@@ -13,7 +13,13 @@ class ProductInstallerExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $config = $this->processConfiguration(new Configuration(), $configs);
+
+        // Load configurations
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
+
+        // Set container parameter
+        $container->setParameter('product_installer.licenser', $config['licenser']);
     }
 }
