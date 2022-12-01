@@ -1,0 +1,4 @@
+installer:
+    menu:
+        label: Produkt installieren
+        title: Installiere und Verwalte deine Produkte

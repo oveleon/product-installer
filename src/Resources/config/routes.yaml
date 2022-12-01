@@ -1,0 +1,3 @@
+oveleon.productinstaller.controller:
+    resource: '@ProductInstaller/Controller'
+    type: annotation

@@ -1,0 +1,4 @@
+installer:
+    menu:
+        label: Install Product
+        title: Install and manage your Product
