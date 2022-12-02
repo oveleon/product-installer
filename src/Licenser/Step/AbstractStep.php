@@ -20,7 +20,7 @@ abstract class AbstractStep
     /**
      * Name of the step.
      */
-    protected array $name;
+    public string $name;
 
     /**
      * The step routes.

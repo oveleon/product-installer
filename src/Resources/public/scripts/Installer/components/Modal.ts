@@ -1,4 +1,4 @@
-import Step from "./Step"
+import Step, {StepConfig} from "./Step"
 import Container from "./Container"
 import Loader, {LoaderMode} from "./Loader";
 
@@ -9,7 +9,6 @@ export default class Modal extends Container
 
     private readonly insideContainer: HTMLDivElement
     private readonly stepContainer: HTMLDivElement
-    private readonly closeElement: HTMLDivElement // ToDo:
     private readonly loaderElement: Loader
     private steps: Step[] = []
 
@@ -46,6 +45,15 @@ export default class Modal extends Container
             this.steps.push(s)
 
             s.appendTo(this.stepContainer)
+        }
+    }
+
+    addStepsByString(step: StepConfig[]): void
+    {
+        // ToDo: Modify Steps: Routes can now passed to the steps (Step class should do this)
+        for (const s of step)
+        {
+            console.log(s)
         }
     }
 

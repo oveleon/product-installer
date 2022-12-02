@@ -3,6 +3,8 @@
 namespace Oveleon\ProductInstaller\Controller;
 
 use Contao\Controller;
+use Oveleon\ProductInstaller\Licenser\AbstractLicenser;
+use Oveleon\ProductInstaller\Licenser\Step\AbstractStep;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,14 +20,37 @@ class InstallerController
     public function getLicenser(): JsonResponse
     {
         $request = $this->requestStack->getCurrentRequest()->toArray();
-        $licensers = Controller::getContainer()->getParameter('product_installer.licenser');
 
-        if(!empty($licensers))
+        $licenserClasses = Controller::getContainer()->getParameter('product_installer.licenser');
+        $collection = [];
+
+        if(!empty($licenserClasses))
         {
-            foreach ($licensers as $licenser)
+            foreach ($licenserClasses as $licenserClass)
             {
-                // ToDo: Return licenser and create a new step component to show them and start the steps included
+                /** @var AbstractLicenser $licenser */
+                $licenser = new $licenserClass();
+                $steps = [];
+
+                // Prepare Steps
+                /** @var AbstractStep $step */
+                foreach ($licenser->getSteps() as $step)
+                {
+                    $steps[] = [
+                        'name'   => $step->name,
+                        'routes' => $step->getRoutes(),
+                    ];
+                }
+
+                $collection[] = [
+                    'config' => $licenser->getConfig(),
+                    'steps'  => $steps
+                ];
             }
+
+            return new JsonResponse([
+                'licensers' => $collection
+            ]);
         }
 
         return new JsonResponse([

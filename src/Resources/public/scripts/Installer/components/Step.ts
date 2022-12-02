@@ -6,6 +6,11 @@ export interface StepErrorResponse {
     fields?: []
 }
 
+export interface StepConfig {
+    name: string,
+    routes: string
+}
+
 export default abstract class Step extends Container
 {
     static stepId: number = 0

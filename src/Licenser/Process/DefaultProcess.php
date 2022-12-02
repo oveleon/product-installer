@@ -1,8 +1,6 @@
 <?php
 
-namespace Oveleon\ProductInstaller\Licenser\Step;
-
-use Oveleon\ProductInstaller\Licenser\Process\AbstractProcess;
+namespace Oveleon\ProductInstaller\Licenser\Process;
 
 /**
  * The process class representing the component of the system check process.

@@ -17,6 +17,14 @@ abstract class AbstractLicenser
     protected array $steps = [];
 
     /**
+     * Create licenser
+     */
+    public function __construct()
+    {
+        $this->setSteps();
+    }
+
+    /**
      * Sets the steps to be traversed:
      *
      * $this->addSteps(
@@ -25,16 +33,24 @@ abstract class AbstractLicenser
      *   ...
      * );
      */
-    abstract function steps(): void;
+    abstract protected function setSteps(): void;
 
     /**
      * Returns a licenser configuration:
      *
-     * icon:        /path-to-custom-icon.svg
+     * image:       /path-to-custom-image.svg
      * title:       Title of the Product-Licenser
      * description: Description of the Product-Licenser
      */
-    abstract function config(): array;
+    abstract public function getConfig(): array;
+
+    /**
+     * Return all steps
+     */
+    public function getSteps(): array
+    {
+        return $this->steps;
+    }
 
     /**
      * Adds one or more step.
