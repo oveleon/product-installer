@@ -9,6 +9,11 @@ use Contao\PageModel;
 use Contao\ZipReader;
 use Exception;
 
+/**
+ * Unpack, read and import content package archives.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class ContentPackageImport
 {
     const TABLE_FILE_EXTENSION = '.table';
@@ -26,7 +31,7 @@ class ContentPackageImport
     protected ?array $callbacks = null;
 
     /**
-     * Sets a root page in which new pages are to be imported
+     * Sets a root page in which new pages are to be imported.
      */
     public function setRootPage(int $pageId): void
     {
@@ -34,7 +39,7 @@ class ContentPackageImport
     }
 
     /**
-     * Register a callback
+     * Register a callback.
      */
     public function registerCallback(string $callbackMode, string $filename, callable $callback): void
     {
@@ -57,7 +62,7 @@ class ContentPackageImport
     }
 
     /**
-     * Starts the import
+     * Starts the import.
      *
      * @throws Exception
      */
@@ -149,7 +154,7 @@ class ContentPackageImport
     }
 
     /**
-     * Import table by filename and return a new collection of ids
+     * Import table by filename and return a new collection of ids.
      *
      * @throws Exception
      */
@@ -200,7 +205,7 @@ class ContentPackageImport
     }
 
     /**
-     * Import table by filename based on a parent table
+     * Import table by filename based on a parent table.
      *
      * @throws Exception
      */
@@ -258,7 +263,7 @@ class ContentPackageImport
     }
 
     /**
-     * Import table by filename from mode DataContainer::MODE_TREE
+     * Import table by filename from mode DataContainer::MODE_TREE.
      *
      * @throws Exception
      */
@@ -334,7 +339,7 @@ class ContentPackageImport
     }
 
     /**
-     * Return all callbacks by callback mode and filename
+     * Return all callbacks by callback mode and filename.
      */
     protected function getCallbacks(string $callbackMode, string $filename): ?array
     {
@@ -342,7 +347,7 @@ class ContentPackageImport
     }
 
     /**
-     * Register default callbacks for contao tables
+     * Register default callbacks for contao tables.
      */
     private function registerDefaultCallbacks(): void
     {
@@ -361,7 +366,7 @@ class ContentPackageImport
     }
 
     /**
-     * Returns the model based on a filename with table name verification
+     * Returns the model based on a filename with table name verification.
      */
     protected function getClassFromFileName(string $filename): string
     {
@@ -369,7 +374,7 @@ class ContentPackageImport
     }
 
     /**
-     * Returns the table based on a table with table name verification
+     * Returns the table based on a table with table name verification.
      */
     protected function getTableFromFileName(string $filename): string
     {
@@ -377,7 +382,7 @@ class ContentPackageImport
     }
 
     /**
-     * Unzip tables and return its content
+     * Unzip tables and return its content.
      *
      * @throws Exception
      */
@@ -400,7 +405,7 @@ class ContentPackageImport
     }
 
     /**
-     * Groups an array by an identifier
+     * Groups an array by an identifier.
      */
     protected function group($rows): array
     {
@@ -422,7 +427,7 @@ class ContentPackageImport
     }
 
     /**
-     * Overwrites the layout id from a page
+     * Overwrites the layout id from a page.
      */
     private function overwritePageLayout($model): void
     {
@@ -434,7 +439,7 @@ class ContentPackageImport
     }
 
     /**
-     * Overwrites connected ids in a content element
+     * Overwrites connected ids in a content element.
      */
     private function overwriteContentElement($model): void
     {
@@ -460,7 +465,7 @@ class ContentPackageImport
     }
 
     /**
-     * Overwrites the connection from one content element to another (Include: Content Element)
+     * Overwrites the connection from one content element to another (Include: Content Element).
      */
     private function overwriteAliasContentElement(?array $contentIds): void
     {

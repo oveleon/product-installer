@@ -1,6 +1,6 @@
 <?php
 
-namespace Oveleon\ProductInstaller\Licenser\Step;
+namespace Oveleon\ProductInstaller\LicenseConnector\Step;
 
 /**
  * The abstract class for new steps.
@@ -12,10 +12,10 @@ abstract class AbstractStep
     /**
      * Predefined steps.
      */
-    const STEP_LICENSE = 'license';
-    const STEP_PRODUCT = 'product';
-    const STEP_PROCESS = 'process';
-    const STEP_CUSTOM  = 'custom';
+    const STEP_LICENSE = 'LicenseStep';
+    const STEP_PRODUCT = 'ProductStep';
+    const STEP_PROCESS = 'ProcessStep';
+    const STEP_CUSTOM  = 'CustomStep';
 
     /**
      * Name of the step.
@@ -36,11 +36,11 @@ abstract class AbstractStep
     }
 
     /**
-     * Adds one or more steps to a route.
+     * Add a route to the step.
      */
-    public function addRoutes(string ...$route): self
+    public function addRoute(string $name, string $route): self
     {
-        $this->routes = [...$this->routes, ...$route];
+        $this->routes = [...$this->routes, ...[$name => $route]];
 
         return $this;
     }
@@ -51,5 +51,13 @@ abstract class AbstractStep
     public function getRoutes(): array
     {
         return $this->routes;
+    }
+
+    /**
+     * Returns step attributes.
+     */
+    public function getAttributes(): array
+    {
+        return [];
     }
 }

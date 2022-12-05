@@ -1,23 +1,23 @@
 <?php
 
-namespace Oveleon\ProductInstaller\Licenser;
+namespace Oveleon\ProductInstaller\LicenseConnector;
 
-use Oveleon\ProductInstaller\Licenser\Step\AbstractStep;
+use Oveleon\ProductInstaller\LicenseConnector\Step\AbstractStep;
 
 /**
- * The abstract class for new licensers.
+ * The abstract class for new license connectors.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-abstract class AbstractLicenser
+abstract class AbstractLicenseConnector
 {
     /**
-     * The licenser steps.
+     * The license connector steps.
      */
     protected array $steps = [];
 
     /**
-     * Create licenser
+     * Create license connector
      */
     public function __construct()
     {
@@ -36,11 +36,11 @@ abstract class AbstractLicenser
     abstract protected function setSteps(): void;
 
     /**
-     * Returns a licenser configuration:
+     * Returns a license connector configuration:
      *
      * image:       /path-to-custom-image.svg
-     * title:       Title of the Product-Licenser
-     * description: Description of the Product-Licenser
+     * title:       Title of the License connector
+     * description: Description of the license connector
      */
     abstract public function getConfig(): array;
 

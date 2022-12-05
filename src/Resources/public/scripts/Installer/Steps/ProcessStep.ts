@@ -1,16 +1,26 @@
-import Step from "../components/Step"
-import {i18n} from "../lang/"
-import ProcessManager, {CheckSystemProcess, InstallProcess} from "./Process"
-import RegisterProcess from "./Process/RegisterProcess"
+import {i18n} from "../Language/"
+import Step from "../Components/Step";
+import ProcessManager from "../Process/ProcessManager";
+import {getProcessInstanceByString} from "../Utils/InstanceUtils";
 
-export default class InstallStep extends Step
+/**
+ * Process step class.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
+export default class ProcessStep extends Step
 {
+    /**
+     * Process manager instance.
+     *
+     * @private
+     */
     private manager: ProcessManager
 
     /**
      * @inheritDoc
      */
-    getTemplate(): string
+    protected getTemplate(): string
     {
         return `
             <h2>${i18n('install.headline')}</h2>
@@ -25,7 +35,7 @@ export default class InstallStep extends Step
     /**
      * @inheritDoc
      */
-    events()
+    protected events()
     {
         // Get the container in which the processes should be appended
         const container = <HTMLDivElement> this.template.querySelector('.process')
@@ -44,12 +54,14 @@ export default class InstallStep extends Step
         // Create process manager
         this.manager = new ProcessManager()
 
-        // Add processes
-        this.manager.addProcess(
-            new CheckSystemProcess(container),
-            new RegisterProcess(container),
-            new InstallProcess(container)
-        )
+        for(const process of this.config.attributes.processes)
+        {
+            // Create instance
+            const instance = getProcessInstanceByString(process.name, container, process)
+
+            // Add processes
+            this.manager.addProcess(instance)
+        }
 
         // Register on finish method
         this.manager.finish(() => {

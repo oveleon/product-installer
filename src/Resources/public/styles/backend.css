@@ -124,14 +124,14 @@
 #installer form {
   height: 100%;
 }
-#installer .licenser-container {
+#installer .license-connector-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: auto;
 }
-#installer .licenser {
+#installer .license-connector {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -141,20 +141,20 @@
   border-radius: 5px;
   cursor: pointer;
 }
-#installer .licenser .image {
+#installer .license-connector .image {
   position: relative;
   width: 65px;
   height: 65px;
   margin: 0 auto 20px;
   overflow: hidden;
 }
-#installer .licenser .image img {
+#installer .license-connector .image img {
   object-fit: cover;
   object-position: center;
   width: 100%;
   height: 100%;
 }
-#installer .licenser .image:not(:has(img)):after {
+#installer .license-connector .image:not(:has(img)):after {
   display: block;
   position: absolute;
   inset: 14px;
@@ -162,16 +162,16 @@
   background: url("/bundles/productinstaller/icons/assistant.svg") center center no-repeat;
   background-size: contain;
 }
-#installer .licenser .content {
+#installer .license-connector .content {
   width: 100%;
 }
-#installer .licenser .content .title {
+#installer .license-connector .content .title {
   color: #222;
   font-size: 0.95rem;
   font-weight: 500;
   margin-bottom: 6px;
 }
-#installer .licenser .content .description {
+#installer .license-connector .content .description {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -179,25 +179,25 @@
   line-height: 1.25em;
   color: #8f8f8f;
 }
-#installer .licenser .content .version {
+#installer .license-connector .content .version {
   margin-top: 7px;
   color: #a6a6a6;
 }
-#installer .licenser + .licenser {
+#installer .license-connector + .license-connector {
   margin-top: 15px;
 }
-#installer .licenser:hover {
+#installer .license-connector:hover {
   border-color: #688191;
 }
 
 @media (min-width: 600px) {
-  #installer .licenser {
+  #installer .license-connector {
     flex-direction: row;
   }
-  #installer .licenser .image {
+  #installer .license-connector .image {
     margin: 0 30px 0 0;
   }
-  #installer .licenser .content {
+  #installer .license-connector .content {
     width: calc(100% - 80px);
   }
 }

@@ -6,7 +6,12 @@ use Contao\File;
 use Github\AuthMethod;
 use Github\Client;
 
-class RepositoryImport
+/**
+ * Class for retrieving and importing GitHub repositories.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
+class RepositoryImport // ToDo: This method should called e.g. `RepositoryDownloader`; It doesnt import, only download and save
 {
     protected Client $client;
 
@@ -15,7 +20,7 @@ class RepositoryImport
     protected string $repository;
 
     /**
-     * Set the authentication token
+     * Set the authentication token.
      */
     public function setAuthentication(string $token): self
     {
@@ -25,7 +30,7 @@ class RepositoryImport
     }
 
     /**
-     * Set the repository name
+     * Set the repository name.
      */
     public function setRepository(string $repository): self
     {
@@ -35,7 +40,7 @@ class RepositoryImport
     }
 
     /**
-     * Set the owners organization name or user
+     * Set the owners organization name or user.
      */
     public function setOrganization(string $organization): self
     {
@@ -45,10 +50,11 @@ class RepositoryImport
     }
 
     /**
-     * Import packages
+     * Import packages.
      */
     public function import(): void
     {
+        // ToDo: This method should called e.g. `save` or `archive` ord `download`
         $this->authenticate();
 
         $archiveContent = $this->client

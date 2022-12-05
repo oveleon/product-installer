@@ -1,28 +1,43 @@
-import ProcessManager from "./ProcessManager"
-import Loader from "../../components/Loader";
-import Container from "../../components/Container";
+import Container from "../Components/Container";
+import Loader from "../Components/Loader";
+import ProcessManager from "./ProcessManager";
 
+/**
+ * Error response for processes.
+ */
 export interface ProcessErrorResponse {
     error: number | boolean,
     messages?: string[]
 }
 
-export interface IProcess
-{
-    process(): void
-    mount(): void
-    getTemplate(): string
+/**
+ * Process configuration.
+ */
+export interface ProcessConfig {
+    name: string,
+    routes: string
+    attributes?: any
 }
 
-export default abstract class Process extends Container implements IProcess
+/**
+ * Abstract process class.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
+export default abstract class Process extends Container
 {
     static processId: number = 0
 
     protected loader: Loader
     protected errorContainer: HTMLDivElement
+    protected manager: ProcessManager
 
+    /**
+     * Creates a new process instance.
+     */
     constructor(
-        protected container: HTMLElement
+        protected container: HTMLElement,
+        protected config: ProcessConfig
     ){
         // Create container
         super('process' + Process.processId++)
@@ -52,26 +67,49 @@ export default abstract class Process extends Container implements IProcess
     }
 
     /**
-     * The manager instance
-     *
-     * @protected
-     */
-    protected manager: ProcessManager
-
-    /**
-     * Bind a manager instance to a process step
+     * Bind a manager instance to a process step.
      *
      * @param manager
      */
-    addManager(manager: ProcessManager): void
+    public addManager(manager: ProcessManager): void
     {
         this.manager = manager
     }
 
     /**
-     * Reset process
+     * Returns a route by name.
+     *
+     * @param routeName
      */
-    reset(): void
+    public getRoute(routeName: string): string
+    {
+        if(!this.config?.routes[routeName])
+        {
+            throw new Error(`No route could be found for the name ${routeName}`)
+        }
+
+        return this.config.routes[routeName]
+    }
+
+    /**
+     * Returns an attribute by name.
+     *
+     * @param attr
+     */
+    public getAttribute(attr: string): any
+    {
+        if(!this.config?.attributes[attr])
+        {
+            return ''
+        }
+
+        return this.config.attributes[attr]
+    }
+
+    /**
+     * Reset process.
+     */
+    public reset(): void
     {
         this.addClass('not-active')
 
@@ -82,9 +120,9 @@ export default abstract class Process extends Container implements IProcess
     }
 
     /**
-     * Starts a single process
+     * Starts a single process.
      */
-    start(): void
+    public start(): void
     {
         this.loader?.play()
         this.removeClass('not-active')
@@ -94,9 +132,11 @@ export default abstract class Process extends Container implements IProcess
     }
 
     /**
-     * Resolve process
+     * Resolve process.
+     *
+     * @protected
      */
-    resolve(): void
+    protected resolve(): void
     {
         this.loader?.pause()
         this.loader?.addClass('done')
@@ -106,11 +146,13 @@ export default abstract class Process extends Container implements IProcess
     }
 
     /**
-     * Reject process
+     * Reject process.
      *
      * @param data
+     *
+     * @protected
      */
-    reject(data: Error | ProcessErrorResponse): void
+    protected reject(data: Error | ProcessErrorResponse): void
     {
         this.loader?.pause()
         this.loader?.addClass('fail')
@@ -119,9 +161,11 @@ export default abstract class Process extends Container implements IProcess
     }
 
     /**
-     * Shows occurred errors in the process
+     * Shows occurred errors in the process.
+     *
+     * @protected
      */
-    error(data: any): void
+    protected error(data: any): void
     {
         // Check for messages of intercepted errors
         if(data?.messages)
@@ -141,11 +185,13 @@ export default abstract class Process extends Container implements IProcess
     }
 
     /**
-     * Adds a paragraph to the error container
+     * Adds a paragraph to the error container.
      *
      * @param content
+     *
+     * @protected
      */
-    addErrorParagraph(content: string): void
+    protected addErrorParagraph(content: string): void
     {
         const msg = <HTMLParagraphElement> document.createElement('p')
         msg.innerText = content
@@ -153,26 +199,34 @@ export default abstract class Process extends Container implements IProcess
     }
 
     /**
-     * Pause process
+     * Pause process.
+     *
+     * @protected
      */
-    pause(): void
+    protected pause(): void
     {
         this.loader?.pause()
         this.loader?.addClass('pause')
     }
 
     /**
-     * Allows manipulation for process specific properties
+     * Allows manipulation for process specific properties.
+     *
+     * @protected
      */
-    mount(): void {}
+    protected mount(): void {}
 
     /**
-     * Start the process
+     * Start the process.
+     *
+     * @protected
      */
-    abstract process(): void
+    protected abstract process(): void
 
     /**
-     * Template for process step
+     * Template for process step.
+     *
+     * @protected
      */
-    abstract getTemplate(): string
+    protected abstract getTemplate(): string
 }

@@ -1,6 +1,6 @@
-import Modal from "./components/Modal";
-import {setLanguage} from "./lang/";
-import LicenserStep from "./steps/LicenserStep";
+import Modal from "./Components/Modal";
+import {setLanguage} from "./Language/";
+import LicenseConnectorStep from "./Steps/LicenseConnectorStep";
 
 export default class Installer
 {
@@ -15,7 +15,7 @@ export default class Installer
         // Create modal and steps
         this.modal = new Modal('installer')
         this.modal.addSteps(
-            new LicenserStep()
+            new LicenseConnectorStep()
         )
 
         this.modal.appendTo('body')
@@ -39,10 +39,4 @@ export default class Installer
     {
         this.modal.open()
     }
-}
-
-export const routes = {
-    licenser: "/contao/installer/getlicenser",
-    license: "/contao/installer/check",
-    systemcheck: "/contao/installer/install/systemcheck"
 }

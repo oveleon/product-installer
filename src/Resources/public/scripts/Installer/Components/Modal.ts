@@ -1,7 +1,12 @@
-import Step, {StepConfig} from "./Step"
+import Step from "./Step"
 import Container from "./Container"
 import Loader, {LoaderMode} from "./Loader";
 
+/**
+ * Modal class - A modal to go through different steps.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 export default class Modal extends Container
 {
     private currentStep: Step
@@ -12,6 +17,9 @@ export default class Modal extends Container
     private readonly loaderElement: Loader
     private steps: Step[] = []
 
+    /**
+     * Creates a new modal instance.
+     */
     constructor(id: string) {
         super(id)
 
@@ -36,7 +44,12 @@ export default class Modal extends Container
         this.loaderElement.appendTo(this.insideContainer)
     }
 
-    addSteps(...step: Step[]): void
+    /**
+     * Adds one or more steps.
+     *
+     * @param step
+     */
+    public addSteps(...step: Step[]): void
     {
         for (const s of step)
         {
@@ -48,16 +61,12 @@ export default class Modal extends Container
         }
     }
 
-    addStepsByString(step: StepConfig[]): void
-    {
-        // ToDo: Modify Steps: Routes can now passed to the steps (Step class should do this)
-        for (const s of step)
-        {
-            console.log(s)
-        }
-    }
-
-    open(startIndex: number = 0): void
+    /**
+     * Opens the modal window and initializes the passed step index.
+     *
+     * @param startIndex
+     */
+    public open(startIndex: number = 0): void
     {
         this.currentIndex = startIndex
         this.currentStep = this.steps[ this.currentIndex ]
@@ -72,7 +81,13 @@ export default class Modal extends Container
         this.show()
     }
 
-    loader(state: boolean = true, text?: string): void
+    /**
+     * Shows or hides the modal loader.
+     *
+     * @param state
+     * @param text
+     */
+    public loader(state: boolean = true, text?: string): void
     {
         state ?
             this.loaderElement.show() :
@@ -83,17 +98,26 @@ export default class Modal extends Container
             this.loaderElement.setText('')
     }
 
-    next(): void
+    /**
+     * Goes to the next step.
+     */
+    public next(): void
     {
         this.open(++this.currentIndex)
     }
 
-    prev(): void
+    /**
+     * Goes to the previous step.
+     */
+    public prev(): void
     {
         this.open(--this.currentIndex)
     }
 
-    closeSteps(): void
+    /**
+     * Hides all steps.
+     */
+    public closeSteps(): void
     {
         for (const step of this.steps)
         {

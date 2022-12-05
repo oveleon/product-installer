@@ -1,10 +1,18 @@
 import Container from "./Container"
 
+/**
+ * Loader modes.
+ */
 export enum LoaderMode {
     INLINE= 'inlined',
     COVER = 'cover'
 }
 
+/**
+ * Loader class.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 export default class Loader extends Container
 {
     static loaderId: number = 0
@@ -12,6 +20,9 @@ export default class Loader extends Container
     private readonly spinnerContainer: HTMLDivElement
     private readonly textContainer: HTMLParagraphElement
 
+    /**
+     * Creates a new loader instance.
+     */
     constructor() {
         // Auto-increment id
         Loader.loaderId++
@@ -45,7 +56,12 @@ export default class Loader extends Container
         this.setMode(LoaderMode.INLINE)
     }
 
-    setMode(type: LoaderMode)
+    /**
+     * Sets a specific loader mode.
+     *
+     * @param type
+     */
+    public setMode(type: LoaderMode)
     {
         this.removeClass(
             LoaderMode.INLINE,
@@ -55,23 +71,37 @@ export default class Loader extends Container
         this.addClass(type)
     }
 
-    setText(text: string): void
+    /**
+     * Sets a loader text.
+     *
+     * @param text
+     */
+    public setText(text: string): void
     {
         this.textContainer.innerHTML = text
     }
 
-    hide(): void
+    /**
+     * Hides the loader.
+     */
+    public hide(): void
     {
         this.setText('')
         super.hide()
     }
 
-    play(): void
+    /**
+     * Starts the loader animation.
+     */
+    public play(): void
     {
         this.addClass('play')
     }
 
-    pause(): void
+    /**
+     * Pauses the loader animation.
+     */
+    public pause(): void
     {
         this.removeClass('play')
     }

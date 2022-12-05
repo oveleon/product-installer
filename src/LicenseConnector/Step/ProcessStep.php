@@ -1,8 +1,8 @@
 <?php
 
-namespace Oveleon\ProductInstaller\Licenser\Step;
+namespace Oveleon\ProductInstaller\LicenseConnector\Step;
 
-use Oveleon\ProductInstaller\Licenser\Process\AbstractProcess;
+use Oveleon\ProductInstaller\LicenseConnector\Process\AbstractProcess;
 
 /**
  * The step class representing the component of the process step.
@@ -40,5 +40,26 @@ class ProcessStep extends AbstractStep
     public function getProcesses(): array
     {
         return $this->processes;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAttributes(): array
+    {
+        $processes = [];
+
+        foreach ($this->getProcesses() as $process)
+        {
+            $processes[] = [
+                'name'       => $process->name,
+                'routes'     => $process->getRoutes(),
+                'attributes' => $process->getAttributes()
+            ];
+        }
+
+        return [
+            'processes' => $processes
+        ];
     }
 }

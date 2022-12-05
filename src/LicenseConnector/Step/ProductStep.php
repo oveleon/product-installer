@@ -1,6 +1,6 @@
 <?php
 
-namespace Oveleon\ProductInstaller\Licenser\Step;
+namespace Oveleon\ProductInstaller\LicenseConnector\Step;
 
 /**
  * The step class representing the component of the product step.

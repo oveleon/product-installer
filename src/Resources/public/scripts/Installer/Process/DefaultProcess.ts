@@ -1,19 +1,22 @@
-import Process, {IProcess, ProcessErrorResponse} from "./Process"
-import {i18n} from "../../lang/"
-import {routes} from "../../Installer"
-import {call} from "../../../Utils/network"
+import Process, {ProcessErrorResponse} from "./Process"
+import {call} from "../../Utils/network"
 
-export default class CheckSystemProcess extends Process implements IProcess
+/**
+ * Default process class.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
+export default class DefaultProcess extends Process
 {
     /**
      * @inheritDoc
      */
-    getTemplate(): string {
+    protected getTemplate(): string {
         return `
             <div data-loader></div>
             <div class="content">
-                <div class="title">${i18n('install.systemcheck.title')}</div>
-                <p>${i18n('install.systemcheck.description')}</p>
+                <div class="title">${this.config.attributes.title}</div>
+                <p>${this.config.attributes.description}</p>
             </div>
         `;
     }
@@ -21,11 +24,10 @@ export default class CheckSystemProcess extends Process implements IProcess
     /**
      * @inheritDoc
      */
-    process(): void
+    protected process(): void
     {
         // Check license
-        call(routes.systemcheck).then((response) => {
-
+        call(this.getRoute('process')).then((response) => {
             console.log(response)
 
             // Check errors
@@ -42,7 +44,7 @@ export default class CheckSystemProcess extends Process implements IProcess
     /**
      * @inheritDoc
      */
-    reject(data: Error | ProcessErrorResponse): void
+    protected reject(data: Error | ProcessErrorResponse): void
     {
         super.reject(data);
 

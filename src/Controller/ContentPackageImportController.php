@@ -9,12 +9,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/contao/content/import",
- *     name=ContentPackageImportController::class,
- *     defaults={"_scope": "backend"}
- * )
- */
+#[Route('%contao.backend.route_prefix%/content/import',
+    name:       ContentPackageImportController::class,
+    defaults:   ['_scope' => 'backend']
+)]
 class ContentPackageImportController
 {
     public function __construct(

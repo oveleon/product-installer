@@ -4,7 +4,7 @@
     height: 100%;
   }
 
-  .licenser-container{
+  .license-connector-container{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -12,7 +12,7 @@
     margin: auto;
   }
 
-  .licenser{
+  .license-connector{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -74,7 +74,7 @@
       }
     }
 
-    + .licenser{
+    + .license-connector{
       margin-top: 15px;
     }
 
@@ -87,7 +87,7 @@
 @media (min-width: 600px) {
   #installer {
 
-    .licenser {
+    .license-connector {
       flex-direction: row;
 
       .image{

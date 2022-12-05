@@ -20,6 +20,6 @@ class ProductInstallerExtension extends Extension
         $loader->load('services.yaml');
 
         // Set container parameter
-        $container->setParameter('product_installer.licenser', $config['licenser']);
+        $container->setParameter('product_installer.license_connectors', $config['license_connectors']);
     }
 }

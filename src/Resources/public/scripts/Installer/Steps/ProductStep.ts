@@ -1,13 +1,13 @@
-import Step from "../components/Step"
-import {i18n} from "../lang/"
+import Step from "../Components/Step";
 import State from "../State";
+import {i18n} from "../Language"
 
 export default class ProductStep extends Step
 {
     /**
      * @inheritDoc
      */
-    getTemplate(): string
+    protected getTemplate(): string
     {
         const props = State.get('product')
         let products = ''

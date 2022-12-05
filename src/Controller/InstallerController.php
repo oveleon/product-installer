@@ -3,59 +3,62 @@
 namespace Oveleon\ProductInstaller\Controller;
 
 use Contao\Controller;
-use Oveleon\ProductInstaller\Licenser\AbstractLicenser;
-use Oveleon\ProductInstaller\Licenser\Step\AbstractStep;
+use Oveleon\ProductInstaller\LicenseConnector\AbstractLicenseConnector;
+use Oveleon\ProductInstaller\LicenseConnector\Step\AbstractStep;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('%contao.backend.route_prefix%/installer', defaults: ['_scope' => 'backend', '_token_check' => false], methods: ['POST'])]
+#[Route('%contao.backend.route_prefix%/installer',
+    name:       InstallerController::class,
+    defaults:   ['_scope' => 'backend', '_token_check' => false],
+    methods:    ['POST']
+)]
 class InstallerController
 {
-    public function __construct(
-        private readonly RequestStack $requestStack,
-    ){}
-
-    #[Route('/getlicenser', name: 'get_licenser', methods: ['POST'])]
-    public function getLicenser(): JsonResponse
+    #[Route('/license_connectors',
+        name: 'license_connectors',
+        methods: ['POST']
+    )]
+    public function getLicenseConnector(): JsonResponse
     {
-        $request = $this->requestStack->getCurrentRequest()->toArray();
+        $licenseConnectors = Controller::getContainer()->getParameter('product_installer.license_connectors');
 
-        $licenserClasses = Controller::getContainer()->getParameter('product_installer.licenser');
-        $collection = [];
-
-        if(!empty($licenserClasses))
+        if(!empty($licenseConnectors))
         {
-            foreach ($licenserClasses as $licenserClass)
+            $collection = [];
+
+            foreach ($licenseConnectors as $licenseConnector)
             {
-                /** @var AbstractLicenser $licenser */
-                $licenser = new $licenserClass();
+                /** @var AbstractLicenseConnector $licenseConnector */
+                $licenseConnector = new $licenseConnector();
                 $steps = [];
 
-                // Prepare Steps
                 /** @var AbstractStep $step */
-                foreach ($licenser->getSteps() as $step)
+                foreach ($licenseConnector->getSteps() as $step)
                 {
-                    $steps[] = [
-                        'name'   => $step->name,
-                        'routes' => $step->getRoutes(),
+                    $stepConfig = [
+                        'name'       => $step->name,
+                        'routes'     => $step->getRoutes(),
+                        'attributes' => $step->getAttributes()
                     ];
+
+                    $steps[] = $stepConfig;
                 }
 
                 $collection[] = [
-                    'config' => $licenser->getConfig(),
+                    'config' => $licenseConnector->getConfig(),
                     'steps'  => $steps
                 ];
             }
 
             return new JsonResponse([
-                'licensers' => $collection
+                'license_connectors' => $collection
             ]);
         }
 
         return new JsonResponse([
             'error' => true,
-            'message' => 'No licenser found.'
+            'message' => 'No license connector found.'
         ]);
     }
 }

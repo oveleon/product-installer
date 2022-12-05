@@ -14,7 +14,7 @@ class Configuration implements ConfigurationInterface
             ->getRootNode()
             ->addDefaultsIfNotSet()
             ->children()
-                ->arrayNode('licenser')
+                ->arrayNode('license_connectors')
                     ->prototype('scalar')
                     ->defaultNull()
                     ->end()

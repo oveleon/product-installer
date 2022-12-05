@@ -1,9 +1,13 @@
-import Step from "../components/Step"
-import {i18n} from "../lang/"
 import State from "../State";
 import {call} from "../../Utils/network"
-import {routes} from "../Installer";
+import {i18n} from "../Language"
+import Step from "../Components/Step";
 
+/**
+ * License step class.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 export default class LicenseStep extends Step
 {
     /**
@@ -30,7 +34,7 @@ export default class LicenseStep extends Step
     /**
      * @inheritDoc
      */
-    submit(form: HTMLFormElement, data: FormData)
+    protected submit(form: HTMLFormElement, data: FormData)
     {
         // Save license form data
         State.set('license', data.get('license'))
@@ -39,7 +43,7 @@ export default class LicenseStep extends Step
         this.modal.loader(true, i18n('license.loading'))
 
         // Check license
-        call(routes.license, {
+        call(this.getRoute('license'), {
             license: data.get('license')
         }).then((response) => {
             // Hide loader

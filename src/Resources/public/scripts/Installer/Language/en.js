@@ -4,9 +4,9 @@ module.exports = {
     "actions.back":                     "Back",
 
     // License step
-    "licenser.headline":                "Please select a product type",
-    "licenser.load.licenser":           "Information is retrieved",
-    "licenser.load.steps":              "Masks are loaded",
+    "license_connector.headline":       "Please select a product type",
+    "license_connector.load.connector": "Information is retrieved",
+    "license_connector.load.steps":     "Masks are loaded",
 
     // License step
     "license.headline":                 "Register product",
