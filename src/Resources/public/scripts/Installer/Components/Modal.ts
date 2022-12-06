@@ -21,7 +21,7 @@ export default class Modal extends Container
      *
      * @private
      */
-    private currentIndex: number
+    public currentIndex: number
 
     /**
      * The inside container of the modal.

@@ -87,7 +87,6 @@ export default class LicenseConnectorStep extends Step
         // Get steps by string
         for (const step of config.steps)
         {
-            debugger
             // Create instance by string
             const instance = createInstance(step.name)
 

@@ -2,11 +2,18 @@ module.exports = {
     // Global
     "actions.close":                    "Close",
     "actions.back":                     "Back",
+    "actions.next":                     "Next",
 
     // License step
     "license_connector.headline":       "Please select a product type",
     "license_connector.load.connector": "Information is retrieved",
     "license_connector.load.steps":     "Masks are loaded",
+
+    // Contao Manager
+    "contao_manager.headline":          "Contao Manager",
+    "contao_manager.description":       "To install the necessary dependencies, we need access to the Contao Manager. If you agree, click on 'Authorize' and follow the steps in the Contao Manager. You will be taken back to the installation process.",
+    "contao_manager.authorize":         "Authorize",
+    "contao_manager.loading":           "Connection to the Contao Manager is established",
 
     // License step
     "license.headline":                 "License verification",
