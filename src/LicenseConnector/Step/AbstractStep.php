@@ -28,11 +28,24 @@ abstract class AbstractStep
     protected array $routes = [];
 
     /**
+     * The step attributes.
+     */
+    protected array $attributes = [];
+
+    /**
      * Create a new step.
      */
     public function __construct($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * Set custom attributes.
+     */
+    public function __set(string $name, mixed $value): void
+    {
+        $this->attributes[$name] = $value;
     }
 
     /**
@@ -58,6 +71,6 @@ abstract class AbstractStep
      */
     public function getAttributes(): array
     {
-        return [];
+        return $this->attributes;
     }
 }

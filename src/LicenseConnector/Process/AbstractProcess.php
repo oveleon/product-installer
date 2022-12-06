@@ -15,9 +15,14 @@ abstract class AbstractProcess
     const PROCESS_DEFAULT = 'DefaultProcess';
 
     /**
-     * The step routes.
+     * The process routes.
      */
     protected array $routes = [];
+
+    /**
+     * The process attributes.
+     */
+    protected array $attributes = [];
 
     /**
      * Name of the process instance.
@@ -30,6 +35,14 @@ abstract class AbstractProcess
     public function __construct(string $name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * Set attributes.
+     */
+    public function __set(string $name, mixed $value): void
+    {
+        $this->attributes[$name] = $value;
     }
 
     /**
@@ -55,6 +68,6 @@ abstract class AbstractProcess
      */
     public function getAttributes(): array
     {
-        return [];
+        return $this->attributes;
     }
 }

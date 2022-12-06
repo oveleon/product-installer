@@ -16,8 +16,8 @@ export default class LicenseStep extends Step
     getTemplate(): string
     {
         return `
-            <h2>${i18n('license.headline')}</h2>
-            <p>${i18n('license.description')}</p>
+            <h2>${this.getAttribute('title', i18n('license.headline'))}</h2>
+            <p>${this.getAttribute('description', i18n('license.description'))}</p>
             <form id="license-form" autocomplete="off">
                 <div class="widget">
                     <label for="license">${i18n('license.form.label.license')}</label>

@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    mode: 'development', // production
+    mode: 'production',
     entry: './src/Resources/public/scripts/index.js',
     output: {
         path: path.resolve(__dirname, 'src/Resources/public/build'),

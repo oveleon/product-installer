@@ -15,9 +15,23 @@ export enum LoaderMode {
  */
 export default class Loader extends Container
 {
+    /**
+     * Dynamic auto-increment id.
+     */
     static loaderId: number = 0
 
+    /**
+     * The container for the spinner.
+     *
+     * @private
+     */
     private readonly spinnerContainer: HTMLDivElement
+
+    /**
+     * The container for the text.
+     *
+     * @private
+     */
     private readonly textContainer: HTMLParagraphElement
 
     /**

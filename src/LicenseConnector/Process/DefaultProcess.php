@@ -6,6 +6,10 @@ namespace Oveleon\ProductInstaller\LicenseConnector\Process;
  * The process class representing the component of the system check process.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
+ *
+ * Attributes:
+ * @property $title
+ * @property $description
  */
 class DefaultProcess extends AbstractProcess
 {
@@ -17,16 +21,6 @@ class DefaultProcess extends AbstractProcess
     const ROUTE_PROCESS = 'process';
 
     /**
-     * Title of the process.
-     */
-    protected string $title;
-
-    /**
-     * Description of the process.
-     */
-    protected string $description;
-
-    /**
      * @inheritDoc
      */
     public function __construct(string $title, string $description)
@@ -35,16 +29,5 @@ class DefaultProcess extends AbstractProcess
         $this->description = $description;
 
         parent::__construct(self::PROCESS_DEFAULT);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getAttributes(): array
-    {
-        return [
-            'title'       => $this->title,
-            'description' => $this->description
-        ];
     }
 }

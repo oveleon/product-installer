@@ -95,12 +95,13 @@ export default abstract class Process extends Container
      * Returns an attribute by name.
      *
      * @param attr
+     * @param fallback
      */
-    public getAttribute(attr: string): any
+    public getAttribute(attr: string, fallback?: string): any
     {
         if(!this.config?.attributes[attr])
         {
-            return ''
+            return fallback ? fallback : ''
         }
 
         return this.config.attributes[attr]

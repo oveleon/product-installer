@@ -2,6 +2,11 @@ import Step from "../Components/Step";
 import State from "../State";
 import {i18n} from "../Language"
 
+/**
+ * An overview of the products of the associated license keys.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 export default class ProductStep extends Step
 {
     /**

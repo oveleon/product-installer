@@ -25,10 +25,30 @@ export interface StepConfig {
  */
 export default abstract class Step extends Container
 {
+    /**
+     * Dynamic auto-increment id.
+     */
     static stepId: number = 0
 
+    /**
+     * Defines if the form is locked
+     *
+     * @protected
+     */
     protected lockedForm: boolean = false
+
+    /**
+     * Contains the current step configuration.
+     *
+     * @protected
+     */
     protected config: StepConfig
+
+    /**
+     * Defines the associated modal instance.
+     *
+     * @protected
+     */
     protected modal: Modal
 
     /**
@@ -81,12 +101,13 @@ export default abstract class Step extends Container
      * Returns an attribute by name.
      *
      * @param attr
+     * @param fallback
      */
-    public getAttribute(attr: string): any
+    public getAttribute(attr: string, fallback?: string): any
     {
         if(!this.config?.attributes[attr])
         {
-            return ''
+            return fallback ? fallback : ''
         }
 
         return this.config.attributes[attr]

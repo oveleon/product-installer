@@ -9,12 +9,46 @@ import Loader, {LoaderMode} from "./Loader";
  */
 export default class Modal extends Container
 {
+    /**
+     * The current step.
+     *
+     * @private
+     */
     private currentStep: Step
+
+    /**
+     * The current step index.
+     *
+     * @private
+     */
     private currentIndex: number
 
+    /**
+     * The inside container of the modal.
+     *
+     * @private
+     */
     private readonly insideContainer: HTMLDivElement
+
+    /**
+     * The container in which the steps are placed.
+     *
+     * @private
+     */
     private readonly stepContainer: HTMLDivElement
+
+    /**
+     * The Loader Instance for the modal.
+     *
+     * @private
+     */
     private readonly loaderElement: Loader
+
+    /**
+     * Collection of the steps to be displayed.
+     *
+     * @private
+     */
     private steps: Step[] = []
 
     /**
