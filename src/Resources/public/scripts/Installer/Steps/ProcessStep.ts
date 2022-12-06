@@ -1,7 +1,7 @@
 import {i18n} from "../Language/"
 import Step from "../Components/Step";
 import ProcessManager from "../Process/ProcessManager";
-import {getProcessInstanceByString} from "../Utils/InstanceUtils";
+import {createInstance} from "../Utils/InstanceUtils";
 
 /**
  * Process step class.
@@ -57,7 +57,7 @@ export default class ProcessStep extends Step
         for(const process of this.config.attributes.processes)
         {
             // Create instance
-            const instance = getProcessInstanceByString(process.name, container, process)
+            const instance = createInstance(process.name, container, process)
 
             // Add processes
             this.manager.addProcess(instance)

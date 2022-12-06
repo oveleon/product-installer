@@ -1,60 +1,14 @@
-import Step from "../Components/Step";
-import LicenseStep from "../Steps/LicenseStep";
-import ProductStep from "../Steps/ProductStep";
-import ProcessStep from "../Steps/ProcessStep";
-import Process, {ProcessConfig} from "../Process/Process";
-import DefaultProcess from "../Process/DefaultProcess";
+import * as handlers from "./DynamicInstances"
 
 /**
- * Creates a step instance by a string.
+ * Creates instance by a string.
  *
- * @param name
- */
-export function getStepInstanceByString(name: string): Step
-{
-    let instance;
-
-    switch (name)
-    {
-        case 'LicenseStep':
-            instance = new LicenseStep()
-            break
-
-        case 'ProductStep':
-            instance = new ProductStep()
-            break
-
-        case 'ProcessStep':
-            instance = new ProcessStep()
-            break
-
-        default:
-            throw new Error(`Step instance ${name} not exists.`)
-    }
-
-    return instance
-}
-
-/**
- * Creates a process instance by a string.
+ * This is a helper method to load classes dynamically based on the string.
+ * Should this possibility no longer exist (for whatever reason), classes must be imported and resolved manually.
  *
- * @param name
- * @param container
- * @param config
+ * @param className
+ * @param args
  */
-export function getProcessInstanceByString(name: string, container: HTMLElement, config: ProcessConfig): Process
-{
-    let instance;
-
-    switch (name)
-    {
-        case 'DefaultProcess':
-            instance = new DefaultProcess(container, config)
-            break
-
-        default:
-            throw new Error(`Process instance ${name} not exists.`)
-    }
-
-    return instance
+export function createInstance(className: string, ...args: any[]) {
+    return new (<any>handlers)[className](...args);
 }

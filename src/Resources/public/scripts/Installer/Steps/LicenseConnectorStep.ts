@@ -1,7 +1,7 @@
 import {i18n} from "../Language/"
 import {call} from "../../Utils/network"
 import Step, {StepConfig} from "../Components/Step";
-import {getStepInstanceByString} from "../Utils/InstanceUtils";
+import {createInstance} from "../Utils/InstanceUtils";
 
 /**
  * License connector configuration.
@@ -87,8 +87,9 @@ export default class LicenseConnectorStep extends Step
         // Get steps by string
         for (const step of config.steps)
         {
+            debugger
             // Create instance by string
-            const instance = getStepInstanceByString(step.name)
+            const instance = createInstance(step.name)
 
             // Set step config
             instance.setConfig(step)
