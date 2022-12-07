@@ -177,7 +177,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.25em;
-  color: #8f8f8f;
+  color: #495258;
 }
 #installer .license-connector .content .version {
   margin-top: 7px;
@@ -251,7 +251,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.25em;
-  color: #8f8f8f;
+  color: #495258;
 }
 #installer .product .content .version {
   margin-top: 7px;
@@ -299,7 +299,7 @@
 #installer .process-step .content p {
   font-size: 0.95rem;
   line-height: 1.25em;
-  color: #8f8f8f;
+  color: #495258;
   margin: 0;
 }
 #installer .process-step .actions {
@@ -341,6 +341,20 @@
   display: none !important;
 }
 
+[data-connection-state] {
+  display: block;
+  content: "";
+  width: 100px;
+  height: 100px;
+  margin: auto;
+  background: url("/bundles/productinstaller/icons/connection-lost.svg") center center no-repeat;
+  background-size: contain;
+}
+
+[data-connection-state=active] {
+  background: url("/bundles/productinstaller/icons/connection.svg") center center no-repeat;
+}
+
 #installer {
   position: fixed;
   inset: 0 0 0 0;
@@ -366,8 +380,8 @@
 }
 #installer p {
   font-size: 0.92rem;
-  line-height: 1.3em;
-  color: #8f8f8f;
+  line-height: 1.5em;
+  color: #495258;
 }
 #installer #steps {
   width: 100%;

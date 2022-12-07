@@ -18,8 +18,10 @@ export default class ContaoManagerStep extends Step
         return `
             <h2>${i18n('contao_manager.headline')}</h2>
             <p>${i18n('contao_manager.description')}</p>
+            <div data-connection-state="inactive"></div>
             <div class="actions">
                 <button id="cm-authenticate" class="primary">${i18n('contao_manager.authorize')}</button>
+                <button class="primary" data-next disabled>${i18n('actions.next')}</button>
             </div>
         `
     }
@@ -37,13 +39,21 @@ export default class ContaoManagerStep extends Step
             // Hide loader
             this.modal.loader(false)
 
+            const connection = <HTMLDivElement> this.template.querySelector('[data-connection-state]')
+            const authenticateBtn = <HTMLButtonElement> this.template.querySelector('#cm-authenticate')
+            const nextBtn =  <HTMLButtonElement> this.template.querySelector('[data-next]')
+
             if(response?.status === 'OK')
             {
-                this.modal.next()
+                authenticateBtn.disabled = true
+                nextBtn.disabled = false
+                connection.dataset.connectionState = 'active'
+
+                return
             }
 
             // Add button events
-            this.template.querySelector('#cm-authenticate').addEventListener('click', () => {
+            authenticateBtn.addEventListener('click', () => {
                 const returnUrl = new URLSearchParams({
                     installer:  State.get('connector'),
                     start:      this.modal.currentIndex.toString()

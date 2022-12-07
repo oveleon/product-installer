@@ -1,4 +1,4 @@
-$text-color: #8f8f8f;
+$text-color: #495258;
 $text-color-error: #b54c4c;
 $text-color-info: #a6a6a6;
 $primary-color: #566974;
@@ -11,6 +11,20 @@ $background-color: #688191;
 
 [hidden]{
   display: none !important;
+}
+
+[data-connection-state] {
+  display: block;
+  content: "";
+  width: 100px;
+  height: 100px;
+  margin: auto;
+  background: url('/bundles/productinstaller/icons/connection-lost.svg') center center no-repeat;
+  background-size: contain;
+}
+
+[data-connection-state="active"] {
+  background: url('/bundles/productinstaller/icons/connection.svg') center center no-repeat;
 }
 
 #installer{
@@ -44,7 +58,7 @@ $background-color: #688191;
 
   p{
     font-size: .92rem;
-    line-height: 1.3em;
+    line-height: 1.5em;
     color: $text-color;
   }
 

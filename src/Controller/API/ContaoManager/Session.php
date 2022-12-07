@@ -2,7 +2,6 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
-use Contao\System;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,12 +39,11 @@ class Session
     public function __invoke(): JsonResponse
     {
         $request = $this->requestStack->getCurrentRequest();
-        $container = System::getContainer();
 
         // Create default response
         $response = [
             'manager' => [
-                'path'       => $container->getParameter('contao_manager.manager_path'),
+                'path'       => $this->contaoManager->getPath(),
                 'return_url' => $request->getSchemeAndHttpHost() . $this->router->generate(Authentication::class)
             ]
         ];
@@ -99,7 +97,7 @@ class Session
     {
         return (HttpClient::create())->request(
             'GET',
-            'http://contao413.local/contao-manager.phar.php/api/session',
+            $this->contaoManager->getRoute('session'),
             [
                 'headers' => [
                     'Content-Type' => 'application/json',

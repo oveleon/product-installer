@@ -23,8 +23,6 @@ class Authentication
     ){}
 
     /**
-     *
-     *
      * @throws Exception
      */
     public function __invoke(): JsonResponse
@@ -36,12 +34,16 @@ class Authentication
 
         if (empty($config))
         {
-            $this->connection->insert(
-                "tl_product_installer",
-                [
-                    'contao_manager_token' => $request->get('token')
-                ]
-            );
+            // Check whether the authorization has really been approved
+            if($request->get('token'))
+            {
+                $this->connection->insert(
+                    "tl_product_installer",
+                    [
+                        'contao_manager_token' => $request->get('token')
+                    ]
+                );
+            }
         }
         else
         {
@@ -54,7 +56,7 @@ class Authentication
 
         $parameter = http_build_query([
             'installer' => $request->get('installer'),
-            'start'     => $request->get('start'),
+            'start'     => $request->get('start')
         ]);
 
         throw new RedirectResponseException($request->getSchemeAndHttpHost() . $container->getParameter('contao.backend.route_prefix') . '?' . $parameter);

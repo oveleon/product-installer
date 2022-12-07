@@ -29,14 +29,14 @@ export default class LicenseConnectorStep extends Step
      *
      * @private
      */
-    private connector: string
+    private connector: string | null
 
     /**
      * Defines the step to be redirected, if set
      *
      * @private
      */
-    private redirect: number
+    private redirect: number | null
 
     /**
      * @inheritDoc
@@ -71,10 +71,20 @@ export default class LicenseConnectorStep extends Step
         this.connector = installer
 
         // Set redirect
-        this.redirect = parseInt(startAt)
+        if(startAt)
+        {
+            // Set state
+            State.set('isRedirect', true)
 
-        // Open modal instant
-        this.modal.open()
+            // Set redirection
+            this.redirect = parseInt(startAt)
+
+            // Open modal instantly
+            this.modal.open()
+
+            // Remove get parameters
+            window.history.pushState({}, document.title, window.location.pathname);
+        }
     }
 
     /**
@@ -105,6 +115,11 @@ export default class LicenseConnectorStep extends Step
                     if(connector.config.name === this.connector)
                     {
                         this.useLicenseConnector(connector, this.redirect)
+
+                        // Reset
+                        this.connector = null
+                        this.redirect = null
+
                         return
                     }
                 }

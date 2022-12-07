@@ -49,6 +49,9 @@ export default class ProcessStep extends Step
             addButton.disabled = true
             closeButton.disabled = true
 
+            // Clear the entire state
+            State.clear()
+
             this.manager.reset()
         }
 
@@ -68,9 +71,6 @@ export default class ProcessStep extends Step
         this.manager.finish(() => {
             addButton.disabled = false
             closeButton.disabled = false
-
-            // Clear the entire state
-            State.clear()
 
             closeButton.addEventListener('click', () => {
                 // Reset all
