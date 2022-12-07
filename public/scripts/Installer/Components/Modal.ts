@@ -87,11 +87,10 @@ export default class Modal extends Container
     {
         for (const s of step)
         {
-            s.addModal(this)
-
             this.steps.push(s)
 
             s.appendTo(this.stepContainer)
+            s.addModal(this)
         }
     }
 

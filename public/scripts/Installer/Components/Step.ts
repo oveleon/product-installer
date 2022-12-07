@@ -70,6 +70,8 @@ export default abstract class Step extends Container
     public addModal(modal: Modal): void
     {
         this.modal = modal
+
+        this.mount()
     }
 
     /**
@@ -210,6 +212,13 @@ export default abstract class Step extends Container
             this.submit(form, data, event)
         }
     }
+
+    /**
+     * Called when step is mounted.
+     *
+     * @protected
+     */
+    protected mount(): void {}
 
     /**
      * Set events.

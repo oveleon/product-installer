@@ -5,5 +5,5 @@ services:
         public: true
 
     Oveleon\ProductInstaller\:
-        resource: '../../'
-        exclude: '../../{Model,DependencyInjection,Resources,LicenseConnector}'
+        resource: '../src/'
+        exclude: '../src/{Model,DependencyInjection,Resources,LicenseConnector}'

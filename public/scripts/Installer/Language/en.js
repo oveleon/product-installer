@@ -8,6 +8,7 @@ module.exports = {
     "license_connector.headline":       "Please select a product type",
     "license_connector.load.connector": "Information is retrieved",
     "license_connector.load.steps":     "Masks are loaded",
+    "license_connector.load.redirect":  "Just a moment, you will be redirected soon",
 
     // Contao Manager
     "contao_manager.headline":          "Contao Manager",

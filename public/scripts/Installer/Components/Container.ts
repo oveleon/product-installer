@@ -18,7 +18,7 @@ export default class Container
     constructor(
         public id: string
     ){
-        this.create()
+        this.createTemplate()
     }
 
     /**
@@ -26,7 +26,7 @@ export default class Container
      *
      * @private
      */
-    private create(): void
+    private createTemplate(): void
     {
         this.template = <HTMLDivElement> document.createElement('div')
         this.template.id = this.id

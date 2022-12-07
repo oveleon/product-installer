@@ -2,12 +2,14 @@ import {i18n} from "../Language/"
 import {call} from "../../Utils/network"
 import Step, {StepConfig} from "../Components/Step";
 import {createInstance} from "../Utils/InstanceUtils";
+import State from "../State";
 
 /**
  * License connector configuration.
  */
 export interface LicenseConnectorConfig {
     config: {
+        name: string,
         title: string,
         description: string,
         image: string
@@ -22,6 +24,20 @@ export interface LicenseConnectorConfig {
  */
 export default class LicenseConnectorStep extends Step
 {
+    /**
+     * Defines the connector name to use, if set
+     *
+     * @private
+     */
+    private connector: string
+
+    /**
+     * Defines the step to be redirected, if set
+     *
+     * @private
+     */
+    private redirect: number
+
     /**
      * @inheritDoc
      */
@@ -38,10 +54,36 @@ export default class LicenseConnectorStep extends Step
     /**
      * @inheritDoc
      */
+    protected mount(): void
+    {
+        // Handle url trigger
+        const params = new URLSearchParams(window.location.search)
+
+        const installer = params.get('installer')
+        const startAt = params.get('start')
+
+        if(!installer)
+        {
+            return
+        }
+
+        // Set connector name
+        this.connector = installer
+
+        // Set redirect
+        this.redirect = parseInt(startAt)
+
+        // Open modal instant
+        this.modal.open()
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected events(): void
     {
         // Show loader
-        this.modal.loader(true, i18n('license_connector.load.connector'))
+        this.modal.loader(true, this.redirect ? i18n('license_connector.load.redirect') : i18n('license_connector.load.connector'))
 
         // Get license connectors
         call("/contao/installer/license_connectors", {}, true).then((response) => {
@@ -53,6 +95,21 @@ export default class LicenseConnectorStep extends Step
             {
                 super.error(response)
                 return
+            }
+
+            // Check if a direct call to a step is set
+            if(this.connector && this.redirect)
+            {
+                for (const connector of response.license_connectors)
+                {
+                    if(connector.config.name === this.connector)
+                    {
+                        this.useLicenseConnector(connector, this.redirect)
+                        return
+                    }
+                }
+
+                throw new Error('The license connector to be used cannot be found')
             }
 
             // Skip step if only one license connector is active
@@ -77,12 +134,17 @@ export default class LicenseConnectorStep extends Step
      * Set license connector to use
      *
      * @param config
+     * @param startAt
      *
      * @private
      */
-    private useLicenseConnector(config: LicenseConnectorConfig): void
+    private useLicenseConnector(config: LicenseConnectorConfig, startAt?: number): void
     {
+        // Show loader
         this.modal.loader(true, i18n('license_connector.load.steps'))
+
+        // Set connector information
+        State.set('connector', config.config.name)
 
         // Get steps by string
         for (const step of config.steps)
@@ -101,7 +163,14 @@ export default class LicenseConnectorStep extends Step
         this.modal.loader(false)
 
         // Goto next step
-        this.modal.next()
+        if(startAt)
+        {
+            this.modal.open(startAt)
+        }
+        else
+        {
+            this.modal.next()
+        }
     }
 
     /**

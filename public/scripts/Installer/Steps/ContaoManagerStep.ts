@@ -33,18 +33,29 @@ export default class ContaoManagerStep extends Step
         this.modal.loader(true, i18n('contao_manager.loading'))
 
         // Check if installer is authorized
-        call('/contao/contao_manager_authorization').then((response) => {
+        call('/contao/contao_manager/session').then((response) => {
             // Hide loader
             this.modal.loader(false)
 
             if(response?.status === 'OK')
             {
-                //this.modal.next()
+                this.modal.next()
             }
 
             // Add button events
             this.template.querySelector('#cm-authenticate').addEventListener('click', () => {
-                document.location.href = '/contao-manager.phar.php/#oauth?scope=admin&client_id=product_installer&return_url=http://contao413.local/contao?installer=' + this.modal.currentIndex
+                const returnUrl = new URLSearchParams({
+                    installer:  State.get('connector'),
+                    start:      this.modal.currentIndex.toString()
+                })
+
+                const parameter = new URLSearchParams({
+                    scope:      'admin',
+                    client_id:  'product_installer',
+                    return_url:  response.manager.return_url + '?' + returnUrl.toString()
+                })
+
+                document.location.href = response.manager.path + '/#oauth?' + parameter.toString()
             })
 
             console.log(response);

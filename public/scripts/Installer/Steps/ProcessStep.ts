@@ -2,6 +2,7 @@ import {i18n} from "../Language/"
 import Step from "../Components/Step";
 import ProcessManager from "../Process/ProcessManager";
 import {createInstance} from "../Utils/InstanceUtils";
+import State from "../State";
 
 /**
  * Process step class.
@@ -67,6 +68,9 @@ export default class ProcessStep extends Step
         this.manager.finish(() => {
             addButton.disabled = false
             closeButton.disabled = false
+
+            // Clear the entire state
+            State.clear()
 
             closeButton.addEventListener('click', () => {
                 // Reset all
