@@ -125,6 +125,51 @@ $background-color: #688191;
     }
   }
 
+  .notifications{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 25px;
+    pointer-events: none;
+
+    .notification{
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 5px 9px;
+      border-radius: 5px;
+      pointer-events: auto;
+
+      background: #e4f0f7;
+
+      p{
+        padding: 0;
+        margin: 0;
+      }
+
+      button.close{
+        width: auto;
+        height: auto;
+        border: 0 none;
+        padding: 3px;
+        line-height: 1;
+        margin: 0 0 0 10px;
+
+        &:after{
+          display: block;
+          content: '✕';
+        }
+      }
+
+      &.error{
+        background: #f7e4e4;
+      }
+    }
+  }
+
   .actions{
     margin-top: auto;
     padding-top: 20px;
@@ -190,6 +235,10 @@ $background-color: #688191;
       > div{
         padding: 35px;
       }
+    }
+
+    .notifications{
+      padding: 35px;
     }
 
     .actions {

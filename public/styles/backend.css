@@ -1,3 +1,4 @@
+@charset "UTF-8";
 #installer .loader .text {
   font-size: 0.95rem;
   margin-top: 25px;
@@ -432,6 +433,44 @@
 #installer #steps .widget.error input {
   border-color: #b54c4c;
 }
+#installer .notifications {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 25px;
+  pointer-events: none;
+}
+#installer .notifications .notification {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 5px 9px;
+  border-radius: 5px;
+  pointer-events: auto;
+  background: #e4f0f7;
+}
+#installer .notifications .notification p {
+  padding: 0;
+  margin: 0;
+}
+#installer .notifications .notification button.close {
+  width: auto;
+  height: auto;
+  border: 0 none;
+  padding: 3px;
+  line-height: 1;
+  margin: 0 0 0 10px;
+}
+#installer .notifications .notification button.close:after {
+  display: block;
+  content: "✕";
+}
+#installer .notifications .notification.error {
+  background: #f7e4e4;
+}
 #installer .actions {
   margin-top: auto;
   padding-top: 20px;
@@ -479,6 +518,9 @@
     margin-bottom: 22px;
   }
   #installer #steps > div {
+    padding: 35px;
+  }
+  #installer .notifications {
     padding: 35px;
   }
   #installer .actions button {

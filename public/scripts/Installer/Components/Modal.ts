@@ -38,6 +38,13 @@ export default class Modal extends Container
     private readonly stepContainer: HTMLDivElement
 
     /**
+     * The container in which the notification are placed.
+     *
+     * @private
+     */
+    public readonly notificationContainer: HTMLDivElement
+
+    /**
      * The Loader Instance for the modal.
      *
      * @private
@@ -71,6 +78,12 @@ export default class Modal extends Container
         this.stepContainer.id = 'steps'
 
         this.insideContainer.append(this.stepContainer)
+
+        // Create notification container
+        this.notificationContainer = <HTMLDivElement> document.createElement('div')
+        this.notificationContainer.classList.add('notifications')
+
+        this.insideContainer.append(this.notificationContainer)
 
         // Create loader
         this.loaderElement = new Loader()

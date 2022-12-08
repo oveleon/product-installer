@@ -139,10 +139,7 @@ export default class LicenseConnectorStep extends Step
                 this.createLicenseConnectorElement(connector)
             }
 
-        }).catch(() => {
-            // ToDo: Error
-            console.log('error catch')
-        })
+        }).catch((e: Error) => super.error(e))
     }
 
     /**

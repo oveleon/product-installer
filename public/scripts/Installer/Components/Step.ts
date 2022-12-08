@@ -1,11 +1,12 @@
 import Container from "./Container"
 import Modal from "./Modal";
+import Notification, {NotificationTypes} from "./Notification";
 
 /**
  * Step error response.
  */
-export interface StepErrorResponse {
-    error: number | boolean,
+export interface StepErrorResponse extends Error {
+    error?: number | boolean,
     fields?: []
 }
 
@@ -185,6 +186,13 @@ export default abstract class Step extends Container
                     form[f].parentElement.classList.remove('error')
                 }, {once: true})
             }
+        }
+
+        // Check if there are a message to show
+        if(response.message)
+        {
+            (new Notification(response.message, NotificationTypes.ERROR, true))
+                .appendTo(this.modal.notificationContainer)
         }
     }
 
