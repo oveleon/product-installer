@@ -12,7 +12,7 @@ abstract class AbstractProcess
     /**
      * Predefined steps.
      */
-    const PROCESS_DEFAULT = 'DefaultProcess';
+    const PROCESS_API = 'ApiProcess';
 
     /**
      * The process routes.

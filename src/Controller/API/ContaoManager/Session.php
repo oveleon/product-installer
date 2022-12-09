@@ -11,7 +11,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('%contao.backend.route_prefix%/contao_manager/session',
+#[Route('%contao.backend.route_prefix%/api/contao_manager/session',
     name:       Session::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],
     methods:    ['POST']
@@ -48,10 +48,7 @@ class Session
             ]
         ];
 
-        // Get contao manager token
-        $token = $this->contaoManager->getToken();
-
-        if(null === $token)
+        if(null === $this->contaoManager->getToken())
         {
             return new JsonResponse([...$response, ...[
                 'error' => true,

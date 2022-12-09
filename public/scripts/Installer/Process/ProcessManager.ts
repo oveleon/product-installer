@@ -1,7 +1,7 @@
 import Process from "./Process";
 
-export default class ProcessManager {
-
+export default class ProcessManager
+{
     /**
      * Current index of process.
      *

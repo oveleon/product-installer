@@ -11,14 +11,14 @@ namespace Oveleon\ProductInstaller\LicenseConnector\Process;
  * @property $title
  * @property $description
  */
-class DefaultProcess extends AbstractProcess
+class ApiProcess extends AbstractProcess
 {
     /**
      * Defines the standardized name of the route for retrieving and checking the process.
      *
      * @required
      */
-    const ROUTE_PROCESS = 'process';
+    const ROUTE = 'api';
 
     /**
      * @inheritDoc
@@ -28,6 +28,6 @@ class DefaultProcess extends AbstractProcess
         $this->title = $title;
         $this->description = $description;
 
-        parent::__construct(self::PROCESS_DEFAULT);
+        parent::__construct(self::PROCESS_API);
     }
 }

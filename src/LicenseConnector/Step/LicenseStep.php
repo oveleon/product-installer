@@ -14,13 +14,6 @@ namespace Oveleon\ProductInstaller\LicenseConnector\Step;
 class LicenseStep extends AbstractStep
 {
     /**
-     * Defines the standardized name of the route for retrieving and checking the licenses.
-     *
-     * @required
-     */
-    const ROUTE_CHECK_LICENSE = 'license';
-
-    /**
      * @inheritDoc
      */
     public function __construct(string $title = '', string $description = '')

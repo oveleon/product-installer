@@ -124,14 +124,14 @@ export default abstract class Step extends Container
         // Update content before show
         super.content(this.getTemplate())
 
+        // Show step before bind events (e.g. to be able to use this.model.next() within the event method)
+        super.show()
+
         // Bind default events
         this.defaultEvents()
 
         // Bind custom events
         this.events()
-
-        // Show step
-        super.show()
     }
 
     /**

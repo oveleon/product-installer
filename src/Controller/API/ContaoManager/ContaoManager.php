@@ -25,6 +25,8 @@ class ContaoManager
      */
     public function getToken(): ?string
     {
+        // ToDo: Use .env.installer instead of database
+
         if($this->token)
         {
             return $this->token;

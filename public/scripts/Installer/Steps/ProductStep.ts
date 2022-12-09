@@ -14,7 +14,7 @@ export default class ProductStep extends Step
      */
     protected getTemplate(): string
     {
-        const props = State.get('product')
+        const props = State.get('config')
         let products = ''
 
         for (const product of props.products)
@@ -42,7 +42,7 @@ export default class ProductStep extends Step
             </div>
             <div class="actions">
                 <button data-prev>${i18n('actions.back')}</button>
-                <button data-next class="primary">${i18n('product.actions.install')}</button>
+                <button data-next class="primary">${i18n('actions.next')}</button>
             </div>
         `
     }

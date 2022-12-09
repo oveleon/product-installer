@@ -1,6 +1,6 @@
 <?php
 
-namespace Oveleon\ProductInstaller\Controller;
+namespace Oveleon\ProductInstaller\Controller\Import;
 
 use Contao\CoreBundle\Exception\RedirectResponseException;
 use Exception;

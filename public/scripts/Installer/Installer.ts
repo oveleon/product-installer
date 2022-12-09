@@ -1,6 +1,7 @@
 import Modal from "./Components/Modal";
 import {setLanguage} from "./Language/";
 import LicenseConnectorStep from "./Steps/LicenseConnectorStep";
+import State from "./State";
 
 export default class Installer
 {
@@ -9,6 +10,9 @@ export default class Installer
 
     constructor(locale: string)
     {
+        // Restore state
+        State.init()
+
         // Set current locale
         this.setLocale(locale)
 

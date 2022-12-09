@@ -71,4 +71,19 @@ export default class State
     {
         localStorage.setItem(this.key, JSON.stringify(this.state))
     }
+
+    /**
+     * Restore sate.
+     *
+     * @private
+     */
+    public static init(): void
+    {
+        let state = localStorage.getItem(this.key)
+
+        if(state)
+        {
+            this.state = JSON.parse(state)
+        }
+    }
 }

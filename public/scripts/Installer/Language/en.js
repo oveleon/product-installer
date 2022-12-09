@@ -3,6 +3,7 @@ module.exports = {
     "actions.close":                    "Close",
     "actions.back":                     "Back",
     "actions.next":                     "Next",
+    "actions.start":                    "Start",
 
     // License step
     "license_connector.headline":       "Please select a product type",
@@ -25,7 +26,6 @@ module.exports = {
 
     // Product step
     "product.headline":                 "Your products",
-    "product.actions.install":          "Install product",
 
     // Install step
     "install.headline":                 "Installation",

@@ -7,11 +7,11 @@ use Github\AuthMethod;
 use Github\Client;
 
 /**
- * Class for retrieving and importing GitHub repositories.
+ * Class for downloading GitHub repositories and storing them as archives.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-class RepositoryImport // ToDo: This method should called e.g. `RepositoryDownloader`; It doesnt import, only download and save
+class RepositoryDownloader
 {
     protected Client $client;
 
@@ -50,11 +50,10 @@ class RepositoryImport // ToDo: This method should called e.g. `RepositoryDownlo
     }
 
     /**
-     * Import packages.
+     * Download and archive repository.
      */
-    public function import(): void
+    public function archive(): void
     {
-        // ToDo: This method should called e.g. `save` or `archive` ord `download`
         $this->authenticate();
 
         $archiveContent = $this->client
@@ -67,6 +66,9 @@ class RepositoryImport // ToDo: This method should called e.g. `RepositoryDownlo
         $archive->close();
     }
 
+    /**
+     * Authenticate.
+     */
     private function authenticate(): void
     {
         $this->client = new Client();

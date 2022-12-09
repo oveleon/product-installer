@@ -27,8 +27,9 @@ export default class ProcessStep extends Step
             <h2>${i18n('install.headline')}</h2>
             <div class="process"></div>
             <div class="actions">
-                <button data-close disabled>${i18n('actions.close')}</button>
-                <button class="add primary" disabled>${i18n('install.actions.add')}</button>
+                <button class="start primary">${i18n('actions.start')}</button>
+                <button data-close disabled hidden>${i18n('actions.close')}</button>
+                <button class="add primary" disabled hidden>${i18n('install.actions.add')}</button>
             </div>
         `
     }
@@ -41,13 +42,19 @@ export default class ProcessStep extends Step
         // Get the container in which the processes should be appended
         const container = <HTMLDivElement> this.template.querySelector('.process')
 
+        const startButton = <HTMLButtonElement> this.template.querySelector('button.start')
         const addButton = <HTMLButtonElement> this.template.querySelector('button.add')
         const closeButton = <HTMLButtonElement> this.template.querySelector('[data-close]')
 
         // Method for reset the step
         const resetProcess = () => {
+            startButton.hidden = false
+            startButton.disabled = false
+
             addButton.disabled = true
+            addButton.hidden = false
             closeButton.disabled = true
+            closeButton.hidden = false
 
             // Clear the entire state
             State.clear()
@@ -88,6 +95,16 @@ export default class ProcessStep extends Step
         })
 
         // Start process manager
-        this.manager.start()
+        startButton.addEventListener('click', () => {
+            startButton.hidden = true
+            startButton.disabled = true
+
+            addButton.disabled = true
+            addButton.hidden = false
+            closeButton.disabled = true
+            closeButton.hidden = false
+
+            this.manager.start()
+        })
     }
 }

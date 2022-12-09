@@ -43,7 +43,7 @@ export default class LicenseStep extends Step
         this.modal.loader(true, i18n('license.loading'))
 
         // Check license
-        call(this.getRoute('license'), {
+        call('/contao/api/license_connector/license', {
             license: data.get('license')
         }).then((response) => {
             // Hide loader
@@ -56,8 +56,8 @@ export default class LicenseStep extends Step
                 return
             }
 
-            // Save product information
-            State.set('product', response)
+            // Save information
+            State.set('config', response)
 
             // Reset form
             form.reset()

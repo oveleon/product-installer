@@ -6,7 +6,7 @@ import {call} from "../../Utils/network"
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class DefaultProcess extends Process
+export default class ApiProcess extends Process
 {
     /**
      * @inheritDoc
@@ -27,9 +27,7 @@ export default class DefaultProcess extends Process
     protected process(): void
     {
         // Check license
-        call(this.getRoute('process')).then((response) => {
-            console.log(response)
-
+        call(this.getRoute('api')).then((response) => {
             // Check errors
             if(response.error)
             {

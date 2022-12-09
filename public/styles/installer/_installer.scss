@@ -7,7 +7,7 @@ $background-color: #688191;
 @import "loader";
 @import "license-connector";
 @import "product";
-@import "install";
+@import "process";
 
 [hidden]{
   display: none !important;
@@ -74,8 +74,14 @@ $background-color: #688191;
     > div{
       display: flex;
       flex-direction: column;
-      padding: 25px;
       height: 100%;
+      padding: 25px;
+
+      .inherit {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
     }
 
     .widget{

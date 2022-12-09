@@ -96,7 +96,7 @@ export default class LicenseConnectorStep extends Step
         this.modal.loader(true, this.redirect ? i18n('license_connector.load.redirect') : i18n('license_connector.load.connector'))
 
         // Get license connectors
-        call("/contao/installer/license_connectors", {}, true).then((response) => {
+        call("/contao/api/license_connector/config", {}, true).then((response) => {
             // Hide loader
             this.modal.loader(false)
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oveleon\ProductInstaller\Controller;
+namespace Oveleon\ProductInstaller\Controller\API\LicenseConnector;
 
 use Contao\Controller;
 use Oveleon\ProductInstaller\LicenseConnector\AbstractLicenseConnector;
@@ -8,18 +8,18 @@ use Oveleon\ProductInstaller\LicenseConnector\Step\AbstractStep;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('%contao.backend.route_prefix%/installer',
-    name:       InstallerController::class,
+#[Route('%contao.backend.route_prefix%/api/license_connector',
+    name:       LicenseConnectorController::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],
     methods:    ['POST']
 )]
-class InstallerController
+class LicenseConnectorController
 {
-    #[Route('/license_connectors',
-        name: 'license_connectors',
+    #[Route('/config',
+        name: 'license_connectors_config',
         methods: ['POST']
     )]
-    public function getLicenseConnector(): JsonResponse
+    public function getLicenseConnectors(): JsonResponse
     {
         $licenseConnectors = Controller::getContainer()->getParameter('product_installer.license_connectors');
 
