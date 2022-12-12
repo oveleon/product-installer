@@ -44,7 +44,6 @@ class LicenseController
                 'products' => [
                     [
                         'name'          => 'Vorlagen-Paket MEDIUM',
-                        'type'          => 'github:import',
                         'version'       => '1.0.0',
                         'image'         => 'https://avatars.githubusercontent.com/u/44843847?s=200&v=4',
                         'description'   => 'Um ein triviales Beispiel zu nehmen, wer von uns unterzieht sich je anstrengender körperlicher Betätigung, außer um Vorteile daraus zu ziehen?',
@@ -52,9 +51,18 @@ class LicenseController
                         'repository'    => 'oveleon/content-package-1',
                         'tasks'         => [
                             [
-                                'type'      => 'composer:update',
-                                'required'  => ['contao-thememanager/core'],
-                                'pkey'      => null
+                                'type'    => 'composer:update',
+                                'require' => ['contao-thememanager/core'],
+                                'update'  => ['contao-thememanager/core'],
+                                'uploads' => false,
+                                'pkey'    => null
+                            ],
+                            [
+                                'type'    => 'composer:update',
+                                'require' => ['contao-thememanager/ctm-tiny-slider'],
+                                'update'  => ['contao-thememanager/ctm-tiny-slider'],
+                                'uploads' => false,
+                                'pkey'    => 'ABC'
                             ]
                         ]
                     ]

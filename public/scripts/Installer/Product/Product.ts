@@ -1,21 +1,13 @@
 /**
- * Product types.
- */
-export enum ProductType {
-    GITHUB_IMPORT = 'github:import',
-    COMPOSER_REQUIRE = 'composer:require',
-}
-
-/**
  * Task types.
  */
 export enum TaskType {
-    COMPOSER_UPDATE = 'composer:update',
-    COMPOSER_INSTALL = 'composer:install'
+    GITHUB_IMPORT    = 'github:import',
+    COMPOSER_UPDATE  = 'composer:update'
 }
 
 /**
- * Task configuration.
+ * Global task configuration.
  */
 export interface TaskConfig {
     type: TaskType
@@ -26,7 +18,6 @@ export interface TaskConfig {
  */
 export interface ProductConfig {
     name: string,
-    type: ProductType
     version: string,
     image: string,
     description: string,

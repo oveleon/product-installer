@@ -155,6 +155,9 @@ export default abstract class Step extends Container
      */
     protected error(response: StepErrorResponse): void
     {
+        // Hide loader
+        this.modal.loader(false)
+
         // Unlock form
         this.lockedForm = false
 

@@ -122,9 +122,6 @@
     border-color: #e57c11;
   }
 }
-#installer form {
-  height: 100%;
-}
 #installer .license-connector-container {
   display: flex;
   flex-direction: column;
@@ -343,6 +340,10 @@
 }
 
 [data-connection-state] {
+  margin: auto;
+  text-align: center;
+}
+[data-connection-state]:before {
   display: block;
   content: "";
   width: 100px;
@@ -352,7 +353,7 @@
   background-size: contain;
 }
 
-[data-connection-state=active] {
+[data-connection-state=active]:before {
   background: url("/bundles/productinstaller/icons/connection.svg") center center no-repeat;
 }
 
@@ -384,6 +385,92 @@
   line-height: 1.5em;
   color: #495258;
 }
+#installer form .widget {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+#installer form .widget + .widget {
+  margin: 15px 0 0 0;
+}
+#installer form .widget p {
+  font-size: 0.8rem;
+  margin: 5px 0 0;
+}
+#installer form .widget label {
+  display: inline-block;
+  color: #222;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+#installer form .widget.center {
+  align-items: center;
+}
+#installer form .widget.text label {
+  margin-bottom: 6px;
+}
+#installer form .widget.text input {
+  font-size: 0.9rem;
+  line-height: 0;
+  border: 1px solid #688191;
+  border-radius: 3px;
+  outline-color: #688191;
+}
+#installer form .widget.text input::placeholder {
+  color: #a6a6a6;
+}
+#installer form .widget.text input[type=text] {
+  padding: 6px 10px;
+}
+#installer form .widget.checkbox input {
+  position: absolute;
+  z-index: 0;
+  -webkit-appearance: none;
+}
+#installer form .widget.checkbox input:checked + label:before {
+  border-color: #2b8718;
+}
+#installer form .widget.checkbox input:checked + label:after {
+  margin: 0 0 0 20px;
+  background-color: #2b8718;
+}
+#installer form .widget.checkbox label {
+  position: relative;
+  cursor: pointer;
+  line-height: 1.3;
+  padding-left: 55px;
+}
+#installer form .widget.checkbox label:before {
+  content: "";
+  width: 40px;
+  height: 20px;
+  border-radius: 10px;
+  border: 1px solid #688191;
+  background-color: #fbfbfb;
+  transition: color 0.5s linear;
+  position: absolute;
+  left: 0;
+  top: -1px;
+  z-index: 5;
+}
+#installer form .widget.checkbox label:after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #688191;
+  transition: margin 0.1s ease-in-out;
+  z-index: 10;
+}
+#installer form .widget.error label, #installer form .widget.error p {
+  color: #b54c4c;
+}
+#installer form .widget.error input {
+  border-color: #b54c4c;
+}
 #installer #steps {
   width: 100%;
 }
@@ -402,41 +489,6 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-}
-#installer #steps .widget {
-  display: flex;
-  flex-direction: column;
-  margin: 0 0 15px;
-}
-#installer #steps .widget label {
-  display: inline-block;
-  color: #222;
-  font-size: 0.95rem;
-  font-weight: 500;
-  margin-bottom: 6px;
-}
-#installer #steps .widget input {
-  font-size: 0.9rem;
-  line-height: 0;
-  border: 1px solid #688191;
-  border-radius: 3px;
-  outline-color: #688191;
-}
-#installer #steps .widget input::placeholder {
-  color: #a6a6a6;
-}
-#installer #steps .widget input[type=text] {
-  padding: 6px 10px;
-}
-#installer #steps .widget p {
-  font-size: 0.8rem;
-  margin: 5px 0 0;
-}
-#installer #steps .widget.error label, #installer #steps .widget.error p {
-  color: #b54c4c;
-}
-#installer #steps .widget.error input {
-  border-color: #b54c4c;
 }
 #installer .notifications {
   display: flex;

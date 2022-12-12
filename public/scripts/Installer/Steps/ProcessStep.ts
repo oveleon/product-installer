@@ -27,6 +27,7 @@ export default class ProcessStep extends Step
             <h2>${i18n('install.headline')}</h2>
             <div class="process"></div>
             <div class="actions">
+                <button class="back" data-prev>${i18n('actions.back')}</button>
                 <button class="start primary">${i18n('actions.start')}</button>
                 <button data-close disabled hidden>${i18n('actions.close')}</button>
                 <button class="add primary" disabled hidden>${i18n('install.actions.add')}</button>
@@ -42,12 +43,15 @@ export default class ProcessStep extends Step
         // Get the container in which the processes should be appended
         const container = <HTMLDivElement> this.template.querySelector('.process')
 
+        const backButton = <HTMLButtonElement> this.template.querySelector('button.start')
         const startButton = <HTMLButtonElement> this.template.querySelector('button.start')
         const addButton = <HTMLButtonElement> this.template.querySelector('button.add')
         const closeButton = <HTMLButtonElement> this.template.querySelector('[data-close]')
 
         // Method for reset the step
         const resetProcess = () => {
+            backButton.hidden = false
+            backButton.disabled = false
             startButton.hidden = false
             startButton.disabled = false
 
@@ -96,6 +100,8 @@ export default class ProcessStep extends Step
 
         // Start process manager
         startButton.addEventListener('click', () => {
+            backButton.hidden = true
+            backButton.disabled = true
             startButton.hidden = true
             startButton.disabled = true
 

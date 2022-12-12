@@ -36,7 +36,7 @@ export default abstract class Process extends Container
      * Creates a new process instance.
      */
     constructor(
-        protected container: HTMLElement,
+        protected parentContainer: HTMLElement,
         protected config: ProcessConfig
     ){
         // Create container
@@ -45,7 +45,7 @@ export default abstract class Process extends Container
         // Create process step template
         this.addClass('process-step', 'not-active')
         this.content(this.getTemplate())
-        this.appendTo(this.container)
+        this.appendTo(this.parentContainer)
 
         // Add error message container
         this.errorContainer = <HTMLDivElement> document.createElement('div')

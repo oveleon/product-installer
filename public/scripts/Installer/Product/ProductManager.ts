@@ -25,7 +25,7 @@ export default class ProductManager
      *
      * @param types
      */
-    getTasksOfType(...types: TaskType[]): TaskConfig[]
+    getTasksByType(...types: TaskType[]): TaskConfig[]
     {
         let tasks = []
 

@@ -4,6 +4,7 @@ import {i18n} from "../Language"
 import Step from "../Components/Step";
 import ProductManager from "../Product/ProductManager";
 import {TaskConfig, TaskType} from "../Product/Product";
+import ContaoManager from "../ContaoManager";
 
 /**
  * Contao Manager step class.
@@ -31,9 +32,19 @@ export default class ContaoManagerStep extends Step
             </div>
             <div class="tasks inherit" hidden>
                 <h2>${i18n('contao_manager.headline')}</h2>
-                <div class="console"></div>
+                <div data-connection-state="active"></div>
+                <form id="install-form">
+                    <div class="widget checkbox center">
+                        <input type="checkbox" name="install_manually" id="install_manually" required/>
+                        <label for="install_manually">${i18n('contao_manager.install.label')}</label>
+                    </div>
+                </form>
+                <div class="install" hidden>
+                    <p>${i18n('contao_manager.install.description')}</p>
+                    <h4>${i18n('contao_manager.dependencies.headline')}</h4>
+                    <div class="tasks"></div>
+                </div>
                 <div class="actions">
-                    <button class="start primary">${i18n('actions.start')}</button>
                     <button class="primary" data-next hidden disabled>${i18n('actions.next')}</button>
                 </div>
             </div>
@@ -47,13 +58,15 @@ export default class ContaoManagerStep extends Step
     {
         // Create product manager to handle tasks
         this.productManager = new ProductManager(State.get('config').products)
-        this.managerTasks = this.productManager.getTasksOfType(
-            TaskType.COMPOSER_UPDATE,
-            TaskType.COMPOSER_INSTALL
-        )
+        this.managerTasks = this.productManager.getTasksByType(TaskType.COMPOSER_UPDATE)
+
+        const useManager = this.managerTasks.length > 0
+
+        // Save information for further steps and processes
+        State.set('useManager', useManager)
 
         // Check if contao manager steps could be skipped
-        if(!this.managerTasks.length)
+        if(!useManager)
         {
             this.modal.next()
             return
@@ -116,10 +129,24 @@ export default class ContaoManagerStep extends Step
         authContainer.hidden = true
         taskContainer.hidden = false
 
-        console.log(this.managerTasks)
-
-        // ToDo: Enable after install is complete
+        // Enable next button
         nextBtn.disabled = false
         nextBtn.hidden = false
+
+        this.createTasks()
+    }
+
+    /**
+     * Create console tasks
+     *
+     * @private
+     */
+    private createTasks(): void
+    {
+        const cm = new ContaoManager()
+        const privateKeys = cm.getPrivateKeyByTasks(this.managerTasks)
+        const updateTasks = cm.summarizeComposerTasks(this.managerTasks)
+
+        console.log(updateTasks)
     }
 }
