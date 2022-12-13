@@ -25,7 +25,7 @@ export default class ProcessStep extends Step
     {
         return `
             <h2>${i18n('install.headline')}</h2>
-            <div class="process"></div>
+            <div class="process inherit"></div>
             <div class="actions">
                 <button class="back" data-prev>${i18n('actions.back')}</button>
                 <button class="start primary">${i18n('actions.start')}</button>
@@ -43,7 +43,7 @@ export default class ProcessStep extends Step
         // Get the container in which the processes should be appended
         const container = <HTMLDivElement> this.template.querySelector('.process')
 
-        const backButton = <HTMLButtonElement> this.template.querySelector('button.start')
+        const backButton = <HTMLButtonElement> this.template.querySelector('button.back')
         const startButton = <HTMLButtonElement> this.template.querySelector('button.start')
         const addButton = <HTMLButtonElement> this.template.querySelector('button.add')
         const closeButton = <HTMLButtonElement> this.template.querySelector('[data-close]')

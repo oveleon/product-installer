@@ -14,12 +14,18 @@ module.exports = {
     // Contao Manager
     "contao_manager.headline":              "Contao Manager",
     "contao_manager.description":           "To install the necessary dependencies, we need access to the Contao Manager. If you agree, click on 'Authorize' and follow the steps in the Contao Manager. You will be taken back to the installation process.",
+    "contao_manager.description.success":   "Access to the Contao Manager has been authorized. If you still want to perform the installation manually, please click 'Manual installation'.",
     "contao_manager.authorize":             "Authorize",
     "contao_manager.open_manager":          "Open Contao Manager",
     "contao_manager.install.label":         "Install dependencies manually",
-    "contao_manager.install.description":   "Please make sure that you have manually installed the dependencies before proceeding to the next step.",
+    "contao_manager.install.button":        "Manual installation",
+    "contao_manager.install.description":   "Your composer.json file has been prepared for manual installation. Please make sure that you have manually installed the dependencies before proceeding to the next step.",
     "contao_manager.dependencies.headline": "Dependencies",
+    "contao_manager.dependencies.installed":"Yes, I have installed all dependencies",
+    "contao_manager.connection.active":     "Connection was established",
+    "contao_manager.connection.inactive":   "Connection could not be established",
     "contao_manager.loading":               "Connection to the Contao Manager is established",
+    "contao_manager.loading.composer":      "The composer.json file is prepared for manual installation",
 
     // License step
     "license.headline":                     "License verification",

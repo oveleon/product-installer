@@ -48,21 +48,28 @@ class LicenseController
                         'image'         => 'https://avatars.githubusercontent.com/u/44843847?s=200&v=4',
                         'description'   => 'Um ein triviales Beispiel zu nehmen, wer von uns unterzieht sich je anstrengender körperlicher Betätigung, außer um Vorteile daraus zu ziehen?',
                         'registrable'   => true,
-                        'repository'    => 'oveleon/content-package-1',
                         'tasks'         => [
                             [
-                                'type'    => 'composer:update',
-                                'require' => ['contao-thememanager/core'],
-                                'update'  => ['contao-thememanager/core'],
-                                'uploads' => false,
+                                'type'    => 'repo:clone',
+                                'provider' => 'github',
+                                'repository' => 'oveleon/content-package-1',
                                 'pkey'    => null
                             ],
                             [
-                                'type'    => 'composer:update',
-                                'require' => ['contao-thememanager/ctm-tiny-slider'],
-                                'update'  => ['contao-thememanager/ctm-tiny-slider'],
-                                'uploads' => false,
-                                'pkey'    => 'ABC'
+                                'type'     => 'composer:update',
+                                'provider' => 'gitlab',
+                                'require'  => ['oveleon/product-exporter'],
+                                'update'   => ['oveleon/product-exporter'],
+                                'composer' => [
+                                    'repositories' => [
+                                        [
+                                            'type' => 'vcs',
+                                            'url'  => 'https://gitlab+deploy-token-1585707:EzG_8siAuE8Rf9sGh4Rj@gitlab.com/oveleon/product-exporter.git'
+                                        ]
+                                    ]
+                                ],
+                                'uploads'  => false,
+                                'pkey'     => 'ABC'
                             ]
                         ]
                     ]

@@ -1,10 +1,12 @@
-import {TaskConfig} from "./Product/Product";
+import {Provider, TaskConfig} from "./Product/Product";
 
 /**
- * Composer configuration.
+ * Composer configuration (Types: COMPOSER_UPDATE, COMPOSER_INSTALL).
  */
 export interface ComposerConfig extends TaskConfig {
+    provider?: Provider,
     require?: [],
+    composer?: [],
     update?: [],
     remove?: [],
     uploads?: boolean,

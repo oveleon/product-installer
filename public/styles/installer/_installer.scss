@@ -7,6 +7,7 @@ $background-color: #688191;
 @import "loader";
 @import "license-connector";
 @import "product";
+@import "manager";
 @import "process";
 
 [hidden]{
@@ -14,27 +15,37 @@ $background-color: #688191;
 }
 
 [data-connection-state] {
-  margin: auto;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+
+  font-weight: 500;
+  color: #a86363;
 
   &:before{
     display: block;
     content: "";
     width: 100px;
-    height: 100px;
-    margin: auto;
+    height: 80px;
     background: url('/bundles/productinstaller/icons/connection-lost.svg') center center no-repeat;
     background-size: contain;
   }
 }
 
-[data-connection-state="active"]:before {
-  background: url('/bundles/productinstaller/icons/connection.svg') center center no-repeat;
+[data-connection-state="active"]{
+  color: #698e79;
+
+  &:before {
+    background: url('/bundles/productinstaller/icons/connection.svg') center center no-repeat;
+  }
 }
 
 #installer{
   position: fixed;
   inset: 0 0 0 0;
+  z-index: 9999;
 
   display: flex;
   justify-content: center;
@@ -53,17 +64,32 @@ $background-color: #688191;
 
     width: 100%;
     max-width: 700px;
-    min-height: 390px;
+    min-height: 450px;
 
     background: #fff;
     box-shadow: rgba(0, 0, 0, 0.15) 0 5px 15px 0;
     border-radius: 4px;
     overflow: hidden;
+
+    > .loader{
+      z-index: 100;
+    }
+  }
+
+  h2{
+    font-size: 1.35em;
+    color: $primary-color;
+    margin-bottom: 15px;
+  }
+
+  h4{
+    color: $primary-color;
+    margin: 8px 0 14px;
   }
 
   p{
-    font-size: .92rem;
-    line-height: 1.5em;
+    font-size: .9rem;
+    line-height: 1.4em;
     color: $text-color;
   }
 
@@ -127,12 +153,11 @@ $background-color: #688191;
           &:checked + label{
 
             &:before {
-              border-color: #2b8718;
+              background-color: rgb(195 212 223 / 55%);
             }
 
             &:after {
               margin: 0 0 0 20px;
-              background-color: #2b8718;
             }
           }
         }
@@ -171,7 +196,7 @@ $background-color: #688191;
 
             border-radius: 50%;
             background-color: $background-color;
-            transition: margin 0.1s ease-in-out;
+            transition: margin 0.1s ease-in-out, background-color 0.3s ease-in-out;
             z-index: 10;
           }
         }
@@ -192,12 +217,6 @@ $background-color: #688191;
 
   #steps{
     width: 100%;
-
-    h2{
-      font-size: 1.35em;
-      color: #566974;
-      margin-bottom: 15px;
-    }
 
     > div{
       display: flex;
@@ -259,9 +278,13 @@ $background-color: #688191;
   }
 
   .actions{
-    margin-top: auto;
     padding-top: 20px;
     text-align: center;
+
+    form {
+      width: 100%;
+      margin-bottom: 20px;
+    }
   }
 
   button{

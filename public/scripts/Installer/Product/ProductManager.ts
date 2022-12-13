@@ -1,4 +1,5 @@
 import Product, {ProductConfig, TaskConfig, TaskType} from "./Product";
+import {ComposerConfig} from "../ContaoManager";
 
 /**
  * ProductManager class.
@@ -25,7 +26,7 @@ export default class ProductManager
      *
      * @param types
      */
-    getTasksByType(...types: TaskType[]): TaskConfig[]
+    public getTasksByType(...types: TaskType[]): TaskConfig[]
     {
         let tasks = []
 

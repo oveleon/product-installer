@@ -1,8 +1,16 @@
 /**
+ * Providers.
+ */
+export enum Provider {
+    GITHUB = 'github',
+    GITLAB  = 'gitlab'
+}
+
+/**
  * Task types.
  */
 export enum TaskType {
-    GITHUB_IMPORT    = 'github:import',
+    REPOSITORY_CLONE = 'repo:clone',
     COMPOSER_UPDATE  = 'composer:update'
 }
 
@@ -14,6 +22,15 @@ export interface TaskConfig {
 }
 
 /**
+ * Repository task configuration (REPO_CLONE).
+ */
+export interface RepoConfig extends TaskConfig {
+    provider: Provider,
+    repository: string,
+    pkey?: string
+}
+
+/**
  * Product configuration.
  */
 export interface ProductConfig {
@@ -22,7 +39,6 @@ export interface ProductConfig {
     image: string,
     description: string,
     registrable: boolean,
-    repository: string,
     tasks: TaskConfig[]
 }
 

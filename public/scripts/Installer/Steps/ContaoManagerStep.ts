@@ -3,8 +3,8 @@ import {call} from "../../Utils/network"
 import {i18n} from "../Language"
 import Step from "../Components/Step";
 import ProductManager from "../Product/ProductManager";
-import {TaskConfig, TaskType} from "../Product/Product";
-import ContaoManager from "../ContaoManager";
+import {TaskType} from "../Product/Product";
+import {ComposerConfig} from "../ContaoManager";
 
 /**
  * Contao Manager step class.
@@ -14,7 +14,20 @@ import ContaoManager from "../ContaoManager";
 export default class ContaoManagerStep extends Step
 {
     private productManager: ProductManager
-    private managerTasks: TaskConfig[]
+    private managerTasks: ComposerConfig[]
+
+    private isAuthenticated: boolean = false
+    private isComposerReady: boolean = false
+
+    private authContainer: HTMLDivElement
+    private installContainer: HTMLDivElement
+    private manuallyContainer: HTMLDivElement
+
+    private manualCheckbox: HTMLInputElement
+    private authenticateBtn: HTMLButtonElement
+    private manuallyBtn: HTMLButtonElement
+    private closeBtn: HTMLButtonElement
+    private nextBtn: HTMLButtonElement
 
     /**
      * @inheritDoc
@@ -22,31 +35,31 @@ export default class ContaoManagerStep extends Step
     getTemplate(): string
     {
         return `
+            <h2>${i18n('contao_manager.headline')}</h2>
             <div class="authentication inherit">
-                <h2>${i18n('contao_manager.headline')}</h2>
                 <p>${i18n('contao_manager.description')}</p>
-                <div data-connection-state></div>
-                <div class="actions">
-                    <button id="cm-authenticate" class="primary">${i18n('contao_manager.authorize')}</button>
-                </div>
+                <div data-connection-state>${i18n('contao_manager.connection.inactive')}</div>
             </div>
-            <div class="tasks inherit" hidden>
-                <h2>${i18n('contao_manager.headline')}</h2>
-                <div data-connection-state="active"></div>
-                <form id="install-form">
+            <div class="install inherit" hidden>
+                <p>${i18n('contao_manager.description.success')}</p>
+                <div data-connection-state="active" class="connection">${i18n('contao_manager.connection.active')}</div>
+            </div>
+            <div class="manually inherit" hidden>
+                <p>${i18n('contao_manager.install.description')}</p>
+                <h4>${i18n('contao_manager.dependencies.headline')}</h4>
+                <div class="tasks inherit"></div>
+                <form>
                     <div class="widget checkbox center">
-                        <input type="checkbox" name="install_manually" id="install_manually" required/>
-                        <label for="install_manually">${i18n('contao_manager.install.label')}</label>
+                        <input type="checkbox" name="manual" id="manual" value="1" />
+                        <label for="manual">${i18n('contao_manager.dependencies.installed')}</label>
                     </div>
                 </form>
-                <div class="install" hidden>
-                    <p>${i18n('contao_manager.install.description')}</p>
-                    <h4>${i18n('contao_manager.dependencies.headline')}</h4>
-                    <div class="tasks"></div>
-                </div>
-                <div class="actions">
-                    <button class="primary" data-next hidden disabled>${i18n('actions.next')}</button>
-                </div>
+            </div>
+            <div class="actions">
+                <button class="cm-manually">${i18n('contao_manager.install.button')}</button>
+                <button class="cm-manually-close" hidden>${i18n('actions.back')}</button>
+                <button id="cm-authenticate" class="primary">${i18n('contao_manager.authorize')}</button>
+                <button class="primary" data-next hidden>${i18n('actions.next')}</button>
             </div>
         `
     }
@@ -75,16 +88,37 @@ export default class ContaoManagerStep extends Step
         // Show loader
         this.modal.loader(true, i18n('contao_manager.loading'))
 
+        this.authContainer = <HTMLDivElement> this.template.querySelector('.authentication')
+        this.installContainer = <HTMLDivElement> this.template.querySelector('.install')
+        this.manuallyContainer = <HTMLDivElement> this.template.querySelector('.manually')
+        this.authenticateBtn = <HTMLButtonElement> this.template.querySelector('#cm-authenticate')
+        this.manuallyBtn = <HTMLButtonElement> this.template.querySelector('.cm-manually')
+        this.closeBtn = <HTMLButtonElement> this.template.querySelector('.cm-manually-close')
+        this.nextBtn = <HTMLButtonElement> this.template.querySelector('[data-next]')
+        this.manualCheckbox = <HTMLInputElement> this.template.querySelector('input#manual')
+
         // Check if installer is authorized to communicate with contao manager
         call('/contao/api/contao_manager/session').then((response) => {
             // Hide loader
             this.modal.loader(false)
 
-            if(response?.status === 'OK')
-                this.sectionTask(response)
-            else
-                this.sectionAuth(response)
+            // Bind manually install button and checkbox events
+            this.manuallyBtn.addEventListener('click', () => this.sectionManuallyInstall(true))
+            this.closeBtn.addEventListener('click', () => this.sectionManuallyInstall(false))
+            this.manualCheckbox.addEventListener('change', () => {
+                this.nextBtn.disabled = !this.manualCheckbox.checked
+            })
 
+            if(response?.status === 'OK')
+            {
+                this.isAuthenticated = true
+                this.sectionInstall(response)
+            }
+            else
+            {
+                this.isAuthenticated = false
+                this.sectionAuth(response)
+            }
         }).catch((e: Error) => super.error(e))
     }
 
@@ -95,10 +129,8 @@ export default class ContaoManagerStep extends Step
      */
     private sectionAuth(response): void
     {
-        const authenticateBtn = <HTMLButtonElement> this.template.querySelector('#cm-authenticate')
-
         // Add button events
-        authenticateBtn.addEventListener('click', () => {
+        this.authenticateBtn.addEventListener('click', () => {
             const returnUrl = new URLSearchParams({
                 installer:  State.get('connector'),
                 start:      this.modal.currentIndex.toString()
@@ -119,34 +151,91 @@ export default class ContaoManagerStep extends Step
      *
      * @private
      */
-    private sectionTask(response): void
+    private sectionInstall(response): void
     {
-        const authContainer = <HTMLDivElement> this.template.querySelector('.authentication')
-        const taskContainer = <HTMLDivElement> this.template.querySelector('.tasks')
-        const nextBtn =  <HTMLButtonElement> this.template.querySelector('[data-next]')
-
-        // Switch container
-        authContainer.hidden = true
-        taskContainer.hidden = false
-
-        // Enable next button
-        nextBtn.disabled = false
-        nextBtn.hidden = false
-
-        this.createTasks()
+        this.authContainer.hidden = true
+        this.installContainer.hidden = false
+        this.authenticateBtn.hidden = true
+        this.nextBtn.hidden = false
     }
 
     /**
-     * Create console tasks
+     * Create composer requirement elements.
      *
      * @private
      */
-    private createTasks(): void
+    private createRequirements(): void
     {
-        const cm = new ContaoManager()
-        const privateKeys = cm.getPrivateKeyByTasks(this.managerTasks)
-        const updateTasks = cm.summarizeComposerTasks(this.managerTasks)
+        const tasksContainer = this.template.querySelector('div.tasks')
 
-        console.log(updateTasks)
+        // Clear container
+        tasksContainer.innerHTML = ''
+
+        for (const task of this.managerTasks)
+        {
+            for (const requirement of task.require)
+            {
+                const element = document.createElement('div')
+
+                element.classList.add('task')
+                element.innerHTML = `composer require ${requirement}`
+
+                tasksContainer.append(element)
+            }
+        }
+    }
+
+    /**
+     * Enable/disable manually installation section.
+     *
+     * @param state
+     *
+     * @private
+     */
+    private sectionManuallyInstall(state: boolean): void
+    {
+        this.manuallyBtn.hidden = state
+        this.manuallyContainer.hidden = !state
+        this.closeBtn.hidden = !state
+
+        if(state === true)
+        {
+            // Create task elements
+            this.createRequirements()
+
+            if(!this.isComposerReady)
+            {
+                // Show loader
+                this.modal.loader(true, i18n('contao_manager.loading.composer'))
+
+                // Write repositories to composer
+                call('/contao/api/composer/repositories/set', this.managerTasks).then((response) => {
+                    // Hide loader
+                    this.modal.loader(false)
+
+                    this.isComposerReady = true
+
+                }).catch((e: Error) => super.error(e))
+            }
+
+            this.authContainer.hidden = true
+            this.installContainer.hidden = true
+            this.authenticateBtn.hidden = true
+            this.nextBtn.hidden = false
+            this.nextBtn.disabled = true
+            this.manualCheckbox.checked = false
+        }
+        else if(this.isAuthenticated)
+        {
+            this.installContainer.hidden = false
+            this.nextBtn.hidden = false
+            this.nextBtn.disabled = false
+        }
+        else
+        {
+            this.authenticateBtn.hidden = false
+            this.authContainer.hidden = false
+            this.nextBtn.hidden = true
+        }
     }
 }
