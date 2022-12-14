@@ -3,11 +3,9 @@
 namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
 use Doctrine\DBAL\Exception;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -57,7 +55,7 @@ class Session
         }
 
         // If we have access to the contao manager, get the status to check if the token is still active
-        $status = $this->getStatus();
+        $status = $this->contaoManager->getStatus();
 
         switch ($status->getStatusCode())
         {
@@ -82,25 +80,5 @@ class Session
         }
 
         return new JsonResponse($response, $status->getStatusCode());
-    }
-
-    /**
-     * Returns the current session status
-     *
-     * @throws TransportExceptionInterface
-     * @throws Exception
-     */
-    private function getStatus(): ResponseInterface
-    {
-        return (HttpClient::create())->request(
-            'GET',
-            $this->contaoManager->getRoute('session'),
-            [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Contao-Manager-Auth' => $this->contaoManager->getToken()
-                ]
-            ]
-        );
     }
 }

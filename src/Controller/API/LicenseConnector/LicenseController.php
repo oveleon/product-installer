@@ -50,15 +50,19 @@ class LicenseController
                         'registrable'   => true,
                         'tasks'         => [
                             [
-                                'type'    => 'repo:clone',
+                                'type'    => 'repo:import',
                                 'provider' => 'github',
                                 'repository' => 'oveleon/content-package-1',
-                                'pkey'    => null
+                            ],
+                            [
+                                'type'       => 'manager:package',
+                                'provider'   => 'server',
+                                'url'        => 'https://protected-path-to-package.zip'
                             ],
                             [
                                 'type'     => 'composer:update',
                                 'provider' => 'gitlab',
-                                'require'  => ['oveleon/product-exporter'],
+                                'require'  => ['oveleon/product-exporter'], // ToDo: Allow version 'oveleon/product-exporter' => '^1.0'
                                 'update'   => ['oveleon/product-exporter'],
                                 'composer' => [
                                     'repositories' => [
@@ -67,14 +71,12 @@ class LicenseController
                                             'url'  => 'https://gitlab+deploy-token-1585707:EzG_8siAuE8Rf9sGh4Rj@gitlab.com/oveleon/product-exporter.git'
                                         ]
                                     ]
-                                ],
-                                'uploads'  => false,
-                                'pkey'     => 'ABC'
+                                ]
                             ]
                         ]
                     ]
                 ],
-                'token'                 => 'license-connector-key-to-get-github-auth-token'
+                'token' => 'license-connector-key-to-get-github-auth-token'
             ]);
         }
 

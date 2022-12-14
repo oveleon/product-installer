@@ -59,6 +59,26 @@ export default class Container
     }
 
     /**
+     * Returns a children element from template
+     *
+     * @param selector
+     */
+    public element(selector: string): HTMLElement
+    {
+        return this.template.querySelector(selector)
+    }
+
+    /**
+     * Returns a list of children elements from template
+     *
+     * @param selector
+     */
+    public elements(selector: string): NodeList
+    {
+        return this.template.querySelectorAll(selector)
+    }
+
+    /**
      * Hides the container template.
      */
     public hide(): void

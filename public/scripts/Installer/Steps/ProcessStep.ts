@@ -66,20 +66,7 @@ export default class ProcessStep extends Step
             this.manager.reset()
         }
 
-        // Create process manager
-        this.manager = new ProcessManager()
-
-        for(const process of this.config.attributes.processes)
-        {
-            // Create instance
-            const instance = createInstance(process.name, container, process)
-
-            // Add processes
-            this.manager.addProcess(instance)
-        }
-
-        // Register on finish method
-        this.manager.finish(() => {
+        const finishProcess = () => {
             addButton.disabled = false
             closeButton.disabled = false
 
@@ -96,7 +83,23 @@ export default class ProcessStep extends Step
 
                 this.modal.open(0)
             })
-        })
+        }
+
+        // Create process manager
+        this.manager = new ProcessManager()
+
+        for(const process of this.config.attributes.processes)
+        {
+            // Create instance
+            const instance = createInstance(process.name, container, process)
+
+            // Add processes
+            this.manager.addProcess(instance)
+        }
+
+        // Register on finish method
+        this.manager.onFinish(() => finishProcess())
+        this.manager.onReject(() => finishProcess())
 
         // Start process manager
         startButton.addEventListener('click', () => {

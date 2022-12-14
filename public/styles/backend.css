@@ -68,7 +68,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(8px);
 }
 #installer .loader.cover .spinner {
@@ -342,13 +342,22 @@
 #installer .process-step.not-active {
   opacity: 0.5;
 }
+#installer .process .subtasks .process-step:last-child {
+  margin-bottom: 0;
+}
+#installer .process .subtasks:not(:empty) {
+  margin-top: 20px;
+}
 
 @media (min-width: 600px) {
-  #installer .process-step .content {
-    width: calc(100% - 250px);
-  }
-  #installer .process-step .actions {
-    width: 200px;
+  #installer .process-step {
+    /*.content{
+      width: calc(100% - 200px);
+    }
+
+    .actions{
+      width: 150px;
+    }*/
   }
 }
 [hidden] {

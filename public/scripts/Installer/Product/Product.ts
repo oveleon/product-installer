@@ -3,15 +3,17 @@
  */
 export enum Provider {
     GITHUB = 'github',
-    GITLAB  = 'gitlab'
+    GITLAB  = 'gitlab',
+    SERVER  = 'server',
 }
 
 /**
  * Task types.
  */
 export enum TaskType {
-    REPOSITORY_CLONE = 'repo:clone',
-    COMPOSER_UPDATE  = 'composer:update'
+    REPOSITORY_IMPORT = 'repo:import',
+    MANAGER_PACKAGE = 'manager:package',
+    COMPOSER_UPDATE = 'composer:update'
 }
 
 /**

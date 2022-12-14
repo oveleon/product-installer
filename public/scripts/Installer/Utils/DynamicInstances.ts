@@ -3,6 +3,7 @@ import ProductStep from "../Steps/ProductStep";
 import ProcessStep from "../Steps/ProcessStep";
 import ContaoManagerStep from "../Steps/ContaoManagerStep";
 import ApiProcess from "../Process/ApiProcess";
+import ContaoManagerProcess from "../Process/ContaoManagerProcess";
 
 export {
     // Steps
@@ -12,5 +13,6 @@ export {
     ContaoManagerStep,
 
     // Processes
-    ApiProcess
+    ApiProcess,
+    ContaoManagerProcess
 }

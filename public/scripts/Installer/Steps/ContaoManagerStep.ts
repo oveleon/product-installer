@@ -2,9 +2,7 @@ import State from "../State";
 import {call} from "../../Utils/network"
 import {i18n} from "../Language"
 import Step from "../Components/Step";
-import ProductManager from "../Product/ProductManager";
-import {TaskType} from "../Product/Product";
-import {ComposerConfig} from "../ContaoManager";
+import ContaoManager, {ComposerConfig} from "../ContaoManager";
 
 /**
  * Contao Manager step class.
@@ -13,7 +11,6 @@ import {ComposerConfig} from "../ContaoManager";
  */
 export default class ContaoManagerStep extends Step
 {
-    private productManager: ProductManager
     private managerTasks: ComposerConfig[]
 
     private isAuthenticated: boolean = false
@@ -69,16 +66,21 @@ export default class ContaoManagerStep extends Step
      */
     protected events()
     {
-        // Create product manager to handle tasks
-        this.productManager = new ProductManager(State.get('config').products)
-        this.managerTasks = this.productManager.getTasksByType(TaskType.COMPOSER_UPDATE)
+        // Get products from state
+        const products = State.get('config').products
 
+        // Get task to handle
+        const contaoManager = new ContaoManager()
+        this.managerTasks = contaoManager.getComposerTasksByProducts(products)
+
+        // Check if there are tasks that need to be done by the Contao Manager
         const useManager = this.managerTasks.length > 0
 
         // Save information for further steps and processes
-        State.set('useManager', useManager)
+        State.set('useManager', contaoManager.hasTasks(products))
+        State.set('installManually', false)
 
-        // Check if contao manager steps could be skipped
+        // Skip the step if there are no tasks for the Contao Manager
         if(!useManager)
         {
             this.modal.next()
@@ -88,75 +90,68 @@ export default class ContaoManagerStep extends Step
         // Show loader
         this.modal.loader(true, i18n('contao_manager.loading'))
 
-        this.authContainer = <HTMLDivElement> this.template.querySelector('.authentication')
-        this.installContainer = <HTMLDivElement> this.template.querySelector('.install')
-        this.manuallyContainer = <HTMLDivElement> this.template.querySelector('.manually')
-        this.authenticateBtn = <HTMLButtonElement> this.template.querySelector('#cm-authenticate')
-        this.manuallyBtn = <HTMLButtonElement> this.template.querySelector('.cm-manually')
-        this.closeBtn = <HTMLButtonElement> this.template.querySelector('.cm-manually-close')
-        this.nextBtn = <HTMLButtonElement> this.template.querySelector('[data-next]')
-        this.manualCheckbox = <HTMLInputElement> this.template.querySelector('input#manual')
+        // Register elements into the scope
+        this.authContainer      = <HTMLDivElement> this.element('.authentication')
+        this.installContainer   = <HTMLDivElement> this.element('.install')
+        this.manuallyContainer  = <HTMLDivElement> this.element('.manually')
+
+        this.authenticateBtn    = <HTMLButtonElement> this.element('#cm-authenticate')
+        this.manuallyBtn        = <HTMLButtonElement> this.element('.cm-manually')
+        this.closeBtn           = <HTMLButtonElement> this.element('.cm-manually-close')
+        this.nextBtn            = <HTMLButtonElement> this.element('[data-next]')
+
+        this.manualCheckbox     = <HTMLInputElement> this.element('input#manual')
 
         // Check if installer is authorized to communicate with contao manager
         call('/contao/api/contao_manager/session').then((response) => {
             // Hide loader
             this.modal.loader(false)
 
-            // Bind manually install button and checkbox events
+            // Set button events
             this.manuallyBtn.addEventListener('click', () => this.sectionManuallyInstall(true))
             this.closeBtn.addEventListener('click', () => this.sectionManuallyInstall(false))
             this.manualCheckbox.addEventListener('change', () => {
+                // Disable/enable next button
                 this.nextBtn.disabled = !this.manualCheckbox.checked
+
+                // Save state to skip processes
+                State.set('installManually', this.manualCheckbox.checked)
             })
 
+            // Check the status to display the corresponding mask
             if(response?.status === 'OK')
             {
+                // Define that the authorization is done
                 this.isAuthenticated = true
-                this.sectionInstall(response)
+
+                // Set the visibility of the action button
+                this.authContainer.hidden = true
+                this.installContainer.hidden = false
+                this.authenticateBtn.hidden = true
+                this.nextBtn.hidden = false
             }
             else
             {
+                // Define that the authorization is not yet complete.
                 this.isAuthenticated = false
-                this.sectionAuth(response)
+
+                // Set the event for authorization
+                this.authenticateBtn.addEventListener('click', () => {
+                    const returnUrl = new URLSearchParams({
+                        installer:  State.get('connector'),
+                        start:      this.modal.currentIndex.toString()
+                    })
+
+                    const parameter = new URLSearchParams({
+                        scope:      'admin',
+                        client_id:  'product_installer',
+                        return_url:  response.manager.return_url + '?' + returnUrl.toString()
+                    })
+
+                    document.location.href = response.manager.path + '/#oauth?' + parameter.toString()
+                })
             }
         }).catch((e: Error) => super.error(e))
-    }
-
-    /**
-     * Handle events of the authentication section
-     *
-     * @private
-     */
-    private sectionAuth(response): void
-    {
-        // Add button events
-        this.authenticateBtn.addEventListener('click', () => {
-            const returnUrl = new URLSearchParams({
-                installer:  State.get('connector'),
-                start:      this.modal.currentIndex.toString()
-            })
-
-            const parameter = new URLSearchParams({
-                scope:      'admin',
-                client_id:  'product_installer',
-                return_url:  response.manager.return_url + '?' + returnUrl.toString()
-            })
-
-            document.location.href = response.manager.path + '/#oauth?' + parameter.toString()
-        })
-    }
-
-    /**
-     * Handle events of the task section
-     *
-     * @private
-     */
-    private sectionInstall(response): void
-    {
-        this.authContainer.hidden = true
-        this.installContainer.hidden = false
-        this.authenticateBtn.hidden = true
-        this.nextBtn.hidden = false
     }
 
     /**
@@ -166,7 +161,7 @@ export default class ContaoManagerStep extends Step
      */
     private createRequirements(): void
     {
-        const tasksContainer = this.template.querySelector('div.tasks')
+        const tasksContainer = this.element('div.tasks')
 
         // Clear container
         tasksContainer.innerHTML = ''
@@ -197,6 +192,8 @@ export default class ContaoManagerStep extends Step
         this.manuallyBtn.hidden = state
         this.manuallyContainer.hidden = !state
         this.closeBtn.hidden = !state
+        
+        State.set('installManually', false)
 
         if(state === true)
         {
@@ -208,8 +205,8 @@ export default class ContaoManagerStep extends Step
                 // Show loader
                 this.modal.loader(true, i18n('contao_manager.loading.composer'))
 
-                // Write repositories to composer
-                call('/contao/api/composer/repositories/set', this.managerTasks).then((response) => {
+                // Add necessary properties to composer.json to be able to install dependencies manually
+                call('/contao/api/composer/repositories/set', this.managerTasks).then(() => {
                     // Hide loader
                     this.modal.loader(false)
 

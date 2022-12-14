@@ -2,7 +2,7 @@ import Process, {ProcessErrorResponse} from "./Process"
 import {call} from "../../Utils/network"
 
 /**
- * Default process class.
+ * Api process class.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
@@ -27,7 +27,7 @@ export default class ApiProcess extends Process
     protected process(): void
     {
         // Check license
-        call(this.getRoute('api')).then((response) => {
+        call(this.getRoute('api'), this.config.parameter).then((response) => {
             // Check errors
             if(response.error)
             {
@@ -37,16 +37,5 @@ export default class ApiProcess extends Process
 
             this.resolve()
         }).catch((e: Error) => this.reject(e))
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected reject(data: Error | ProcessErrorResponse): void
-    {
-        super.reject(data);
-
-        // Exit manager and following processes
-        this.manager.exit()
     }
 }

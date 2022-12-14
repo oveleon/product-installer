@@ -66,6 +66,20 @@
         opacity: .5;
       }
     }
+
+    .subtasks{
+
+      .process-step{
+
+        &:last-child{
+          margin-bottom: 0;
+        }
+      }
+
+      &:not(:empty) {
+        margin-top: 20px;
+      }
+    }
   }
 }
 
@@ -76,13 +90,13 @@
 
       &-step{
 
-        .content{
-          width: calc(100% - 250px);
+        /*.content{
+          width: calc(100% - 200px);
         }
 
         .actions{
-          width: 200px;
-        }
+          width: 150px;
+        }*/
       }
     }
   }

@@ -1,7 +1,8 @@
-import {Provider, TaskConfig} from "./Product/Product";
+import {ProductConfig, Provider, TaskConfig, TaskType} from "./Product/Product";
+import ProductManager from "./Product/ProductManager";
 
 /**
- * Composer configuration (Types: COMPOSER_UPDATE, COMPOSER_INSTALL).
+ * Composer configuration.
  */
 export interface ComposerConfig extends TaskConfig {
     provider?: Provider,
@@ -11,6 +12,13 @@ export interface ComposerConfig extends TaskConfig {
     remove?: [],
     uploads?: boolean,
     pkey?: string
+}
+/**
+ * Manager package configuration.
+ */
+export interface ManagerPackageConfig extends TaskConfig {
+    provider?: Provider,
+    url?: string
 }
 
 /**
@@ -46,8 +54,6 @@ export enum TaskStatus {
  */
 export default class ContaoManager
 {
-    private token: string
-
     /**
      * Start the composer process
      *
@@ -56,6 +62,50 @@ export default class ContaoManager
     public start(tasks: ComposerConfig[]): void
     {
 
+    }
+
+    /**
+     * Return composer tasks.
+     *
+     * @param products
+     */
+    public getComposerTasksByProducts(products: ProductConfig[]): ComposerConfig[]
+    {
+        return (new ProductManager(products)).getTasksByType(TaskType.COMPOSER_UPDATE)
+    }
+
+    /**
+     * Return package tasks.
+     *
+     * @param products
+     */
+    public getPackageTasksByProducts(products: ProductConfig[]): ComposerConfig[]
+    {
+        return (new ProductManager(products)).getTasksByType(TaskType.MANAGER_PACKAGE)
+    }
+
+    /**
+     * Check if tasks for the contao manager exists
+     *
+     * @param products
+     * @param type
+     */
+    public hasTasks(products: ProductConfig[], type?: TaskType): boolean
+    {
+        const composerTasks = this.getComposerTasksByProducts(products)
+        const packageTasks = this.getPackageTasksByProducts(products)
+
+        switch (type)
+        {
+            case TaskType.MANAGER_PACKAGE:
+                return packageTasks.length > 0
+
+            case TaskType.COMPOSER_UPDATE:
+                return composerTasks.length > 0
+
+            default:
+                return composerTasks.length > 0 || packageTasks.length > 0
+        }
     }
 
     /**

@@ -1,5 +1,4 @@
 import Product, {ProductConfig, TaskConfig, TaskType} from "./Product";
-import {ComposerConfig} from "../ContaoManager";
 
 /**
  * ProductManager class.

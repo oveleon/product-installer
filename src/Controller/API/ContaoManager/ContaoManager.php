@@ -6,6 +6,9 @@ use Contao\Environment;
 use Contao\System;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class ContaoManager
 {
@@ -49,5 +52,25 @@ class ContaoManager
     public function getRoute(string $apiRoute): string
     {
         return Environment::get('url') . '/' . $this->getPath() . '/api/' . $apiRoute;
+    }
+
+    /**
+     * Returns the current session status
+     *
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
+    public function getStatus(): ResponseInterface
+    {
+        return (HttpClient::create())->request(
+            'GET',
+            $this->getRoute('session'),
+            [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Contao-Manager-Auth' => $this->getToken()
+                ]
+            ]
+        );
     }
 }

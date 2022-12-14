@@ -13,6 +13,7 @@ abstract class AbstractProcess
      * Predefined steps.
      */
     const PROCESS_API = 'ApiProcess';
+    const PROCESS_CM = 'ContaoManagerProcess';
 
     /**
      * The process routes.

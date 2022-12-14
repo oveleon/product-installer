@@ -3,7 +3,7 @@
 namespace Oveleon\ProductInstaller\LicenseConnector\Process;
 
 /**
- * The process class representing the component of the system check process.
+ * The process class representing the component of the api process.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  *

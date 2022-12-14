@@ -15,8 +15,9 @@ export interface ProcessErrorResponse {
  */
 export interface ProcessConfig {
     name: string,
-    routes: string
+    routes: {}
     attributes?: any
+    parameter?: {}
 }
 
 /**
@@ -142,6 +143,8 @@ export default abstract class Process extends Container
         this.loader?.pause()
         this.loader?.addClass('done')
 
+        this.manager.callResolve(this)
+
         // Start next process
         this.manager.next()
     }
@@ -158,6 +161,7 @@ export default abstract class Process extends Container
         this.loader?.pause()
         this.loader?.addClass('fail')
 
+        this.manager.callReject(this, data)
         this.error(data)
     }
 

@@ -1,4 +1,4 @@
-import Process from "./Process";
+import Process, {ProcessErrorResponse} from "./Process";
 
 export default class ProcessManager
 {
@@ -26,7 +26,17 @@ export default class ProcessManager
     /**
      * Method which is called when all processes have been completed.
      */
-    private onFinish: Function = () => {}
+    private fnFinish: Function = () => {}
+
+    /**
+     * Method which is called when one process is rejected.
+     */
+    private fnReject: Function = () => {}
+
+    /**
+     * Method which is called when one process is resolved.
+     */
+    private fnResolve: Function = () => {}
 
     /**
      * Adds one or more processes to be queued.
@@ -56,7 +66,7 @@ export default class ProcessManager
     {
         if(startIndex >= this.processes.length)
         {
-            this.exit()
+            this.callFinish()
             return
         }
 
@@ -69,9 +79,30 @@ export default class ProcessManager
     /**
      * Call the finish method.
      */
-    public exit(): void
+    public callFinish(): void
     {
-        this.onFinish.call(this)
+        this.fnFinish.call(this)
+    }
+
+    /**
+     * Call the reject method.
+     *
+     * @param err
+     * @param process
+     */
+    public callReject(process: Process, err: Error | ProcessErrorResponse): void
+    {
+        this.fnReject.call(this, process, err)
+    }
+
+    /**
+     * Call the resolve method.
+     *
+     * @param process
+     */
+    public callResolve(process: Process): void
+    {
+        this.fnResolve.call(this, process)
     }
 
     /**
@@ -87,9 +118,29 @@ export default class ProcessManager
      *
      * @param fn
      */
-    public finish(fn: Function): ProcessManager
+    public onFinish(fn: Function): ProcessManager
     {
-        this.onFinish = fn
+        this.fnFinish = fn
+
+        return this
+    }
+
+    /**
+     * Calling the registered resolve method.
+     */
+    public onResolve(fn: Function): ProcessManager
+    {
+        this.fnResolve = fn
+
+        return this
+    }
+
+    /**
+     * Calling the registered reject method.
+     */
+    public onReject(fn: Function): ProcessManager
+    {
+        this.fnReject = fn
 
         return this
     }

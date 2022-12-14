@@ -23,9 +23,11 @@ module.exports = {
     "contao_manager.dependencies.headline": "Dependencies",
     "contao_manager.dependencies.installed":"Yes, I have installed all dependencies",
     "contao_manager.connection.active":     "Connection was established",
-    "contao_manager.connection.inactive":   "Connection could not be established",
+    "contao_manager.connection.inactive":   "Authorization pending",
     "contao_manager.loading":               "Connection to the Contao Manager is established",
     "contao_manager.loading.composer":      "The composer.json file is prepared for manual installation",
+    "contao_manager.process.title":         "Contao Manager",
+    "contao_manager.process.description":   "The Contao Manager installs all necessary dependencies in the background to be able to install the product.",
 
     // License step
     "license.headline":                     "License verification",
