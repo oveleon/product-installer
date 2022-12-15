@@ -10,12 +10,19 @@ namespace Oveleon\ProductInstaller\LicenseConnector\Step;
 abstract class AbstractStep
 {
     /**
+     * ToDo:
+     * - Allow creating own actions and behaviours
+     * - Create custom step
+     */
+
+    /**
      * Predefined steps.
      */
-    const STEP_LICENSE = 'LicenseStep';
-    const STEP_PRODUCT = 'ProductStep';
-    const STEP_PROCESS = 'ProcessStep';
-    const STEP_CUSTOM  = 'CustomStep';
+    const STEP_LICENSE        = 'LicenseStep';
+    const STEP_PRODUCT        = 'ProductStep';
+    const STEP_PROCESS        = 'ProcessStep';
+    const STEP_CUSTOM         = 'CustomStep';
+    const STEP_CONTAO_MANAGER = 'ContaoManagerStep';
 
     /**
      * Name of the step.

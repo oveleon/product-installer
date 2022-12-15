@@ -38,9 +38,11 @@ abstract class AbstractLicenseConnector
     /**
      * Returns a license connector configuration:
      *
-     * image:       /path-to-custom-image.svg
-     * title:       Title of the License connector
-     * description: Description of the license connector
+     * name:        Name of the license connector (e.g. MyLicenseConnector)
+     * title:       Title to be displayed
+     * description: Description to be displayed
+     * image:       Path to the icon
+     * entry:       Defines the entry of the store API
      */
     abstract public function getConfig(): array;
 

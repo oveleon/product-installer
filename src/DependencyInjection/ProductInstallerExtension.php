@@ -16,7 +16,7 @@ class ProductInstallerExtension extends Extension
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         // Load configurations
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.yaml');
 
         // Set container parameter

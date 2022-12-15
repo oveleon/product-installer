@@ -1,9 +1,9 @@
 <?php
 
-namespace Oveleon\ProductInstaller\LicenseConnector\Step;
+namespace Oveleon\ProductInstaller\LicenseConnector\Process;
 
 /**
- * The step class representing the component of the license step.
+ * The process class representing the component of the contao manager process.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  *
@@ -11,7 +11,7 @@ namespace Oveleon\ProductInstaller\LicenseConnector\Step;
  * @property $title
  * @property $description
  */
-class LicenseStep extends AbstractStep
+class ContaoManagerProcess extends AbstractProcess
 {
     /**
      * @inheritDoc
@@ -21,6 +21,6 @@ class LicenseStep extends AbstractStep
         $this->title = $title;
         $this->description = $description;
 
-        parent::__construct(self::STEP_LICENSE);
+        parent::__construct(self::PROCESS_CM);
     }
 }

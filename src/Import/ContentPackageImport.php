@@ -10,7 +10,7 @@ use Contao\ZipReader;
 use Exception;
 
 /**
- * Unpack, read and import content package archives.
+ * Unpack, read and import archives.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */

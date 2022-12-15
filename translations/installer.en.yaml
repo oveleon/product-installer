@@ -1,0 +1,8 @@
+installer:
+    menu:
+        label: Install Product
+        title: Install and manage your Product
+    license:
+        errors:
+            license_not_found:  The specified license could not be found, please check your input and pay attention to upper and lower case.
+            license_empty:      Please enter a valid license.
