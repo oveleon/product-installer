@@ -17,7 +17,7 @@ export interface ProcessConfig {
     name: string,
     routes: {}
     attributes?: any
-    parameter?: {}
+    parameter?: {} | Function
 }
 
 /**
@@ -38,7 +38,7 @@ export default abstract class Process extends Container
      */
     constructor(
         protected parentContainer: HTMLElement,
-        protected config: ProcessConfig
+        public config: ProcessConfig
     ){
         // Create container
         super('process' + Process.processId++)
@@ -109,6 +109,19 @@ export default abstract class Process extends Container
     }
 
     /**
+     * Returns the parameters of the process.
+     */
+    public getParameter(): {}
+    {
+        if(typeof this.config.parameter === 'function')
+        {
+            return this.config.parameter.call(this)
+        }
+
+        return this.config.parameter
+    }
+
+    /**
      * Reset process.
      */
     public reset(): void
@@ -138,12 +151,12 @@ export default abstract class Process extends Container
      *
      * @protected
      */
-    protected resolve(): void
+    protected resolve(response: any): void
     {
         this.loader?.pause()
         this.loader?.addClass('done')
 
-        this.manager.callResolve(this)
+        this.manager.callResolve(this, response)
 
         // Start next process
         this.manager.next()
@@ -152,17 +165,17 @@ export default abstract class Process extends Container
     /**
      * Reject process.
      *
-     * @param data
+     * @param response
      *
      * @protected
      */
-    protected reject(data: Error | ProcessErrorResponse): void
+    protected reject(response: Error | ProcessErrorResponse): void
     {
         this.loader?.pause()
         this.loader?.addClass('fail')
 
-        this.manager.callReject(this, data)
-        this.error(data)
+        this.manager.callReject(this, response)
+        this.error(response)
     }
 
     /**

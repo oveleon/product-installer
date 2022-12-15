@@ -52,7 +52,7 @@ class RepositoryDownloader
     /**
      * Download and archive repository.
      */
-    public function archive(): void
+    public function archive($destination): void
     {
         $this->authenticate();
 
@@ -61,7 +61,7 @@ class RepositoryDownloader
                              ->contents()
                              ->archive($this->organization, $this->repository, 'zipball');
 
-        $archive = new File('system/tmp/'.$this->organization.'-'.$this->repository.'.zip');
+        $archive = new File($destination);
         $archive->write($archiveContent);
         $archive->close();
     }

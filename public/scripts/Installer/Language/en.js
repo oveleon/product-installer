@@ -41,5 +41,15 @@ module.exports = {
 
     // Install step
     "install.headline":                     "Installation",
-    "install.actions.add":                  "Register more products"
+    "install.actions.add":                  "Register more products",
+
+    // Manager process
+    "process.contao_manager.download.title":        "Download packages",
+    "process.contao_manager.download.description":  "Dependent packages are downloaded and made available.",
+
+    "process.contao_manager.package.title":         "Integrate packages",
+    "process.contao_manager.package.description":   "Packages are deposited to the project.",
+
+    "process.contao_manager.composer.title":        "Install dependencies",
+    "process.contao_manager.composer.description":  "The dependencies are installed via composer."
 }

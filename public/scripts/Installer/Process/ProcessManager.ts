@@ -99,10 +99,11 @@ export default class ProcessManager
      * Call the resolve method.
      *
      * @param process
+     * @param response
      */
-    public callResolve(process: Process): void
+    public callResolve(process: Process, response: any): void
     {
-        this.fnResolve.call(this, process)
+        this.fnResolve.call(this, process, response)
     }
 
     /**

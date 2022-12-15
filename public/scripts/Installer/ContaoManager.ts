@@ -16,9 +16,10 @@ export interface ComposerConfig extends TaskConfig {
 /**
  * Manager package configuration.
  */
-export interface ManagerPackageConfig extends TaskConfig {
+export interface PackageConfig extends TaskConfig {
     provider?: Provider,
-    url?: string
+    source?: string,
+    token?: string
 }
 
 /**
@@ -79,7 +80,7 @@ export default class ContaoManager
      *
      * @param products
      */
-    public getPackageTasksByProducts(products: ProductConfig[]): ComposerConfig[]
+    public getPackageTasksByProducts(products: ProductConfig[]): PackageConfig[]
     {
         return (new ProductManager(products)).getTasksByType(TaskType.MANAGER_PACKAGE)
     }

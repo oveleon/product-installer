@@ -2,6 +2,9 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
+use Contao\File;
+use Contao\System;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -27,6 +30,14 @@ class Package
     public function installPackage(): JsonResponse
     {
         $request = $this->requestStack->getCurrentRequest();
+        $root = System::getContainer()->getParameter('kernel.project_dir');
+        $filesystem = new Filesystem();
+        $targetPath = $root . DIRECTORY_SEPARATOR . 'contao-manager' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR;
+
+        foreach ($request->toArray() as $path)
+        {
+            $filesystem->copy($root . DIRECTORY_SEPARATOR  . $path, $targetPath . basename($path), true);
+        }
 
         /*return new JsonResponse([
             'error' => true,

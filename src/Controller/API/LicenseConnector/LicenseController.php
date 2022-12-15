@@ -57,8 +57,14 @@ class LicenseController
                             [
                                 'type'       => 'manager:package',
                                 'provider'   => 'server',
-                                'url'        => 'https://protected-path-to-package.zip'
-                            ],
+                                'source'     => 'https://p607045.mittwaldserver.info/share/product-exporter.zip'
+                            ],/*
+                            [
+                                'type'       => 'manager:package',
+                                'provider'   => 'github',
+                                'source'     => 'oveleon/product-exporter',
+                                'token'      => 'XYZ'
+                            ],*/
                             [
                                 'type'     => 'composer:update',
                                 'provider' => 'gitlab',

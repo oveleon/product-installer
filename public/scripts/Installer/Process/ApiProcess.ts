@@ -1,4 +1,4 @@
-import Process, {ProcessErrorResponse} from "./Process"
+import Process from "./Process"
 import {call} from "../../Utils/network"
 
 /**
@@ -27,7 +27,7 @@ export default class ApiProcess extends Process
     protected process(): void
     {
         // Check license
-        call(this.getRoute('api'), this.config.parameter).then((response) => {
+        call(this.getRoute('api'), this.getParameter()).then((response) => {
             // Check errors
             if(response.error)
             {
@@ -35,7 +35,7 @@ export default class ApiProcess extends Process
                 return
             }
 
-            this.resolve()
+            this.resolve(response)
         }).catch((e: Error) => this.reject(e))
     }
 }
