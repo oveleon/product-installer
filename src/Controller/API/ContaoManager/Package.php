@@ -5,6 +5,7 @@ namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 use Contao\File;
 use Contao\System;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -31,12 +32,28 @@ class Package
     {
         $request = $this->requestStack->getCurrentRequest();
         $root = System::getContainer()->getParameter('kernel.project_dir');
+
         $filesystem = new Filesystem();
         $targetPath = $root . DIRECTORY_SEPARATOR . 'contao-manager' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR;
 
         foreach ($request->toArray() as $path)
         {
-            $filesystem->copy($root . DIRECTORY_SEPARATOR  . $path, $targetPath . basename($path), true);
+            //$filesystem->copy($root . DIRECTORY_SEPARATOR  . $path, $targetPath . basename($path), true);
+
+            // ToDo: Finding out how the transfer must take place...
+            $test = (HttpClient::create())->request(
+                'POST',
+                $this->contaoManager->getRoute('packages/uploads'),
+                [
+                    'headers' => [
+                        'Content-Type' => 'application/zip',
+                        'Contao-Manager-Auth' => $this->contaoManager->getToken()
+                    ],
+                    'body' => [
+                        'package' => file_get_contents($root . DIRECTORY_SEPARATOR  . $path)
+                    ]
+                ]
+            );
         }
 
         /*return new JsonResponse([
