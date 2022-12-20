@@ -39,7 +39,8 @@ export default class ContaoManagerProcess extends Process
     /**
      * @inheritDoc
      */
-    protected getTemplate(): string {
+    protected getTemplate(): string
+    {
         return `
             <div data-loader></div>
             <div class="content">
@@ -82,6 +83,9 @@ export default class ContaoManagerProcess extends Process
             {
                 case ManagerProcess.DOWNLOAD_PROCESS:
                     State.set(ManagerProcess.DOWNLOAD_PROCESS, response.map((taskWithDestination) => taskWithDestination.destination))
+                    break
+                case ManagerProcess.PACKAGE_PROCESS:
+                    State.set(ManagerProcess.PACKAGE_PROCESS, response)
                     break
             }
         })
