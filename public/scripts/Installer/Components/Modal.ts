@@ -157,7 +157,26 @@ export default class Modal extends Container
      */
     public prev(): void
     {
-        this.open(--this.currentIndex)
+        const index = --this.currentIndex;
+
+        if(this.isSkip(index))
+        {
+            this.prev()
+            return
+        }
+
+        this.open(index)
+    }
+
+    /**
+     * Check if a step need to be skipped.
+     *
+     * @param index
+     * @private
+     */
+    private isSkip(index): boolean
+    {
+        return this.steps[ index ].skip
     }
 
     /**

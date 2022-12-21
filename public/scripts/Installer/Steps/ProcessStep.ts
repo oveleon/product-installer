@@ -41,12 +41,12 @@ export default class ProcessStep extends Step
     protected events()
     {
         // Get the container in which the processes should be appended
-        const container = <HTMLDivElement> this.template.querySelector('.process')
+        const container = <HTMLDivElement> this.element('.process')
 
-        const backButton = <HTMLButtonElement> this.template.querySelector('button.back')
-        const startButton = <HTMLButtonElement> this.template.querySelector('button.start')
-        const addButton = <HTMLButtonElement> this.template.querySelector('button.add')
-        const closeButton = <HTMLButtonElement> this.template.querySelector('[data-close]')
+        const backButton = <HTMLButtonElement> this.element('button.back')
+        const startButton = <HTMLButtonElement> this.element('button.start')
+        const addButton = <HTMLButtonElement> this.element('button.add')
+        const closeButton = <HTMLButtonElement> this.element('[data-close]')
 
         // Method for reset the step
         const resetProcess = () => {

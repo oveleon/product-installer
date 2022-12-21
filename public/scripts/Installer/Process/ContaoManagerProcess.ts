@@ -1,10 +1,11 @@
 import Process, {ProcessErrorResponse} from "./Process"
 import {i18n} from "../Language"
 import State from "../State";
-import ContaoManager from "../ContaoManager";
+import ContaoManager, {ComposerConfig} from "../ContaoManager";
 import {TaskType} from "../Product/Product";
 import ProcessManager from "./ProcessManager";
 import ApiProcess from "./ApiProcess";
+import ComposerProcess from "./ComposerProcess";
 
 /**
  * Manager processes.
@@ -76,20 +77,6 @@ export default class ContaoManagerProcess extends Process
             this.reject(err)
         })
 
-        // Register on resolve method to save information of each process
-        this.processManager.onResolve((process: Process, response: any) => {
-
-            switch(process.config.name)
-            {
-                case ManagerProcess.DOWNLOAD_PROCESS:
-                    State.set(ManagerProcess.DOWNLOAD_PROCESS, response.map((taskWithDestination) => taskWithDestination.destination))
-                    break
-                case ManagerProcess.PACKAGE_PROCESS:
-                    State.set(ManagerProcess.PACKAGE_PROCESS, response)
-                    break
-            }
-        })
-
         // Register on finish to exit sub processes
         this.processManager.onFinish((response) => {
             this.resolve(response)
@@ -113,8 +100,6 @@ export default class ContaoManagerProcess extends Process
 
     private createProcesses(): void
     {
-        // Todo: Check database and migrate
-
         // Get products from state
         const products = State.get('config').products
 
@@ -131,6 +116,9 @@ export default class ContaoManagerProcess extends Process
                     title: i18n('process.contao_manager.download.title'),
                     description: i18n('process.contao_manager.download.description')
                 },
+                onResolve: (response) => {
+                    State.set(ManagerProcess.DOWNLOAD_PROCESS, response.map((taskWithDestination) => taskWithDestination.destination))
+                },
                 parameter: this.contaoManager.getPackageTasksByProducts(products)
             }))
 
@@ -144,6 +132,23 @@ export default class ContaoManagerProcess extends Process
                     title: i18n('process.contao_manager.package.title'),
                     description: i18n('process.contao_manager.package.description')
                 },
+                onResolve: (response) => {
+                    // Create a tasks from response
+                    const tasks: ComposerConfig[] = []
+
+                    for (let key in response.collection)
+                    {
+                        tasks.push({
+                            type: TaskType.MANAGER_PACKAGE,
+                            uploads: true,
+                            require: this.contaoManager.createRequirementObject(response.collection[key].package.name, response.collection[key].package.version),
+                            update: [response.collection[key].package.name]
+                        })
+                    }
+
+                    // Add tasks
+                    this.contaoManager.addComposerTasks(tasks)
+                },
                 parameter: () => {
                     return State.get(ManagerProcess.DOWNLOAD_PROCESS)
                 }
@@ -153,20 +158,27 @@ export default class ContaoManagerProcess extends Process
         // Check if tasks of type composer update exists
         if(this.contaoManager.hasTasks(products, TaskType.COMPOSER_UPDATE))
         {
+            // Get all tasks of type composer
             const composerTasks = this.contaoManager.getComposerTasksByProducts(products)
-            const task = this.contaoManager.summarizeComposerTasks(composerTasks)
 
-            this.processManager.addProcess(new ApiProcess(this.element('.manager-tasks'), {
-                name: ManagerProcess.COMPOSER_PROCESS,
-                routes: {
-                    'api': '/contao/api/contao_manager/update/task'
-                },
-                attributes: {
-                    title: i18n('process.contao_manager.composer.title'),
-                    description: i18n('process.contao_manager.composer.description')
-                },
-                parameter: task
-            }))
+            // Add them to the task collection
+            this.contaoManager.addComposerTasks(composerTasks)
         }
+
+        // Add a Composer update process that runs only when tasks exist
+        this.processManager.addProcess(new ComposerProcess(this.element('.manager-tasks'), {
+            name: ManagerProcess.COMPOSER_PROCESS,
+            routes: {
+                'start': '/contao/api/contao_manager/task/set',
+                'update': '/contao/api/contao_manager/task/get'
+            },
+            attributes: {
+                title: i18n('process.contao_manager.composer.title'),
+                description: i18n('process.contao_manager.composer.description')
+            },
+            parameter: () => this.contaoManager.getComposerTasks()
+        }))
+
+        // Todo: Check database and migrate
     }
 }

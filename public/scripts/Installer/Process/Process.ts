@@ -18,6 +18,8 @@ export interface ProcessConfig {
     routes: {}
     attributes?: any
     parameter?: {} | Function
+    onResolve?: Function
+    onReject?: Function
 }
 
 /**
@@ -54,7 +56,7 @@ export default abstract class Process extends Container
         this.template.append(this.errorContainer)
 
         // Add loader
-        const loaderContainer = <HTMLDivElement> this.template.querySelector('[data-loader]')
+        const loaderContainer = <HTMLDivElement> this.element('[data-loader]')
 
         if(loaderContainer)
         {
@@ -131,7 +133,7 @@ export default abstract class Process extends Container
         this.loader?.pause()
         this.loader?.removeClass('done', 'fail', 'pause')
 
-        this.template.querySelector('div.errors')?.remove()
+        this.element('div.errors')?.remove()
     }
 
     /**
@@ -156,6 +158,7 @@ export default abstract class Process extends Container
         this.loader?.pause()
         this.loader?.addClass('done')
 
+        this.config?.onResolve?.call(this, response)
         this.manager.callResolve(this, response)
 
         // Start next process
@@ -174,6 +177,7 @@ export default abstract class Process extends Container
         this.loader?.pause()
         this.loader?.addClass('fail')
 
+        this.config?.onReject?.call(this, response)
         this.manager.callReject(this, response)
         this.error(response)
     }

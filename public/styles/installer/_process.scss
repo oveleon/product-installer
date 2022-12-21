@@ -92,10 +92,13 @@
 
         /*.content{
           width: calc(100% - 200px);
+
+          .content:has(+ .actions) {
+          }
         }
 
         .actions{
-          width: 150px;
+          //width: 150px;
         }*/
       }
     }

@@ -211,6 +211,6 @@ export default class LicenseConnectorStep extends Step
         `
 
         // Append to container
-        this.template.querySelector('.license-connector-container').append(template)
+        this.element('.license-connector-container').append(template)
     }
 }

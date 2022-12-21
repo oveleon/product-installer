@@ -6,12 +6,11 @@ import ProductManager from "./Product/ProductManager";
  */
 export interface ComposerConfig extends TaskConfig {
     provider?: Provider,
-    require?: [],
+    require?: {},
     composer?: [],
-    update?: [],
-    remove?: [],
-    uploads?: boolean,
-    pkey?: string
+    update?: string[],
+    remove?: string[],
+    uploads?: boolean
 }
 /**
  * Manager package configuration.
@@ -45,7 +44,10 @@ export enum TaskStatus {
     COMPLETE = 'complete',
     ERROR = 'error',
     ABORTING = 'aborting',
-    STOPPED = 'stopped'
+    STOPPED = 'stopped',
+
+    ALREADY_RUNNING = 'already_running',
+    NOT_AVAILABLE   = 'not_available'
 }
 
 /**
@@ -56,13 +58,28 @@ export enum TaskStatus {
 export default class ContaoManager
 {
     /**
-     * Start the composer process
+     * Collection of composer tasks
+     *
+     * @protected
+     */
+    protected composerTasks: ComposerConfig[] = []
+
+    /**
+     * Adds a composer tasks
      *
      * @param tasks
      */
-    public start(tasks: ComposerConfig[]): void
+    public addComposerTasks(tasks: ComposerConfig[]): void
     {
+        this.composerTasks = [...this.composerTasks, ...tasks]
+    }
 
+    /**
+     * Return the composer tasks collection.
+     */
+    public getComposerTasks(): ComposerConfig[]
+    {
+        return this.composerTasks
     }
 
     /**
@@ -86,7 +103,7 @@ export default class ContaoManager
     }
 
     /**
-     * Check if tasks for the contao manager exists
+     * Check if tasks for the contao manager exists.
      *
      * @param products
      * @param type
@@ -110,44 +127,17 @@ export default class ContaoManager
     }
 
     /**
-     * Returns all private keys of every task
+     * Create a requirement object and return it
      *
-     * @param tasks
+     * @param name
+     * @param version
      */
-    public getPrivateKeyByTasks(tasks: ComposerConfig[]): string[]
+    public createRequirementObject(name: string, version: string): {}
     {
-        const keys = []
+        let require: {} = {};
 
-        for (const task of tasks)
-        {
-            if(task.pkey)
-                keys.push(task.pkey)
-        }
+        require[name] = version
 
-        return keys
-    }
-
-    /**
-     * Summarize tasks and return them as a single object.
-     *
-     * @param tasks
-     */
-    public summarizeComposerTasks(tasks: ComposerConfig[]): ComposerConfig
-    {
-        let collection: ComposerConfig
-
-        for (const task of tasks)
-        {
-            if(typeof collection === 'undefined')
-            {
-                collection = task
-                continue
-            }
-
-            collection.require = [...collection.require, ...task.require]
-            collection.update = [...collection.update, ...task.update]
-        }
-
-        return collection
+        return require
     }
 }

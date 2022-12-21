@@ -67,9 +67,9 @@ export default class LicenseStep extends Step
 
             // Show next step
             this.modal.next()
-        }).catch(() => {
-            // ToDo: Error
-            console.log('error catch')
+        }).catch((e: Error) => {
+            // Trigger error
+            super.error(e)
 
             // Unlock form
             this.lockedForm = false

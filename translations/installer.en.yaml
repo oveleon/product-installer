@@ -1,6 +1,6 @@
 installer:
     menu:
-        label: Install Product
+        label: Product management
         title: Install and manage your Product
     license:
         errors:

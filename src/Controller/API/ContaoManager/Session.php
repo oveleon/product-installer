@@ -55,7 +55,7 @@ class Session
         }
 
         // If we have access to the contao manager, get the status to check if the token is still active
-        $status = $this->contaoManager->getStatus();
+        $status = $this->contaoManager->call('session');
 
         switch ($status->getStatusCode())
         {

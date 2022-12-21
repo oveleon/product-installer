@@ -26,7 +26,6 @@ export default class ApiProcess extends Process
      */
     protected process(): void
     {
-        // Check license
         call(this.getRoute('api'), this.getParameter()).then((response) => {
             // Check errors
             if(response.error)

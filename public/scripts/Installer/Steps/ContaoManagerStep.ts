@@ -74,15 +74,19 @@ export default class ContaoManagerStep extends Step
         this.managerTasks = contaoManager.getComposerTasksByProducts(products)
 
         // Check if there are tasks that need to be done by the Contao Manager
-        const useManager = this.managerTasks.length > 0
+        const useManager = contaoManager.hasTasks(products)
 
         // Save information for further steps and processes
-        State.set('useManager', contaoManager.hasTasks(products))
+        State.set('useManager', useManager)
         State.set('installManually', false)
+
+        // Reset skip attribute
+        this.skip = false
 
         // Skip the step if there are no tasks for the Contao Manager
         if(!useManager)
         {
+            this.skip = true
             this.modal.next()
             return
         }
@@ -90,7 +94,6 @@ export default class ContaoManagerStep extends Step
         // Show loader
         this.modal.loader(true, i18n('contao_manager.loading'))
 
-        // Register elements into the scope
         this.authContainer      = <HTMLDivElement> this.element('.authentication')
         this.installContainer   = <HTMLDivElement> this.element('.install')
         this.manuallyContainer  = <HTMLDivElement> this.element('.manually')
@@ -168,12 +171,12 @@ export default class ContaoManagerStep extends Step
 
         for (const task of this.managerTasks)
         {
-            for (const requirement of task.require)
+            for (let packageName in task.require)
             {
                 const element = document.createElement('div')
 
                 element.classList.add('task')
-                element.innerHTML = `composer require ${requirement}`
+                element.innerHTML = `composer require ${packageName} "${task.require[packageName]}"`
 
                 tasksContainer.append(element)
             }
@@ -192,7 +195,7 @@ export default class ContaoManagerStep extends Step
         this.manuallyBtn.hidden = state
         this.manuallyContainer.hidden = !state
         this.closeBtn.hidden = !state
-        
+
         State.set('installManually', false)
 
         if(state === true)

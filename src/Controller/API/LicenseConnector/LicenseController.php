@@ -65,10 +65,10 @@ class LicenseController
                                 'source'     => 'oveleon/product-exporter',
                                 'token'      => 'XYZ'
                             ],*/
-                            [
+                            /*[
                                 'type'     => 'composer:update',
                                 'provider' => 'gitlab',
-                                'require'  => ['oveleon/product-exporter'], // ToDo: Allow version 'oveleon/product-exporter' => '^1.0'
+                                'require'  => ['oveleon/product-exporter' => '0.1'],
                                 'update'   => ['oveleon/product-exporter'],
                                 'composer' => [
                                     'repositories' => [
@@ -78,6 +78,11 @@ class LicenseController
                                         ]
                                     ]
                                 ]
+                            ]*/
+                            [
+                                'type'     => 'composer:update',
+                                'require'  => ['oveleon/contao-cookiebar' => '^1.12'],
+                                'update'   => ['oveleon/contao-cookiebar']
                             ]
                         ]
                     ]

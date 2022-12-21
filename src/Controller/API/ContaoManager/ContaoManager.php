@@ -60,17 +60,31 @@ class ContaoManager
      * @throws TransportExceptionInterface
      * @throws Exception
      */
-    public function getStatus(): ResponseInterface
+    public function call(string $route, string $method = 'GET', null|string $body = null, null|array $headers = null): ResponseInterface
     {
+        $_headers = [
+            'Content-Type' => 'application/json',
+            'Contao-Manager-Auth' => $this->getToken()
+        ];
+
+        if($headers)
+        {
+            $_headers = array_merge($_headers, $headers);
+        }
+
+        $parameter = [
+            'headers' => $_headers,
+        ];
+
+        if($body)
+        {
+            $parameter['body'] = $body;
+        }
+
         return (HttpClient::create())->request(
-            'GET',
-            $this->getRoute('session'),
-            [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Contao-Manager-Auth' => $this->getToken()
-                ]
-            ]
+            $method,
+            $this->getRoute($route),
+            $parameter
         );
     }
 }

@@ -39,6 +39,13 @@ export default abstract class Step extends Container
     protected lockedForm: boolean = false
 
     /**
+     * Defines if the step would be skipped.
+     *
+     * @protected
+     */
+    public skip: boolean = false
+
+    /**
      * Contains the current step configuration.
      *
      * @protected
@@ -140,12 +147,12 @@ export default abstract class Step extends Container
     private defaultEvents(): void
     {
         // Default button events
-        this.template.querySelector('[data-close]')?.addEventListener('click', () => this.modal.hide())
-        this.template.querySelector('[data-prev]')?.addEventListener('click', () => this.modal.prev())
-        this.template.querySelector('[data-next]')?.addEventListener('click', () => this.modal.next())
+        this.element('[data-close]')?.addEventListener('click', () => this.modal.hide())
+        this.element('[data-prev]')?.addEventListener('click', () => this.modal.prev())
+        this.element('[data-next]')?.addEventListener('click', () => this.modal.next())
 
         // Default form submit event
-        this.template.querySelector('form')?.addEventListener('submit', (e) => this.formSubmit(e))
+        this.element('form')?.addEventListener('submit', (e) => this.formSubmit(e))
     }
 
     /**
@@ -164,7 +171,7 @@ export default abstract class Step extends Container
         // Check if there are field errors
         if(response?.fields)
         {
-            const form = <HTMLFormElement> this.template.querySelector('form')
+            const form = <HTMLFormElement> this.element('form')
 
             for(const f in response.fields)
             {
