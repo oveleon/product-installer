@@ -447,6 +447,7 @@
   padding-left: 40px;
   font-size: 12px;
   line-height: 16px;
+  white-space: pre-wrap;
   word-break: break-word;
 }
 .console .operation .line:before {
@@ -481,7 +482,7 @@
   height: 8px;
   border-radius: 50%;
   border: 2px dotted #d0ad15;
-  animation: spin 1s linear infinite;
+  animation: spin 0.7s linear infinite;
 }
 .console > div[data-status=pending] .summary:after {
   top: 3px;

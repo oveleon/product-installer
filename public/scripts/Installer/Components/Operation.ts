@@ -84,7 +84,6 @@ export default class Operation extends Container
 
         if(!operation.console.trim())
         {
-            console.log('Skipped becouse its empty', operation.console.length, operation.console)
             return
         }
 

@@ -58,6 +58,8 @@ $console-background: #2e3031;
 
       font-size: 12px;
       line-height: 16px;
+
+      white-space: pre-wrap;
       word-break: break-word;
 
       &:before{
@@ -107,7 +109,7 @@ $console-background: #2e3031;
         height: 8px;
         border-radius: 50%;
         border: 2px dotted #d0ad15;
-        animation: spin 1s linear infinite;
+        animation: spin .7s linear infinite;
       }
     }
 
