@@ -45,7 +45,7 @@ export enum TaskStatus {
     ERROR = 'error',
     ABORTING = 'aborting',
     STOPPED = 'stopped',
-
+    PENDING = 'pending',
     ALREADY_RUNNING = 'already_running',
     NOT_AVAILABLE   = 'not_available'
 }

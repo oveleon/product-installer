@@ -36,7 +36,7 @@
 
       .actions{
         width: 100%;
-        margin: 0;
+        margin: 5px 0 0;
         padding: 0;
         text-align: right;
         align-self: center;
@@ -55,6 +55,11 @@
           margin: 2px 0 0;
           font-size: .8rem;
           color: $text-color-error;
+        }
+
+        .notification{
+          &.error p{ color: $text-color-error; }
+          &.warn p{ color: $text-color-warn; }
         }
 
         &:not(:empty){
@@ -90,16 +95,17 @@
 
       &-step{
 
-        /*.content{
-          width: calc(100% - 200px);
+        .content{
 
-          .content:has(+ .actions) {
+          &:has(+ .actions) {
+            width: calc(100% - 200px);
           }
         }
 
         .actions{
-          //width: 150px;
-        }*/
+          margin: 0;
+          width: 150px;
+        }
       }
     }
   }

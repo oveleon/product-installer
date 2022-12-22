@@ -1,6 +1,8 @@
 import Process from "./Process"
 import {call} from "../../Utils/network"
 import {TaskStatus} from "../ContaoManager";
+import Notification, {NotificationTypes} from "../Components/Notification";
+import Console from "../Components/Console";
 
 /**
  * Composer process class.
@@ -9,6 +11,13 @@ import {TaskStatus} from "../ContaoManager";
  */
 export default class ComposerProcess extends Process
 {
+    /**
+     * Console.
+     *
+     * @protected
+     */
+    protected console: Console
+
     /**
      * @inheritDoc
      */
@@ -51,27 +60,46 @@ export default class ComposerProcess extends Process
                 // Delete task if status is error
                 if(response.task.status === 'error')
                 {
-                    // ToDo: Show notification
+                    const notification = new Notification('Nicht beendete Aufgaben werden beendet.', NotificationTypes.WARN, {
+                        timer: {
+                            ms: 5000
+                        }
+                    })
 
-                    call('/contao/api/contao_manager/task/delete', response.task).then((deleteResponse) => {
+                    notification.appendTo(this.errorContainer)
+
+                    call('/contao/api/contao_manager/task/delete', response.task).then(() => {
+                        notification.remove()
                         this.process()
                     })
                 }
                 // Try again
                 else
                 {
-                    // ToDo: Show notification and stop after 5 trys and show manager button or similar
-
-                    setTimeout(() => {
-                        this.process()
-                    }, 5000)
+                    (new Notification('Der Contao Manager führt derzeit eine andere Aufgabe durch.', NotificationTypes.WARN, {
+                        timer: {
+                            ms: 5000,
+                            text: `Versuche erneut in #seconds# Sekunden.`,
+                            autoClose: true,
+                            onComplete: () => this.process()
+                        }
+                    })).appendTo(this.errorContainer)
                 }
 
                 return
             }
 
+            // Set initial console operations
+            this.console = new Console();
+            this.console.hide()
+            this.console.appendTo(this.template)
+            this.console.set(response.operations)
+
             // Disable button
-            this.element('.details').hidden = false
+            const detailsBtn = this.element('.details')
+
+            detailsBtn.hidden = false
+            detailsBtn.addEventListener('click', () => this.console.toggle())
 
             // Update console
             this.updateConsole()
@@ -89,6 +117,9 @@ export default class ComposerProcess extends Process
                 this.reject(response)
                 return
             }
+
+            // Update console
+            this.console.update(response.operations)
 
             switch (response.status)
             {

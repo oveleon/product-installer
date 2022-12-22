@@ -16,6 +16,8 @@ export default class ContaoManagerStep extends Step
     private isAuthenticated: boolean = false
     private isComposerReady: boolean = false
 
+    private connectActiveContainer: HTMLDivElement
+    private connectInactiveContainer: HTMLDivElement
     private authContainer: HTMLDivElement
     private installContainer: HTMLDivElement
     private manuallyContainer: HTMLDivElement
@@ -35,11 +37,11 @@ export default class ContaoManagerStep extends Step
             <h2>${i18n('contao_manager.headline')}</h2>
             <div class="authentication inherit">
                 <p>${i18n('contao_manager.description')}</p>
-                <div data-connection-state>${i18n('contao_manager.connection.inactive')}</div>
+                <div class="con-inactive" data-connection-state>${i18n('contao_manager.connection.inactive')}</div>
             </div>
             <div class="install inherit" hidden>
                 <p>${i18n('contao_manager.description.success')}</p>
-                <div data-connection-state="active" class="connection">${i18n('contao_manager.connection.active')}</div>
+                <div class="con-active" data-connection-state class="connection">${i18n('contao_manager.connection.active')}</div>
             </div>
             <div class="manually inherit" hidden>
                 <p>${i18n('contao_manager.install.description')}</p>
@@ -94,6 +96,9 @@ export default class ContaoManagerStep extends Step
         // Show loader
         this.modal.loader(true, i18n('contao_manager.loading'))
 
+        this.connectActiveContainer = <HTMLDivElement> this.element('.con-active')
+        this.connectInactiveContainer = <HTMLDivElement> this.element('.con-inactive')
+
         this.authContainer      = <HTMLDivElement> this.element('.authentication')
         this.installContainer   = <HTMLDivElement> this.element('.install')
         this.manuallyContainer  = <HTMLDivElement> this.element('.manually')
@@ -132,6 +137,9 @@ export default class ContaoManagerStep extends Step
                 this.installContainer.hidden = false
                 this.authenticateBtn.hidden = true
                 this.nextBtn.hidden = false
+
+                // Set connection
+                this.connectActiveContainer.dataset.connectionState = 'active'
             }
             else
             {
@@ -153,6 +161,9 @@ export default class ContaoManagerStep extends Step
 
                     document.location.href = response.manager.path + '/#oauth?' + parameter.toString()
                 })
+
+                // Set connection
+                this.connectInactiveContainer.dataset.connectionState = 'inactive'
             }
         }).catch((e: Error) => super.error(e))
     }

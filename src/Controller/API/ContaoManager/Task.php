@@ -87,8 +87,7 @@ class Task
             try {
                 $response = $this->contaoManager->call('task');
                 $taskData = $response->toArray();
-            }
-            catch (Exception | TransportExceptionInterface | ClientExceptionInterface | DecodingExceptionInterface | RedirectionExceptionInterface | ServerExceptionInterface $e) {}
+            } catch (Exception | TransportExceptionInterface | ClientExceptionInterface | DecodingExceptionInterface | RedirectionExceptionInterface | ServerExceptionInterface $e) {}
 
             return new JsonResponse([
                 'status'  => TaskStatus::ALREADY_RUNNING->value,

@@ -5,15 +5,21 @@ import Container from "./Container"
  */
 export enum NotificationTypes {
     ERROR = 'error',
+    WARN = 'warn',
     INFO = 'info'
 }
-
 
 /**
  * NotifyOptions.
  */
 export interface NotifyOptions {
-    closeable?: boolean
+    closeable?: boolean,
+    timer?: {
+        ms: number,
+        text?: string,
+        autoClose?: boolean
+        onComplete?: Function
+    }
 }
 
 /**
@@ -47,7 +53,7 @@ export default class Notification extends Container
      * @param type
      * @param options Use shorthand `true` for a closeable notification
      */
-    constructor(text: string, type: NotificationTypes = NotificationTypes.ERROR, options?: NotifyOptions | boolean) {
+    constructor(protected text: string, type: NotificationTypes = NotificationTypes.ERROR, options?: NotifyOptions | boolean) {
         // Auto-increment id
         Notification.notificationId++
 
@@ -72,11 +78,11 @@ export default class Notification extends Container
             this.options = options
         }
 
-        // Apply options
-        this.applyOptions()
-
         // Create
         this.setText(text)
+
+        // Apply options
+        this.applyOptions()
     }
 
     private applyOptions(): void
@@ -92,6 +98,42 @@ export default class Notification extends Container
             })
 
             this.template.append(closeBtn)
+        }
+
+        if(this.options?.timer)
+        {
+            let seconds = this.options.timer.ms / 1000
+            let text = '';
+
+            if(this.options.timer?.text)
+            {
+                text = this.options.timer.text.replace("#seconds#", seconds.toString())
+            }
+
+            this.setText(this.text + ' ' + text)
+
+            const interval = setInterval(() => {
+                --seconds
+
+                if(this.options.timer?.text)
+                {
+                    text = this.options.timer.text.replace("#seconds#", seconds.toString());
+                }
+
+                this.setText(this.text + ' ' + text)
+
+                if(seconds === 0)
+                {
+                    clearInterval(interval)
+
+                    if(this.options.timer?.autoClose)
+                    {
+                        this.remove()
+                    }
+
+                    this.options.timer.onComplete?.call(this)
+                }
+            }, 1000)
         }
     }
 

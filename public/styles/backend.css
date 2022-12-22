@@ -122,6 +122,40 @@
     border-color: #e57c11;
   }
 }
+[data-connection-state] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  font-weight: 500;
+  padding-bottom: 5px;
+  overflow: hidden;
+}
+[data-connection-state]:before {
+  display: block;
+  content: "";
+  width: 100%;
+  height: 350px;
+  margin: -50px 0;
+}
+
+[data-connection-state=inactive] {
+  color: #688191;
+}
+[data-connection-state=inactive]:before {
+  background: url("/bundles/productinstaller/icons/connection-lost.gif") center center no-repeat;
+  background-size: auto 100%;
+}
+
+[data-connection-state=active] {
+  color: #698e79;
+}
+[data-connection-state=active]:before {
+  background: url("/bundles/productinstaller/icons/connection.gif") center center no-repeat;
+  background-size: auto 100%;
+}
+
 #installer .license-connector-container {
   display: flex;
   flex-direction: column;
@@ -318,7 +352,7 @@
 }
 #installer .process-step .actions {
   width: 100%;
-  margin: 0;
+  margin: 5px 0 0;
   padding: 0;
   text-align: right;
   align-self: center;
@@ -336,6 +370,12 @@
   font-size: 0.8rem;
   color: #b54c4c;
 }
+#installer .process-step .errors .notification.error p {
+  color: #b54c4c;
+}
+#installer .process-step .errors .notification.warn p {
+  color: #b5a65e;
+}
 #installer .process-step .errors:not(:empty) {
   margin-top: 5px;
 }
@@ -350,46 +390,152 @@
 }
 
 @media (min-width: 600px) {
-  #installer .process-step {
-    /*.content{
-      width: calc(100% - 200px);
+  #installer .process-step .content:has(+ .actions) {
+    width: calc(100% - 200px);
+  }
+  #installer .process-step .actions {
+    margin: 0;
+    width: 150px;
+  }
+}
+.console {
+  font-family: -apple-system, system-ui, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+  font-size: 13px;
+  color: #fff;
+  background: #2e3031;
+  border-radius: 3px;
+  margin-top: 15px;
+  padding: 30px;
+  width: 100%;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #2e3031 #f0f0f0;
+}
+.console .summary {
+  position: relative;
+  font-weight: 600;
+  line-height: 1.2;
+  padding-left: 35px;
+}
+.console .summary:has(+ .operation:not(:empty)) {
+  cursor: pointer;
+}
+.console .summary:has(+ .operation:not(:empty)):before {
+  display: block;
+  content: "⯈";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  color: #bababa;
+  font-size: 8px;
+  line-height: 1;
+}
+.console .summary:after {
+  display: block;
+  content: "";
+  position: absolute;
+  left: 15px;
+}
+.console .operation {
+  color: #bdbdbd;
+  counter-reset: lines;
+}
+.console .operation .line {
+  counter-increment: lines;
+  position: relative;
+  min-height: 16px;
+  padding-left: 40px;
+  font-size: 12px;
+  line-height: 16px;
+  word-break: break-word;
+}
+.console .operation .line:before {
+  display: inline-block;
+  content: counter(lines);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 25px;
+  margin-right: 15px;
+  color: #6a6a6a;
+  text-align: right;
+}
+.console .operation .line:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.console .operation .line:last-child:empty {
+  display: none;
+}
+.console > div {
+  margin-bottom: 20px;
+}
+.console > div.open .summary {
+  margin-bottom: 15px;
+}
+.console > div.open .summary:before {
+  transform: rotateZ(90deg);
+}
+.console > div[data-status=active] .summary:after {
+  top: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px dotted #d0ad15;
+  animation: spin 1s linear infinite;
+}
+.console > div[data-status=pending] .summary:after {
+  top: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid #4b4b4b;
+}
+.console > div[data-status=complete] .summary:after {
+  top: 1px;
+  color: #1cb636;
+  content: "🗸";
+}
+.console > div[data-status=error] .summary:after, .console > div[data-status=stopped] .summary:after {
+  top: 1px;
+  color: #fb5555;
+  content: "✕";
+}
+.console > div:last-child {
+  margin-bottom: 0;
+}
+.console.absolute {
+  position: absolute;
+  z-index: 10;
+  inset: 1px;
+  width: auto;
+  margin-top: 0;
+  overflow-y: auto;
+}
+.console::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.console::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 10px #5a5e60;
+}
+.console::-webkit-scrollbar-thumb {
+  background-color: #718b9a;
+  border-radius: 10px;
+}
+.console::-webkit-scrollbar-track, .console::-webkit-scrollbar-thumb {
+  border: 0 solid #2e3031;
+}
 
-      .content:has(+ .actions) {
-      }
-    }
-
-    .actions{
-      //width: 150px;
-    }*/
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 [hidden] {
   display: none !important;
-}
-
-[data-connection-state] {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-  font-weight: 500;
-  color: #a86363;
-}
-[data-connection-state]:before {
-  display: block;
-  content: "";
-  width: 100px;
-  height: 80px;
-  background: url("/bundles/productinstaller/icons/connection-lost.svg") center center no-repeat;
-  background-size: contain;
-}
-
-[data-connection-state=active] {
-  color: #698e79;
-}
-[data-connection-state=active]:before {
-  background: url("/bundles/productinstaller/icons/connection.svg") center center no-repeat;
 }
 
 #installer {
@@ -409,8 +555,8 @@
   display: flex;
   position: relative;
   width: 100%;
-  max-width: 700px;
-  min-height: 450px;
+  max-width: 710px;
+  min-height: 460px;
   background: #fff;
   box-shadow: rgba(0, 0, 0, 0.15) 0 5px 15px 0;
   border-radius: 4px;
@@ -534,6 +680,7 @@
 }
 #installer .notifications {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   position: absolute;
   bottom: 0;
@@ -549,6 +696,7 @@
   padding: 5px 9px;
   border-radius: 5px;
   pointer-events: auto;
+  margin-bottom: 5px;
   background: #e4f0f7;
 }
 #installer .notifications .notification p {
@@ -569,6 +717,9 @@
 }
 #installer .notifications .notification.error {
   background: #f7e4e4;
+}
+#installer .notifications .notification.warn {
+  background: #f4eec9;
 }
 #installer .actions {
   padding-top: 20px;
@@ -620,10 +771,10 @@
     margin-bottom: 22px;
   }
   #installer #steps > div {
-    padding: 35px;
+    padding: 45px;
   }
   #installer .notifications {
-    padding: 35px;
+    padding: 45px;
   }
   #installer .actions button {
     width: auto;

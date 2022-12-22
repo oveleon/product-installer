@@ -1,45 +1,20 @@
 $text-color: #495258;
 $text-color-error: #b54c4c;
+$text-color-warn: #b5a65e;
 $text-color-info: #a6a6a6;
 $primary-color: #566974;
 $background-color: #688191;
 
 @import "loader";
+@import "connection";
 @import "license-connector";
 @import "product";
 @import "manager";
 @import "process";
+@import "console";
 
 [hidden]{
   display: none !important;
-}
-
-[data-connection-state] {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-
-  font-weight: 500;
-  color: #a86363;
-
-  &:before{
-    display: block;
-    content: "";
-    width: 100px;
-    height: 80px;
-    background: url('/bundles/productinstaller/icons/connection-lost.svg') center center no-repeat;
-    background-size: contain;
-  }
-}
-
-[data-connection-state="active"]{
-  color: #698e79;
-
-  &:before {
-    background: url('/bundles/productinstaller/icons/connection.svg') center center no-repeat;
-  }
 }
 
 #installer{
@@ -63,8 +38,8 @@ $background-color: #688191;
     position: relative;
 
     width: 100%;
-    max-width: 700px;
-    min-height: 450px;
+    max-width: 710px;
+    min-height: 460px;
 
     background: #fff;
     box-shadow: rgba(0, 0, 0, 0.15) 0 5px 15px 0;
@@ -234,6 +209,7 @@ $background-color: #688191;
 
   .notifications{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     position: absolute;
     bottom: 0;
@@ -249,6 +225,7 @@ $background-color: #688191;
       padding: 5px 9px;
       border-radius: 5px;
       pointer-events: auto;
+      margin-bottom: 5px;
 
       background: #e4f0f7;
 
@@ -273,6 +250,9 @@ $background-color: #688191;
 
       &.error{
         background: #f7e4e4;
+      }
+      &.warn{
+        background: #f4eec9;
       }
     }
   }
@@ -344,12 +324,12 @@ $background-color: #688191;
       }
 
       > div{
-        padding: 35px;
+        padding: 45px;
       }
     }
 
     .notifications{
-      padding: 35px;
+      padding: 45px;
     }
 
     .actions {

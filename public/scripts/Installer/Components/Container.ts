@@ -95,6 +95,14 @@ export default class Container
     }
 
     /**
+     * Shows/Hides the container template by current display mode.
+     */
+    public toggle(): void
+    {
+        this.template.hidden = !this.template.hidden
+    }
+
+    /**
      * Adds css classes to the container template.
      *
      * @param className

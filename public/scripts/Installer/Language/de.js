@@ -23,7 +23,7 @@ module.exports = {
     "contao_manager.dependencies.headline": "Abhängigkeiten",
     "contao_manager.dependencies.installed":"Ja, ich habe alle Abhängigkeiten installiert",
     "contao_manager.connection.active":     "Verbindung wurde hergestellt",
-    "contao_manager.connection.inactive":   "Autorisierung ausstehend",
+    "contao_manager.connection.inactive":   "Verbindung nicht hergestellt",
     "contao_manager.loading":               "Verbindung zum Contao Manager wird hergestellt",
     "contao_manager.loading.composer":      "Die composer.json Datei wird für die manuelle Installation vorbereitet",
     "contao_manager.process.title":         "Contao Manager",

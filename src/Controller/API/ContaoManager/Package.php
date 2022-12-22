@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -23,7 +22,6 @@ class Package
 {
     public function __construct(
         private readonly ContaoManager $contaoManager,
-        private readonly RouterInterface $router,
         private readonly RequestStack $requestStack
     ){}
 
@@ -40,15 +38,8 @@ class Package
         $request = $this->requestStack->getCurrentRequest();
         $root = System::getContainer()->getParameter('kernel.project_dir');
 
-        $uploads = (HttpClient::create())->request(
-            'GET',
-            $this->contaoManager->getRoute('packages/uploads'),
-            [
-                'headers' => [
-                    'Contao-Manager-Auth' => $this->contaoManager->getToken()
-                ]
-            ]
-        );
+        // Get current uploads
+        $uploads = $this->contaoManager->call('packages/uploads');
 
         $collection = $uploads->toArray(false) ?? [];
         $uploadedPackages = array_map(fn($upload): string => $upload['name'], $collection);
@@ -72,16 +63,11 @@ class Package
                 )
             ]);
 
-            $header = $formData->getPreparedHeaders()->toArray();
-            $header['Contao-Manager-Auth'] = $this->contaoManager->getToken();
-
-            $response = (HttpClient::create())->request(
+            $response = $this->contaoManager->call(
+                'packages/uploads',
                 'POST',
-                $this->contaoManager->getRoute('packages/uploads'),
-                [
-                    'headers' => $header,
-                    'body' => $formData->bodyToString()
-                ]
+                $formData->bodyToString(),
+                $formData->getPreparedHeaders()->toArray()
             );
 
             if($response->getStatusCode() !== Response::HTTP_OK)
