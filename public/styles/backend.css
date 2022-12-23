@@ -1,4 +1,27 @@
 @charset "UTF-8";
+.scrollable {
+  display: flex;
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #c7c7c7 #f0f0f0;
+}
+.scrollable::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scrollable::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 10px #e3e3e3;
+}
+.scrollable::-webkit-scrollbar-thumb {
+  background-color: #a5a5a5;
+  border-radius: 10px;
+}
+.scrollable::-webkit-scrollbar-track, .scrollable::-webkit-scrollbar-thumb {
+  border: 0 solid #a5a5a5;
+}
+
 #installer .loader .text {
   font-size: 0.95rem;
   margin-top: 25px;
@@ -128,7 +151,7 @@
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  font-weight: 500;
+  font-weight: 600;
   padding-bottom: 5px;
   overflow: hidden;
 }
@@ -200,7 +223,7 @@
 #installer .license-connector .content .title {
   color: #222;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 6px;
 }
 #installer .license-connector .content .description {
@@ -236,8 +259,10 @@
 #installer .products {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin: auto;
+  flex-grow: 1;
 }
 #installer .product {
   display: flex;
@@ -274,7 +299,7 @@
 #installer .product .content .title {
   color: #222;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 6px;
 }
 #installer .product .content .description {
@@ -341,7 +366,7 @@
 #installer .process-step .content .title {
   color: #222;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 6px;
 }
 #installer .process-step .content p {
@@ -409,7 +434,7 @@
   width: 100%;
   overflow: auto;
   scrollbar-width: thin;
-  scrollbar-color: #2e3031 #f0f0f0;
+  scrollbar-color: #c7c7c7 #f0f0f0;
 }
 .console .summary {
   position: relative;
@@ -481,7 +506,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: 2px dotted #d0ad15;
+  border: 2px dotted #ffeb94;
   animation: spin 0.7s linear infinite;
 }
 .console > div[data-status=pending] .summary:after {
@@ -517,14 +542,14 @@
   height: 6px;
 }
 .console::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 10px #5a5e60;
+  -webkit-box-shadow: inset 0 0 10px #e3e3e3;
 }
 .console::-webkit-scrollbar-thumb {
-  background-color: #718b9a;
+  background-color: #a5a5a5;
   border-radius: 10px;
 }
 .console::-webkit-scrollbar-track, .console::-webkit-scrollbar-thumb {
-  border: 0 solid #2e3031;
+  border: 0 solid #a5a5a5;
 }
 
 @keyframes spin {
@@ -543,9 +568,9 @@
   position: fixed;
   inset: 0 0 0 0;
   z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-size: 0;
+  letter-spacing: 0;
+  text-align: center;
   padding: 10px;
   background: rgba(0, 0, 0, 0.15);
 }
@@ -553,14 +578,18 @@
   box-sizing: border-box;
 }
 #installer > .inside {
-  display: flex;
+  display: inline-flex;
   position: relative;
+  vertical-align: middle;
   width: 100%;
   max-width: 710px;
   min-height: 460px;
+  max-height: 100%;
   background: #fff;
   box-shadow: rgba(0, 0, 0, 0.15) 0 5px 15px 0;
   border-radius: 4px;
+  font-size: 0.875rem;
+  text-align: left;
   overflow: hidden;
 }
 #installer > .inside > .loader {
@@ -596,7 +625,7 @@
   display: inline-block;
   color: #222;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 #installer form .widget.center {
   align-items: center;
@@ -610,6 +639,10 @@
   border: 1px solid #688191;
   border-radius: 3px;
   outline-color: #688191;
+}
+#installer form .widget.text input:focus {
+  outline-width: 1px;
+  outline-style: solid;
 }
 #installer form .widget.text input::placeholder {
   color: #a6a6a6;
@@ -667,17 +700,18 @@
 }
 #installer #steps {
   width: 100%;
+  flex-grow: 1;
 }
 #installer #steps > div {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100%;
   padding: 25px;
 }
 #installer #steps > div .inherit {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex-grow: 1;
 }
 #installer .notifications {
   display: flex;
@@ -723,6 +757,7 @@
   background: #f4eec9;
 }
 #installer .actions {
+  margin-top: auto;
   padding-top: 20px;
   text-align: center;
 }
@@ -764,6 +799,12 @@
 #installer button.primary[disabled] {
   border-color: #c3c4c5;
   background: #d7d7d7;
+}
+#installer:before {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
 }
 
 @media (min-width: 600px) {

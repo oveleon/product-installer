@@ -3,7 +3,7 @@ With this extension, products from Oveleon can be registered, managed and instal
 
 #### ToDo
 - Finish bundle
-  - Make installer more responsive (height / scrollable)
+  - Optimize styles in Firefox (Firefox does not support the `:has()` selector)
   - Use translations everywhere
   - Create database and migration process
   - Create product overview

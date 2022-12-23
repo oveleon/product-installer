@@ -31,6 +31,13 @@ export default class Modal extends Container
     private readonly insideContainer: HTMLDivElement
 
     /**
+     * The scroll container of the modal.
+     *
+     * @private
+     */
+    private readonly scrollContainer: HTMLDivElement
+
+    /**
      * The container in which the steps are placed.
      *
      * @private
@@ -73,11 +80,17 @@ export default class Modal extends Container
 
         this.template.append(this.insideContainer)
 
+        // Create scroll container
+        this.scrollContainer = <HTMLDivElement> document.createElement('div')
+        this.scrollContainer.classList.add('scrollable')
+
+        this.insideContainer.append(this.scrollContainer)
+
         // Create step container
         this.stepContainer = <HTMLDivElement> document.createElement('div')
         this.stepContainer.id = 'steps'
 
-        this.insideContainer.append(this.stepContainer)
+        this.scrollContainer.append(this.stepContainer)
 
         // Create notification container
         this.notificationContainer = <HTMLDivElement> document.createElement('div')

@@ -5,6 +5,7 @@ $text-color-info: #a6a6a6;
 $primary-color: #566974;
 $background-color: #688191;
 
+@import "scrollable";
 @import "loader";
 @import "connection";
 @import "license-connector";
@@ -22,9 +23,9 @@ $background-color: #688191;
   inset: 0 0 0 0;
   z-index: 9999;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-size: 0;
+  letter-spacing: 0;
+  text-align: center;
 
   padding: 10px;
   background: rgb(0 0 0 / 15%);
@@ -34,16 +35,22 @@ $background-color: #688191;
   }
 
   > .inside{
-    display: flex;
+    display: inline-flex;
     position: relative;
 
+    vertical-align: middle;
     width: 100%;
     max-width: 710px;
     min-height: 460px;
+    max-height: 100%;
 
     background: #fff;
     box-shadow: rgba(0, 0, 0, 0.15) 0 5px 15px 0;
     border-radius: 4px;
+
+    font-size: .875rem;
+    text-align: left;
+
     overflow: hidden;
 
     > .loader{
@@ -88,7 +95,7 @@ $background-color: #688191;
         display: inline-block;
         color: #222;
         font-size: .95rem;
-        font-weight: 500;
+        font-weight: 600;
       }
 
       &.center{
@@ -107,6 +114,11 @@ $background-color: #688191;
           border: 1px solid #688191;
           border-radius: 3px;
           outline-color: $background-color;
+
+          &:focus{
+            outline-width: 1px;
+            outline-style:solid;
+          }
 
           &::placeholder {
             color: $text-color-info;
@@ -192,17 +204,18 @@ $background-color: #688191;
 
   #steps{
     width: 100%;
+    flex-grow: 1;
 
     > div{
       display: flex;
       flex-direction: column;
-      height: 100%;
+      min-height: 100%;
       padding: 25px;
 
       .inherit {
         display: flex;
         flex-direction: column;
-        height: 100%;
+        flex-grow: 1;
       }
     }
   }
@@ -258,6 +271,7 @@ $background-color: #688191;
   }
 
   .actions{
+    margin-top: auto;
     padding-top: 20px;
     text-align: center;
 
@@ -310,6 +324,13 @@ $background-color: #688191;
         background: #d7d7d7;
       }
     }
+  }
+
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
   }
 }
 
