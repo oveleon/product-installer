@@ -5,7 +5,7 @@ import State from "./State";
 
 export default class Installer
 {
-    private locale: string
+    public static locale: string
     private readonly modal: Modal
 
     constructor(locale: string)
@@ -32,7 +32,7 @@ export default class Installer
      */
     setLocale(locale: string): void
     {
-        this.locale = locale
+        Installer.locale = locale
         setLanguage(locale)
     }
 

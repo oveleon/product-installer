@@ -2,6 +2,7 @@ import State from "../State";
 import {call} from "../../Utils/network"
 import {i18n} from "../Language"
 import Step from "../Components/Step";
+import Installer from "../Installer";
 
 /**
  * License step class.
@@ -44,7 +45,10 @@ export default class LicenseStep extends Step
 
         // Check license
         call('/contao/api/license_connector/license', {
-            license: data.get('license')
+            license: data.get('license'),
+            connector: State.get('connector'),
+            locale: Installer.locale,
+            host: window.location.host
         }).then((response) => {
             // Hide loader
             this.modal.loader(false)

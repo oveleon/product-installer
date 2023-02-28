@@ -11,9 +11,9 @@ export enum Provider {
  * Task types.
  */
 export enum TaskType {
-    REPOSITORY_IMPORT = 'repo:import',
-    MANAGER_PACKAGE = 'manager:package',
-    COMPOSER_UPDATE = 'composer:update'
+    REPOSITORY_IMPORT = 'repo_import',
+    MANAGER_PACKAGE = 'manager_package',
+    COMPOSER_UPDATE = 'composer_update'
 }
 
 /**

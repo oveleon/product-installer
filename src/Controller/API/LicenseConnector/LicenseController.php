@@ -2,8 +2,10 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\LicenseConnector;
 
+use Oveleon\ProductInstaller\Util\ConnectorUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -16,7 +18,8 @@ class LicenseController
 {
     public function __construct(
         private readonly RequestStack $requestStack,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly ConnectorUtil $connectorUtil
     ){}
 
     /**
@@ -26,6 +29,7 @@ class LicenseController
     {
         $request = $this->requestStack->getCurrentRequest()->toArray();
 
+        // Check if a license has been submitted
         if(!$license = $request['license'])
         {
             return new JsonResponse([
@@ -36,30 +40,69 @@ class LicenseController
             ]);
         }
 
-        // ToDo: Check license by product-licenser (server)
-        if($license === 'ABC')
+        // Get current connector
+        if(!$connector = $this->connectorUtil->getConnectorByName($request['connector']))
         {
-            // Fixme: Demo-Response
+            return new JsonResponse([
+                'error'  => true,
+                'fields' => [
+                    'license' => 'No license connector found.'
+                ]
+            ]);
+        }
+
+        // Register license via connector
+        $response = $this->connectorUtil->post(
+            $connector['connector'],
+            '/license/register',
+            $request
+        );
+
+        // Check whether a connection could be established
+        if($response->getStatusCode() !== Response::HTTP_OK)
+        {
+            return new JsonResponse([
+                'error'  => true,
+                'fields' => [
+                    'license' => 'No connection can be established at the moment, please try again later.'
+                ]
+            ]);
+        }
+
+        $licenseInformation = $response->toArray();
+
+        if($error = ($licenseInformation['error'] ?? false))
+        {
+            return new JsonResponse([
+                'error'  => true,
+                'fields' => [
+                    'license' => $error
+                ]
+            ]);
+        }
+
+        if($license === 'TEST')
+        {
             return new JsonResponse([
                 'products' => [
                     [
-                        'name'          => 'Vorlagen-Paket MEDIUM',
+                        'name'          => 'Content Paket',
                         'version'       => '1.0.0',
                         'image'         => 'https://avatars.githubusercontent.com/u/44843847?s=200&v=4',
                         'description'   => 'Um ein triviales Beispiel zu nehmen, wer von uns unterzieht sich je anstrengender körperlicher Betätigung, außer um Vorteile daraus zu ziehen?',
                         'registrable'   => true,
                         'tasks'         => [
                             [
-                                'type'    => 'repo:import',
+                                'type'    => 'repo_import',
                                 'provider' => 'github',
                                 'repository' => 'oveleon/content-package-1',
                             ],
                             [
-                                'type'       => 'manager:package',
+                                'type'       => 'manager_package',
                                 'provider'   => 'server',
                                 'source'     => 'https://p607045.mittwaldserver.info/share/product-exporter.zip'
-                            ],/*
-                            [
+                            ],
+                            /*[
                                 'type'       => 'manager:package',
                                 'provider'   => 'github',
                                 'source'     => 'oveleon/product-exporter',
@@ -79,9 +122,22 @@ class LicenseController
                                     ]
                                 ]
                             ]*/
-                            [
-                                'type'     => 'composer:update',
+                            /*[
+                                'type'     => 'composer_update',
                                 'require'  => ['oveleon/contao-cookiebar' => '^1.12'],
+                                'update'   => ['oveleon/contao-cookiebar']
+                            ]*/
+                        ]
+                    ],[
+                        'name'          => 'Skin',
+                        'version'       => '1.0.0',
+                        'image'         => 'https://avatars.githubusercontent.com/u/44843847?s=200&v=4',
+                        'description'   => 'Um ein triviales Beispiel zu nehmen, wer von uns unterzieht sich je anstrengender körperlicher Betätigung, außer um Vorteile daraus zu ziehen?',
+                        'registrable'   => true,
+                        'tasks'         => [
+                            [
+                                'type'     => 'composer_update',
+                                'require'  => ['oveleon/contao-cookiebar' => '5.x-dev'],
                                 'update'   => ['oveleon/contao-cookiebar']
                             ]
                         ]
@@ -92,10 +148,7 @@ class LicenseController
         }
 
         return new JsonResponse([
-            'error' => true,
-            'fields' => [
-                'license' => $this->translator->trans('installer.license.errors.license_not_found', [], 'installer')
-            ]
+            'products' => $licenseInformation['products'] ?? []
         ]);
     }
 }

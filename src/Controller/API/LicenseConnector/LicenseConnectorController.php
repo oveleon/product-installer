@@ -2,9 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\LicenseConnector;
 
-use Contao\Controller;
-use Oveleon\ProductInstaller\LicenseConnector\AbstractLicenseConnector;
-use Oveleon\ProductInstaller\LicenseConnector\Step\AbstractStep;
+use Oveleon\ProductInstaller\Util\ConnectorUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,44 +13,22 @@ use Symfony\Component\Routing\Annotation\Route;
 )]
 class LicenseConnectorController
 {
+    public function __construct(
+        private readonly ConnectorUtil $connectorUtil
+    ){}
+
     #[Route('/config',
         name: 'license_connectors_config',
         methods: ['POST']
     )]
     public function getLicenseConnectors(): JsonResponse
     {
-        $licenseConnectors = Controller::getContainer()->getParameter('product_installer.license_connectors');
+        $licenseConnectors = $this->connectorUtil->getConnectors();
 
-        if(!empty($licenseConnectors))
+        if(null !== $licenseConnectors)
         {
-            $collection = [];
-
-            foreach ($licenseConnectors as $licenseConnector)
-            {
-                /** @var AbstractLicenseConnector $licenseConnector */
-                $licenseConnector = new $licenseConnector();
-                $steps = [];
-
-                /** @var AbstractStep $step */
-                foreach ($licenseConnector->getSteps() as $step)
-                {
-                    $stepConfig = [
-                        'name'       => $step->name,
-                        'routes'     => $step->getRoutes(),
-                        'attributes' => $step->getAttributes()
-                    ];
-
-                    $steps[] = $stepConfig;
-                }
-
-                $collection[] = [
-                    'config' => $licenseConnector->getConfig(),
-                    'steps'  => $steps
-                ];
-            }
-
             return new JsonResponse([
-                'license_connectors' => $collection
+                'license_connectors' => $licenseConnectors
             ]);
         }
 
