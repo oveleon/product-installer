@@ -27,10 +27,11 @@ class LicenseController
      */
     public function __invoke(): JsonResponse
     {
-        $request = $this->requestStack->getCurrentRequest()->toArray();
+        $request = $this->requestStack->getCurrentRequest();
+        $parameter = $request->toArray();
 
         // Check if a license has been submitted
-        if(!$license = $request['license'])
+        if(!$license = $parameter['license'])
         {
             return new JsonResponse([
                 'error'  => true,
@@ -41,7 +42,7 @@ class LicenseController
         }
 
         // Get current connector
-        if(!$connector = $this->connectorUtil->getConnectorByName($request['connector']))
+        if(!$connector = $this->connectorUtil->getConnectorByName($parameter['connector']))
         {
             return new JsonResponse([
                 'error'  => true,
@@ -55,7 +56,13 @@ class LicenseController
         $response = $this->connectorUtil->post(
             $connector['connector'],
             '/license/register',
-            $request
+            array_merge(
+                $parameter,
+                [
+                    'locale' => $request->getLocale(),
+                    'host'   => $request->getHost()
+                ]
+            )
         );
 
         // Check whether a connection could be established
