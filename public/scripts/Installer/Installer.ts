@@ -1,7 +1,9 @@
 import Modal from "./Components/Modal";
 import {setLanguage} from "./Language/";
-import LicenseConnectorStep from "./Steps/LicenseConnectorStep";
 import State from "./State";
+
+import LicenseConnectorStep from "./Steps/LicenseConnectorStep";
+import DashboardStep from "./Steps/DashboardStep";
 
 export default class Installer
 {
@@ -19,6 +21,7 @@ export default class Installer
         // Create modal and steps
         this.modal = new Modal('installer')
         this.modal.addSteps(
+            new DashboardStep(),
             new LicenseConnectorStep()
         )
 

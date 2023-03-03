@@ -5,6 +5,9 @@ module.exports = {
     "actions.next":                         "Weiter",
     "actions.start":                        "Starten",
 
+    // Dashboard step
+    "dashboard.headline":                   "Produktverwaltung",
+
     // License step
     "license_connector.headline":           "Bitte wählen Sie einen Produkttypen",
     "license_connector.load.connector":     "Informationen werden abgerufen",
@@ -43,6 +46,9 @@ module.exports = {
     "install.headline":                     "Installation",
     "install.actions.add":                  "Weiteres Produkt registrieren",
 
+    // Advertising step
+    "advertising.doNotShowAgain":           "Nicht erneut anzeigen",
+
     // Manager process
     "process.contao_manager.download.title":        "Pakete herunterladen",
     "process.contao_manager.download.description":  "Abhängige Pakete werden heruntergeladen und zur Verfügung gestellt.",
@@ -51,5 +57,9 @@ module.exports = {
     "process.contao_manager.package.description":   "Pakete werden dem Projekt hinterlegt.",
 
     "process.contao_manager.composer.title":         "Abhängigkeiten installieren",
-    "process.contao_manager.composer.description":   "Die Abhängigkeiten werden über composer installiert."
+    "process.contao_manager.composer.description":   "Die Abhängigkeiten werden über composer installiert.",
+
+    // Register product process
+    "process.register.title":               "Produktregistrierung",
+    "process.register.description":         "Die installierten Produkte werden registriert.",
 }

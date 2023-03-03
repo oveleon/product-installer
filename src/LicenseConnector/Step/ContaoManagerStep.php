@@ -3,7 +3,7 @@
 namespace Oveleon\ProductInstaller\LicenseConnector\Step;
 
 /**
- * The step class representing the component of the component manager step.
+ * The step class representing the component of the contao manager step.
  * This step is used to check if a connection to the Contao Manager can be established.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>

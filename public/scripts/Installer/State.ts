@@ -15,14 +15,28 @@ export default class State
     private static state = {}
 
     /**
+     * Object for properties that are retained even after cleanup.
+     *
+     * @private
+     */
+    private static persistKeys = []
+
+    /**
      * Sets a value.
      *
      * @param name
      * @param value
+     * @param persists
      */
-    public static set(name: string, value: any): void
+    public static set(name: string, value: any, persists: boolean = false): void
     {
         this.state[name] = value
+
+        if(persists)
+        {
+            this.persistKeys.push(name)
+        }
+
         this.save()
     }
 
@@ -58,8 +72,19 @@ export default class State
             return
         }
 
-        this.state = {}
-        localStorage.removeItem(this.key);
+        const persistentState = {};
+
+        if(this.persistKeys.length)
+        {
+            for(const key of this.persistKeys)
+            {
+                persistentState[key] = this.state[key]
+            }
+        }
+
+        this.state = persistentState
+
+        this.save()
     }
 
     /**

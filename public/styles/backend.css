@@ -560,6 +560,39 @@
     transform: rotate(360deg);
   }
 }
+.advertising {
+  position: relative;
+  margin-bottom: 35px;
+}
+.advertising #image_banner img {
+  width: 100%;
+}
+.advertising .overlay {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: absolute;
+  inset: 0;
+  padding: 15px;
+}
+.advertising a.button, .advertising button {
+  display: inline-block;
+  width: auto;
+  height: 38px;
+  padding: 0 14px;
+  margin: 0 5px;
+  font-weight: 600;
+  line-height: 38px;
+  color: #566974;
+  text-decoration: none;
+  text-align: center;
+  background-color: transparent;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
 [hidden] {
   display: none !important;
 }

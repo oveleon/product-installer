@@ -46,8 +46,11 @@ export default class LicenseConnectorStep extends Step
         return `
             <h2>${i18n('license_connector.headline')}</h2>
             <form id="license-connector-form" autocomplete="off">
-                <div class="license-conntector-container"></div>
+                <div class="license-connector-container"></div>
             </form>
+            <div class="actions">
+                <button data-prev>${i18n('actions.back')}</button>
+            </div>
         `
     }
 

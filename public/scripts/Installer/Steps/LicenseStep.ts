@@ -2,7 +2,6 @@ import State from "../State";
 import {call} from "../../Utils/network"
 import {i18n} from "../Language"
 import Step from "../Components/Step";
-import Installer from "../Installer";
 
 /**
  * License step class.
@@ -26,7 +25,7 @@ export default class LicenseStep extends Step
                 </div>
             </form>
             <div class="actions">
-                <button data-close>${i18n('actions.close')}</button>
+                <button data-prev>${i18n('actions.back')}</button>
                 <button type="submit" form="license-form" class="check primary">${i18n('license.actions.next')}</button>
             </div>
         `

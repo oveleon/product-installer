@@ -43,6 +43,9 @@ module.exports = {
     "install.headline":                     "Installation",
     "install.actions.add":                  "Register more products",
 
+    // Advertising step
+    "advertising.doNotShowAgain":           "Do not show again",
+
     // Manager process
     "process.contao_manager.download.title":        "Download packages",
     "process.contao_manager.download.description":  "Dependent packages are downloaded and made available.",
@@ -51,5 +54,9 @@ module.exports = {
     "process.contao_manager.package.description":   "Packages are deposited to the project.",
 
     "process.contao_manager.composer.title":        "Install dependencies",
-    "process.contao_manager.composer.description":  "The dependencies are installed via composer."
+    "process.contao_manager.composer.description":  "The dependencies are installed via composer.",
+
+    // Register product process
+    "process.register.title":               "Product registration",
+    "process.register.description":         "The installed products are registered.",
 }

@@ -10,7 +10,7 @@ use Symfony\Component\HttpClient\HttpClient;
 
 class ConnectorUtil
 {
-    public function post(AbstractLicenseConnector $connector, string $route, array $body): ResponseInterface
+    public function post(AbstractLicenseConnector $connector, string $route, array $body = []): ResponseInterface
     {
         return (HttpClient::create())->request(
             'POST',

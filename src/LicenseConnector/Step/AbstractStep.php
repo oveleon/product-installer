@@ -22,6 +22,7 @@ abstract class AbstractStep
     const STEP_PRODUCT        = 'ProductStep';
     const STEP_PROCESS        = 'ProcessStep';
     const STEP_CUSTOM         = 'CustomStep';
+    const STEP_ADVERTISING    = 'AdvertisingStep';
     const STEP_CONTAO_MANAGER = 'ContaoManagerStep';
 
     /**

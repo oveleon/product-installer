@@ -170,6 +170,13 @@ export default class Modal extends Container
      */
     public prev(): void
     {
+        // Close when it is already the first step
+        if(this.currentIndex === 0)
+        {
+            this.hide();
+            return
+        }
+
         const index = --this.currentIndex;
 
         if(this.isSkip(index))
