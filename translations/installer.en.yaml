@@ -6,3 +6,6 @@ installer:
         errors:
             license_not_found:  The specified license could not be found, please check your input and pay attention to upper and lower case.
             license_empty:      Please enter a valid license.
+    connector:
+        errors:
+            connection_failed: No connection to %connectorTitle% could be established.

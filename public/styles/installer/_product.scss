@@ -3,27 +3,35 @@
   .products{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
     flex-grow: 1;
   }
 
   .product{
-    display: flex;
-    flex-direction: column;
-    max-width: 470px;
+
+    > .inside{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 3px;
+      margin: 0 -10px;
+      padding: 10px;
+      cursor: default;
+
+      &:hover{
+        background: rgb(104 129 145 / 4%);
+      }
+    }
 
     .image{
       position: relative;
-      width: 85px;
-      height: 85px;
+      width: 65px;
+      height: 65px;
 
       border: 1px solid #ebebeb;
-      border-radius: 50%;
+      border-radius: 4px;
       box-shadow: rgb(0 0 0 / 15%) 0 5px 15px 0;
+      background: #fff;
 
-      margin: 0 auto 20px;
       overflow: hidden;
 
       img{
@@ -38,39 +46,122 @@
         position: absolute;
         inset: 14px;
         content: "";
-        background: url('/bundles/productinstaller/icons/assistant.svg') center center no-repeat;
+        background: url('/bundles/productinstaller/icons/logo.svg') center center no-repeat;
         background-size: contain;
       }
     }
 
     .content{
-      width: 100%;
+      margin: 10px;
+      flex-grow: 1;
 
       .title{
         color: #222;
         font-size: .95rem;
         font-weight: 600;
-        margin-bottom: 6px;
+        margin-bottom: 3px;
       }
 
       .description{
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
 
         line-height: 1.25em;
         color: $text-color;
+
+        p{
+          margin: 0;
+        }
       }
+    }
+
+    .info{
+      width: 120px;
 
       .version{
         margin-top: 7px;
         color: $text-color-info;
+
+        &:before{
+          position: relative;
+          top: 1px;
+          content: url("/bundles/productinstaller/icons/version_current.svg") " ";
+        }
+
+        &.new{
+          color: #0e9a0e;
+
+          &:before{
+            content: url("/bundles/productinstaller/icons/version_update.svg") " ";
+          }
+        }
+      }
+    }
+
+    .badges{
+      display: none;
+      margin-top: 6px;
+    }
+
+    .badge{
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.2;
+
+      white-space: nowrap;
+      word-break: keep-all;
+      background: #f1f1f1;
+      border-radius: 10px;
+      padding: 4px 10px;
+
+      &.type{
+        background: #d9eaf4;
+        color: #16335d;
+      }
+
+      &.installed{
+        background: #daf4d9;
+        color: #165d1c;
+      }
+
+      &.removed{
+        color: #5d1616;
+        background: #f4d9d9;
+      }
+
+      &.package{
+        background: #ddd9f4;
+      }
+
+      &:empty{
+        display: none;
+      }
+    }
+
+    .packages{
+      display: none;
+      width: 100%;
+    }
+
+    &.removed {
+
+      > .inside{
+        background: rgb(199 123 123 / 5%);
+      }
+
+      .content{
+
+        .title{
+          color: #793a3a;
+        }
       }
     }
 
     + .product{
-      margin-top: 30px;
+      margin-top: 10px;
     }
   }
 }
@@ -79,14 +170,13 @@
   #installer {
 
     .product {
-      flex-direction: row;
 
-      .image{
-        margin: 0 20px 0 0;
+      > .inside {
+        flex-direction: row;
       }
 
       .content{
-        width: calc(100% - 90px);
+        margin: 0 20px;
       }
     }
   }

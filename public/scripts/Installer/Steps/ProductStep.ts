@@ -1,6 +1,7 @@
 import Step from "../Components/Step";
 import State from "../State";
 import {i18n} from "../Language"
+import Product, {ProductOptions, ProductViewMode} from "../Components/Product";
 
 /**
  * An overview of the products of the associated license keys.
@@ -14,36 +15,37 @@ export default class ProductStep extends Step
      */
     protected getTemplate(): string
     {
-        const props = State.get('config')
-        let products = ''
-
-        for (const product of props.products)
-        {
-            const image = product.image ? `<img src="${product.image}" alt/>` : ''
-
-            products += `
-                 <div class="product">
-                    <div class="image">
-                        ${image}
-                    </div>
-                    <div class="content">
-                        <div class="title">${product.name}</div>
-                        <div class="description">${product.description}</div>
-                        <div class="version">${product.version}</div>
-                    </div>
-                </div>
-            `
-        }
-
         return `
             <h2>${i18n('product.headline')}</h2>
-            <div class="products">
-                ${products}
-            </div>
+            <div class="products"></div>
             <div class="actions">
                 <button data-prev>${i18n('actions.back')}</button>
                 <button data-next class="primary">${i18n('actions.next')}</button>
             </div>
         `
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected events()
+    {
+        const container = this.element('.products')
+        const props = State.get('config')
+
+        for (const productConfig of props.products)
+        {
+            const product = new Product(productConfig)
+
+            // ToDo: Allow selection of products to install - Overwrite config to respond to this situation
+
+            product.setMode(ProductViewMode.PREVIEW_SELECTABLE)
+            product.appendTo(container)
+        }
+    }
+
+    protected selectProduct(productConfig: ProductOptions)
+    {
+
     }
 }

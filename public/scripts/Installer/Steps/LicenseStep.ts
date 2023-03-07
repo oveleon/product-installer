@@ -45,7 +45,6 @@ export default class LicenseStep extends Step
         // Check license
         call('/contao/api/license_connector/license', {
             license: data.get('license'),
-            connector: State.get('connector'),
         }).then((response) => {
             // Hide loader
             this.modal.loader(false)

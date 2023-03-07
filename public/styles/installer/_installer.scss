@@ -7,6 +7,7 @@ $background-color: #688191;
 
 @import "scrollable";
 @import "loader";
+@import "dashboard";
 @import "connection";
 @import "license-connector";
 @import "product";
@@ -42,7 +43,7 @@ $background-color: #688191;
     vertical-align: middle;
     width: 100%;
     max-width: 710px;
-    min-height: 460px;
+    min-height: 530px;
     max-height: 100%;
 
     background: #fff;
@@ -127,6 +128,10 @@ $background-color: #688191;
 
           &[type="text"]{
             padding: 6px 10px;
+          }
+
+          &#license{
+            letter-spacing: .8px;
           }
         }
       }
@@ -254,7 +259,7 @@ $background-color: #688191;
         border: 0 none;
         padding: 3px;
         line-height: 1;
-        margin: 0 0 0 10px;
+        margin: 0 0 0 auto;
 
         &:after{
           display: block;

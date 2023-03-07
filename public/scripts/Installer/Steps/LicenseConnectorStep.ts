@@ -122,6 +122,7 @@ export default class LicenseConnectorStep extends Step
                         // Reset
                         this.connector = null
                         this.redirect = null
+                        State.clear('isRedirect')
 
                         return
                     }

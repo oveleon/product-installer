@@ -1,0 +1,20 @@
+.products{
+
+  .no-products{
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 600;
+    color: #688191;
+
+    &:before {
+      display: block;
+      content: "";
+      width: 100%;
+      height: 350px;
+      margin: 0 0 -50px 0;
+
+      background: url('/bundles/productinstaller/icons/dashboard.gif') center center no-repeat;
+      background-size: auto 100%;
+    }
+  }
+}

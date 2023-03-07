@@ -5,6 +5,18 @@ module.exports = {
     "actions.next":                         "Next",
     "actions.start":                        "Start",
 
+    "type.product":                         "Product",
+    "type.package":                         "Product package",
+
+    "product.installed":                    "Installed",
+    "product.removed":                      "Removed",
+
+    // Dashboard step
+    "dashboard.headline":                   "Product management",
+    "dashboard.noProducts":                 "You have not registered any products in this project yet.",
+    "dashboard.actions.register":           "Register product",
+    "dashboard.loading":                    "Products are retrieved",
+
     // License step
     "license_connector.headline":           "Please select a product type",
     "license_connector.load.connector":     "Information is retrieved",
@@ -13,8 +25,8 @@ module.exports = {
 
     // Contao Manager
     "contao_manager.headline":              "Contao Manager",
-    "contao_manager.description":           "To install the necessary dependencies, we need access to the Contao Manager. If you agree, click on 'Authorize' and follow the steps in the Contao Manager. You will be taken back to the installation process.",
-    "contao_manager.description.success":   "Access to the Contao Manager has been authorized. If you still want to perform the installation manually, please click 'Manual installation'.",
+    "contao_manager.description":           "In order to install the necessary dependencies, we need access to Contao Manager. If you agree, please click on 'Authorize' and follow the further steps in Contao Manager. Afterwards, you will be led back to the installation process.",
+    "contao_manager.description.success":   "The access to Contao Manager has been authorized. If you still wish to perform a manual installation, please click on 'Manual Installation'.",
     "contao_manager.authorize":             "Authorize",
     "contao_manager.open_manager":          "Open Contao Manager",
     "contao_manager.install.label":         "Install dependencies manually",

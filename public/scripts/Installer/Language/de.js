@@ -5,8 +5,17 @@ module.exports = {
     "actions.next":                         "Weiter",
     "actions.start":                        "Starten",
 
+    "type.product":                         "Produkt",
+    "type.package":                         "Produktpaket",
+
+    "product.installed":                    "Installiert",
+    "product.removed":                      "Entfernt",
+
     // Dashboard step
     "dashboard.headline":                   "Produktverwaltung",
+    "dashboard.noProducts":                 "Sie haben noch keine Produkte für dieses Projekt registriert.",
+    "dashboard.actions.register":           "Produkt registrieren",
+    "dashboard.loading":                    "Produkte werden abgerufen",
 
     // License step
     "license_connector.headline":           "Bitte wählen Sie einen Produkttypen",
@@ -16,8 +25,8 @@ module.exports = {
 
     // Contao Manager
     "contao_manager.headline":              "Contao Manager",
-    "contao_manager.description":           "Um die nötigen Abhängigkeiten installieren zu können, benötigen wir Zugriff zum Contao Manager. Sofern du damit einverstanden bist, klicke auf 'Autorisieren' und folge den weiteren Schritten im Contao Manager. Anschließend wirst du zurück in den Installationsprozess geführt.",
-    "contao_manager.description.success":   "Der Zugriff auf den Contao Manager wurde autorisiert. Wenn Sie die Installation dennoch manuell durchführen möchten, klicken Sie bitte auf 'Manuelle Installation'.",
+    "contao_manager.description":           "Damit wir die erforderlichen Abhängigkeiten installieren können, benötigen wir Zugriff auf den Contao Manager. Wenn Sie damit einverstanden sind, klicken Sie bitte auf \"Autorisieren\" und folgen Sie den weiteren Schritten im Contao Manager. Sobald Sie dies abgeschlossen haben, werden Sie zum Installationsprozess zurückgeleitet.",
+    "contao_manager.description.success":   "Der Zugriff auf den Contao Manager wurde erfolgreich autorisiert. Falls Sie jedoch lieber eine manuelle Installation durchführen möchten, können Sie auf die Schaltfläche \"Manuelle Installation\" klicken.",
     "contao_manager.authorize":             "Autorisieren",
     "contao_manager.open_manager":          "Contao Manager öffnen",
     "contao_manager.install.label":         "Abhängigkeiten manuell installieren",

@@ -145,6 +145,22 @@
     border-color: #e57c11;
   }
 }
+.products .no-products {
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 600;
+  color: #688191;
+}
+.products .no-products:before {
+  display: block;
+  content: "";
+  width: 100%;
+  height: 350px;
+  margin: 0 0 -50px 0;
+  background: url("/bundles/productinstaller/icons/dashboard.gif") center center no-repeat;
+  background-size: auto 100%;
+}
+
 [data-connection-state] {
   display: flex;
   flex-direction: column;
@@ -214,7 +230,7 @@
   position: absolute;
   inset: 14px;
   content: "";
-  background: url("/bundles/productinstaller/icons/assistant.svg") center center no-repeat;
+  background: url("/bundles/productinstaller/icons/logo.svg") center center no-repeat;
   background-size: contain;
 }
 #installer .license-connector .content {
@@ -259,24 +275,28 @@
 #installer .products {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
   flex-grow: 1;
 }
-#installer .product {
+#installer .product > .inside {
   display: flex;
   flex-direction: column;
-  max-width: 470px;
+  align-items: center;
+  border-radius: 3px;
+  margin: 0 -10px;
+  padding: 10px;
+  cursor: default;
+}
+#installer .product > .inside:hover {
+  background: rgba(104, 129, 145, 0.04);
 }
 #installer .product .image {
   position: relative;
-  width: 85px;
-  height: 85px;
+  width: 65px;
+  height: 65px;
   border: 1px solid #ebebeb;
-  border-radius: 50%;
+  border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.15) 0 5px 15px 0;
-  margin: 0 auto 20px;
+  background: #fff;
   overflow: hidden;
 }
 #installer .product .image img {
@@ -290,43 +310,101 @@
   position: absolute;
   inset: 14px;
   content: "";
-  background: url("/bundles/productinstaller/icons/assistant.svg") center center no-repeat;
+  background: url("/bundles/productinstaller/icons/logo.svg") center center no-repeat;
   background-size: contain;
 }
 #installer .product .content {
-  width: 100%;
+  margin: 10px;
+  flex-grow: 1;
 }
 #installer .product .content .title {
   color: #222;
   font-size: 0.95rem;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 3px;
 }
 #installer .product .content .description {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.25em;
   color: #495258;
 }
-#installer .product .content .version {
+#installer .product .content .description p {
+  margin: 0;
+}
+#installer .product .info {
+  width: 120px;
+}
+#installer .product .info .version {
   margin-top: 7px;
   color: #a6a6a6;
 }
+#installer .product .info .version:before {
+  position: relative;
+  top: 1px;
+  content: url("/bundles/productinstaller/icons/version_current.svg") " ";
+}
+#installer .product .info .version.new {
+  color: #0e9a0e;
+}
+#installer .product .info .version.new:before {
+  content: url("/bundles/productinstaller/icons/version_update.svg") " ";
+}
+#installer .product .badges {
+  display: none;
+  margin-top: 6px;
+}
+#installer .product .badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  word-break: keep-all;
+  background: #f1f1f1;
+  border-radius: 10px;
+  padding: 4px 10px;
+}
+#installer .product .badge.type {
+  background: #d9eaf4;
+  color: #16335d;
+}
+#installer .product .badge.installed {
+  background: #daf4d9;
+  color: #165d1c;
+}
+#installer .product .badge.removed {
+  color: #5d1616;
+  background: #f4d9d9;
+}
+#installer .product .badge.package {
+  background: #ddd9f4;
+}
+#installer .product .badge:empty {
+  display: none;
+}
+#installer .product .packages {
+  display: none;
+  width: 100%;
+}
+#installer .product.removed > .inside {
+  background: rgba(199, 123, 123, 0.05);
+}
+#installer .product.removed .content .title {
+  color: #793a3a;
+}
 #installer .product + .product {
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 @media (min-width: 600px) {
-  #installer .product {
+  #installer .product > .inside {
     flex-direction: row;
   }
-  #installer .product .image {
-    margin: 0 20px 0 0;
-  }
   #installer .product .content {
-    width: calc(100% - 90px);
+    margin: 0 20px;
   }
 }
 #installer .tasks {
@@ -616,7 +694,7 @@
   vertical-align: middle;
   width: 100%;
   max-width: 710px;
-  min-height: 460px;
+  min-height: 530px;
   max-height: 100%;
   background: #fff;
   box-shadow: rgba(0, 0, 0, 0.15) 0 5px 15px 0;
@@ -682,6 +760,9 @@
 }
 #installer form .widget.text input[type=text] {
   padding: 6px 10px;
+}
+#installer form .widget.text input#license {
+  letter-spacing: 0.8px;
 }
 #installer form .widget.checkbox input {
   position: absolute;
@@ -777,7 +858,7 @@
   border: 0 none;
   padding: 3px;
   line-height: 1;
-  margin: 0 0 0 10px;
+  margin: 0 0 0 auto;
 }
 #installer .notifications .notification button.close:after {
   display: block;

@@ -55,7 +55,7 @@ class LicenseController
         // Register license via connector
         $response = $this->connectorUtil->post(
             $connector['connector'],
-            '/license/register',
+            '/license/check',
             array_merge(
                 $parameter,
                 [

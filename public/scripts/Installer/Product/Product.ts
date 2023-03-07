@@ -40,7 +40,6 @@ export interface ProductConfig {
     version: string,
     image: string,
     description: string,
-    registrable: boolean,
     tasks: TaskConfig[]
 }
 
