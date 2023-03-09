@@ -292,6 +292,7 @@
 #installer .product .image {
   position: relative;
   width: 65px;
+  min-width: 65px;
   height: 65px;
   border: 1px solid #ebebeb;
   border-radius: 4px;
@@ -335,10 +336,14 @@
   margin: 0;
 }
 #installer .product .info {
-  width: 120px;
+  min-width: 70px;
+  max-width: 70px;
+  margin: 0 10px;
+}
+#installer .product .info .state {
+  margin-bottom: 7px;
 }
 #installer .product .info .version {
-  margin-top: 7px;
   color: #a6a6a6;
 }
 #installer .product .info .version:before {
@@ -351,6 +356,9 @@
 }
 #installer .product .info .version.new:before {
   content: url("/bundles/productinstaller/icons/version_update.svg") " ";
+}
+#installer .product .info .version + .version {
+  margin-top: 7px;
 }
 #installer .product .badges {
   display: none;
@@ -393,7 +401,7 @@
   background: rgba(199, 123, 123, 0.05);
 }
 #installer .product.removed .content .title {
-  color: #793a3a;
+  color: #a03c3c;
 }
 #installer .product + .product {
   margin-top: 10px;
@@ -720,68 +728,71 @@
   line-height: 1.4em;
   color: #495258;
 }
-#installer form .widget {
+#installer .widget {
   display: flex;
   flex-direction: column;
   margin: 0;
 }
-#installer form .widget + .widget {
+#installer .widget + .widget {
   margin: 15px 0 0 0;
 }
-#installer form .widget p {
+#installer .widget p {
   font-size: 0.8rem;
   margin: 5px 0 0;
 }
-#installer form .widget label {
+#installer .widget label {
   display: inline-block;
   color: #222;
   font-size: 0.95rem;
   font-weight: 600;
 }
-#installer form .widget.center {
+#installer .widget.center {
   align-items: center;
 }
-#installer form .widget.text label {
+#installer .widget.text label {
   margin-bottom: 6px;
 }
-#installer form .widget.text input {
+#installer .widget.text input {
   font-size: 0.9rem;
   line-height: 0;
   border: 1px solid #688191;
   border-radius: 3px;
   outline-color: #688191;
 }
-#installer form .widget.text input:focus {
+#installer .widget.text input:focus {
   outline-width: 1px;
   outline-style: solid;
 }
-#installer form .widget.text input::placeholder {
+#installer .widget.text input::placeholder {
   color: #a6a6a6;
 }
-#installer form .widget.text input[type=text] {
+#installer .widget.text input[type=text] {
   padding: 6px 10px;
 }
-#installer form .widget.text input#license {
+#installer .widget.text input#license {
   letter-spacing: 0.8px;
 }
-#installer form .widget.checkbox input {
+#installer .widget.checkbox {
+  height: 19px;
+}
+#installer .widget.checkbox input {
   position: absolute;
   z-index: 0;
   -webkit-appearance: none;
 }
-#installer form .widget.checkbox input:checked + label:before {
+#installer .widget.checkbox input:checked + label:before {
   background-color: rgba(195, 212, 223, 0.55);
 }
-#installer form .widget.checkbox input:checked + label:after {
+#installer .widget.checkbox input:checked + label:after {
   margin: 0 0 0 20px;
 }
-#installer form .widget.checkbox label {
+#installer .widget.checkbox label {
   position: relative;
   cursor: pointer;
   line-height: 1.3;
   padding-left: 55px;
 }
-#installer form .widget.checkbox label:before {
+#installer .widget.checkbox label:before {
   content: "";
   width: 40px;
   height: 20px;
@@ -794,7 +805,7 @@
   top: -1px;
   z-index: 5;
 }
-#installer form .widget.checkbox label:after {
+#installer .widget.checkbox label:after {
   content: "";
   position: absolute;
   left: 3px;
@@ -806,10 +817,10 @@
   transition: margin 0.1s ease-in-out, background-color 0.3s ease-in-out;
   z-index: 10;
 }
-#installer form .widget.error label, #installer form .widget.error p {
+#installer .widget.error label, #installer .widget.error p {
   color: #b54c4c;
 }
-#installer form .widget.error input {
+#installer .widget.error input {
   border-color: #b54c4c;
 }
 #installer #steps {

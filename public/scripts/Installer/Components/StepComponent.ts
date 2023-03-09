@@ -1,6 +1,6 @@
-import Container from "./Container"
-import Modal from "./Modal";
-import Notification, {NotificationTypes} from "./Notification";
+import ContainerComponent from "./ContainerComponent"
+import ModalComponent from "./ModalComponent";
+import NotificationComponent, {NotificationTypes} from "./NotificationComponent";
 
 /**
  * Step error response.
@@ -24,7 +24,7 @@ export interface StepConfig {
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default abstract class Step extends Container
+export default abstract class StepComponent extends ContainerComponent
 {
     /**
      * Dynamic auto-increment id.
@@ -57,14 +57,14 @@ export default abstract class Step extends Container
      *
      * @protected
      */
-    protected modal: Modal
+    protected modal: ModalComponent
 
     /**
      * Creates a new step instance and hides it immediately.
      */
     constructor() {
         // Create container
-        super('step' + Step.stepId++)
+        super('step' + StepComponent.stepId++)
 
         // Steps are hidden by default
         this.hide()
@@ -75,7 +75,7 @@ export default abstract class Step extends Container
      *
      * @param modal
      */
-    public addModal(modal: Modal): void
+    public addModal(modal: ModalComponent): void
     {
         this.modal = modal
 
@@ -201,7 +201,7 @@ export default abstract class Step extends Container
         // Check if there are a message to show
         if(response.message)
         {
-            (new Notification(response.message, NotificationTypes.ERROR, true))
+            (new NotificationComponent(response.message, NotificationTypes.ERROR, true))
                 .appendTo(this.modal.notificationContainer)
         }
     }

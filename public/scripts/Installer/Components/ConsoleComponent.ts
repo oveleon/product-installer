@@ -1,12 +1,12 @@
-import Container from "./Container"
-import Operation, {OperationConfig} from "./Operation";
+import ContainerComponent from "./ContainerComponent"
+import ConsoleOperationComponent, {OperationConfig} from "./ConsoleOperationComponent";
 
 /**
  * Console class.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class Console extends Container
+export default class ConsoleComponent extends ContainerComponent
 {
     /**
      * Dynamic auto-increment id.
@@ -18,17 +18,17 @@ export default class Console extends Container
      *
      * @private
      */
-    private readonly operations: Operation[] = []
+    private readonly operations: ConsoleOperationComponent[] = []
 
     /**
      * Creates a console instance.
      */
     constructor()
     {
-        Console.consoleId++;
+        ConsoleComponent.consoleId++;
 
         // Create container
-        super('console' + Console.consoleId)
+        super('console' + ConsoleComponent.consoleId)
 
         this.addClass('console')
     }
@@ -42,7 +42,7 @@ export default class Console extends Container
     {
         for(const operation of operations)
         {
-            const op = new Operation(operation);
+            const op = new ConsoleOperationComponent(operation);
             op.appendTo(this.template)
 
             this.operations.push(op)

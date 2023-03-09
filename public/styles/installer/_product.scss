@@ -25,6 +25,7 @@
     .image{
       position: relative;
       width: 65px;
+      min-width: 65px;
       height: 65px;
 
       border: 1px solid #ebebeb;
@@ -78,10 +79,15 @@
     }
 
     .info{
-      width: 120px;
+      min-width: 70px;
+      max-width: 70px;
+      margin: 0 10px;
+
+      .state{
+        margin-bottom: 7px;
+      }
 
       .version{
-        margin-top: 7px;
         color: $text-color-info;
 
         &:before{
@@ -97,6 +103,10 @@
             content: url("/bundles/productinstaller/icons/version_update.svg") " ";
           }
         }
+      }
+
+      .version + .version{
+        margin-top: 7px;
       }
     }
 
@@ -155,7 +165,7 @@
       .content{
 
         .title{
-          color: #793a3a;
+          color: #a03c3c;
         }
       }
     }

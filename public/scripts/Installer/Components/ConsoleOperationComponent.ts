@@ -1,4 +1,4 @@
-import Container from "./Container"
+import ContainerComponent from "./ContainerComponent"
 import {TaskStatus} from "../ContaoManager";
 
 /**
@@ -16,7 +16,7 @@ export interface OperationConfig {
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class Operation extends Container
+export default class ConsoleOperationComponent extends ContainerComponent
 {
     /**
      * Dynamic auto-increment id.
@@ -43,10 +43,10 @@ export default class Operation extends Container
     constructor(operation: OperationConfig)
     {
         // Auto-increment id
-        Operation.operationId++
+        ConsoleOperationComponent.operationId++
 
         // Create container
-        super('operation' + Operation.operationId)
+        super('operation' + ConsoleOperationComponent.operationId)
 
         // Create console container
         this.consoleContainer = <HTMLDivElement> document.createElement('div')

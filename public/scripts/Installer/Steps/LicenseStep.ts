@@ -1,14 +1,14 @@
 import State from "../State";
 import {call} from "../../Utils/network"
 import {i18n} from "../Language"
-import Step from "../Components/Step";
+import StepComponent from "../Components/StepComponent";
 
 /**
  * License step class.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class LicenseStep extends Step
+export default class LicenseStep extends StepComponent
 {
     /**
      * @inheritDoc

@@ -3,7 +3,7 @@
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class Container
+export default class ContainerComponent
 {
     /**
      * The container template.

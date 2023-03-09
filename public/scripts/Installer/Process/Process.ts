@@ -1,5 +1,5 @@
-import Container from "../Components/Container";
-import Loader from "../Components/Loader";
+import ContainerComponent from "../Components/ContainerComponent";
+import LoaderComponent from "../Components/LoaderComponent";
 import ProcessManager from "./ProcessManager";
 
 /**
@@ -27,11 +27,11 @@ export interface ProcessConfig {
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default abstract class Process extends Container
+export default abstract class Process extends ContainerComponent
 {
     static processId: number = 0
 
-    protected loader: Loader
+    protected loader: LoaderComponent
     protected errorContainer: HTMLDivElement
     protected manager: ProcessManager
 
@@ -60,7 +60,7 @@ export default abstract class Process extends Container
 
         if(loaderContainer)
         {
-            this.loader = new Loader()
+            this.loader = new LoaderComponent()
             this.loader.show()
             this.loader.pause()
             this.loader.appendTo(loaderContainer)

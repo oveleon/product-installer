@@ -1,6 +1,6 @@
 import {i18n} from "../Language/"
 import {call} from "../../Utils/network"
-import Step, {StepConfig} from "../Components/Step";
+import StepComponent, {StepConfig} from "../Components/StepComponent";
 import {createInstance} from "../Utils/InstanceUtils";
 import State from "../State";
 
@@ -22,7 +22,7 @@ export interface LicenseConnectorConfig {
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class LicenseConnectorStep extends Step
+export default class LicenseConnectorStep extends StepComponent
 {
     /**
      * Defines the connector name to use, if set
@@ -134,6 +134,13 @@ export default class LicenseConnectorStep extends Step
             // Skip step if only one license connector is active
             if(response.license_connectors.length === 1)
             {
+                // Check if a step has been taken backwards to skip this step backwards as well
+                if(!this.modal.lastDirection)
+                {
+                    this.modal.prev()
+                    return
+                }
+
                 this.useLicenseConnector(response.license_connectors[0])
                 return
             }

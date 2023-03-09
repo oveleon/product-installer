@@ -1,20 +1,20 @@
-import Step from "./Step"
-import Container from "./Container"
-import Loader, {LoaderMode} from "./Loader";
+import StepComponent from "./StepComponent"
+import ContainerComponent from "./ContainerComponent"
+import LoaderComponent, {LoaderMode} from "./LoaderComponent";
 
 /**
  * Modal class - A modal to go through different steps.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class Modal extends Container
+export default class ModalComponent extends ContainerComponent
 {
     /**
      * The current step.
      *
      * @private
      */
-    private currentStep: Step
+    private currentStep: StepComponent
 
     /**
      * The current step index.
@@ -22,6 +22,11 @@ export default class Modal extends Container
      * @private
      */
     public currentIndex: number
+
+    /**
+     * Indicates from which direction the user is coming (Next = 1, Prev = 0)
+     */
+    public lastDirection: number = 1
 
     /**
      * The inside container of the modal.
@@ -56,14 +61,14 @@ export default class Modal extends Container
      *
      * @private
      */
-    private readonly loaderElement: Loader
+    private readonly loaderElement: LoaderComponent
 
     /**
      * Collection of the steps to be displayed.
      *
      * @private
      */
-    private steps: Step[] = []
+    private steps: StepComponent[] = []
 
     /**
      * Creates a new modal instance.
@@ -99,7 +104,7 @@ export default class Modal extends Container
         this.insideContainer.append(this.notificationContainer)
 
         // Create loader
-        this.loaderElement = new Loader()
+        this.loaderElement = new LoaderComponent()
         this.loaderElement.setMode(LoaderMode.COVER)
         this.loaderElement.appendTo(this.insideContainer)
     }
@@ -109,7 +114,7 @@ export default class Modal extends Container
      *
      * @param step
      */
-    public addSteps(...step: Step[]): void
+    public addSteps(...step: StepComponent[]): void
     {
         for (const s of step)
         {
@@ -162,6 +167,8 @@ export default class Modal extends Container
      */
     public next(): void
     {
+        this.lastDirection = 1
+
         this.open(++this.currentIndex)
     }
 
@@ -170,6 +177,8 @@ export default class Modal extends Container
      */
     public prev(): void
     {
+        this.lastDirection = 0
+
         // Close when it is already the first step
         if(this.currentIndex === 0)
         {

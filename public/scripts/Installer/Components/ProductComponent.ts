@@ -1,19 +1,12 @@
-import Container from "./Container"
+import ContainerComponent from "./ContainerComponent"
 import {i18n} from "../Language"
-
-/**
- * Product view modes
- */
-export enum ProductViewMode {
-    PREVIEW_DASHBOARD,
-    PREVIEW_SELECTABLE
-}
 
 /**
  * Operation config.
  */
 export interface ProductOptions {
     title: string,
+    hash: string,
     type: string,
     description: string
     installed?: boolean
@@ -26,18 +19,19 @@ export interface ProductOptions {
 }
 
 /**
- * Product Component class.
+ * Product component class.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class Product extends Container
+export default class ProductComponent extends ContainerComponent
 {
     /**
      * Dynamic auto-increment id.
      */
     static productId: number = 0
 
-    private viewMode: ProductViewMode
+    private selectable: boolean = false
+    private isChecked: boolean = false
     private selectFn: Function
 
     /**
@@ -46,39 +40,41 @@ export default class Product extends Container
     constructor(protected product: ProductOptions)
     {
         // Auto-increment id
-        Product.productId++
+        ProductComponent.productId++
 
         // Create container
-        super('product' + Product.productId)
+        super('product' + ProductComponent.productId)
 
         // Add class
         this.addClass('product')
-
-        // Set default mode
-        this.setMode(ProductViewMode.PREVIEW_DASHBOARD)
 
         // Generate template
         this.generate()
     }
 
     /**
-     * Set view mode of the product item.
+     * Returns a specific product option.
      *
-     * @param viewMode
+     * @param option
      */
-    public setMode(viewMode: ProductViewMode): void
+    get(option: string): string|boolean|number|ProductOptions[]
     {
-        this.viewMode = viewMode
+        return this.product[option]
     }
 
     /**
-     * Register on select method for handle selection in Product view mode PREVIEW_SELECTABLE.
+     * Register on select method for handle selection.
+     * When registering a method, the product automatically becomes selectable.
      *
      * @param fn
+     * @param checked
      */
-    public onSelect(fn: Function): void
+    public onSelect(fn: Function, checked: boolean = false): void
     {
         this.selectFn = fn
+        this.selectable = true
+        this.isChecked = checked
+        this.generate()
     }
 
     /**
@@ -119,8 +115,8 @@ export default class Product extends Container
         {
             const versionElement = this.element('.version')
             const newVersionElement = <HTMLDivElement> document.createElement('div')
-            newVersionElement.classList.add('version', 'new')
-            newVersionElement.innerHTML = this.product.latestVersion
+                  newVersionElement.classList.add('version', 'new')
+                  newVersionElement.innerHTML = this.product.latestVersion
 
             versionElement.after(newVersionElement)
         }
@@ -140,13 +136,39 @@ export default class Product extends Container
 
             for (const packageProduct of this.product.package)
             {
-                const product = new Product(packageProduct)
+                const product = new ProductComponent(packageProduct)
 
                 packageContainer.append(product.template)
             }
 
             this.template.append(packageContainer)
         }
+    }
+
+    /**
+     * Enable product selection.
+     *
+     * @private
+     */
+    private enableSelection(): void
+    {
+        const selectContainer = <HTMLDivElement> document.createElement('div')
+              selectContainer.classList.add('selectable', 'widget', 'checkbox')
+              selectContainer.innerHTML = `<label for="${this.id}_checkbox"></label>`
+
+        const selectInput = <HTMLInputElement> document.createElement('input')
+              selectInput.type = 'checkbox'
+              selectInput.value = '1'
+              selectInput.id = `${this.id}_checkbox`
+              selectInput.name = selectInput.id
+              selectInput.checked = this.isChecked
+
+        selectInput.addEventListener('change', () => {
+            this.selectFn.call(this, selectInput.checked, this.product)
+        })
+
+        selectContainer.prepend(selectInput)
+        this.element('.inside').append(selectContainer)
     }
 
     /**
@@ -179,6 +201,9 @@ export default class Product extends Container
         this.checkNewVersion()
         this.createPackageProducts()
 
-        // ToDo: React to view modes, e.g. make products selectable and trigger selectFn on select
+        // ToDo: Add DropListComponent (Menu) before selection!
+
+        if(this.selectable)
+            this.enableSelection()
     }
 }

@@ -1,4 +1,4 @@
-import Container from "./Container"
+import ContainerComponent from "./ContainerComponent"
 
 /**
  * Loader modes.
@@ -13,7 +13,7 @@ export enum LoaderMode {
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class Loader extends Container
+export default class LoaderComponent extends ContainerComponent
 {
     /**
      * Dynamic auto-increment id.
@@ -39,10 +39,10 @@ export default class Loader extends Container
      */
     constructor() {
         // Auto-increment id
-        Loader.loaderId++
+        LoaderComponent.loaderId++
 
         // Create container
-        super('loader' + Loader.loaderId)
+        super('loader' + LoaderComponent.loaderId)
 
         // Add template class
         this.addClass('loader')

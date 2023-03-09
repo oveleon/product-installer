@@ -1,15 +1,16 @@
-import Step from "../Components/Step";
+import StepComponent from "../Components/StepComponent";
 import {i18n} from "../Language"
 import {call} from "../../Utils/network"
-import Product from "../Components/Product";
+import ProductComponent from "../Components/ProductComponent";
 import State from "../State";
+import {isBooleanObject} from "util/types";
 
 /**
  * An overview of installed products.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class DashboardStep extends Step
+export default class DashboardStep extends StepComponent
 {
     /**
      * @inheritDoc
@@ -84,17 +85,35 @@ export default class DashboardStep extends Step
 
             hasProducts = true
 
-            // Create new connector information row
-            const headingElement = <HTMLHeadingElement> document.createElement('h4')
-                  headingElement.innerText = connector.connector.title
+            // Create new connector information row if there are more than one
+            if(response.length > 1)
+            {
+                const headingElement = <HTMLHeadingElement> document.createElement('h4')
+                      headingElement.innerText = connector.connector.title
 
-            container.append(headingElement)
+                container.append(headingElement)
+            }
+
+            // Collect products to sort them by removed flag
+            const products = [];
 
             for(const productConfig of connector.products)
             {
-                const product = new Product(productConfig);
+                const product = new ProductComponent(productConfig)
 
-                container.append(product.template)
+                products.push({
+                    remove: product.get('remove'),
+                    product
+                })
+            }
+
+            // Sort products
+            products.sort((a, b) => b.remove - a.remove);
+
+            // Render products
+            for (const product of products)
+            {
+                product.product.appendTo(container)
             }
         }
 

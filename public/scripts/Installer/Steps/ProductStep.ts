@@ -1,14 +1,14 @@
-import Step from "../Components/Step";
+import StepComponent from "../Components/StepComponent";
 import State from "../State";
 import {i18n} from "../Language"
-import Product, {ProductOptions, ProductViewMode} from "../Components/Product";
+import ProductComponent, {ProductOptions} from "../Components/ProductComponent";
 
 /**
  * An overview of the products of the associated license keys.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class ProductStep extends Step
+export default class ProductStep extends StepComponent
 {
     /**
      * @inheritDoc
@@ -35,17 +35,35 @@ export default class ProductStep extends Step
 
         for (const productConfig of props.products)
         {
-            const product = new Product(productConfig)
+            const product = new ProductComponent(productConfig)
 
-            // ToDo: Allow selection of products to install - Overwrite config to respond to this situation
+            // Show selection only if there are more than one product
+            if(props.products.length > 1)
+            {
+                product.onSelect(this.selectProduct, true)
+            }
 
-            product.setMode(ProductViewMode.PREVIEW_SELECTABLE)
             product.appendTo(container)
         }
     }
 
-    protected selectProduct(productConfig: ProductOptions)
+    protected selectProduct(checked: boolean, productConfig: ProductOptions)
     {
+        // ToDo: React to skip non-checked products in process
 
+        let config = State.get('config')
+
+        for(const index in config.products)
+        {
+            const product = config.products[index]
+
+            if(product.hash === productConfig.hash)
+            {
+                product.skip = !checked
+                config.products[index] = product
+                State.set('config', config)
+                break
+            }
+        }
     }
 }

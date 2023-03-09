@@ -1,4 +1,4 @@
-import Modal from "./Components/Modal";
+import ModalComponent from "./Components/ModalComponent";
 import {setLanguage} from "./Language/";
 import State from "./State";
 
@@ -8,7 +8,7 @@ import DashboardStep from "./Steps/DashboardStep";
 export default class Installer
 {
     public static locale: string
-    private readonly modal: Modal
+    private readonly modal: ModalComponent
 
     constructor(locale: string)
     {
@@ -19,7 +19,7 @@ export default class Installer
         this.setLocale(locale)
 
         // Create modal and steps
-        this.modal = new Modal('installer')
+        this.modal = new ModalComponent('installer')
         this.modal.addSteps(
             new DashboardStep(),
             new LicenseConnectorStep()

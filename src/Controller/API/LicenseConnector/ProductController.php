@@ -70,7 +70,10 @@ class ProductController
                     $hash = $product['hash'];
 
                     // Product is installed and valid
-                    if(array_key_exists($hash, $remoteProducts))
+                    if(
+                        array_key_exists($hash, $remoteProducts) &&
+                        strtolower($request->getHost()) === strtolower($remoteProducts[$hash]['license']['acceptedHost'])
+                    )
                     {
                         // Copy product information
                         $p = $remoteProducts[$hash];

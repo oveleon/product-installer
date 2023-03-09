@@ -1,8 +1,8 @@
 import Process from "./Process"
 import {call} from "../../Utils/network"
 import {TaskStatus} from "../ContaoManager";
-import Notification, {NotificationTypes} from "../Components/Notification";
-import Console from "../Components/Console";
+import NotificationComponent, {NotificationTypes} from "../Components/NotificationComponent";
+import ConsoleComponent from "../Components/ConsoleComponent";
 
 /**
  * Composer process class.
@@ -16,7 +16,7 @@ export default class ComposerProcess extends Process
      *
      * @protected
      */
-    protected console: Console
+    protected console: ConsoleComponent
 
     /**
      * @inheritDoc
@@ -60,7 +60,7 @@ export default class ComposerProcess extends Process
                 // Delete task if status is error
                 if(response.task.status === 'error')
                 {
-                    const notification = new Notification('Nicht beendete Aufgaben werden beendet.', NotificationTypes.WARN, {
+                    const notification = new NotificationComponent('Nicht beendete Aufgaben werden beendet.', NotificationTypes.WARN, {
                         timer: {
                             ms: 5000
                         }
@@ -76,7 +76,7 @@ export default class ComposerProcess extends Process
                 // Try again
                 else
                 {
-                    (new Notification('Der Contao Manager führt derzeit eine andere Aufgabe durch.', NotificationTypes.WARN, {
+                    (new NotificationComponent('Der Contao Manager führt derzeit eine andere Aufgabe durch.', NotificationTypes.WARN, {
                         timer: {
                             ms: 5000,
                             text: `Versuche erneut in #seconds# Sekunden.`,
@@ -90,7 +90,7 @@ export default class ComposerProcess extends Process
             }
 
             // Set initial console operations
-            this.console = new Console();
+            this.console = new ConsoleComponent();
             this.console.hide()
             this.console.appendTo(this.template)
             this.console.set(response.operations)

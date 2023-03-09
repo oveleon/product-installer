@@ -1,4 +1,4 @@
-import Container from "../Components/Container";
+import ContainerComponent from "../Components/ContainerComponent";
 
 /**
  * Advertising configurations.
@@ -11,7 +11,7 @@ export interface AdvertisingConfig {
     linkText: string
 }
 
-export default abstract class AdvertisingBanner extends Container
+export default abstract class AdvertisingBanner extends ContainerComponent
 {
     constructor(id: string, protected config: AdvertisingConfig)
     {

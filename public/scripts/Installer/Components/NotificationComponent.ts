@@ -1,4 +1,4 @@
-import Container from "./Container"
+import ContainerComponent from "./ContainerComponent"
 
 /**
  * Notification types.
@@ -27,7 +27,7 @@ export interface NotifyOptions {
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class Notification extends Container
+export default class NotificationComponent extends ContainerComponent
 {
     /**
      * Dynamic auto-increment id.
@@ -55,10 +55,10 @@ export default class Notification extends Container
      */
     constructor(protected text: string, type: NotificationTypes = NotificationTypes.ERROR, options?: NotifyOptions | boolean) {
         // Auto-increment id
-        Notification.notificationId++
+        NotificationComponent.notificationId++
 
         // Create container
-        super('notification' + Notification.notificationId)
+        super('notification' + NotificationComponent.notificationId)
 
         // Add template class and type
         this.addClass('notification', type)

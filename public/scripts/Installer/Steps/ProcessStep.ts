@@ -1,5 +1,5 @@
 import {i18n} from "../Language/"
-import Step from "../Components/Step";
+import StepComponent from "../Components/StepComponent";
 import ProcessManager from "../Process/ProcessManager";
 import {createInstance} from "../Utils/InstanceUtils";
 import State from "../State";
@@ -13,7 +13,7 @@ import State from "../State";
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class ProcessStep extends Step
+export default class ProcessStep extends StepComponent
 {
     /**
      * Process manager instance.

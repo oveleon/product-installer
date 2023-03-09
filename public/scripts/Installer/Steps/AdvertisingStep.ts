@@ -1,4 +1,4 @@
-import Step from "../Components/Step";
+import StepComponent from "../Components/StepComponent";
 import {call} from "../../Utils/network"
 import {i18n} from "../Language"
 import State from "../State";
@@ -9,7 +9,7 @@ import ImageBanner from "../Advertising/ImageBanner";
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-export default class AdvertisingStep extends Step
+export default class AdvertisingStep extends StepComponent
 {
     /**
      * @inheritDoc
@@ -20,8 +20,8 @@ export default class AdvertisingStep extends Step
             <div class="advertising"></div>
             <form id="advertising-form">
                 <div class="widget checkbox center">
-                    <input type="checkbox" name="ad_doNotShowAgain" id="ad_doNotShowAgain" value="1" />
-                    <label for="ad_doNotShowAgain">${i18n('advertising.doNotShowAgain')}</label>
+                    <input type="checkbox" name="skipAd" id="skipAd" value="1" />
+                    <label for="skipAd">${i18n('advertising.doNotShowAgain')}</label>
                 </div>
             </form>
             <div class="actions">
@@ -36,7 +36,7 @@ export default class AdvertisingStep extends Step
      */
     protected submit(form: HTMLFormElement, data: FormData)
     {
-        const doNotShowAgain = !!data.get('ad_doNotShowAgain')
+        const doNotShowAgain = !!data.get('skipAd')
 
         // Set state
         State.set('skipAdvertising', doNotShowAgain, true);
