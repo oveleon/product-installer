@@ -20,16 +20,16 @@ export enum TaskType {
  * Global task configuration.
  */
 export interface TaskConfig {
+    hash: string,
     type: TaskType
 }
 
 /**
- * Repository task configuration (REPO_CLONE).
+ * Repository task configuration (REPOSITORY_IMPORT).
  */
 export interface RepoConfig extends TaskConfig {
     provider: Provider,
-    repository: string,
-    pkey?: string
+    repository: string
 }
 
 /**
@@ -37,8 +37,11 @@ export interface RepoConfig extends TaskConfig {
  */
 export interface ProductConfig {
     name: string,
+    type: string,
+    hash: string,
     version: string,
     image: string,
+    skip?: boolean,
     description: string,
     tasks: TaskConfig[]
 }

@@ -4,6 +4,7 @@ import ProcessStep from "../Steps/ProcessStep";
 import AdvertisingStep from "../Steps/AdvertisingStep";
 import ContaoManagerStep from "../Steps/ContaoManagerStep";
 import ApiProcess from "../Process/ApiProcess";
+import DownloadProcess from "../Process/DownloadProcess";
 import RegisterProductProcess from "../Process/RegisterProductProcess";
 import ContaoManagerProcess from "../Process/ContaoManagerProcess";
 
@@ -17,6 +18,7 @@ export {
 
     // Processes
     ApiProcess,
+    DownloadProcess,
     RegisterProductProcess,
     ContaoManagerProcess
 }

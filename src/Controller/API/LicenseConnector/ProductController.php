@@ -117,7 +117,7 @@ class ProductController
     }
 
     /**
-     * Reduce all types of products (packages and products) and return just product types
+     * Reduce all types of products (packages and products) and return only product types
      */
     private function reduceProducts($products)
     {

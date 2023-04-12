@@ -107,6 +107,7 @@ export default class ContaoManagerProcess extends Process
         if(this.contaoManager.hasTasks(products, TaskType.MANAGER_PACKAGE))
         {
             // Add download process
+            // Fixme: Der DownlodProcess wird vorher ausgeführt, somit wird folgender Downlodprozess nicht benötigt und kann direkt in den nächsten Schritt über gehen
             this.processManager.addProcess(new ApiProcess(this.element('.manager-tasks'), {
                 name: ManagerProcess.DOWNLOAD_PROCESS,
                 routes: {
@@ -139,6 +140,7 @@ export default class ContaoManagerProcess extends Process
                     for (let key in response.collection)
                     {
                         tasks.push({
+                            hash: key, // ToDo: 'key' überprüfen
                             type: TaskType.MANAGER_PACKAGE,
                             uploads: true,
                             require: this.contaoManager.createRequirementObject(response.collection[key].package.name, response.collection[key].package.version),

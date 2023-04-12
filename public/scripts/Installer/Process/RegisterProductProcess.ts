@@ -1,6 +1,7 @@
 import Process from "./Process"
 import {call} from "../../Utils/network"
 import {i18n} from "../Language"
+import State from "../State";
 
 /**
  * Register products process class.
@@ -27,7 +28,7 @@ export default class RegisterProductProcess extends Process
      */
     protected process(): void
     {
-        call('/contao/api/license_connector/register', this.getParameter()).then((response) => {
+        call('/contao/api/license_connector/register', State.get('config')).then((response) => {
             // Check errors
             if(response.error)
             {

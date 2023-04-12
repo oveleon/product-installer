@@ -68,6 +68,10 @@ module.exports = {
     "process.contao_manager.composer.title":         "Abhängigkeiten installieren",
     "process.contao_manager.composer.description":   "Die Abhängigkeiten werden über composer installiert.",
 
+    // Download process
+    "process.download.title":               "Produkte abrufen",
+    "process.download.description":         "Die Produkte werden abgerufen und heruntergeladen.",
+
     // Register product process
     "process.register.title":               "Produktregistrierung",
     "process.register.description":         "Die installierten Produkte werden registriert.",

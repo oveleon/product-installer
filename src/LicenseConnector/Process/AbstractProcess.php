@@ -14,6 +14,7 @@ abstract class AbstractProcess
      */
     const PROCESS_API = 'ApiProcess';
     const PROCESS_CM  = 'ContaoManagerProcess';
+    const PROCESS_DOWNLOAD = 'DownloadProcess';
     const PROCESS_REGISTER_PRODUCTS = 'RegisterProductProcess';
 
     /**

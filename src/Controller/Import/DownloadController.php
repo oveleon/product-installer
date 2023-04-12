@@ -49,7 +49,7 @@ class DownloadController
             switch ($package['provider'])
             {
                 case 'github':
-                    [$organization, $repository] = explode("/", $package['source']);
+                    [$organization, $repository] = explode("/", $package['repository']);
                     $destination = 'system/tmp/'. $organization .'-'. $repository .'.zip';
 
                     $this->githubDownloader
@@ -64,10 +64,10 @@ class DownloadController
                     break;
 
                 case 'server':
-                    $destination = 'system/tmp/'. basename($package['source']);
+                    $destination = 'system/tmp/'. basename($package['repository']);
 
                     $this->fileDownloader
-                        ->download($package['source'], $destination);
+                        ->download($package['repository'], $destination);
 
                     $package['destination'] = $destination;
                     $response[] = $package;

@@ -22,6 +22,7 @@ export default class ProductManager
 
     /**
      * Returns product tasks of given types.
+     * It is taken into account whether the products should be skipped.
      *
      * @param types
      */
@@ -31,6 +32,11 @@ export default class ProductManager
 
        for (const product of this.products)
         {
+            if(product.get('skip') === true)
+            {
+                continue
+            }
+
             for (const task of product.getTasks())
             {
                 if(types.includes(task.type))

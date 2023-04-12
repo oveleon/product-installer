@@ -68,6 +68,10 @@ module.exports = {
     "process.contao_manager.composer.title":        "Install dependencies",
     "process.contao_manager.composer.description":  "The dependencies are installed via composer.",
 
+    // Download process
+    "process.download.title":               "Retrieve products",
+    "process.download.description":         "The products are retrieved and downloaded.",
+
     // Register product process
     "process.register.title":               "Product registration",
     "process.register.description":         "The installed products are registered.",

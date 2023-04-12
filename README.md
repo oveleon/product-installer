@@ -2,6 +2,8 @@
 With this extension, products from Oveleon can be registered, managed and installed.
 
 #### ToDo
+- Concept to check which products can be installed, are installed, need an update or need to be deleted
+- Download Process for Content-Packages + Setup-Configurator
 - Create product overview (dashboard - update)
 - Create product overview (product-preview - make selectable)
 - Create product update process

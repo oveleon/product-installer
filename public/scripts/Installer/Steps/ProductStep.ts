@@ -49,16 +49,19 @@ export default class ProductStep extends StepComponent
 
     protected selectProduct(checked: boolean, productConfig: ProductOptions)
     {
-        // ToDo: React to skip non-checked products in process
-
         let config = State.get('config')
 
         for(const index in config.products)
         {
+            if (!config.products.hasOwnProperty(index)) {
+                continue
+            }
+
             const product = config.products[index]
 
             if(product.hash === productConfig.hash)
             {
+                // Info: ProductManager is able to filter products to skip
                 product.skip = !checked
                 config.products[index] = product
                 State.set('config', config)
