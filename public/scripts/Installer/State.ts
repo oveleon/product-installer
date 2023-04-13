@@ -45,13 +45,19 @@ export default class State
      *
      * @param name
      */
-    public static get(name): any
+    public static get(name?: string): any
     {
         let state = localStorage.getItem(this.key)
 
         if(state)
         {
             state = JSON.parse(state)
+
+            if(!name)
+            {
+                return state
+            }
+
             return state[name]
         }
 

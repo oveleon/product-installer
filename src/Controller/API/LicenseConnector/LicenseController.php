@@ -52,7 +52,7 @@ class LicenseController
             ]);
         }
 
-        // Register license via connector
+        // Check license via connector
         $response = $this->connectorUtil->post(
             $connector['connector'],
             '/license/check',

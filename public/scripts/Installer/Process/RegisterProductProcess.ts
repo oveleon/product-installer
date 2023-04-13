@@ -28,7 +28,7 @@ export default class RegisterProductProcess extends Process
      */
     protected process(): void
     {
-        call('/contao/api/license_connector/register', State.get('config')).then((response) => {
+        call('/contao/api/license_connector/register', State.get()).then((response) => {
             // Check errors
             if(response.error)
             {
