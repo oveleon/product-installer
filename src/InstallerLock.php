@@ -20,7 +20,7 @@ class InstallerLock
     {
         $this->filesystem = new Filesystem();
         $this->root = System::getContainer()->getParameter('kernel.project_dir');
-        $this->path = $this->root . '/' . self::FILENAME;
+        $this->path = $this->root . '/product-installer/' . self::FILENAME;
 
         $this->createIfNotExists();
     }
@@ -32,7 +32,7 @@ class InstallerLock
     {
         if(!$this->filesystem->exists($this->path))
         {
-            $this->filesystem->touch($this->path);
+            $this->filesystem->dumpFile($this->path, '');
         }
 
         $finder = new Finder();

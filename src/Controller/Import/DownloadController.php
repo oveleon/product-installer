@@ -50,7 +50,7 @@ class DownloadController
             {
                 case 'github':
                     [$organization, $repository] = explode("/", $package['repository']);
-                    $destination = 'system/tmp/'. $organization .'-'. $repository .'.zip';
+                    $destination = 'product-installer/downloads/'. $organization .'-'. $repository .'.zip';
 
                     $this->githubDownloader
                         ->setOrganization($organization)
@@ -64,7 +64,7 @@ class DownloadController
                     break;
 
                 case 'server':
-                    $destination = 'system/tmp/'. basename($package['repository']);
+                    $destination = 'product-installer/downloads/'. basename($package['repository']);
 
                     $this->fileDownloader
                         ->download($package['repository'], $destination);
