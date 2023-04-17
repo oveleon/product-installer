@@ -104,7 +104,10 @@ class Task
             ], $status);
         }
 
-        return new JsonResponse($response->toArray(), $status);
+        $output = $response->toArray();
+        $output['token'] = $this->contaoManager->getToken();
+
+        return new JsonResponse($output, $status);
     }
 
     /**
