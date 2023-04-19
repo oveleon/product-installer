@@ -106,6 +106,7 @@ class Task
 
         $output = $response->toArray();
         $output['token'] = $this->contaoManager->getToken();
+        $output['updateRoute'] = $this->contaoManager->getRoute('task');
 
         return new JsonResponse($output, $status);
     }

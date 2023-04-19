@@ -15,7 +15,7 @@ export interface ProcessErrorResponse {
  */
 export interface ProcessConfig {
     name: string,
-    routes: {}
+    routes?: {}
     attributes?: any
     parameter?: {} | Function
     onResolve?: Function

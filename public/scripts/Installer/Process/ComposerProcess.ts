@@ -1,5 +1,5 @@
 import Process from "./Process"
-import {call} from "../../Utils/network"
+import {call, get} from "../../Utils/network"
 import {TaskStatus} from "../ContaoManager";
 import NotificationComponent, {NotificationTypes} from "../Components/NotificationComponent";
 import ConsoleComponent from "../Components/ConsoleComponent";
@@ -17,6 +17,20 @@ export default class ComposerProcess extends Process
      * @protected
      */
     protected console: ConsoleComponent
+
+    /**
+     * CM Token.
+     *
+     * @protected
+     */
+    protected token: string
+
+    /**
+     * Update route.
+     *
+     * @protected
+     */
+    protected updateRoute: string
 
     /**
      * @inheritDoc
@@ -39,7 +53,7 @@ export default class ComposerProcess extends Process
      */
     protected process(): void
     {
-        call(this.getRoute('start'), this.getParameter()).then((response) => {
+        call('/contao/api/contao_manager/task/set', this.getParameter()).then((response) => {
             // Check errors
             if(response.error)
             {
@@ -95,6 +109,10 @@ export default class ComposerProcess extends Process
             this.console.appendTo(this.template)
             this.console.set(response.operations)
 
+            // Get update route info
+            this.token = response.token
+            this.updateRoute = response.updateRoute
+
             // Disable button
             const detailsBtn = this.element('.details')
 
@@ -109,8 +127,11 @@ export default class ComposerProcess extends Process
 
     updateConsole(): void
     {
+        /**
+         * ! Because of the maintenance-mode, we are not allowed to query the tasks via our own controller but have to access the API of the Contao manager directly.
+         */
         // Check task status and update console
-        call(this.getRoute('update'), this.getParameter()).then((response) => {
+        get(this.updateRoute, {'Contao-Manager-Auth': this.token}).then((response) => {
             // Check errors
             if(response.error)
             {

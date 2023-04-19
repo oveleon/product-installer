@@ -170,10 +170,6 @@ export default class ContaoManagerProcess extends Process
         // Add a Composer update process that runs only when tasks exist
         this.processManager.addProcess(new ComposerProcess(this.element('.manager-tasks'), {
             name: ManagerProcess.COMPOSER_PROCESS,
-            routes: {
-                'start': '/contao/api/contao_manager/task/set',
-                'update': '/contao/api/contao_manager/task/get'
-            },
             attributes: {
                 title: i18n('process.contao_manager.composer.title'),
                 description: i18n('process.contao_manager.composer.description')

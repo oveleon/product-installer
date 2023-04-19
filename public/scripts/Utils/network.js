@@ -20,3 +20,19 @@ export async function call(url, parameter = {}, cache = false)
             .then((response) => response.json())
             .then((data) => data)
 }
+
+
+export async function get(url, header = {}, cache = false)
+{
+    header['Content-Type'] = 'application/json'
+
+    const props = {
+        method: 'GET',
+        cache: cache ? "force-cache" : "no-cache",
+        headers: header,
+    }
+
+    return fetch(url, props)
+        .then((response) => response.json())
+        .then((data) => data)
+}
