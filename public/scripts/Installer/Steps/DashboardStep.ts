@@ -1,12 +1,12 @@
 import StepComponent from "../Components/StepComponent";
+import ProductComponent from "../Components/ProductComponent";
+import DropMenuComponent from "../Components/DropMenuComponent";
 import {i18n} from "../Language"
 import {call} from "../../Utils/network"
-import ProductComponent from "../Components/ProductComponent";
 import State from "../State";
-import {isBooleanObject} from "util/types";
 
 /**
- * An overview of installed products.
+ * An overview of registered products.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
@@ -85,6 +85,7 @@ export default class DashboardStep extends StepComponent
 
             hasProducts = true
 
+            // ToDo: Check also, that connectors have products. Since the upload connector is always installed we need another check here...
             // Create new connector information row if there are more than one
             if(response.length > 1)
             {
@@ -100,7 +101,48 @@ export default class DashboardStep extends StepComponent
             for(const productConfig of connector.products)
             {
                 const product = new ProductComponent(productConfig)
+                const menuOptions = []
 
+                // Setup product
+                if(!product.isRemoved())
+                {
+                    menuOptions.push({
+                        label: i18n('product.setup'),
+                        value: () => console.log('TEST 1'),
+                        highlight: !product.get('setup')
+                    })
+                }
+
+                // Product update option
+                if(product.hasNewVersion() && !product.isRemoved())
+                {
+                    menuOptions.push({
+                        label: i18n('product.update'),
+                        value: () => console.log('TEST 1'),
+                        highlight: true
+                    })
+                }
+
+                // Product info
+                menuOptions.push({
+                    label: i18n('product.info'),
+                    value: () => console.log('TEST 1'),
+                    disabled: true
+                })
+
+                // Remove products from list
+                if(product.isRemoved())
+                {
+                    menuOptions.push({
+                        label: i18n('product.remove'),
+                        value: () => console.log('TEST 1')
+                    })
+                }
+
+                // Set product context menu
+                product.setMenu(new DropMenuComponent(menuOptions))
+
+                // Push product to sort by removed-flag
                 products.push({
                     remove: product.get('remove'),
                     product

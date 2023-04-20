@@ -8,8 +8,12 @@ module.exports = {
     "type.product":                         "Product",
     "type.package":                         "Product package",
 
-    "product.installed":                    "Installed",
-    "product.removed":                      "Removed",
+    "product.badge.registered":             "Registered",
+    "product.badge.removed":                "Removed",
+    "product.setup":                        "Set up product",
+    "product.update":                       "Update product",
+    "product.info":                         "Product information",
+    "product.remove":                       "Remove from the list",
 
     // Dashboard step
     "dashboard.headline":                   "Product management",

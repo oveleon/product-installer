@@ -19,8 +19,8 @@ class InstallerLock
     public function __construct()
     {
         $this->filesystem = new Filesystem();
-        $this->root = System::getContainer()->getParameter('kernel.project_dir');
-        $this->path = $this->root . '/product-installer/' . self::FILENAME;
+        $this->root = System::getContainer()->getParameter('kernel.project_dir') . '/product-installer/';
+        $this->path = $this->root . self::FILENAME;
 
         $this->createIfNotExists();
     }
@@ -123,10 +123,25 @@ class InstallerLock
     /**
      * Returns all products.
      */
-    public function getInstalledProducts(): ?array
+    public function getInstalledProducts(?string $connector = null): ?array
     {
         if($this->lock)
         {
+            if(null !== $connector)
+            {
+                $products = null;
+
+                foreach ($this->lock['products'] as $product)
+                {
+                    if($product['connector'] === $connector)
+                    {
+                        $products[] = $product;
+                    }
+                }
+
+                return $products;
+            }
+
             return $this->lock['products'];
         }
 

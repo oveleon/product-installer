@@ -8,7 +8,7 @@ installer:
             license_empty:      Please enter a valid license.
     connector:
         upload:
-            title:              Manual Upload
+            title:              Upload
             description:        Upload the packages to be installed manually.
         errors:
             connection_failed: No connection to %connectorTitle% could be established.

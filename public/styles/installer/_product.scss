@@ -110,6 +110,10 @@
       }
     }
 
+    .drop-menu{
+      margin-left: 10px;
+    }
+
     .badges{
       display: none;
       margin-top: 6px;
@@ -132,7 +136,7 @@
         color: #16335d;
       }
 
-      &.installed{
+      &.registered{
         background: #daf4d9;
         color: #165d1c;
       }

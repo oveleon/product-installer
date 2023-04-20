@@ -1,16 +1,18 @@
 import ContainerComponent from "./ContainerComponent"
 import {i18n} from "../Language"
+import DropMenuComponent from "./DropMenuComponent";
 
 /**
- * Operation config.
+ * Product config.
  */
 export interface ProductOptions {
     title: string,
     hash: string,
     type: string,
     description: string
-    installed?: boolean
-    remove?: boolean
+    registered?: boolean
+    remove?: boolean        // Product was removed
+    setup?: boolean         // If false, product need a setup
     updated?: number
     version?: string
     latestVersion?: string
@@ -30,6 +32,7 @@ export default class ProductComponent extends ContainerComponent
      */
     static productId: number = 0
 
+    private menu: DropMenuComponent = null
     private selectable: boolean = false
     private isChecked: boolean = false
     private selectFn: Function
@@ -78,6 +81,33 @@ export default class ProductComponent extends ContainerComponent
     }
 
     /**
+     * Set a menu for the product.
+     *
+     * @param menu
+     */
+    public setMenu(menu: DropMenuComponent): void
+    {
+        this.menu = menu
+        this.generate()
+    }
+
+    /**
+     * Compares version numbers and return true if a newer version exists.
+     */
+    public hasNewVersion(): boolean
+    {
+        return this.product?.latestVersion?.localeCompare(this.product.version, undefined, { numeric: true, sensitivity: 'base' }) === 1
+    }
+
+    /**
+     * Returns if the product is to be removed.
+     */
+    public isRemoved(): boolean
+    {
+        return this.product?.remove
+    }
+
+    /**
      * Generates the product state badge.
      *
      * @private
@@ -85,22 +115,22 @@ export default class ProductComponent extends ContainerComponent
     private generateState(): void
     {
         // Product is to be removed
-        if(this.product?.remove)
+        if(this.isRemoved())
         {
             const state = this.element('.state')
 
             this.addClass('removed')
 
             state.classList.add('removed')
-            state.innerHTML = i18n('product.removed')
+            state.innerHTML = i18n('product.badge.removed')
         }
-        // Product is installed
-        else if(this.product?.installed)
+        // Product is registered
+        else if(this.product?.registered)
         {
             const state = this.element('.state')
 
-            state.classList.add('installed')
-            state.innerHTML = i18n('product.installed')
+            state.classList.add('registered')
+            state.innerHTML = i18n('product.badge.registered')
         }
     }
 
@@ -109,9 +139,9 @@ export default class ProductComponent extends ContainerComponent
      *
      * @private
      */
-    private checkNewVersion(): void
+    private createVersionCompare(): void
     {
-        if(this.product?.latestVersion?.localeCompare(this.product.version, undefined, { numeric: true, sensitivity: 'base' }))
+        if(this.hasNewVersion())
         {
             const versionElement = this.element('.version')
             const newVersionElement = <HTMLDivElement> document.createElement('div')
@@ -150,7 +180,7 @@ export default class ProductComponent extends ContainerComponent
      *
      * @private
      */
-    private enableSelection(): void
+    private buildSelection(): void
     {
         const selectContainer = <HTMLDivElement> document.createElement('div')
               selectContainer.classList.add('selectable', 'widget', 'checkbox')
@@ -198,12 +228,13 @@ export default class ProductComponent extends ContainerComponent
         `)
 
         this.generateState()
-        this.checkNewVersion()
+        this.createVersionCompare()
         this.createPackageProducts()
 
-        // ToDo: Add DropListComponent (Menu) before selection!
+        if(this.menu)
+            this.menu.appendTo(this.element('.inside'))
 
         if(this.selectable)
-            this.enableSelection()
+            this.buildSelection()
     }
 }

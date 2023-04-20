@@ -90,6 +90,7 @@ class RegisterProductController
         {
             // Add connector information
             $product['connector'] = $parameter['connector'];
+            $product['setup'] = false;
 
             // Register product in installer-lock.json
             $this->installerLock->setProduct($product);

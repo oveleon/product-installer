@@ -15,6 +15,7 @@ $background-color: #688191;
 @import "process";
 @import "console";
 @import "advertising";
+@import "menu";
 
 [hidden]{
   display: none !important;
@@ -277,7 +278,7 @@ $background-color: #688191;
 
   .actions{
     margin-top: auto;
-    padding-top: 20px;
+    padding-top: 25px;
     text-align: center;
 
     form {

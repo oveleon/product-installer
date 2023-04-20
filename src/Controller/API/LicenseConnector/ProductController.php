@@ -61,7 +61,7 @@ class ProductController
             try {
                 $remoteProducts = $response->toArray();
                 $remoteProducts = $this->reduceProducts($remoteProducts);
-                $clientProducts = ($this->installerLock->getInstalledProducts() ?? []);
+                $clientProducts = ($this->installerLock->getInstalledProducts($connector['config']['name']) ?? []);
 
                 $collection = [];
 
@@ -69,7 +69,7 @@ class ProductController
                 {
                     $hash = $product['hash'];
 
-                    // Product is installed and valid
+                    // Product is registered and valid
                     if(
                         array_key_exists($hash, $remoteProducts) &&
                         strtolower($request->getHost()) === strtolower($remoteProducts[$hash]['license']['acceptedHost'])
@@ -79,8 +79,9 @@ class ProductController
                         $p = $remoteProducts[$hash];
 
                         // Enrich data
-                        $p['installed'] = true;
+                        $p['registered'] = true;
                         $p['remove'] = false;
+                        $p['setup'] = $product['setup'];
                         $p['latestVersion'] = $p['version'];
                         $p['updated'] = $product['updated'];
                         $p['version'] = $product['version'];
@@ -88,12 +89,13 @@ class ProductController
                         // Add product to collection
                         $collection[$hash] = $p;
                     }
-                    // Product is installed but not valid anymore
+                    // Product is registered but not valid anymore
                     else
                     {
                         // Add product to collection
-                        $product['installed'] = true;
+                        $product['registered'] = true;
                         $product['remove'] = true;
+                        $product['setup'] = true;
 
                         $collection[$hash] = $product;
                     }

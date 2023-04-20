@@ -8,7 +8,7 @@ installer:
             license_empty:     Bitte geben Sie eine gültige Lizenz an.
     connector:
         upload:
-            title:             Manueller Upload
+            title:             Upload
             description:       Laden Sie die zu installieren Pakete manuell hoch.
         errors:
             connection_failed: Es konnte keine Verbindung zum %connectorTitle% hergestellt werden.
