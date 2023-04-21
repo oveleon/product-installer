@@ -1,0 +1,63 @@
+#installer .popup{
+  position: absolute;
+  inset: 0;
+
+  > div{
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+    width: 100%;
+    padding: 45px;
+
+    background: #fff;
+
+    animation: zoom-in .25s forwards ease-in-out;
+  }
+
+  .table{
+
+    table{
+      font-size: .91rem;
+      border: 0 none;
+      border-spacing: 0;
+
+      p{
+        font-size: .91rem;
+        padding: 0;
+        margin: 0;
+      }
+
+      tr{
+
+        td:last-child{
+          font-weight: 500;
+        }
+
+        &:nth-child(2n){
+
+          td{
+            background: rgb(0 0 0 / 2%);
+          }
+        }
+      }
+
+      td{
+        min-width: 190px;
+        padding: 5px;
+        height: 40px;
+      }
+    }
+  }
+}
+
+@keyframes zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale(.6, .6);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+}

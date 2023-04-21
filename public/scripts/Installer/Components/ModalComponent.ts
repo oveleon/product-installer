@@ -33,7 +33,7 @@ export default class ModalComponent extends ContainerComponent
      *
      * @private
      */
-    private readonly insideContainer: HTMLDivElement
+    public readonly insideContainer: HTMLDivElement
 
     /**
      * The scroll container of the modal.

@@ -15,6 +15,7 @@ export interface ProductOptions {
     setup?: boolean         // If false, product need a setup
     updated?: number
     version?: string
+    connectorImage?: string
     latestVersion?: string
     image?: string,
     package?: ProductOptions[],

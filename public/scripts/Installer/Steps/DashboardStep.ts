@@ -4,6 +4,7 @@ import DropMenuComponent from "../Components/DropMenuComponent";
 import {i18n} from "../Language"
 import {call} from "../../Utils/network"
 import State from "../State";
+import PopupComponent, {PopupType} from "../Components/PopupComponent";
 
 /**
  * An overview of registered products.
@@ -85,25 +86,18 @@ export default class DashboardStep extends StepComponent
 
             hasProducts = true
 
-            // ToDo: Check also, that connectors have products. Since the upload connector is always installed we need another check here...
-            // Create new connector information row if there are more than one
-            if(response.length > 1)
-            {
-                const headingElement = <HTMLHeadingElement> document.createElement('h4')
-                      headingElement.innerText = connector.connector.title
-
-                container.append(headingElement)
-            }
-
             // Collect products to sort them by removed flag
             const products = [];
 
             for(const productConfig of connector.products)
             {
+                // Create product
                 const product = new ProductComponent(productConfig)
+
+                // Create menu options
                 const menuOptions = []
 
-                // Setup product
+                // Option: Setup product
                 if(!product.isRemoved())
                 {
                     menuOptions.push({
@@ -113,7 +107,7 @@ export default class DashboardStep extends StepComponent
                     })
                 }
 
-                // Product update option
+                // Option: Product update option
                 if(product.hasNewVersion() && !product.isRemoved())
                 {
                     menuOptions.push({
@@ -123,23 +117,55 @@ export default class DashboardStep extends StepComponent
                     })
                 }
 
-                // Product info
+                // Option: Product info
                 menuOptions.push({
                     label: i18n('product.info'),
-                    value: () => console.log('TEST 1'),
-                    disabled: true
+                    value: () => {
+                        const popup = new PopupComponent({
+                            type: PopupType.TABLE,
+                            appendTo: this.modal.insideContainer,
+                            title: i18n('product.info'),
+                            content: {
+                                [i18n('product.label.shop')]: connector.connector.title,
+                                [i18n('product.label.title')]: productConfig.title,
+                                [i18n('product.label.description')]: productConfig.description,
+                                [i18n('product.label.version')]: productConfig.version,
+                                [i18n('product.label.latestVersion')]: productConfig.latestVersion ? productConfig.latestVersion : '-',
+                                [i18n('product.label.registered')]: productConfig.registered && !productConfig.remove ? i18n('global.yes') : i18n('global.no'),
+                                [i18n('product.label.registeredDate')]: productConfig?.license?.registered ? (new Date(productConfig.license.registered * 1000).toLocaleDateString()) : '-'
+                            },
+                            closeable: true
+                        })
+
+                        popup.show()
+                    }
                 })
 
-                // Remove products from list
+                // Option: Remove products from list
                 if(product.isRemoved())
                 {
                     menuOptions.push({
                         label: i18n('product.remove'),
-                        value: () => console.log('TEST 1')
+                        value: () => {
+                            // Show loader
+                            this.modal.loader(true, i18n('product.loading.remove'))
+
+                            // Check license
+                            call('/contao/api/license_connector/lock/remove', {
+                                hash: product.get('hash')
+                            }).then(() => {
+                                // Hide loader
+                                this.modal.loader(false)
+
+                                // Remove product from list
+                                product.template.remove()
+
+                            }).catch((e: Error) => super.error(e))
+                        }
                     })
                 }
 
-                // Set product context menu
+                // Set product menu
                 product.setMenu(new DropMenuComponent(menuOptions))
 
                 // Push product to sort by removed-flag

@@ -92,6 +92,32 @@ class InstallerLock
     }
 
     /**
+     * Removes a product.
+     */
+    public function removeProduct($hash): void
+    {
+        if(!$this->lock || !$this->hasProduct($hash))
+        {
+            return;
+        }
+
+        $products = [];
+
+        foreach ($this->lock['products'] ?? [] as $key => $p)
+        {
+            if($hash === $p['hash'])
+            {
+                continue;
+            }
+
+            $products[] = $p;
+        }
+
+
+        $this->lock['products'] = $products;
+    }
+
+    /**
      * Check if a product exists by a given hash.
      */
     public function hasProduct($hash): bool

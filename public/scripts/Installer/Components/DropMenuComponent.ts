@@ -58,14 +58,6 @@ export default class DropMenuComponent extends ContainerComponent
         this.template.classList.toggle('open', this.open)
     }
 
-    private checkHighlighting(): void
-    {
-        for (const opt of this.options)
-        {
-
-        }
-    }
-
     /**
      * Generates the drop menu template.
      *

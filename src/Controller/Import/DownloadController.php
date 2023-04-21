@@ -49,7 +49,7 @@ class DownloadController
             switch ($package['provider'])
             {
                 case 'github':
-                    [$organization, $repository] = explode("/", $package['repository']);
+                    [$organization, $repository] = explode("/", $package['source']);
                     $destination = 'product-installer/downloads/'. $organization .'-'. $repository .'.zip';
 
                     $this->githubDownloader

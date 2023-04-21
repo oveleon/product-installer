@@ -8,12 +8,26 @@ module.exports = {
     "type.product":                         "Produkt",
     "type.package":                         "Produktpaket",
 
+    "global.yes":                           "Ja",
+    "global.no":                            "Nein",
+
+    // Product
     "product.badge.registered":             "Registriert",
     "product.badge.removed":                "Entfernt",
     "product.setup":                        "Produkt einrichten",
     "product.update":                       "Produkt aktualisieren",
     "product.info":                         "Produktinformation",
     "product.remove":                       "Aus der Liste entfernen",
+
+    "product.loading.remove":               "Das Produkt wird entfernt",
+
+    "product.label.title":                  "Titel",
+    "product.label.description":            "Beschreibung",
+    "product.label.version":                "Aktuelle Version",
+    "product.label.latestVersion":          "Neuste Version",
+    "product.label.registered":             "Produkt ist registriert",
+    "product.label.registeredDate":         "Registriert am",
+    "product.label.shop":                   "Erworben bei",
 
     // Dashboard step
     "dashboard.headline":                   "Produktverwaltung",

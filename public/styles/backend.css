@@ -772,6 +772,51 @@
   z-index: 9999;
 }
 
+#installer .popup {
+  position: absolute;
+  inset: 0;
+}
+#installer .popup > div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding: 45px;
+  background: #fff;
+  animation: zoom-in 0.25s forwards ease-in-out;
+}
+#installer .popup .table table {
+  font-size: 0.91rem;
+  border: 0 none;
+  border-spacing: 0;
+}
+#installer .popup .table table p {
+  font-size: 0.91rem;
+  padding: 0;
+  margin: 0;
+}
+#installer .popup .table table tr td:last-child {
+  font-weight: 500;
+}
+#installer .popup .table table tr:nth-child(2n) td {
+  background: rgba(0, 0, 0, 0.02);
+}
+#installer .popup .table table td {
+  min-width: 190px;
+  padding: 5px;
+  height: 40px;
+}
+
+@keyframes zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.6, 0.6);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+}
 [hidden] {
   display: none !important;
 }

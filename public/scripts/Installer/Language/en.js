@@ -8,12 +8,26 @@ module.exports = {
     "type.product":                         "Product",
     "type.package":                         "Product package",
 
+    "global.yes":                           "Yes",
+    "global.no":                            "No",
+
+    // Product
     "product.badge.registered":             "Registered",
     "product.badge.removed":                "Removed",
     "product.setup":                        "Set up product",
     "product.update":                       "Update product",
     "product.info":                         "Product information",
     "product.remove":                       "Remove from the list",
+
+    "product.loading.remove":               "The product will be removed",
+
+    "product.label.title":                  "Title",
+    "product.label.description":            "Description",
+    "product.label.version":                "Current Version",
+    "product.label.latestVersion":          "Newest Version",
+    "product.label.registered":             "Product is registered",
+    "product.label.registeredDate":         "Registered at",
+    "product.label.shop":                   "Purchased at",
 
     // Dashboard step
     "dashboard.headline":                   "Product management",
