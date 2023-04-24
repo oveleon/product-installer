@@ -30,7 +30,7 @@ module.exports = {
     "product.label.shop":                   "Erworben bei",
 
     // Dashboard step
-    "dashboard.headline":                   "Produktverwaltung",
+    "dashboard.headline":                   "Meine Produkte",
     "dashboard.noProducts":                 "Sie haben noch keine Produkte für dieses Projekt registriert.",
     "dashboard.actions.register":           "Produkt registrieren",
     "dashboard.loading":                    "Produkte werden abgerufen",

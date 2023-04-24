@@ -59,6 +59,9 @@ export default class LicenseConnectorStep extends StepComponent
      */
     protected mount(): void
     {
+        // Lock step and protect for deletion
+        this.locked = true
+
         // Handle url trigger
         const params = new URLSearchParams(window.location.search)
 
@@ -95,6 +98,9 @@ export default class LicenseConnectorStep extends StepComponent
      */
     protected events(): void
     {
+        // Reset / remove steps from modal
+        this.modal.removeSteps()
+
         // Show loader
         this.modal.loader(true, this.redirect ? i18n('license_connector.load.redirect') : i18n('license_connector.load.connector'))
 

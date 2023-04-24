@@ -1,6 +1,7 @@
 import StepComponent from "./StepComponent"
 import ContainerComponent from "./ContainerComponent"
 import LoaderComponent, {LoaderMode} from "./LoaderComponent";
+import {buildSolutionReferences} from "ts-loader/dist/instances";
 
 /**
  * Modal class - A modal to go through different steps.
@@ -126,6 +127,30 @@ export default class ModalComponent extends ContainerComponent
     }
 
     /**
+     * Remove step.
+     */
+    public removeStep(step: StepComponent): void
+    {
+        this.steps = this.steps.filter((_step) => step !== _step)
+    }
+
+    /**
+     * Removes all steps (keep locked steps).
+     */
+    public removeSteps(): void
+    {
+        for(let i = this.steps.length - 1; i >= 0; i--)
+        {
+            if(!this.isLocked(i))
+            {
+                // Call the step method remove to unload events e.g.
+                // The step method calls the removeStep-method from modal.
+                this.steps[i].remove()
+            }
+        }
+    }
+
+    /**
      * Opens the modal window and initializes the passed step index.
      *
      * @param startIndex
@@ -206,6 +231,17 @@ export default class ModalComponent extends ContainerComponent
     private isSkip(index): boolean
     {
         return this.steps[ index ].skip
+    }
+
+    /**
+     * Check if a step is locked.
+     *
+     * @param index
+     * @private
+     */
+    private isLocked(index): boolean
+    {
+        return this.steps[ index ].locked
     }
 
     /**

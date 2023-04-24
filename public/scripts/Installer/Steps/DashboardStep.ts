@@ -31,6 +31,15 @@ export default class DashboardStep extends StepComponent
     /**
      * @inheritDoc
      */
+    protected mount(): void
+    {
+        // Lock step and protect for deletion
+        this.locked = true
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected events(): void
     {
         // Skip dashboard when we have active redirects

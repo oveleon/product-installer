@@ -3,11 +3,11 @@
 namespace Oveleon\ProductInstaller\LicenseConnector;
 
 use Contao\Controller;
+use Oveleon\ProductInstaller\LicenseConnector\Step\UploadStep;
 use Symfony\Component\HttpFoundation\Request;
 use Oveleon\ProductInstaller\LicenseConnector\Process\ContaoManagerProcess;
 use Oveleon\ProductInstaller\LicenseConnector\Process\RegisterProductProcess;
 use Oveleon\ProductInstaller\LicenseConnector\Step\ContaoManagerStep;
-use Oveleon\ProductInstaller\LicenseConnector\Step\LicenseStep;
 use Oveleon\ProductInstaller\LicenseConnector\Step\ProcessStep;
 
 /**
@@ -25,7 +25,7 @@ class UploadConnector extends AbstractLicenseConnector
         // Create steps
         $this->addSteps(
             // Add license step
-            new LicenseStep(),
+            new UploadStep(),
 
             // Add contao manager step
             new ContaoManagerStep(),
@@ -51,7 +51,7 @@ class UploadConnector extends AbstractLicenseConnector
             'name'          => 'Upload',
             'title'         => $translator->trans('installer.connector.upload.title', [], 'installer'),
             'description'   => $translator->trans('installer.connector.upload.description', [], 'installer'),
-            'image'         => '/bundles/productinstaller/icons/logo.svg',
+            'image'         => '/bundles/productinstaller/icons/upload.svg',
             'entry'         => $request->getSchemeAndHttpHost() . '/api/upload'
         ];
     }

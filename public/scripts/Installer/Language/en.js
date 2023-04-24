@@ -30,7 +30,7 @@ module.exports = {
     "product.label.shop":                   "Purchased at",
 
     // Dashboard step
-    "dashboard.headline":                   "Product management",
+    "dashboard.headline":                   "My products",
     "dashboard.noProducts":                 "You have not registered any products in this project yet.",
     "dashboard.actions.register":           "Register product",
     "dashboard.loading":                    "Products are retrieved",

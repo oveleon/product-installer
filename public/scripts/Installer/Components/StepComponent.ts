@@ -46,6 +46,13 @@ export default abstract class StepComponent extends ContainerComponent
     public skip: boolean = false
 
     /**
+     * Defines if the step is locked.
+     *
+     * @protected
+     */
+    public locked: boolean = false
+
+    /**
      * Contains the current step configuration.
      *
      * @protected
@@ -139,6 +146,16 @@ export default abstract class StepComponent extends ContainerComponent
 
         // Bind custom events
         this.events()
+    }
+
+    /**
+     * Removes a step.
+     */
+    public remove(): void
+    {
+        this.unmount()
+        this.modal.removeStep(this)
+        this.template.remove()
     }
 
     /**
@@ -237,6 +254,13 @@ export default abstract class StepComponent extends ContainerComponent
      * @protected
      */
     protected mount(): void {}
+
+    /**
+     * Called when step is unmounted.
+     *
+     * @protected
+     */
+    protected unmount(): void {}
 
     /**
      * Set events.
