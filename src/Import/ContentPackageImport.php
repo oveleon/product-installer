@@ -483,4 +483,21 @@ class ContentPackageImport
         }
     }
 
+    public static function getManifestFromArchive($filepath): ?array
+    {
+        $manifest = null;
+        $root = Controller::getContainer()->getParameter('kernel.project_dir');
+
+        // Read zip archive
+        $archive = new ZipReader(str_replace($root, '', $filepath));
+
+        // Read manifest
+        if($archive->getFile('content.manifest.json'))
+        {
+            $manifest = json_decode($archive->unzip(), true);
+            $archive->reset();
+        }
+
+        return $manifest;
+    }
 }

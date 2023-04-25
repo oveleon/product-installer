@@ -341,6 +341,21 @@ $background-color: #688191;
   }
 }
 
+div.file-upload{
+  flex-grow: 1;
+
+  border-radius: 30px;
+  border: 1px dashed #e2e2e2;
+  background: url('/bundles/productinstaller/icons/upload.gif') center center no-repeat;
+  background-size: auto 100%;
+
+  cursor: pointer;
+
+  &.dz-drag-hover{
+    border-color: $primary-color;
+  }
+}
+
 @media (min-width: 600px) {
   #installer{
 

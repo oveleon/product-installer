@@ -35,6 +35,11 @@ module.exports = {
     "dashboard.actions.register":           "Produkt registrieren",
     "dashboard.loading":                    "Produkte werden abgerufen",
 
+    // Upload step
+    "upload.headline":                      "Produkt hochladen",
+    "upload.description":                   "Bitte laden Sie ein Produkt hoch. Entweder Sie ziehen die Produktdatei (.content) in den gestrichelten Bereich oder klicken auf diesen um den Dateimanager aufzurufen.",
+    "upload.loading":                       "Produkt wird hochgeladen",
+
     // License step
     "license_connector.headline":           "Bitte wählen Sie einen Produkttypen",
     "license_connector.load.connector":     "Informationen werden abgerufen",

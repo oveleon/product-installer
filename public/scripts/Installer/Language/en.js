@@ -35,6 +35,11 @@ module.exports = {
     "dashboard.actions.register":           "Register product",
     "dashboard.loading":                    "Products are retrieved",
 
+    // Upload step
+    "upload.headline":                      "Upload product",
+    "upload.description":                   "Please upload a product. Either drag the product file (.content) into the dashed area or click on it to open the file manager.",
+    "upload.loading":                       "Product is uploading",
+
     // License step
     "license_connector.headline":           "Please select a product type",
     "license_connector.load.connector":     "Information is retrieved",

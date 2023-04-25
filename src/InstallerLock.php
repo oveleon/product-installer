@@ -19,7 +19,7 @@ class InstallerLock
     public function __construct()
     {
         $this->filesystem = new Filesystem();
-        $this->root = System::getContainer()->getParameter('kernel.project_dir') . '/product-installer/';
+        $this->root = System::getContainer()->getParameter('kernel.project_dir') . DIRECTORY_SEPARATOR . 'product-installer' . DIRECTORY_SEPARATOR;
         $this->path = $this->root . self::FILENAME;
 
         $this->createIfNotExists();

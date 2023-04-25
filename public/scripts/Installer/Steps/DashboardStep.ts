@@ -1,10 +1,10 @@
 import StepComponent from "../Components/StepComponent";
 import ProductComponent from "../Components/ProductComponent";
 import DropMenuComponent from "../Components/DropMenuComponent";
+import PopupComponent, {PopupType} from "../Components/PopupComponent";
 import {i18n} from "../Language"
 import {call} from "../../Utils/network"
 import State from "../State";
-import PopupComponent, {PopupType} from "../Components/PopupComponent";
 
 /**
  * An overview of registered products.

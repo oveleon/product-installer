@@ -7,10 +7,12 @@ import DropMenuComponent from "./DropMenuComponent";
  */
 export interface ProductOptions {
     title: string,
-    hash: string,
     type: string,
     description: string
+
+    hash?: string,
     registered?: boolean
+    skip?: boolean
     remove?: boolean        // Product was removed
     setup?: boolean         // If false, product need a setup
     updated?: number

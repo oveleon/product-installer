@@ -21,7 +21,6 @@ export async function call(url, parameter = {}, cache = false)
             .then((data) => data)
 }
 
-
 export async function get(url, header = {}, cache = false)
 {
     header['Content-Type'] = 'application/json'

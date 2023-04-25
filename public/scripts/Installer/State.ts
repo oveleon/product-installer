@@ -58,7 +58,10 @@ export default class State
                 return state
             }
 
-            return state[name]
+            if(state.hasOwnProperty(name))
+            {
+                return state[name]
+            }
         }
 
         return null

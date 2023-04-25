@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\LicenseConnector;
 
+use Contao\System;
 use Oveleon\ProductInstaller\InstallerLock;
 use Oveleon\ProductInstaller\Util\ConnectorUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -64,40 +65,53 @@ class ProductController
                 $clientProducts = ($this->installerLock->getInstalledProducts($connector['config']['name']) ?? []);
 
                 $collection = [];
+                $skip = false;
 
-                foreach ($clientProducts as $product)
+                if (isset($GLOBALS['PI_HOOKS']['matchProducts']) && \is_array($GLOBALS['PI_HOOKS']['matchProducts']))
                 {
-                    $hash = $product['hash'];
-
-                    // Product is registered and valid
-                    if(
-                        array_key_exists($hash, $remoteProducts) &&
-                        strtolower($request->getHost()) === strtolower($remoteProducts[$hash]['license']['acceptedHost'])
-                    )
+                    foreach ($GLOBALS['PI_HOOKS']['matchProducts'] as $callback)
                     {
-                        // Copy product information
-                        $p = $remoteProducts[$hash];
-
-                        // Enrich data
-                        $p['registered'] = true;
-                        $p['remove'] = false;
-                        $p['setup'] = $product['setup'];
-                        $p['latestVersion'] = $p['version'];
-                        $p['updated'] = $product['updated'];
-                        $p['version'] = $product['version'];
-
-                        // Add product to collection
-                        $collection[$hash] = $p;
+                        // If the callback returns true, the system logic will be skipped
+                        $skip = System::importStatic($callback[0])->{$callback[1]}($connector['config']['name'], $remoteProducts, $clientProducts, $collection);
                     }
-                    // Product is registered but not valid anymore
-                    else
-                    {
-                        // Add product to collection
-                        $product['registered'] = true;
-                        $product['remove'] = true;
-                        $product['setup'] = true;
+                }
 
-                        $collection[$hash] = $product;
+                if(!$skip)
+                {
+                    foreach ($clientProducts as $product)
+                    {
+                        $hash = $product['hash'];
+
+                        // Product is registered and valid
+                        if(
+                            array_key_exists($hash, $remoteProducts) &&
+                            strtolower($request->getHost()) === strtolower($remoteProducts[$hash]['license']['acceptedHost'])
+                        )
+                        {
+                            // Copy product information
+                            $p = $remoteProducts[$hash];
+
+                            // Enrich data
+                            $p['registered'] = true;
+                            $p['remove'] = false;
+                            $p['setup'] = $product['setup'];
+                            $p['latestVersion'] = $p['version'];
+                            $p['updated'] = $product['updated'];
+                            $p['version'] = $product['version'];
+
+                            // Add product to collection
+                            $collection[$hash] = $p;
+                        }
+                        // Product is registered but not valid anymore
+                        else
+                        {
+                            // Add product to collection
+                            $product['registered'] = true;
+                            $product['remove'] = true;
+                            $product['setup'] = true;
+
+                            $collection[$hash] = $product;
+                        }
                     }
                 }
 
