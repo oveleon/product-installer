@@ -40,8 +40,8 @@ module.exports = {
     "upload.description":                   "Please upload a product. Either drag the product file (.content) into the dashed area or click on it to open the file manager.",
     "upload.loading":                       "Product is uploading",
 
-    // License step
-    "license_connector.headline":           "Please select a product type",
+    // License Connector step
+    "license_connector.headline":           "Register product",
     "license_connector.load.connector":     "Information is retrieved",
     "license_connector.load.steps":         "Masks are loaded",
     "license_connector.load.redirect":      "Just a moment, you will be redirected soon",
@@ -61,8 +61,8 @@ module.exports = {
     "contao_manager.connection.inactive":   "Authorization pending",
     "contao_manager.loading":               "Connection to the Contao Manager is established",
     "contao_manager.loading.composer":      "The composer.json file is prepared for manual installation",
-    "contao_manager.process.title":         "Contao Manager",
-    "contao_manager.process.description":   "The Contao Manager installs all necessary dependencies in the background to be able to install the product.",
+    "contao_manager.process.title":         "Install dependencies",
+    "contao_manager.process.description":   "The Contao Manager installs all necessary dependencies in the background to be able to setup the product.",
 
     // License step
     "license.headline":                     "License verification",

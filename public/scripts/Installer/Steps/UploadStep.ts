@@ -1,5 +1,4 @@
 import State from "../State";
-import {call} from "../../Utils/network"
 import {i18n} from "../Language"
 import StepComponent from "../Components/StepComponent";
 import { Dropzone } from "dropzone";
@@ -62,7 +61,7 @@ export default class UploadStep extends StepComponent
                 // Get config
                 let config = State.get('config') ?? {}
 
-                // Overwrite products (at this moment no products should be there)
+                // Overwrite products
                 config['products'] = []
                 config['products'].push(response)
 

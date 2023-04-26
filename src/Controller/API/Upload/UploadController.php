@@ -6,6 +6,7 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\System;
 use Oveleon\ProductInstaller\Import\ContentPackageImport;
 use Oveleon\ProductInstaller\InstallerLock;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,6 +33,8 @@ class UploadController
         $this->framework->initialize();
 
         $request = $this->requestStack->getCurrentRequest();
+
+        /** @var UploadedFile $file */
         $file = $request->files->get('file');
 
         $root = System::getContainer()->getParameter('kernel.project_dir');
@@ -45,15 +48,15 @@ class UploadController
 
         if($manifest = ContentPackageImport::getManifestFromArchive($root . DIRECTORY_SEPARATOR . $destination . DIRECTORY_SEPARATOR . $filename))
         {
-            $manifest['connector'] = 'Upload';
+            $manifest['hash'] = hash('sha256', json_encode($manifest));
             $manifest['type'] = 'product';
-            $manifest['setup'] = false;
             $manifest['updated'] = time();
-            $manifest['destination'] = $destination . DIRECTORY_SEPARATOR . $filename;
-
-            $lock = new InstallerLock();
-            $lock->setProduct($manifest);
-            $lock->save();
+            $manifest['tasks'] = array_merge($manifest['tasks'], [
+                [
+                    'type'        => 'upload',
+                    'destination' => $destination . DIRECTORY_SEPARATOR . $filename
+                ]
+            ]);
         }
         else
         {

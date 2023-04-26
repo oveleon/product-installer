@@ -32,17 +32,6 @@ class RegisterProductController
         $request = $this->requestStack->getCurrentRequest();
         $parameter = $request->toArray();
 
-        // Check if a license has been submitted
-        if(!$license = $parameter['license'])
-        {
-            return new JsonResponse([
-                'error'  => true,
-                'fields' => [
-                    'license' => $this->translator->trans('installer.license.errors.license_empty', [], 'installer')
-                ]
-            ]);
-        }
-
         // Get current connector
         if(!$connector = $this->connectorUtil->getConnectorByName($parameter['connector']))
         {
@@ -82,7 +71,7 @@ class RegisterProductController
         {
             return new JsonResponse([
                 'error'  => true,
-                'message' => 'Die Lizenz konnte nicht registriert werden, bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.'
+                'message' => 'Das Produkt konnte nicht registriert werden, bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.'
             ]);
         }
 
