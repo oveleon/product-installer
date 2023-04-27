@@ -1,0 +1,94 @@
+<?php
+
+namespace Oveleon\ProductInstaller\Controller\API\Setup;
+
+use Contao\System;
+use Oveleon\ProductInstaller\Import\ContentPackageImport;
+use Oveleon\ProductInstaller\InstallerLock;
+use Oveleon\ProductInstaller\ProductTaskType;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+#[Route('%contao.backend.route_prefix%/api/setup/init',
+    name:       SetupController::class,
+    defaults:   ['_scope' => 'backend', '_token_check' => false],
+    methods:    ['POST']
+)]
+class SetupController
+{
+    public function __construct(
+        private readonly RequestStack $requestStack,
+        private readonly TranslatorInterface $translator,
+        private readonly InstallerLock $installerLock
+    ){}
+
+    /**
+     * Init product setup.
+     *
+     * Collecting and returning tasks that require a setup.
+     */
+    public function __invoke(): JsonResponse
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $parameter = $request->toArray();
+
+        if(!$product = $this->installerLock->getProduct($parameter['hash']))
+        {
+            return new JsonResponse([
+                'error' => true,
+                'message' => 'Produkt kann nicht gefunden werden oder ist nicht mehr installiert.'
+            ]);
+        }
+
+        $collection = [
+            'product' => $product,
+            'tasks'   => null
+        ];
+
+        $filesystem = new Filesystem();
+        $root = System::getContainer()->getParameter('kernel.project_dir');
+
+        foreach ($product['tasks'] ?? [] as $task)
+        {
+            switch ($task['type'])
+            {
+                case ProductTaskType::CONTENT_PACKAGE->value:
+
+                    // Check if the task is complete
+                    if(!$filepath = $task['destination'])
+                    {
+                        return new JsonResponse([
+                            'error' => true,
+                            'message' => 'Das Produkt kann nicht eingerichtet werden, da es nicht vollständig installiert wurde. Bitte registrieren Sie das Produkt erneut bevor Sie die Einrichtung starten.'
+                        ]);
+                    }
+
+                    // Check if the import file still exists.
+                    if(!$filesystem->exists($root . DIRECTORY_SEPARATOR . $filepath))
+                    {
+                        return new JsonResponse([
+                            'error' => true,
+                            'message' => 'Das Produkt kann nicht eingerichtet werden, da die Installationsdatei nicht gefunden werden kann. Bitte registrieren Sie das Produkt erneut bevor Sie die Einrichtung starten.'
+                        ]);
+                    }
+
+                    // Check if there is a content.manifest.json in the import file
+                    if(!$manifest = ContentPackageImport::getManifestFromArchive($root . DIRECTORY_SEPARATOR . $filepath))
+                    {
+                        return new JsonResponse([
+                            'error' => true,
+                            'message' => 'Das Produkt kann nicht eingerichtet werden, da benötigte Dateien nicht in der Installationsdatei gefunden werden konnten. Bitte registrieren Sie das Produkt erneut bevor Sie die Einrichtung starten.'
+                        ]);
+                    }
+
+                    $collection['tasks'][] = $task;
+                    break;
+            }
+        }
+
+        return new JsonResponse($collection);
+    }
+}

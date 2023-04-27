@@ -21,7 +21,7 @@ export default class ProductManager
     }
 
     /**
-     * Returns product tasks of given types.
+     * Returns product tasks of given types from all products.
      * It is taken into account whether the products should be skipped.
      *
      * @param types
@@ -36,6 +36,9 @@ export default class ProductManager
             {
                 continue
             }
+
+            // Fixme: Meanwhile, the product class also has this method, so the query here can be simplified, e.g. like this:
+            // const foundTasks = product.getTasksByType(...types)
 
             for (const task of product.getTasks())
             {

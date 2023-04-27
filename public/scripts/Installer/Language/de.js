@@ -1,4 +1,8 @@
 module.exports = {
+    // Error
+    "error.unknown":                        "Oops, die Abfrage konnte nicht durchgeführt werden. Bitte versuchen Sie es erneut!",
+    "error.session.lost":                   "Ihre Sitzung ist abgelaufen, bitte loggen Sie sich erneut ein!",
+
     // Global
     "actions.close":                        "Schließen",
     "actions.back":                         "Zurück",
@@ -63,6 +67,10 @@ module.exports = {
     "contao_manager.loading.composer":      "Die composer.json Datei wird für die manuelle Installation vorbereitet",
     "contao_manager.process.title":         "Abhängigkeiten installieren",
     "contao_manager.process.description":   "Der Contao Manager installiert im Hintergrund alle nötigen Abhängigkeiten um das Produkt anschließend Einrichten zu können.",
+
+    // Setup step
+    "setup.headline":                       "Produkteinrichtung",
+    "setup.loading":                        "Produkteinrichtung wird vorbereitet",
 
     // License step
     "license.headline":                     "Lizenzüberprüfung",

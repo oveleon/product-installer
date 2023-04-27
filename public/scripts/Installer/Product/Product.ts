@@ -12,6 +12,7 @@ export enum Provider {
  */
 export enum TaskType {
     REPOSITORY_IMPORT = 'repo_import',
+    CONTENT_PACKAGE = 'content_package',
     MANAGER_PACKAGE = 'manager_package',
     COMPOSER_UPDATE = 'composer_update'
 }
@@ -22,14 +23,6 @@ export enum TaskType {
 export interface TaskConfig {
     hash: string,
     type: TaskType
-}
-
-/**
- * Repository task configuration (REPOSITORY_IMPORT).
- */
-export interface RepoConfig extends TaskConfig {
-    provider: Provider,
-    repository: string
 }
 
 /**
@@ -82,5 +75,25 @@ export default class Product
     public getTasks(): TaskConfig[]
     {
         return this.get('tasks', [])
+    }
+
+    /**
+     * Returns product tasks of given types.
+     *
+     * @param types
+     */
+    public getTasksByType(...types: TaskType[]): TaskConfig[]
+    {
+        let tasks = []
+
+        for (const task of this.getTasks())
+        {
+            if(types.includes(task.type))
+            {
+                tasks.push(task)
+            }
+        }
+
+        return tasks
     }
 }

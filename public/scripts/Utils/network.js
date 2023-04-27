@@ -1,5 +1,7 @@
 import Installer from "../Installer/Installer";
 import State from "../Installer/State";
+import {i18n} from "../Installer/Language";
+import {NotificationTypes} from "../Installer/Components/NotificationComponent";
 
 export async function call(url, parameter = {}, cache = false)
 {
@@ -17,6 +19,16 @@ export async function call(url, parameter = {}, cache = false)
     }
 
     return fetch(url, props)
+            .then((response) => {
+                // Intercept when the route has been redirected to the login page.
+                // In this case the session has expired and a clear error message should be issued.
+                if(response.url.includes('login') && response.url.includes('redirect'))
+                {
+                    throw new Error(i18n('error.session.lost'))
+                }
+
+                return response
+            })
             .then((response) => response.json())
             .then((data) => data)
 }

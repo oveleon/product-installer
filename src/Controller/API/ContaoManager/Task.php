@@ -13,23 +13,6 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-enum TaskAction: string
-{
-    case COMPOSER_UPDATE        = 'composer/update';
-    case COMPOSER_INSTALL       = 'composer/install';
-    case COMPOSER_DUMP_AUTOLOAD = 'composer/dump-autoload';
-    case CONTAO_INSTALL         = 'contao/install';
-    case CONTAO_REBUILD_CACHE   = 'contao/rebuild-cache';
-    case CONTAO_CLEAR_CACHE     = 'contao/clear-cache';
-    case MANAGER_SELF_UPDATE    = 'manager/self-update';
-}
-
-enum TaskStatus: string
-{
-    case ALREADY_RUNNING = 'already_running';
-    case NOT_AVAILABLE   = 'not_available';
-}
-
 /**
  * Class for set and get contao manager tasks.
  *

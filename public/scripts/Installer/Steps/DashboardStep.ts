@@ -5,6 +5,8 @@ import PopupComponent, {PopupType} from "../Components/PopupComponent";
 import {i18n} from "../Language"
 import {call} from "../../Utils/network"
 import State from "../State";
+import SetupStep from "./SetupStep";
+import Product, {TaskType} from "../Product/Product";
 
 /**
  * An overview of registered products.
@@ -111,7 +113,13 @@ export default class DashboardStep extends StepComponent
                 {
                     menuOptions.push({
                         label: i18n('product.setup'),
-                        value: () => console.log('TEST 1'),
+                        value: () => {
+                            // Add setup step
+                            this.modal.addSteps(new SetupStep(productConfig.hash))
+
+                            // Goto setup
+                            this.modal.open(this.modal.currentIndex + 2) // Fixme: Get index of specific step
+                        },
                         highlight: !product.get('setup')
                     })
                 }

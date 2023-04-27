@@ -39,7 +39,11 @@ export default class DownloadProcess extends Process
         const productManager = new ProductManager(products)
 
         // Get download tasks
-        const downloadTasks = productManager.getTasksByType(TaskType.MANAGER_PACKAGE, TaskType.REPOSITORY_IMPORT)
+        const downloadTasks = productManager.getTasksByType(
+            TaskType.MANAGER_PACKAGE,
+            TaskType.REPOSITORY_IMPORT,
+            TaskType.CONTENT_PACKAGE
+        )
 
         if(!downloadTasks.length)
         {
@@ -54,6 +58,16 @@ export default class DownloadProcess extends Process
                 return
             }
 
+            /**
+             * Todo:
+             * Special attention should be paid to tasks of type CONTENT_PACKAGE.
+             * These could contain further tasks, which must also be attached to the product.
+             *
+             * Possible implementation sites:
+             * - This file
+             * - DownloadController
+             */
+
             // Replacing the new tasks objects
             for(const productIndex in products)
             {
@@ -63,7 +77,7 @@ export default class DownloadProcess extends Process
 
                 const product = products[productIndex]
 
-                // Loop the product tasks
+                // Run through the product tasks
                 for(const productTaskIndex in product.tasks)
                 {
                     if (!product.tasks.hasOwnProperty(productTaskIndex)) {
@@ -72,7 +86,7 @@ export default class DownloadProcess extends Process
 
                     const productTask = product.tasks[productTaskIndex]
 
-                    // Loop the response tasks
+                    // Run through the response tasks
                     for(const task of response)
                     {
                         if(task.hash === productTask.hash)

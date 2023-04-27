@@ -5,7 +5,7 @@ namespace Oveleon\ProductInstaller\Controller\API\Upload;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\System;
 use Oveleon\ProductInstaller\Import\ContentPackageImport;
-use Oveleon\ProductInstaller\InstallerLock;
+use Oveleon\ProductInstaller\ProductTaskType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -53,7 +53,7 @@ class UploadController
             $manifest['updated'] = time();
             $manifest['tasks'] = array_merge($manifest['tasks'], [
                 [
-                    'type'        => 'upload',
+                    'type'        => ProductTaskType::CONTENT_PACKAGE->value,
                     'destination' => $destination . DIRECTORY_SEPARATOR . $filename
                 ]
             ]);

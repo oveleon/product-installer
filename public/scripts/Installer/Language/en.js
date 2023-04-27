@@ -1,4 +1,8 @@
 module.exports = {
+    // Error
+    "error.unknown":                        "Oops, the query could not be performed. Please try again!",
+    "error.session.lost":                   "The session has expired. Please log in again!",
+
     // Global
     "actions.close":                        "Close",
     "actions.back":                         "Back",
@@ -63,6 +67,10 @@ module.exports = {
     "contao_manager.loading.composer":      "The composer.json file is prepared for manual installation",
     "contao_manager.process.title":         "Install dependencies",
     "contao_manager.process.description":   "The Contao Manager installs all necessary dependencies in the background to be able to setup the product.",
+
+    // Setup step
+    "setup.headline":                       "Product setup",
+    "setup.loading":                        "Product setup is prepared",
 
     // License step
     "license.headline":                     "License verification",
