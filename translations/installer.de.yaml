@@ -9,6 +9,6 @@ installer:
     connector:
         upload:
             title:             Upload
-            description:       Laden Sie die zu installieren Pakete manuell hoch.
+            description:       Sollten Sie Produkte als Datei vorliegen haben, können Sie diese hier hochladen und anschließend Einrichten.
         errors:
             connection_failed: Es konnte keine Verbindung zum %connectorTitle% hergestellt werden.

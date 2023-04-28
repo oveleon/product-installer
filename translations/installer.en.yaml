@@ -9,6 +9,6 @@ installer:
     connector:
         upload:
             title:              Upload
-            description:        Upload the packages to be installed manually.
+            description:        If you have products as a file, you can upload them here and then set them up.
         errors:
             connection_failed: No connection to %connectorTitle% could be established.

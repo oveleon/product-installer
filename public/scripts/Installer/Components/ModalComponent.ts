@@ -1,7 +1,6 @@
 import StepComponent from "./StepComponent"
 import ContainerComponent from "./ContainerComponent"
 import LoaderComponent, {LoaderMode} from "./LoaderComponent";
-import {buildSolutionReferences} from "ts-loader/dist/instances";
 
 /**
  * Modal class - A modal to go through different steps.
@@ -127,7 +126,9 @@ export default class ModalComponent extends ContainerComponent
     }
 
     /**
-     * Remove step.
+     * Removes the given step.
+     *
+     * @param step
      */
     public removeStep(step: StepComponent): void
     {
@@ -148,6 +149,36 @@ export default class ModalComponent extends ContainerComponent
                 this.steps[i].remove()
             }
         }
+    }
+
+    /**
+     * Returns the step index by string or StepComponent.
+     *
+     * @param step
+     */
+    public getStepIndex(step: string|StepComponent): number
+    {
+        for (const index in this.steps)
+        {
+            if(!this.steps.hasOwnProperty(index))
+            {
+                continue
+            }
+
+            let _step: StepComponent|string = this.steps[index]
+
+            if(typeof step === 'string')
+            {
+                _step = this.steps[index].constructor.name
+            }
+
+            if(step === _step)
+            {
+                return parseInt(index)
+            }
+        }
+
+        return 0
     }
 
     /**

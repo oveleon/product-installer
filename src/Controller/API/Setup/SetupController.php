@@ -60,27 +60,45 @@ class SetupController
                     // Check if the task is complete
                     if(!$filepath = $task['destination'])
                     {
+                        // Overwrite the setup flag
+                        $product['setup'] = true;
+
+                        $this->installerLock->setProduct($product);
+                        $this->installerLock->save();
+
                         return new JsonResponse([
                             'error' => true,
-                            'message' => 'Das Produkt kann nicht eingerichtet werden, da es nicht vollständig installiert wurde. Bitte registrieren Sie das Produkt erneut bevor Sie die Einrichtung starten.'
+                            'message' => 'Das Produkt kann nicht eingerichtet werden, da es nicht vollständig installiert wurde. Bitte registrieren Sie das Produkt erneut, bevor Sie die Einrichtung starten.'
                         ]);
                     }
 
                     // Check if the import file still exists.
                     if(!$filesystem->exists($root . DIRECTORY_SEPARATOR . $filepath))
                     {
+                        // Overwrite the setup flag
+                        $product['setup'] = true;
+
+                        $this->installerLock->setProduct($product);
+                        $this->installerLock->save();
+
                         return new JsonResponse([
                             'error' => true,
-                            'message' => 'Das Produkt kann nicht eingerichtet werden, da die Installationsdatei nicht gefunden werden kann. Bitte registrieren Sie das Produkt erneut bevor Sie die Einrichtung starten.'
+                            'message' => 'Das Produkt kann nicht eingerichtet werden, da die Installationsdatei nicht gefunden werden kann. Bitte registrieren Sie das Produkt erneut, bevor Sie die Einrichtung starten.'
                         ]);
                     }
 
                     // Check if there is a content.manifest.json in the import file
                     if(!$manifest = ContentPackageImport::getManifestFromArchive($root . DIRECTORY_SEPARATOR . $filepath))
                     {
+                        // Overwrite the setup flag
+                        $product['setup'] = true;
+
+                        $this->installerLock->setProduct($product);
+                        $this->installerLock->save();
+
                         return new JsonResponse([
                             'error' => true,
-                            'message' => 'Das Produkt kann nicht eingerichtet werden, da benötigte Dateien nicht in der Installationsdatei gefunden werden konnten. Bitte registrieren Sie das Produkt erneut bevor Sie die Einrichtung starten.'
+                            'message' => 'Das Produkt kann nicht eingerichtet werden, da die Installationsdatei fehlerhaft ist. Bitte registrieren Sie das Produkt erneut, bevor Sie die Einrichtung starten.'
                         ]);
                     }
 

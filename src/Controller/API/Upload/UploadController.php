@@ -53,6 +53,7 @@ class UploadController
             $manifest['updated'] = time();
             $manifest['tasks'] = array_merge($manifest['tasks'], [
                 [
+                    'hash'        => hash('sha256', $filename),
                     'type'        => ProductTaskType::CONTENT_PACKAGE->value,
                     'destination' => $destination . DIRECTORY_SEPARATOR . $filename
                 ]

@@ -220,10 +220,12 @@ export default class LicenseConnectorStep extends StepComponent
 
         // Create content
         template.innerHTML = `
-            <div class="image">${image}</div>
-            <div class="content">
-                <div class="title">${config.config.title}</div>
-                <div class="description">${config.config.description}</div>
+            <div class="inside">
+                <div class="image">${image}</div>
+                <div class="content">
+                    <div class="title">${config.config.title}</div>
+                    <div class="description">${config.config.description}</div>
+                </div>
             </div>
         `
 

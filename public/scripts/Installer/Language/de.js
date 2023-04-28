@@ -70,6 +70,7 @@ module.exports = {
 
     // Setup step
     "setup.headline":                       "Produkteinrichtung",
+    "setup.available_imports.headline":     "Verfügbare Datenpakete in diesem Produkt",
     "setup.loading":                        "Produkteinrichtung wird vorbereitet",
 
     // License step
@@ -88,6 +89,9 @@ module.exports = {
 
     // Advertising step
     "advertising.doNotShowAgain":           "Nicht erneut anzeigen",
+
+    // Import content-package step
+    "import.content_package.headline":      "Produkteinrichtung",
 
     // Manager process
     "process.contao_manager.download.title":        "Pakete herunterladen",
