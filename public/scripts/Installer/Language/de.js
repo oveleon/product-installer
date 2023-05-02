@@ -3,6 +3,11 @@ module.exports = {
     "error.unknown":                        "Oops, die Abfrage konnte nicht durchgeführt werden. Bitte versuchen Sie es erneut!",
     "error.session.lost":                   "Ihre Sitzung ist abgelaufen, bitte loggen Sie sich erneut ein!",
 
+    // Tasks
+    "task.label.setup":                     "Einrichten",
+    "task.content_package.title":           "Content-Paket",
+    "task.content_package.description":     "Content-Pakete befüllen Ihre Instanz mit Leben. Je nach Content-Paket werden hier verschiedene Inhalte mit ausgeliefert. Dabei kann es sich um Seiten, Artikel, Module, Content-Elemente usw. handeln.",
+
     // Global
     "actions.close":                        "Schließen",
     "actions.back":                         "Zurück",

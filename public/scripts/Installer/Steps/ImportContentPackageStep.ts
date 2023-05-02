@@ -30,5 +30,7 @@ export default class ImportContentPackageStep extends StepComponent
     {
         // Show loader
         //this.modal.loader(true, i18n('setup.loading'))
+
+
     }
 }

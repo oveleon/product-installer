@@ -102,14 +102,24 @@ export default class SetupStep extends StepComponent
         {
             // Create task
             const taskElement: HTMLDivElement = document.createElement('div')
+                  taskElement.classList.add('task-item')
+                  taskElement.innerHTML = `
+                      <div class="inside">
+                          <div class="content">
+                              <div class="title ${task.type}">${i18n('task.' + task.type + '.title')}</div>
+                              <div class="description">${i18n('task.' + task.type + '.description')}</div>
+                          </div>
+                          <div class="actions"></div>
+                      </div>
+                  `
 
-
+            // Create setup button
             const runButton: HTMLButtonElement = document.createElement('button')
-            runButton.innerText = 'Einrichten'
+                  runButton.classList.add('primary')
+                  runButton.innerText = i18n('task.label.setup')
 
             // Set run action
             runButton.addEventListener('click', () => {
-
                 // Get current setup state
                 const setup = State.get('setup')
 
@@ -137,10 +147,7 @@ export default class SetupStep extends StepComponent
                 this.modal.next()
             })
 
-            // Fixme: make me pretty 🤡
-            taskElement.innerHTML = task.type
-            taskElement.appendChild(runButton)
-
+            taskElement.querySelector('.actions').appendChild(runButton)
             taskContainer.appendChild(taskElement)
         }
     }

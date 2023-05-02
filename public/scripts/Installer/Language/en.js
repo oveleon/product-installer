@@ -3,6 +3,11 @@ module.exports = {
     "error.unknown":                        "Oops, the query could not be performed. Please try again!",
     "error.session.lost":                   "The session has expired. Please log in again!",
 
+    // Tasks
+    "task.label.setup":                     "Setup",
+    "task.content_package.title":           "Content-Package",
+    "task.content_package.description":     "Content packages fill your instance with life. Depending on the content package, different content is delivered here. These can be pages, articles, modules, content elements, and so on.",
+
     // Global
     "actions.close":                        "Close",
     "actions.back":                         "Back",

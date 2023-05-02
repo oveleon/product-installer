@@ -1,8 +1,87 @@
 #installer{
 
   .setup-headline{
-    border-top: 1px solid #ebebeb;
-    margin-top: 23px;
-    padding-top: 23px;
+    position: relative;
+    border-top: 1px dashed #d5d5d5;
+    margin-top: 33px;
+    margin-bottom: 20px;
+    padding-top: 40px;
+
+    &:before{
+      position: absolute;
+      display: flex;
+      content: "";
+      bottom: 100%;
+      width: 35px;
+      left: 50%;
+      height: 18px;
+      transform: translateX(-50%) translateY(50%);
+      background: url('/bundles/productinstaller/icons/arrow_down.svg') center center no-repeat #fff;
+    }
+  }
+
+  .task-item{
+
+    .inside{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 18px;
+      border-radius: 3px;
+
+      border: 1px solid rgb(218 218 218);
+      border-bottom: 0;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15),
+                  0 8px 0 -5px #fdfdfd,
+                  0 8px 1px -4px rgba(0, 0, 0, 0.15),
+                  0 16px 0 -10px #f8f8f8,
+                  0 16px 1px -9px rgba(0, 0, 0, 0.15);
+    }
+
+    .content{
+      flex-grow: 1;
+      margin-right: 15px;
+
+      .title {
+        display: flex;
+        align-items: center;
+
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #222;
+
+        margin-bottom: 10px;
+
+        &:before{
+          content: "";
+          display: block;
+          width: 23px;
+          height: 23px;
+          margin-right: 10px;
+          background-image: url('/bundles/productinstaller/icons/task_default.svg');
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
+
+        &.content_package:before{
+          background-image: url('/bundles/productinstaller/icons/task_content_package.svg');
+        }
+      }
+
+      .description{
+        line-height: 1.25em;
+        color: #495258;
+      }
+    }
+
+    .actions{
+      margin: 0;
+      padding: 0;
+      text-align: right;
+    }
+
+    + .task-item{
+      margin-top: 20px;
+    }
   }
 }
