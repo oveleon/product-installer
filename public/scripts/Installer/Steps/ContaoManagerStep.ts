@@ -19,6 +19,7 @@ export default class ContaoManagerStep extends StepComponent
     private connectActiveContainer: HTMLDivElement
     private connectInactiveContainer: HTMLDivElement
     private authContainer: HTMLDivElement
+    private notInstalledContainer: HTMLDivElement
     private installContainer: HTMLDivElement
     private manuallyContainer: HTMLDivElement
 
@@ -26,6 +27,7 @@ export default class ContaoManagerStep extends StepComponent
     private authenticateBtn: HTMLButtonElement
     private manuallyBtn: HTMLButtonElement
     private closeBtn: HTMLButtonElement
+    private closeModalBtn: HTMLButtonElement
     private nextBtn: HTMLButtonElement
 
     /**
@@ -38,6 +40,10 @@ export default class ContaoManagerStep extends StepComponent
             <div class="authentication inherit">
                 <p>${i18n('contao_manager.description')}</p>
                 <div class="con-inactive" data-connection-state>${i18n('contao_manager.connection.inactive')}</div>
+            </div>
+            <div class="not-installed inherit" hidden>
+                <p>${i18n('contao_manager.description.notInstalled')}</p>
+                <div class="con-not-found"></div>
             </div>
             <div class="install inherit" hidden>
                 <p>${i18n('contao_manager.description.success')}</p>
@@ -59,6 +65,7 @@ export default class ContaoManagerStep extends StepComponent
                 <button class="cm-manually-close" hidden>${i18n('actions.back')}</button>
                 <button id="cm-authenticate" class="primary">${i18n('contao_manager.authorize')}</button>
                 <button class="primary" data-next hidden>${i18n('actions.next')}</button>
+                <button data-close hidden>${i18n('actions.close')}</button>
             </div>
         `
     }
@@ -101,12 +108,14 @@ export default class ContaoManagerStep extends StepComponent
 
         this.authContainer      = <HTMLDivElement> this.element('.authentication')
         this.installContainer   = <HTMLDivElement> this.element('.install')
+        this.notInstalledContainer = <HTMLDivElement> this.element('.not-installed')
         this.manuallyContainer  = <HTMLDivElement> this.element('.manually')
 
         this.authenticateBtn    = <HTMLButtonElement> this.element('#cm-authenticate')
         this.manuallyBtn        = <HTMLButtonElement> this.element('.cm-manually')
         this.closeBtn           = <HTMLButtonElement> this.element('.cm-manually-close')
         this.nextBtn            = <HTMLButtonElement> this.element('[data-next]')
+        this.closeModalBtn      = <HTMLButtonElement> this.element('[data-close]')
 
         this.manualCheckbox     = <HTMLInputElement> this.element('input#manual')
 
@@ -143,6 +152,18 @@ export default class ContaoManagerStep extends StepComponent
             }
             else
             {
+                // Check if contao manager exits
+                if(response?.error && response?.exists === false)
+                {
+                    this.closeModalBtn.hidden = false
+                    this.authenticateBtn.hidden = true
+                    this.manuallyBtn.hidden = true
+
+                    // Set the visibility of the action button
+                    this.authContainer.hidden = true
+                    this.notInstalledContainer.hidden = false
+                }
+
                 // Define that the authorization is not yet complete.
                 this.isAuthenticated = false
 
@@ -241,12 +262,14 @@ export default class ContaoManagerStep extends StepComponent
             this.installContainer.hidden = false
             this.nextBtn.hidden = false
             this.nextBtn.disabled = false
+            this.closeModalBtn.hidden = true
         }
         else
         {
             this.authenticateBtn.hidden = false
             this.authContainer.hidden = false
             this.nextBtn.hidden = true
+            this.closeModalBtn.hidden = true
         }
     }
 }

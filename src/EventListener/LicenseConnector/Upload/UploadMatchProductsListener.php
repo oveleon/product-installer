@@ -19,9 +19,21 @@ class UploadMatchProductsListener
 
         foreach ($clientProducts as $clientProduct)
         {
+            $remove = false;
+
+            // Check if tasks contain a file that must exist
+            foreach ($clientProduct['tasks'] ?? [] as $task)
+            {
+                if(($task['destination'] ?? false) && !$filesystem->exists($filepath . $task['destination']))
+                {
+                    $remove = true;
+                    break;
+                }
+            }
+
             $collection[] = array_merge($clientProduct, [
                 'registered' => true,
-                'remove'     => !$filesystem->exists($filepath . $clientProduct['destination'])
+                'remove'     => $remove
             ]);
         }
 

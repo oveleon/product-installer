@@ -41,7 +41,7 @@ class ContaoManager
     /**
      * Returns the contao manager path.
      */
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return System::getContainer()->getParameter('contao_manager.manager_path');
     }

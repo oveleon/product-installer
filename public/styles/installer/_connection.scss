@@ -1,4 +1,4 @@
-[data-connection-state] {
+[data-connection-state], .con-not-found{
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -32,6 +32,14 @@
 
   &:before {
     background: url('/bundles/productinstaller/icons/connection.gif') center center no-repeat;
+    background-size: auto 100%;
+  }
+}
+
+.con-not-found{
+
+  &:before {
+    background: url('/bundles/productinstaller/icons/not_found.gif') center center no-repeat;
     background-size: auto 100%;
   }
 }

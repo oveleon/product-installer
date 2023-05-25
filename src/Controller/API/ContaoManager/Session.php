@@ -38,10 +38,20 @@ class Session
     {
         $request = $this->requestStack->getCurrentRequest();
 
+        // Check if the manager is installed
+        if(!$managerPath = $this->contaoManager->getPath())
+        {
+            return new JsonResponse([
+                'error' => true,
+                'exists' => false,
+                'message' => 'Contao Manager is not installed.'
+            ]);
+        }
+
         // Create default response
         $response = [
             'manager' => [
-                'path'       => $this->contaoManager->getPath(),
+                'path'       => $managerPath,
                 'return_url' => $request->getSchemeAndHttpHost() . $this->router->generate(Authentication::class)
             ]
         ];
@@ -50,6 +60,7 @@ class Session
         {
             return new JsonResponse([...$response, ...[
                 'error' => true,
+                'exists' => true,
                 'message' => 'Not authorized.'
             ]]);
         }
