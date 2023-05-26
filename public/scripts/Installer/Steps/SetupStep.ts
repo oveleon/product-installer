@@ -4,7 +4,7 @@ import {call} from "../../Utils/network"
 import State from "../State";
 import {TaskConfig, TaskType} from "../Product/Product";
 import ProductComponent from "../Components/ProductComponent";
-import ImportContentPackageStep from "./ImportContentPackageStep";
+import SetupPromptStep from "./SetupPromptStep";
 
 /**
  * Setup products.
@@ -118,7 +118,7 @@ export default class SetupStep extends StepComponent
                   runButton.classList.add('primary')
                   runButton.innerText = i18n('task.label.setup')
 
-            // Set run action
+            // Start setup
             runButton.addEventListener('click', () => {
                 // Get current setup state
                 const setup = State.get('setup')
@@ -128,22 +128,7 @@ export default class SetupStep extends StepComponent
                 // Set new task hash (used to start an import process and further steps)
                 State.set('setup', setup)
 
-                // Create new step by task.type
-                let importStep: StepComponent;
-
-                switch (task.type)
-                {
-                    case TaskType.CONTENT_PACKAGE:
-                        importStep = new ImportContentPackageStep()
-                        break
-
-                    case TaskType.REPOSITORY_IMPORT:
-                    case TaskType.MANAGER_PACKAGE:
-                        // ToDo: Create new setup-steps for other types...
-                        return
-                }
-
-                this.modal.addSteps(importStep)
+                this.modal.addSteps(new SetupPromptStep())
                 this.modal.next()
             })
 

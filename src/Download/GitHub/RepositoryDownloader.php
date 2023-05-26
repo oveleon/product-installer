@@ -1,6 +1,6 @@
 <?php
 
-namespace Oveleon\ProductInstaller\Import\GitHub;
+namespace Oveleon\ProductInstaller\Download\GitHub;
 
 use Contao\File;
 use Github\AuthMethod;

@@ -2,61 +2,11 @@
 
 namespace Oveleon\ProductInstaller;
 
-use Contao\System;
-use Symfony\Component\Filesystem\Exception\RuntimeException;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
-
-class InstallerLock
+class InstallerLock extends InstallerFile
 {
-    const FILENAME = 'installer-lock.json';
-
-    protected Filesystem $filesystem;
-    protected string $root;
-    protected string $path;
-    protected ?array $lock;
-
     public function __construct()
     {
-        $this->filesystem = new Filesystem();
-        $this->root = System::getContainer()->getParameter('kernel.project_dir') . DIRECTORY_SEPARATOR . 'product-installer' . DIRECTORY_SEPARATOR;
-        $this->path = $this->root . self::FILENAME;
-
-        $this->createIfNotExists();
-    }
-
-    /**
-     * Create the lock file if not exists.
-     */
-    protected function createIfNotExists(): void
-    {
-        if(!$this->filesystem->exists($this->path))
-        {
-            $this->filesystem->dumpFile($this->path, '');
-        }
-
-        $finder = new Finder();
-        $finder->files()
-               ->depth('== 0')
-               ->in($this->root)
-               ->name(self::FILENAME);
-
-        if(!$finder->hasResults())
-        {
-            throw new RuntimeException('Cannot find ' . self::FILENAME);
-        }
-
-        foreach ($finder as $file)
-        {
-            if($content = $file->getContents())
-            {
-                $this->lock = json_decode($content, true);
-                break;
-            }
-
-            $this->lock = null;
-            break;
-        }
+        parent::__construct('installer-lock.json');
     }
 
     /**
@@ -64,14 +14,14 @@ class InstallerLock
      */
     public function setProduct(array $product): void
     {
-        if(!$this->lock)
+        if(!$this->content)
         {
-            $this->lock = [
+            $this->content = [
                 'products' => []
             ];
         }
 
-        $products = $this->lock['products'];
+        $products = $this->content['products'];
 
         if(!$this->hasProduct($product['hash']))
         {
@@ -88,7 +38,7 @@ class InstallerLock
             }
         }
 
-        $this->lock['products'] = $products;
+        $this->content['products'] = $products;
     }
 
     /**
@@ -96,14 +46,14 @@ class InstallerLock
      */
     public function removeProduct($hash): void
     {
-        if(!$this->lock || !$this->hasProduct($hash))
+        if(!$this->content || !$this->hasProduct($hash))
         {
             return;
         }
 
         $products = [];
 
-        foreach ($this->lock['products'] ?? [] as $key => $p)
+        foreach ($this->content['products'] ?? [] as $key => $p)
         {
             if($hash === $p['hash'])
             {
@@ -114,7 +64,7 @@ class InstallerLock
         }
 
 
-        $this->lock['products'] = $products;
+        $this->content['products'] = $products;
     }
 
     /**
@@ -130,12 +80,12 @@ class InstallerLock
      */
     public function getProduct($hash): ?array
     {
-        if(!$this->lock)
+        if(!$this->content)
         {
             return null;
         }
 
-        foreach ($this->lock['products'] ?? [] as $product)
+        foreach ($this->content['products'] ?? [] as $product)
         {
             if($product['hash'] === $hash)
             {
@@ -151,13 +101,13 @@ class InstallerLock
      */
     public function getInstalledProducts(?string $connector = null): ?array
     {
-        if($this->lock)
+        if($this->content)
         {
             if(null !== $connector)
             {
                 $products = null;
 
-                foreach ($this->lock['products'] as $product)
+                foreach ($this->content['products'] as $product)
                 {
                     if($product['connector'] === $connector)
                     {
@@ -168,18 +118,9 @@ class InstallerLock
                 return $products;
             }
 
-            return $this->lock['products'];
+            return $this->content['products'];
         }
 
         return null;
-    }
-
-    /**
-     * Saves the lock file.
-     */
-    public function save(): void
-    {
-        $this->filesystem->touch($this->path);
-        $this->filesystem->dumpFile($this->path, json_encode($this->lock, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 }

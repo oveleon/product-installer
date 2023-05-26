@@ -76,8 +76,10 @@ module.exports = {
 
     // Setup step
     "setup.headline":                       "Product setup",
+    "setup.prompt.headline":                "Product setup",
     "setup.available_imports.headline":     "Available data packages in this product",
     "setup.loading":                        "Product setup is prepared",
+    "setup.loading.step":                    "Product setup continues...",
 
     // License step
     "license.headline":                     "License verification",
@@ -95,9 +97,6 @@ module.exports = {
 
     // Advertising step
     "advertising.doNotShowAgain":           "Do not show again",
-
-    // Import content-package step
-    "import.content_package.headline":      "Product setup",
 
     // Manager process
     "process.contao_manager.download.title":        "Download packages",

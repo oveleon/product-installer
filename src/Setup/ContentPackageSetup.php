@@ -1,6 +1,6 @@
 <?php
 
-namespace Oveleon\ProductInstaller\Import;
+namespace Oveleon\ProductInstaller\Setup;
 
 use Contao\ContentModel;
 use Contao\Controller;
@@ -8,13 +8,20 @@ use Contao\Model;
 use Contao\PageModel;
 use Contao\ZipReader;
 use Exception;
+use Oveleon\ProductInstaller\Import\ImportPromptType;
+use Oveleon\ProductInstaller\Import\Prompt\ConfirmPrompt;
+use Oveleon\ProductInstaller\Import\Prompt\PromptResponse;
+use Oveleon\ProductInstaller\Import\TableImport;
+use Oveleon\ProductInstaller\SetupLock;
+use Oveleon\ProductInstaller\Util\ArchiveUtil;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Unpack, read and import archives.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
-class ContentPackageImport
+class ContentPackageSetup
 {
     const TABLE_FILE_EXTENSION = '.table';
     const FOREIGN_KEY = 'pid';
@@ -29,6 +36,132 @@ class ContentPackageImport
 
     protected array $connections = [];
     protected ?array $callbacks = null;
+
+    public function __construct(
+        protected readonly ArchiveUtil $archiveUtil,
+        protected readonly TableImport $tableImporter,
+        protected readonly SetupLock $setupLock
+    ){}
+
+    public function run($task, PromptResponse $promptResponse): JsonResponse
+    {
+        // Catch possible errors and check if the task destination still exists
+        if(!$destination = $task['destination'])
+        {
+            return new JsonResponse([
+                'error'   => true,
+                'message' => 'Zieldatei konnte nicht gefunden werden.'
+            ]);
+        }
+
+        // Before we start importing tables, we check if there is already a setup in progress
+        if(
+            $promptResponse->has('checkRunningSetup') ||
+            $blnAnswered = (
+                $promptResponse->get('name') === 'runningSetup' &&
+                $promptResponse->get('type') === ImportPromptType::CONFIRM->value
+            )
+        ){
+            // We have received a response on whether to continue the setup or start from scratch
+            if($blnAnswered ?? false)
+            {
+
+            }
+            // We have noticed that there is still an ongoing setup in progress
+            elseif($this->setupLock->getScope(TableImport::class))
+            {
+                return (new ConfirmPrompt('runningSetup'))
+                            ->question('Die letzte Einrichtung konnte nicht abgeschlossen werden, möchten Sie dort weiter machen wo aufgehört wurde?')
+                            ->answer('Einrichtung neu starten', 0)
+                            ->answer('Einrichtung fortsetzen',1)
+                            ->getResponse();
+            }
+        }
+
+        // Set prompt response
+        $this->tableImporter->setPromptResponse($promptResponse);
+
+        // Running through the tables in the correct order
+        foreach ($this->getTableStructure($destination) as $tableName)
+        {
+            // Get table content or skip if empty
+            if(!$tableContent = $this->archiveUtil->getFileContent($destination, $tableName . self::TABLE_FILE_EXTENSION, true))
+            {
+                continue;
+            }
+
+            // Start the import and expect a prompt
+            if(($prompt = $this->tableImporter->import($tableName, $tableContent)) !== null)
+            {
+                // Import need user input
+                return $prompt->getResponse();
+            }
+        }
+
+        return new JsonResponse(['message' => 'FINISH']);
+    }
+
+    public function getTableStructure(string $archiveDestination): array
+    {
+        // ToDo: Get structure from config yml
+        // Get table structure by config
+        $tableOrder = [
+            'tl_theme',
+            'tl_style_sheet',
+            'tl_style',
+            'tl_image_size',
+            'tl_image_size_item',
+            'tl_module',
+            'tl_layout',
+            'tl_user_group',
+            'tl_member_group',
+            'tl_faq_category',
+            'tl_faq',
+            'tl_news_archive',
+            'tl_news_feed',
+            'tl_news',
+            'tl_calendar',
+            'tl_calendar_feed',
+            'tl_calendar_events',
+            'tl_comments',
+            'tl_comments_notify',
+            'tl_newsletter_channel',
+            'tl_newsletter_deny_list',
+            'tl_newsletter',
+            'tl_newsletter_recipients',
+            'tl_form',
+            'tl_form_field',
+            'tl_page',
+            'tl_article',
+            'tl_content.tl_article',
+            'tl_content.tl_news',
+            'tl_content.tl_calendar_events'
+        ];
+
+        // Get table structure by archive and remove file extension
+        $archiveTables = array_map(
+            fn($table): string => str_replace(self::TABLE_FILE_EXTENSION, '', $table),
+            $this->archiveUtil->getFileList($archiveDestination, self::TABLE_FILE_EXTENSION)
+        );
+
+        // Retrieve tables that are not in the configuration but are in the archive in order to attach them afterward
+        $archiveTablesOnTop = array_diff($archiveTables, $tableOrder);
+
+        if($diffTables = array_diff($tableOrder, $archiveTables))
+        {
+           // Clean up order structure (Consider only tables that are available in the archive)
+            foreach ($diffTables as $removeTable)
+            {
+                if($index = array_search($removeTable, $tableOrder))
+                {
+                    unset($tableOrder[$index]);
+                }
+            }
+        }
+
+        // Append unknown tables and return full structure
+        return array_merge($tableOrder, $archiveTablesOnTop);
+    }
 
     /**
      * Sets a root page in which new pages are to be imported.
@@ -483,21 +616,5 @@ class ContentPackageImport
         }
     }
 
-    public static function getManifestFromArchive($filepath): ?array
-    {
-        $manifest = null;
-        $root = Controller::getContainer()->getParameter('kernel.project_dir');
 
-        // Read zip archive
-        $archive = new ZipReader(str_replace($root, '', $filepath));
-
-        // Read manifest
-        if($archive->getFile('content.manifest.json'))
-        {
-            $manifest = json_decode($archive->unzip(), true);
-            $archive->reset();
-        }
-
-        return $manifest;
-    }
 }

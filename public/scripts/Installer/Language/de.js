@@ -75,9 +75,11 @@ module.exports = {
     "contao_manager.process.description":       "Der Contao Manager installiert im Hintergrund alle nötigen Abhängigkeiten um das Produkt anschließend Einrichten zu können.",
 
     // Setup step
-    "setup.headline":                       "Produkteinrichtung",
-    "setup.available_imports.headline":     "Verfügbare Datenpakete in diesem Produkt",
-    "setup.loading":                        "Produkteinrichtung wird vorbereitet",
+    "setup.headline":                           "Produkteinrichtung",
+    "setup.prompt.headline":                    "Produkteinrichtung",
+    "setup.available_imports.headline":         "Verfügbare Datenpakete in diesem Produkt",
+    "setup.loading":                            "Produkteinrichtung wird vorbereitet",
+    "setup.loading.step":                       "Produkteinrichtung wird fortgesetzt...",
 
     // License step
     "license.headline":                     "Lizenzüberprüfung",
@@ -95,9 +97,6 @@ module.exports = {
 
     // Advertising step
     "advertising.doNotShowAgain":           "Nicht erneut anzeigen",
-
-    // Import content-package step
-    "import.content_package.headline":      "Produkteinrichtung",
 
     // Manager process
     "process.contao_manager.download.title":        "Pakete herunterladen",

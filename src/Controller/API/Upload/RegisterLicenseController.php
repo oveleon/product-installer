@@ -12,11 +12,13 @@ use Symfony\Component\Routing\Annotation\Route;
 )]
 class RegisterLicenseController
 {
-    /**
-     * Get products
-     */
     public function __invoke(): JsonResponse
     {
+        /**
+         * All connectors are based on the same API, but products that have been uploaded manually do not have the same
+         * information as products that come from a store system, for example. Therefore, the product check for manually
+         * uploaded products is performed and prepared in the `matchProducts` hook.
+         */
         return new JsonResponse([]);
     }
 }

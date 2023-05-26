@@ -12,9 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 )]
 class ProductController
 {
-    /**
-     * Get products
-     */
     public function __invoke(): JsonResponse
     {
         /**

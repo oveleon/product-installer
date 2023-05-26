@@ -6,4 +6,4 @@ services:
 
     Oveleon\ProductInstaller\:
         resource: '../src/'
-        exclude: '../src/{Model,DependencyInjection,Resources,LicenseConnector}'
+        exclude: '../src/{Model,DependencyInjection,Resources,LicenseConnector,Import/Prompt}'

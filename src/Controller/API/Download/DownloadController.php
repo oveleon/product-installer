@@ -1,10 +1,11 @@
 <?php
 
-namespace Oveleon\ProductInstaller\Controller\Import;
+namespace Oveleon\ProductInstaller\Controller\API\Download;
 
+use Contao\System;
 use Exception;
-use Oveleon\ProductInstaller\Import\FileDownloader;
-use Oveleon\ProductInstaller\Import\GitHub\RepositoryDownloader;
+use Oveleon\ProductInstaller\Download\FileDownloader;
+use Oveleon\ProductInstaller\Download\GitHub\RepositoryDownloader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,6 +43,7 @@ class DownloadController
     public function __invoke(): Response
     {
         $request = $this->requestStack->getCurrentRequest();
+        $basePath = System::getContainer()->getParameter('product_installer.installer_path') . '/downloads/';
         $response = [];
 
         foreach ($request->toArray() as $package)
@@ -50,7 +52,7 @@ class DownloadController
             {
                 case 'github':
                     [$organization, $repository] = explode("/", $package['source']);
-                    $destination = 'product-installer/downloads/'. $organization .'-'. $repository .'.zip';
+                    $destination = $basePath . $organization .'-'. $repository .'.zip';
 
                     $this->githubDownloader
                         ->setOrganization($organization)
@@ -64,7 +66,7 @@ class DownloadController
                     break;
 
                 case 'server':
-                    $destination = 'product-installer/downloads/'. basename($package['repository']);
+                    $destination = $basePath . basename($package['repository']);
 
                     $this->fileDownloader
                         ->download($package['repository'], $destination);

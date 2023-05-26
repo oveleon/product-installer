@@ -23,6 +23,7 @@ class ProductInstallerExtension extends Extension
         $config['license_connectors'][] = 'Oveleon\ProductInstaller\LicenseConnector\UploadConnector';
 
         // Set container parameter
+        $container->setParameter('product_installer.installer_path', $config['installer_path']);
         $container->setParameter('product_installer.license_connectors', $config['license_connectors']);
     }
 }

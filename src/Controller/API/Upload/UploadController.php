@@ -4,8 +4,8 @@ namespace Oveleon\ProductInstaller\Controller\API\Upload;
 
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\System;
-use Oveleon\ProductInstaller\Import\ContentPackageImport;
 use Oveleon\ProductInstaller\ProductTaskType;
+use Oveleon\ProductInstaller\Util\ArchiveUtil;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -20,9 +20,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class UploadController
 {
     public function __construct(
-        private readonly RequestStack $requestStack,
-        private readonly ContaoFramework $framework,
-        private readonly TranslatorInterface $translator
+        protected readonly RequestStack $requestStack,
+        protected readonly ContaoFramework $framework,
+        protected readonly TranslatorInterface $translator,
+        protected readonly ArchiveUtil $archiveUtil,
     ){}
 
     /**
@@ -46,7 +47,7 @@ class UploadController
             $filename
         );
 
-        if($manifest = ContentPackageImport::getManifestFromArchive($root . DIRECTORY_SEPARATOR . $destination . DIRECTORY_SEPARATOR . $filename))
+        if($manifest = $this->archiveUtil->getFileContent($root . DIRECTORY_SEPARATOR . $destination . DIRECTORY_SEPARATOR . $filename,'content.manifest.json', true))
         {
             $manifest['hash'] = hash('sha256', json_encode($manifest));
             $manifest['type'] = 'product';

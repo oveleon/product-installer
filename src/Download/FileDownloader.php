@@ -1,6 +1,6 @@
 <?php
 
-namespace Oveleon\ProductInstaller\Import;
+namespace Oveleon\ProductInstaller\Download;
 
 use Contao\File;
 
