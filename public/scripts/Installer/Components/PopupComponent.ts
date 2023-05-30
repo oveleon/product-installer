@@ -57,8 +57,6 @@ export default class PopupComponent extends ContainerComponent
     {
         // Create content
         this.setContent()
-
-
     }
 
     /**

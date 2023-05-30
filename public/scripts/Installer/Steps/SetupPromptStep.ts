@@ -19,12 +19,7 @@ export default class SetupPromptStep extends StepComponent
     {
         return `
             <h2>${i18n('setup.prompt.headline')}</h2>
-            <div class="structure">
-            
-            </div>
-            <div class="prompt">
-                
-            </div>
+            <div class="prompts"></div>
         `
     }
 
@@ -52,13 +47,8 @@ export default class SetupPromptStep extends StepComponent
             if(response.error)
             {
                 super.error(response)
-
                 return
             }
-
-            this.element('.prompt').innerHTML = response.name
-
-            // ToDo: Show prompts, get user inputs and send prompt response to continue setup
 
             switch(response.type)
             {
@@ -67,13 +57,15 @@ export default class SetupPromptStep extends StepComponent
                     const confirm: ConfirmPrompt = new ConfirmPrompt(response.data);
 
                     // Append prompt
-                    confirm.appendTo(this.element('.prompt'))
+                    confirm.appendTo(this.element('.prompts'))
 
                     // Set resolve method
-                    confirm.onResolve((data) => this.run({
+                    confirm.onResolve((value) => this.run({
                         promptResponse: {
                             ...response,
-                            ...data
+                            ...{
+                                answer: value
+                            }
                         }
                     }))
 
@@ -81,15 +73,6 @@ export default class SetupPromptStep extends StepComponent
             }
 
             console.log(response);
-
-            /*setTimeout(() => {
-                this.run({
-                    promptResponse: {
-                        ...response,
-                        ...{userInput: 'abc'}
-                    }
-                })
-            }, 6000)*/
 
         }).catch((e: Error) => super.error(e))
     }

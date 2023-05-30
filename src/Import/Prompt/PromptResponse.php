@@ -26,6 +26,4 @@ class PromptResponse
 
         return $this->response[$key] ?? $default;
     }
-
-
 }

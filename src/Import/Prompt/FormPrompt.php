@@ -11,6 +11,13 @@ class FormPrompt extends AbstractPrompt
         parent::__construct($name, ImportPromptType::FORM);
     }
 
+    public function field(string $name, string $type, array|string $values): self
+    {
+
+
+        return $this;
+    }
+
     protected function setResponse(): array
     {
         return [

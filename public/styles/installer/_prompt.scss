@@ -1,0 +1,19 @@
+#installer .prompt{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background: #fff;
+  padding: 25px;
+}
+
+@media (min-width: 600px) {
+  #installer .prompt{
+    padding: 45px;
+  }
+}

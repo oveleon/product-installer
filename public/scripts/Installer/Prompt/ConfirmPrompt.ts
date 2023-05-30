@@ -16,28 +16,27 @@ export interface ConfirmPromptConfig {
 export default class ConfirmPrompt extends Prompt
 {
     constructor(
-        protected config: ConfirmPromptConfig
+        public config: ConfirmPromptConfig
     ){
         super('confirm_prompt');
+
+        // Set content
+        this.setContent()
     }
 
-    getTemplate(): string {
-
-        let buttons = '';
+    setContent(): void
+    {
+        this.content(`
+            <h4 class="question">
+                ${this.config.question}
+            </h4>
+            <div class="actions"></div>
+        `)
 
         for(const answer of this.config.answers)
         {
-
+            this.element('.actions').appendChild(this.createAnswer(answer))
         }
-
-        return `
-            <div class="question">
-                ${this.config.question}
-            </div>
-            <div class="actions">
-                
-            </div>
-        `;
     }
 
     createAnswer(answer): HTMLButtonElement
@@ -48,6 +47,16 @@ export default class ConfirmPrompt extends Prompt
 
         button.innerHTML = label
         button.value = value
+
+        // Resolve
+        if(parseInt(value))
+        {
+            button.classList.add('primary')
+        }
+
+        button.addEventListener('click', () => {
+            this.resolve(value)
+        })
 
         return button
     }

@@ -65,11 +65,21 @@ class ContentPackageSetup
             // We have received a response on whether to continue the setup or start from scratch
             if($blnAnswered ?? false)
             {
+                // Get answer
+                $answer = $promptResponse->get('answer');
 
+                // Restart
+                if((int) $answer === 0)
+                {
+                    // Delete setup config
+                    $this->setupLock->removeScope($task['hash']);
+                    $this->setupLock->save();
+                }
             }
             // We have noticed that there is still an ongoing setup in progress
-            elseif($this->setupLock->getScope(TableImport::class))
+            elseif($this->setupLock->getScope($task['hash']))
             {
+                // Return a confirm prompt
                 return (new ConfirmPrompt('runningSetup'))
                             ->question('Die letzte Einrichtung konnte nicht abgeschlossen werden, möchten Sie dort weiter machen wo aufgehört wurde?')
                             ->answer('Einrichtung neu starten', 0)
@@ -78,8 +88,22 @@ class ContentPackageSetup
             }
         }
 
-        // Set prompt response
+        $this->tableImporter->setScope($task['hash']);
         $this->tableImporter->setPromptResponse($promptResponse);
+        $this->tableImporter->setConditions([
+            'tl_theme' => [
+                [
+                    'type'     => 'field',
+                    'field'    => 'id',
+                    'multiple' => true,
+                    'callback' => [
+                        'fn'    => 'connect',
+                        'table' => 'tl_theme',
+                        'field' => 'id'
+                    ]
+                ]
+            ]
+        ]);
 
         // Running through the tables in the correct order
         foreach ($this->getTableStructure($destination) as $tableName)

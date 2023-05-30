@@ -4,7 +4,6 @@ namespace Oveleon\ProductInstaller\Import;
 
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
-use Oveleon\ProductInstaller\SetupLock;
 
 class TableImport extends AbstractPromptImport
 {
@@ -19,31 +18,9 @@ class TableImport extends AbstractPromptImport
     private ?int $parentTable = null;
 
     /**
-     * Defines the curren prompt.
-     */
-    private ?AbstractPrompt $prompt = null;
-
-    /**
      * Defines the content of the currently handled table.
      */
     private ?array $content = null;
-
-    /**
-     * Initialize instance and set setup lock state.
-     */
-    public function __construct(
-        protected readonly SetupLock $setupLock
-    ){
-        $setupLock->setScope(TableImport::class);
-    }
-
-    /**
-     * Sets the current prompt.
-     */
-    public function setPrompt(AbstractPrompt $prompt): void
-    {
-        $this->prompt = $prompt;
-    }
 
     /**
      * Starts importing the tables and returns prompts.
@@ -91,8 +68,20 @@ class TableImport extends AbstractPromptImport
 
     private function scanPrompts(): void
     {
-        // Fixme: Simulate prompt found
-        if(true)
+        $hasPrompts = true;
+
+        if($conditions = $this->getConditions($this->table))
+        {
+            foreach ($conditions as $condition)
+            {
+                if(\array_key_exists('field', $condition))
+                {
+
+                }
+            }
+        }
+
+        if($hasPrompts)
         {
             $this->setupLock->set($this->table, ImportStateType::PROMPT->value);
 

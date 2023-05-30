@@ -901,6 +901,24 @@
   margin-top: 20px;
 }
 
+#installer .prompt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background: #fff;
+  padding: 25px;
+}
+
+@media (min-width: 600px) {
+  #installer .prompt {
+    padding: 45px;
+  }
+}
 [hidden] {
   display: none !important;
 }
@@ -944,6 +962,7 @@
 #installer h4 {
   color: #566974;
   margin: 8px 0 14px;
+  line-height: 1.3;
 }
 #installer p {
   font-size: 0.9rem;

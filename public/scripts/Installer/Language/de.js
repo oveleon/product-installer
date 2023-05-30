@@ -79,7 +79,7 @@ module.exports = {
     "setup.prompt.headline":                    "Produkteinrichtung",
     "setup.available_imports.headline":         "Verfügbare Datenpakete in diesem Produkt",
     "setup.loading":                            "Produkteinrichtung wird vorbereitet",
-    "setup.loading.step":                       "Produkteinrichtung wird fortgesetzt...",
+    "setup.loading.step":                       "Produkteinrichtung wird durchgeführt",
 
     // License step
     "license.headline":                     "Lizenzüberprüfung",
