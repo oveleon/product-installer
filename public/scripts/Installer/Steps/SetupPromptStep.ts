@@ -2,8 +2,9 @@ import StepComponent from "../Components/StepComponent";
 import {i18n} from "../Language"
 import {call} from "../../Utils/network"
 import State from "../State";
-import {PromptType} from "../Prompt/Prompt";
+import Prompt, {PromptType} from "../Prompt/Prompt";
 import ConfirmPrompt from "../Prompt/ConfirmPrompt";
+import FormPrompt from "../Prompt/FormPrompt";
 
 /**
  * Import content package step.
@@ -19,7 +20,7 @@ export default class SetupPromptStep extends StepComponent
     {
         return `
             <h2>${i18n('setup.prompt.headline')}</h2>
-            <div class="prompts"></div>
+            <div class="prompts inherit"></div>
         `
     }
 
@@ -50,27 +51,32 @@ export default class SetupPromptStep extends StepComponent
                 return
             }
 
+            let prompt: Prompt
+
             switch(response.type)
             {
                 case PromptType.CONFIRM:
-                    // Create confirm prompt
-                    const confirm: ConfirmPrompt = new ConfirmPrompt(response.data);
+                    prompt = new ConfirmPrompt(response.data)
+                    break
 
-                    // Append prompt
-                    confirm.appendTo(this.element('.prompts'))
-
-                    // Set resolve method
-                    confirm.onResolve((value) => this.run({
-                        promptResponse: {
-                            ...response,
-                            ...{
-                                answer: value
-                            }
-                        }
-                    }))
-
+                case PromptType.FORM:
+                    prompt = new FormPrompt(response.data)
                     break;
+
             }
+
+            // Append prompt
+            prompt.appendTo(this.element('.prompts'))
+
+            // Set resolve method
+            prompt.onResolve((value) => this.run({
+                promptResponse: {
+                    ...response,
+                    ...{
+                        result: value
+                    }
+                }
+            }))
 
             console.log(response);
 

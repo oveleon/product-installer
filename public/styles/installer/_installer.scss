@@ -140,7 +140,10 @@ $background-color: #688191;
     }
 
     &.checkbox{
-      height: 19px;
+
+      &:not(.multiple) {
+        height: 19px;
+      }
 
       input{
         position: absolute;
@@ -211,6 +214,18 @@ $background-color: #688191;
     }
   }
 
+  fieldset {
+    margin-top: 0;
+
+    legend {
+      margin-bottom: 8px;
+    }
+
+    .tl_checkbox + label{
+      width: 100%;
+      margin: 3px 0;
+    }
+  }
 
   #steps{
     width: 100%;

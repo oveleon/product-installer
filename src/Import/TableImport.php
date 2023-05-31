@@ -2,6 +2,10 @@
 
 namespace Oveleon\ProductInstaller\Import;
 
+use Contao\Controller;
+use Contao\DataContainer;
+use Contao\DC_Table;
+use Contao\Model;
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
 
@@ -10,17 +14,12 @@ class TableImport extends AbstractPromptImport
     /**
      * Defines the table of the currently handled table.
      */
-    private ?string $table = null;
-
-    /**
-     * Defines the parent table of the currently handled table.
-     */
-    private ?int $parentTable = null;
+    protected ?string $table = null;
 
     /**
      * Defines the content of the currently handled table.
      */
-    private ?array $content = null;
+    protected ?array $content = null;
 
     /**
      * Starts importing the tables and returns prompts.
@@ -32,45 +31,40 @@ class TableImport extends AbstractPromptImport
         $this->content = $tableContent;
 
         // Get current import state
-        $state = $this->getState($tableName);
+        $state = $this->getTableState($tableName);
 
         switch($state)
         {
-            // Check for prompts
             case ImportStateType::INIT->value:
 
-                $this->scanPrompts();
-                break;
+                // Empty state for sending prompts when a table is initiated for the first time
 
-            // Ready to import
+            case ImportStateType::PROMPT->value:
+
+                // ToDo: Merge prompt response with config
+                if($response = $this->getPromptResponse() && false)
+                {
+                    // Fixme: Something went wrong when merging data -> Prompt again -> break -> otherwise goto import
+                    break;
+                }
+
             case ImportStateType::IMPORT->value:
 
-                $this->setupLock->set($this->table, ImportStateType::FINISH->value);
-                $this->setupLock->save();
+                $this->start();
 
-                break;
-
-            default:
-                return null;
+                // ToDo: Set table state to finished when import was successfully
+                //$this->setupLock->set($this->table, ImportStateType::FINISH->value);
+                //$this->setupLock->save();
         }
 
-        // Get DCA from table to detect ptable e.g.
-        // Load data container for the current table
-        //Controller::loadDataContainer($currentTable);
-
-        if($this->prompt)
-        {
-            return $this->prompt;
-        }
-
-        return null;
+        return $this->prompt ?? null;
     }
 
-    private function scanPrompts(): void
+    protected function scanPrompts(): void
     {
-        $hasPrompts = true;
+        $hasPrompts = false;
 
-        if($conditions = $this->getConditions($this->table))
+        /*if($conditions = $this->getConditions($this->table))
         {
             foreach ($conditions as $condition)
             {
@@ -79,7 +73,7 @@ class TableImport extends AbstractPromptImport
 
                 }
             }
-        }
+        }*/
 
         if($hasPrompts)
         {
@@ -97,9 +91,16 @@ class TableImport extends AbstractPromptImport
         $this->setupLock->save();
     }
 
-    public function getState($tableName): string
+    /**
+     * Returns the current state of the table.
+     */
+    public function getTableState($tableName): string
     {
-        $tableMode = $this->setupLock->get($tableName);
+        // Return init state if the table was not found
+        if(!$tableMode = $this->setupLock->get($tableName))
+        {
+            return ImportStateType::INIT->value;
+        }
 
         // Skip the table if it set to finish
         if($tableMode === ImportStateType::FINISH->value)
@@ -107,23 +108,96 @@ class TableImport extends AbstractPromptImport
             return ImportStateType::SKIP->value;
         }
 
-        // Check table modes
-        if($tableMode)
+        // Return state
+        return $tableMode;
+    }
+
+    /**
+     * Returns information about the specified table or null if no information can be determined.
+     */
+    public function getTableInformation($tableName): ?array
+    {
+        // Load data container for the current table
+        Controller::loadDataContainer($tableName);
+
+        if(!isset($GLOBALS['TL_DCA'][$tableName]['config']))
         {
-            switch ($tableMode)
-            {
-                case ImportStateType::PROMPT->value:
-
-                    if($this->getPromptResponse()->get('name') === $tableName)
-                    {
-                        return ImportStateType::IMPORT->value;
-                    }
-
-                    break;
-            }
+            return null;
         }
 
-        // Return init state
-        return ImportStateType::INIT->value;
+        return [
+            ...array_intersect_key($GLOBALS['TL_DCA'][$tableName]['config'], [
+                'dataContainer' => '',
+                'ptable'        => '',
+                'dynamicPtable' => '',
+                'ctable'        => ''
+            ]),
+            ...[
+                'sortingMode'   => $GLOBALS['TL_DCA'][$tableName]['list']['sorting']['mode'] ?? ''
+            ]
+        ];
+    }
+
+    protected function start(): void
+    {
+        $info = $this->getTableInformation($this->table);
+
+        // Check if it is a table
+        if(DC_Table::class === $info['dataContainer'])
+        {
+            // Determine the type of the import
+            if(DataContainer::MODE_TREE === $info['sortingMode'])
+            {
+                // $this->importTreeTable();
+            }
+            elseif(\array_key_exists('ptable', $info) && $parentTable = $info['ptable'])
+            {
+                // $this->importNestedTable($parentTable);
+            }
+            else
+            {
+                $this->importTable();
+            }
+        }
+    }
+
+    /**
+     * Import table.
+     */
+    protected function importTable(): void
+    {
+        // Get model class by table
+        $modelClass = Model::getClassFromTable($this->table);
+
+        foreach ($this->content as $row)
+        {
+            // Temporarily store the ID of the row and delete it before assigning it to the new model
+            $id = $row['id'];
+            unset($row['id']);
+
+            $model = new $modelClass();
+            //$model->setRow($row);
+
+            /*if($callbacks = $this->getCallbacks(self::CALLBACK_EACH_MODULE, $filename))
+            {
+                foreach ($callbacks as $callback)
+                {
+                    call_user_func($callback, $model);
+                }
+            }*/
+
+            // Save model and set new id to collection
+            //$idCollection[ $id ] = ($model->save())->id;
+        }
+
+        //$this->connections[ $filename ] = $idCollection;
+
+        /*if($callbacks = $this->getCallbacks(self::CALLBACK_ON_FINISHED, $filename))
+        {
+            foreach ($callbacks as $callback)
+            {
+                call_user_func($callback, $idCollection);
+            }
+        }*/
     }
 }

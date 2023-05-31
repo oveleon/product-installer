@@ -27,9 +27,9 @@ export default class ConfirmPrompt extends Prompt
     setContent(): void
     {
         this.content(`
-            <h4 class="question">
+            <p class="question">
                 ${this.config.question}
-            </h4>
+            </p>
             <div class="actions"></div>
         `)
 

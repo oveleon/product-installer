@@ -2,18 +2,23 @@
 
 namespace Oveleon\ProductInstaller\Import\Prompt;
 
-use Oveleon\ProductInstaller\Import\ImportPromptType;
-
 class FormPrompt extends AbstractPrompt
 {
+    protected array $fields = [];
+
     public function __construct(string $name)
     {
         parent::__construct($name, ImportPromptType::FORM);
     }
 
-    public function field(string $name, string $type, array|string $values): self
+    public function field(string $name, array|string $values, FormPromptType|string $type, array $options = []): self
     {
-
+        $this->fields[] = [
+            'name'    => $name,
+            'value'   => $values,
+            'type'    => $type,
+            'options' => $options
+        ];
 
         return $this;
     }
@@ -21,9 +26,7 @@ class FormPrompt extends AbstractPrompt
     protected function setResponse(): array
     {
         return [
-            'fields'  => [
-                'feld1' => 'Hallo!'
-            ]
+            'fields' => $this->fields
         ];
     }
 }

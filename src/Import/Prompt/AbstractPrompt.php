@@ -2,7 +2,6 @@
 
 namespace Oveleon\ProductInstaller\Import\Prompt;
 
-use Oveleon\ProductInstaller\Import\ImportPromptType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 abstract class AbstractPrompt

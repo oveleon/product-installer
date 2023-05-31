@@ -8,7 +8,9 @@ use Contao\Model;
 use Contao\PageModel;
 use Contao\ZipReader;
 use Exception;
-use Oveleon\ProductInstaller\Import\ImportPromptType;
+use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
+use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
+use Oveleon\ProductInstaller\Import\Prompt\ImportPromptType;
 use Oveleon\ProductInstaller\Import\Prompt\ConfirmPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\PromptResponse;
 use Oveleon\ProductInstaller\Import\TableImport;
@@ -17,7 +19,7 @@ use Oveleon\ProductInstaller\Util\ArchiveUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Unpack, read and import archives.
+ * Content package setup initiator.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
@@ -57,19 +59,16 @@ class ContentPackageSetup
         // Before we start importing tables, we check if there is already a setup in progress
         if(
             $promptResponse->has('checkRunningSetup') ||
-            $blnAnswered = (
+            ($blnAnswered = (
                 $promptResponse->get('name') === 'runningSetup' &&
                 $promptResponse->get('type') === ImportPromptType::CONFIRM->value
-            )
+            ))
         ){
             // We have received a response on whether to continue the setup or start from scratch
             if($blnAnswered ?? false)
             {
-                // Get answer
-                $answer = $promptResponse->get('answer');
-
-                // Restart
-                if((int) $answer === 0)
+                // Restart: result = 0
+                if((int) $promptResponse->get('result') === 0)
                 {
                     // Delete setup config
                     $this->setupLock->removeScope($task['hash']);
@@ -81,33 +80,79 @@ class ContentPackageSetup
             {
                 // Return a confirm prompt
                 return (new ConfirmPrompt('runningSetup'))
-                            ->question('Die letzte Einrichtung konnte nicht abgeschlossen werden, möchten Sie dort weiter machen wo aufgehört wurde?')
+                            ->question('Wir haben festgestellt, dass die vorherige Einrichtung nicht vollständig abgeschlossen wurde. Möchten Sie mit der Einrichtung fortfahren oder erneut starten?')
                             ->answer('Einrichtung neu starten', 0)
                             ->answer('Einrichtung fortsetzen',1)
                             ->getResponse();
             }
         }
 
+        // Set scope
+        $this->setupLock->setScope($task['hash']);
         $this->tableImporter->setScope($task['hash']);
+
+        // Get table structure
+        $tableStructure = $this->getTableStructure($destination);
+
+        // Initial 'expert' prompt (choose tables to import)
+        if(
+            ($blnConfig = (
+                $promptResponse->get('name') === 'setupConfig' &&
+                $promptResponse->get('type') === ImportPromptType::FORM->value
+            )) ||
+            !$this->setupLock->get('config')
+        )
+        {
+            if($blnConfig ?? false)
+            {
+                $fields = $promptResponse->get('result');
+
+                $this->setupLock->set('config', $fields);
+                $this->setupLock->save();
+            }
+            elseif(!$this->setupLock->get('config'))
+            {
+                return (new FormPrompt('setupConfig'))
+                    ->field('tables', array_combine($tableStructure, $tableStructure), FormPromptType::CHECKBOX, ['checked' => true, 'checkAll' => true])
+                    ->getResponse();
+            }
+        }
+
         $this->tableImporter->setPromptResponse($promptResponse);
         $this->tableImporter->setConditions([
-            'tl_theme' => [
+            'tl_page' => [                       // ToDo: Choose root page condition
                 [
-                    'type'     => 'field',
-                    'field'    => 'id',
-                    'multiple' => true,
-                    'callback' => [
-                        'fn'    => 'connect',
-                        'table' => 'tl_theme',
-                        'field' => 'id'
+                    'type'      => 'field',      // Typ der Condition
+                    'condition' => 'type=root',  // Condition (field)
+                    'callback'  => [             // Callback-Informationen
+                        'fn'    => 'connect',    // Callback-Methode
+                        'table' => 'tl_theme',   // Callback-Param: Table
+                        'field' => 'id',         // Callback-Param: Field
                     ]
                 ]
             ]
         ]);
 
-        // Running through the tables in the correct order
-        foreach ($this->getTableStructure($destination) as $tableName)
+        // Get selected tables to import
+        $skipTables = [];
+
+        if($config = $this->setupLock->get('config'))
         {
+            if($tables = ($config['tables'] ?? false))
+            {
+                $skipTables = array_diff($tableStructure, $tables);
+            }
+        }
+
+        // Running through the tables in the correct order
+        foreach ($tableStructure as $tableName)
+        {
+            // Skip table if needed
+            if(\in_array($tableName, $skipTables))
+            {
+                continue;
+            }
+
             // Get table content or skip if empty
             if(!$tableContent = $this->archiveUtil->getFileContent($destination, $tableName . self::TABLE_FILE_EXTENSION, true))
             {
@@ -173,7 +218,7 @@ class ContentPackageSetup
 
         if($diffTables = array_diff($tableOrder, $archiveTables))
         {
-           // Clean up order structure (Consider only tables that are available in the archive)
+            // Clean up order structure (Consider only tables that are available in the archive)
             foreach ($diffTables as $removeTable)
             {
                 if($index = array_search($removeTable, $tableOrder))

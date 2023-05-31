@@ -115,4 +115,8 @@ module.exports = {
     // Register product process
     "process.register.title":               "Produktregistrierung",
     "process.register.description":         "Die installierten Produkte werden registriert.",
+
+    // Form
+    "form.field.tables.label":               "Zu importierenden Tabellen",
+    "form.field.tables.desc":                "Bitte wählen Sie hier die zu importierenden Tabellen.",
 }

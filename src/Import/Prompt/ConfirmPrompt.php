@@ -2,8 +2,6 @@
 
 namespace Oveleon\ProductInstaller\Import\Prompt;
 
-use Oveleon\ProductInstaller\Import\ImportPromptType;
-
 class ConfirmPrompt extends AbstractPrompt
 {
     private string $question;

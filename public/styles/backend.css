@@ -902,23 +902,17 @@
 }
 
 #installer .prompt {
-  position: absolute;
+  /*position: absolute;
   top: 0;
   left: 0;
   height: 100%;
-  width: 100%;
+  width: 100%;*/
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   background: #fff;
-  padding: 25px;
 }
 
-@media (min-width: 600px) {
-  #installer .prompt {
-    padding: 45px;
-  }
-}
 [hidden] {
   display: none !important;
 }
@@ -1013,7 +1007,7 @@
 #installer .widget.text input#license {
   letter-spacing: 0.8px;
 }
-#installer .widget.checkbox {
+#installer .widget.checkbox:not(.multiple) {
   height: 19px;
 }
 #installer .widget.checkbox input {
@@ -1063,6 +1057,16 @@
 }
 #installer .widget.error input {
   border-color: #b54c4c;
+}
+#installer fieldset {
+  margin-top: 0;
+}
+#installer fieldset legend {
+  margin-bottom: 8px;
+}
+#installer fieldset .tl_checkbox + label {
+  width: 100%;
+  margin: 3px 0;
 }
 #installer #steps {
   width: 100%;
