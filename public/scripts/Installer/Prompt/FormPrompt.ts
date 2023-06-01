@@ -33,7 +33,7 @@ export default class FormPrompt extends Prompt
     setContent(): void
     {
         this.content(`
-            <div class="fields"></div>
+            <form class="fields"></form>
             <div class="actions">
                 <button type="button">${i18n('actions.next')}</button>            
             </div>
@@ -57,6 +57,9 @@ export default class FormPrompt extends Prompt
                 case FormFieldType.CHECKBOX:
                     field = new CheckboxField(fieldOptions)
                     break
+
+                default:
+                    continue
             }
 
             this.fields.push(field);

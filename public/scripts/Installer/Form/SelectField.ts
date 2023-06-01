@@ -50,6 +50,11 @@ export default class SelectField extends FormField
 
         for (const key in this.options.value)
         {
+            if(!this.options.value.hasOwnProperty(key))
+            {
+                continue
+            }
+
             const opt = document.createElement('option')
 
             opt.value = key
