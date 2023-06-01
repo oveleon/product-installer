@@ -79,14 +79,4 @@ abstract class AbstractPromptImport
 
         return null;
     }
-
-    /**
-     * Condition methods:
-     *
-     * - connect: The Connect method allows to create assignments between newly set values. For example, a new parent ID can be set via this method.
-     */
-    public function connect($table, $field): void
-    {
-        
-    }
 }

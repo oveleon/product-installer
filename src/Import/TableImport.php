@@ -6,8 +6,10 @@ use Contao\Controller;
 use Contao\DataContainer;
 use Contao\DC_Table;
 use Contao\Model;
+use Contao\PageModel;
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
+use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 
 class TableImport extends AbstractPromptImport
 {
@@ -30,10 +32,7 @@ class TableImport extends AbstractPromptImport
         $this->table = $tableName;
         $this->content = $tableContent;
 
-        // Get current import state
-        $state = $this->getTableState($tableName);
-
-        switch($state)
+        switch($this->getState())
         {
             case ImportStateType::INIT->value:
 
@@ -41,11 +40,12 @@ class TableImport extends AbstractPromptImport
 
             case ImportStateType::PROMPT->value:
 
-                // ToDo: Merge prompt response with config
-                if($response = $this->getPromptResponse() && false)
-                {
-                    // Fixme: Something went wrong when merging data -> Prompt again -> break -> otherwise goto import
-                    break;
+                // Check if the PromptResponse belongs to an import and save it for further processing
+                if(
+                    ($response = $this->getPromptResponse()) &&
+                    $response->get('name') === 'importPrompt'
+                ){
+                    $this->addPromptValue($response->get('result'));
                 }
 
             case ImportStateType::IMPORT->value:
@@ -60,44 +60,123 @@ class TableImport extends AbstractPromptImport
         return $this->prompt ?? null;
     }
 
-    protected function scanPrompts(): void
+    /**
+     * Starts the import.
+     */
+    protected function start(): void
     {
-        $hasPrompts = false;
+        $info = $this->getTableInformation();
 
-        /*if($conditions = $this->getConditions($this->table))
+        // Consider only data container of type DC_Table
+        if(DC_Table::class === $info['dataContainer'])
         {
-            foreach ($conditions as $condition)
+            // Determine the type of the import
+            if(DataContainer::MODE_TREE === $info['sortingMode'])
             {
-                if(\array_key_exists('field', $condition))
-                {
-
-                }
+                //$this->importTreeTable();
+                $this->importTable();
             }
-        }*/
+            else
+            {
+                $this->importTable();
+            }
+        }
+    }
 
-        if($hasPrompts)
+    /**
+     * Adds a connection between two records and make them available for further processing.
+     */
+    protected function addConnection(string|int $a, string|int $b): void
+    {
+        if(!$connections = $this->setupLock->get('connections'))
         {
-            $this->setupLock->set($this->table, ImportStateType::PROMPT->value);
-
-            $this->setPrompt(new FormPrompt($this->table));
+            $connections = [];
         }
 
-        // No prompt found; continue with import
-        else
+        if(\array_key_exists($this->table, $connections))
         {
-            $this->setupLock->set($this->table, ImportStateType::IMPORT->value);
+            $connections[$this->table] = array_merge(
+                $connections[$this->table],
+                [$a => $b]
+            );
+        }else{
+            $connections[$this->table] = [$a => $b];
         }
 
+        $this->setupLock->set('connections', $connections);
+        $this->setupLock->save();
+    }
+
+    /**
+     * Returns the value of a mapped field.
+     */
+    protected function getConnection(string|int $a): null|string|int
+    {
+        $connectedValue = null;
+
+        if($connections = $this->setupLock->get('connections'))
+        {
+            $connectedValue = $connections[ $this->table ][ $a ] ?? null;
+        }
+
+        return $connectedValue;
+    }
+
+    /**
+     * Adds results that was retrieved by a prompt based on current table.
+     */
+    protected function addPromptValue(array $result): void
+    {
+        if(!$prompts = $this->setupLock->get('prompts'))
+        {
+            $prompts = [];
+        }
+
+        if(\array_key_exists($this->table, $prompts))
+        {
+            $prompts[$this->table] = array_merge(
+                $prompts[$this->table],
+                $result
+            );
+        }else{
+            $prompts[$this->table] = $result;
+        }
+
+        $this->setupLock->set('prompts', $prompts);
+        $this->setupLock->save();
+    }
+
+    /**
+     * Returns the value of a field that was retrieved by a prompt based on current table.
+     */
+    protected function getPromptValue(string $fieldName): ?string
+    {
+        $mappedValue = null;
+
+        if($prompts = $this->setupLock->get('prompts'))
+        {
+            $mappedValue = $prompts[ $this->table ][ $fieldName ] ?? null;
+        }
+
+        return $mappedValue;
+    }
+
+    /**
+     * Sets the state of the current table.
+     */
+    protected function setState(ImportStateType $state): void
+    {
+        $this->setupLock->set($this->table, $state->value);
         $this->setupLock->save();
     }
 
     /**
      * Returns the current state of the table.
      */
-    public function getTableState($tableName): string
+    protected function getState(): string
     {
         // Return init state if the table was not found
-        if(!$tableMode = $this->setupLock->get($tableName))
+        if(!$tableMode = $this->setupLock->get($this->table))
         {
             return ImportStateType::INIT->value;
         }
@@ -115,50 +194,120 @@ class TableImport extends AbstractPromptImport
     /**
      * Returns information about the specified table or null if no information can be determined.
      */
-    public function getTableInformation($tableName): ?array
+    protected function getTableInformation(): ?array
     {
         // Load data container for the current table
-        Controller::loadDataContainer($tableName);
+        Controller::loadDataContainer($this->table);
 
-        if(!isset($GLOBALS['TL_DCA'][$tableName]['config']))
+        if(!isset($GLOBALS['TL_DCA'][$this->table]['config']))
         {
             return null;
         }
 
         return [
-            ...array_intersect_key($GLOBALS['TL_DCA'][$tableName]['config'], [
+            ...array_intersect_key($GLOBALS['TL_DCA'][$this->table]['config'], [
                 'dataContainer' => '',
                 'ptable'        => '',
                 'dynamicPtable' => '',
                 'ctable'        => ''
             ]),
             ...[
-                'sortingMode'   => $GLOBALS['TL_DCA'][$tableName]['list']['sorting']['mode'] ?? ''
+                'sortingMode'   => $GLOBALS['TL_DCA'][$this->table]['list']['sorting']['mode'] ?? ''
             ]
         ];
     }
 
-    protected function start(): void
+    /**
+     * Checks the table to be imported considering various rules and returns the import as a valid record.
+     */
+    protected function validate(): ?array
     {
-        $info = $this->getTableInformation($this->table);
+        // Form field collection for the prompt
+        $fields = [];
 
-        // Check if it is a table
-        if(DC_Table::class === $info['dataContainer'])
+        // Get content
+        $content = $this->content;
+
+        // Get table information
+        $info = $this->getTableInformation();
+
+        // Check if the current table is a child table
+        $isChildTable = \array_key_exists('ptable', $info);
+
+        // Get model class by table
+        if(!$modelClass = Model::getClassFromTable($this->table))
         {
-            // Determine the type of the import
-            if(DataContainer::MODE_TREE === $info['sortingMode'])
+            // ToDo: CancelPrompt
+        }
+
+        foreach ($content as &$row)
+        {
+            switch ($this->table)
             {
-                // $this->importTreeTable();
-            }
-            elseif(\array_key_exists('ptable', $info) && $parentTable = $info['ptable'])
-            {
-                // $this->importNestedTable($parentTable);
-            }
-            else
-            {
-                $this->importTable();
+                case 'tl_page':
+
+                    // Condition: Check root page
+                    if($row['type'] === 'root')
+                    {
+                        if(null === ($mappedValue = $this->getPromptValue('rootPage')))
+                        {
+                            $values = [
+                                '0' => 'Neue Seite anlegen (' . $row['title'] . ')'
+                            ];
+
+                            if($pages = PageModel::findAll())
+                            {
+                                $values = array_combine(
+                                    $pages->fetchEach('id'),
+                                    $pages->fetchEach('title')
+                                );
+                            }
+
+                            $fields['rootPage'] = [
+                                $values,
+                                FormPromptType::SELECT
+                            ];
+                        }
+                        else
+                        {
+                            // TODO: !
+
+                            // If another root page was selected, the give root page won't be imported
+                            if($mappedValue !== "0")
+                            {
+                                $row['_skip'] = true;
+                            }
+
+                            // Add id connection
+                            $this->addConnection($row['id'], $mappedValue);
+                        }
+                    }
             }
         }
+
+        if(!empty($fields))
+        {
+            // Create prompt ad create fields
+            $prompt = new FormPrompt('importPrompt');
+
+            foreach ($fields as $name => [$options, $type])
+            {
+                $prompt->field($name, $options, $type);
+            }
+
+            // Set table state
+            $this->setState(ImportStateType::PROMPT);
+
+            // Set prompt
+            $this->setPrompt($prompt);
+
+            return null;
+        }
+
+        // Set table state
+        $this->setState(ImportStateType::IMPORT);
+
+        return $content;
     }
 
     /**
@@ -166,17 +315,31 @@ class TableImport extends AbstractPromptImport
      */
     protected function importTable(): void
     {
-        // Get model class by table
+        if(!$validatedRows = $this->validate())
+        {
+            return;
+        }
+
         $modelClass = Model::getClassFromTable($this->table);
 
-        foreach ($this->content as $row)
+        foreach ($validatedRows as $row)
         {
+            if(\array_key_exists('_skip', $row))
+            {
+                continue;
+            }
+
             // Temporarily store the ID of the row and delete it before assigning it to the new model
             $id = $row['id'];
             unset($row['id']);
 
             $model = new $modelClass();
-            //$model->setRow($row);
+            $model->setRow($row);
+
+            /*if($isChildTable)
+            {
+                $model->pid = $parentIds[$row[self::FOREIGN_KEY]];
+            }*/
 
             /*if($callbacks = $this->getCallbacks(self::CALLBACK_EACH_MODULE, $filename))
             {
