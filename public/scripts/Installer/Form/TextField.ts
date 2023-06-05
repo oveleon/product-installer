@@ -24,7 +24,7 @@ export default class TextField extends FormField
         super(options)
 
         // Add class
-        this.addClass('text', 'w50', 'widget')
+        this.addClass('text', 'widget')
 
         // Create content
         this.setContent()

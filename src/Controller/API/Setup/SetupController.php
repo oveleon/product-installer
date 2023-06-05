@@ -41,6 +41,9 @@ class SetupController
 
         foreach ($parameter['tasks'] ?? [] as $task)
         {
+            // Extend task options with expert-mode information
+            $task['expert'] = $parameter['expert'];
+
             // Get current task
             if($task['hash'] === $taskHash)
             {

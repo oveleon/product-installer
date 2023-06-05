@@ -51,6 +51,13 @@ export default class SetupPromptStep extends StepComponent
                 return
             }
 
+            if(response.complete)
+            {
+                alert('FERTIG 🎉')
+
+                return
+            }
+
             let prompt: Prompt
 
             switch(response.type)

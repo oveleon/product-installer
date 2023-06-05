@@ -895,7 +895,7 @@
 #installer .task-item .actions {
   margin: 0;
   padding: 0;
-  text-align: right;
+  text-align: left;
 }
 #installer .task-item + .task-item {
   margin-top: 20px;
@@ -971,9 +971,12 @@
 #installer .widget + .widget {
   margin: 15px 0 0 0;
 }
+#installer .widget h3 {
+  margin-bottom: 2px;
+}
 #installer .widget p {
   font-size: 0.8rem;
-  margin: 5px 0 0;
+  margin: 2px 0 0;
 }
 #installer .widget label {
   display: inline-block;
@@ -1200,10 +1203,10 @@ div.file-upload.dz-drag-hover {
   #installer .notifications {
     padding: 45px;
   }
-  #installer .actions button {
+  #installer .actions > button {
     width: auto;
   }
-  #installer .actions button + button {
+  #installer .actions > button + button {
     margin-top: 0;
   }
 }

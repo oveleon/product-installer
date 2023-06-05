@@ -2,9 +2,10 @@ import StepComponent from "../Components/StepComponent";
 import {i18n} from "../Language"
 import {call} from "../../Utils/network"
 import State from "../State";
-import {TaskConfig, TaskType} from "../Product/Product";
-import ProductComponent from "../Components/ProductComponent";
+import {ProductConfig, TaskConfig, TaskType} from "../Product/Product";
+import ProductComponent, {ProductOptions} from "../Components/ProductComponent";
 import SetupPromptStep from "./SetupPromptStep";
+import DropMenuComponent from "../Components/DropMenuComponent";
 
 /**
  * Setup products.
@@ -82,15 +83,16 @@ export default class SetupStep extends StepComponent
             State.set('setup', response)
 
             // Show product
-            new ProductComponent(response.product).appendTo(this.element('.product-overview'))
+            const product: ProductComponent = new ProductComponent(response.product)
+                  product.appendTo(this.element('.product-overview'))
 
             // Create tasks
-            this.createTasks(response.tasks)
+            this.createTasks(response.tasks, product)
 
         }).catch((e: Error) => super.error(e))
     }
 
-    protected createTasks(tasks: TaskConfig[]): void
+    protected createTasks(tasks: TaskConfig[], product: ProductComponent): void
     {
         const taskContainer: HTMLDivElement = <HTMLDivElement> this.element('.tasks-overview')
         const setupHeadline: HTMLHeadingElement = <HTMLHeadingElement> this.element('.setup-headline')
@@ -113,28 +115,39 @@ export default class SetupStep extends StepComponent
                       </div>
                   `
 
-            // Create setup button
-            const runButton: HTMLButtonElement = document.createElement('button')
-                  runButton.classList.add('primary')
-                  runButton.innerText = i18n('task.label.setup')
+            // Create menu
+            new DropMenuComponent([
+                {
+                    label: 'Einrichtung starten',
+                    highlight: !product.get('setup'),
+                    value: () => this.runSetup(task)
+                },
+                {
+                    label: 'Im Expertenmodus starten',
+                    highlight: !product.get('setup'),
+                    value: () => this.runSetup(task, true)
+                },
+            ]).appendTo(
+                <HTMLDivElement> taskElement.querySelector('.actions')
+            )
 
-            // Start setup
-            runButton.addEventListener('click', () => {
-                // Get current setup state
-                const setup = State.get('setup')
-
-                setup['task'] = task.hash
-
-                // Set new task hash (used to start an import process and further steps)
-                State.set('setup', setup)
-
-                this.modal.addSteps(new SetupPromptStep())
-                this.modal.next()
-            })
-
-            taskElement.querySelector('.actions').appendChild(runButton)
             taskContainer.appendChild(taskElement)
         }
+    }
+
+    private runSetup(task, expert: boolean = false)
+    {
+        // Get current setup state
+        const setup = State.get('setup')
+
+        setup['task'] = task.hash
+        setup['expert'] = expert
+
+        // Set new task hash (used to start an import process and further steps)
+        State.set('setup', setup)
+
+        this.modal.addSteps(new SetupPromptStep())
+        this.modal.next()
     }
 
     private gotToDashboard(): void

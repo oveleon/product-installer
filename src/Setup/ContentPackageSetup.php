@@ -8,6 +8,7 @@ use Contao\Model;
 use Contao\PageModel;
 use Contao\ZipReader;
 use Exception;
+use Oveleon\ProductInstaller\Import\ImportStateType;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\Prompt\ImportPromptType;
@@ -96,11 +97,12 @@ class ContentPackageSetup
 
         // Initial 'expert' prompt (choose tables to import)
         if(
-            ($blnConfig = (
+            $task['expert'] &&
+            (($blnConfig = (
                 $promptResponse->get('name') === 'setupConfig' &&
                 $promptResponse->get('type') === ImportPromptType::FORM->value
             )) ||
-            !$this->setupLock->get('config')
+            !$this->setupLock->get('config'))
         )
         {
             if($blnConfig ?? false)
@@ -144,6 +146,13 @@ class ContentPackageSetup
             }
         }
 
+        // Check wich tables already imported and add them to the skip tables array
+        if($scope = $this->setupLock->getScope($task['hash']))
+        {
+            // Get keys where the value is set to ImportStateType::FINISH
+            $skipTables = $skipTables + (array_keys($scope, ImportStateType::FINISH->value) ?? []);
+        }
+
         // Running through the tables in the correct order
         foreach ($tableStructure as $tableName)
         {
@@ -167,7 +176,13 @@ class ContentPackageSetup
             }
         }
 
-        return new JsonResponse(['message' => 'FINISH']);
+        // Remove scope to reset the setup for this task
+        $this->setupLock->removeScope($task['hash']);
+        $this->setupLock->save();
+
+        return new JsonResponse([
+            'complete' => 1
+        ]);
     }
 
     public function getTableStructure(string $archiveDestination): array

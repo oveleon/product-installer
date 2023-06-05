@@ -25,7 +25,7 @@ export default class SelectField extends FormField
         super(options)
 
         // Add class
-        this.addClass('select', 'w50', 'widget')
+        this.addClass('select', 'widget')
 
         // Create content
         this.setContent()
