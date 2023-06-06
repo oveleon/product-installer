@@ -114,8 +114,22 @@ class ContentPackageSetup
             }
             elseif(!$this->setupLock->get('config'))
             {
+                $values = [];
+
+                foreach ($tableStructure as $table)
+                {
+                    $values[] = [
+                        'value' => $table,
+                        'text'  => $table, // ToDo: Translate e.g. tl_page -> Seitenstruktur,
+                        'options' => [
+                            'checked' => true,
+                            'description' => 'Achtung!',
+                        ]
+                    ];
+                }
+
                 return (new FormPrompt('setupConfig'))
-                    ->field('tables', array_combine($tableStructure, $tableStructure), FormPromptType::CHECKBOX, ['checked' => true, 'checkAll' => true])
+                    ->field('tables', $values, FormPromptType::CHECKBOX, ['checked' => true, 'multiple' => true, 'info'  => 'blabla info'])
                     ->getResponse();
             }
         }

@@ -1,6 +1,9 @@
 #installer .popup{
   position: absolute;
   inset: 0;
+  z-index: 500;
+  font-size: 16px;
+  line-height: 1.4;
 
   > div{
     display: flex;
@@ -15,38 +18,34 @@
     animation: zoom-in .25s forwards ease-in-out;
   }
 
-  .table{
+  table{
+    border: 0 none;
+    border-spacing: 0;
 
-    table{
+    p{
       font-size: .91rem;
-      border: 0 none;
-      border-spacing: 0;
+      padding: 0;
+      margin: 0;
+    }
 
-      p{
-        font-size: .91rem;
-        padding: 0;
-        margin: 0;
+    tr{
+
+      td:last-child{
+        font-weight: 500;
       }
 
-      tr{
+      &:nth-child(2n){
 
-        td:last-child{
-          font-weight: 500;
-        }
-
-        &:nth-child(2n){
-
-          td{
-            background: rgb(0 0 0 / 2%);
-          }
+        td{
+          background: rgb(0 0 0 / 2%);
         }
       }
+    }
 
-      td{
-        min-width: 190px;
-        padding: 5px;
-        height: 40px;
-      }
+    td{
+      min-width: 190px;
+      padding: 5px;
+      height: 40px;
     }
   }
 }

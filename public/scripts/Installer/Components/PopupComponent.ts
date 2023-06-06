@@ -18,7 +18,7 @@ export interface PopupConfig {
     type: PopupType,
     title: string,
     content: string|any,
-    appendTo: HTMLElement
+    appendTo: HTMLElement|Function
     closeable?: boolean
 }
 
@@ -131,8 +131,15 @@ export default class PopupComponent extends ContainerComponent
             this.hide()
         })
 
+        let target = this.options.appendTo
+
+        if(target instanceof Function)
+        {
+            target = <HTMLElement> target.call(this)
+        }
+
         // Append popup
-        this.appendTo(this.options.appendTo)
+        this.appendTo(target)
     }
 
     private arrayToTable(data): string {

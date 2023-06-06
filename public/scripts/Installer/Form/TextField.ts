@@ -1,7 +1,7 @@
 import FormField, {FormFieldConfig} from "./FormField";
 import {i18n} from "../Language"
 
-export interface TextFieldConfig extends FormFieldConfig {
+export type TextFieldConfig = FormFieldConfig & {
     options?: {
         required: boolean
     }

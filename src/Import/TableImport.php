@@ -181,7 +181,7 @@ class TableImport extends AbstractPromptImport
     /**
      * Returns information about the specified table or null if no information can be determined.
      */
-    protected function getTableInformation(): ?\stdClass
+    public function getTableInformation(): ?\stdClass
     {
         // Load data container for the current table
         Controller::loadDataContainer($this->table);
@@ -245,9 +245,14 @@ class TableImport extends AbstractPromptImport
             // Create form prompt and fields
             $prompt = new FormPrompt($this->table);
 
-            foreach ($fields as $name => [$options, $type])
+            foreach ($fields as $name => $opt)
             {
-                $prompt->field($name, $options, $type);
+                $prompt->field(
+                    $name,
+                    ($opt[0] ?? []),
+                    ($opt[1] ?? []),
+                    ($opt[2] ?? [])
+                );
             }
 
             // Set table state

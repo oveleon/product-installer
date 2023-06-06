@@ -5,6 +5,7 @@ namespace Oveleon\ProductInstaller\Import\Prompt;
 class FormPrompt extends AbstractPrompt
 {
     protected array $fields = [];
+    protected array $options = [];
 
     public function __construct(string $name)
     {
@@ -26,7 +27,8 @@ class FormPrompt extends AbstractPrompt
     protected function setResponse(): array
     {
         return [
-            'fields' => $this->fields
+            'fields'  => $this->fields,
+            'options' => $this->options
         ];
     }
 }

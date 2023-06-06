@@ -34,21 +34,30 @@ Validator::addValidator('tl_page', static function (array &$row, AbstractPromptI
     if(null === ($rootPage = $importer->getPromptValue('rootPage')))
     {
         $values = [
-            '0' => 'Neue Seite anlegen (' . $row['title'] . ')'
+            [
+                'value' => '0',
+                'text'  => 'Neue Seite anlegen (' . $row['title'] . ')'
+            ]
         ];
 
         if($pages = PageModel::findAll())
         {
-            $values = $values + array_combine(
-                $pages->fetchEach('id'),
-                $pages->fetchEach('title')
-            );
+            foreach ($pages as $page)
+            {
+                $values[] = [
+                    'value' => $page->id,
+                    'text'  => $page->title
+                ];
+            }
         }
 
         return [
             'rootPage' => [
                 $values,
-                FormPromptType::SELECT
+                FormPromptType::SELECT,
+                [
+                    'default' => ['0']
+                ]
             ]
         ];
     }
@@ -68,15 +77,17 @@ Validator::addValidator('tl_page', static function (array &$row, AbstractPromptI
 });
 
 // Set layout
-/*Validator::addValidator('tl_page', static function (array &$row, AbstractPromptImport $importer): ?array
+Validator::addValidator('tl_page', static function (array &$row, AbstractPromptImport $importer): ?array
 {
+    // ToDo: Remember the field layout id to skip questions from same type
+
     // Skip if the page has no own layout connection
     if(!$row['includeLayout'])
     {
         return null;
     }
 
-    if($connectedId = $importer->getConnection($row['includeLayout'], 'tl_layout'))
+    if($connectedId = $importer->getConnection($row['layout'], 'tl_layout'))
     {
         $row['layout'] = $connectedId;
     }
@@ -84,20 +95,43 @@ Validator::addValidator('tl_page', static function (array &$row, AbstractPromptI
     {
         if($layouts = LayoutModel::findAll())
         {
-            $values = array_combine(
-                $layouts->fetchEach('id'),
-                $layouts->fetchEach('title')
-            );
+            foreach ($layouts as $layout)
+            {
+                $values[] = [
+                    'value' => $layout->id,
+                    'text'  => $layout->name
+                ];
+            }
         }
 
-        // ToDo: Multiple concat page id?
         return [
-            'pageLayout' => [
-                $values,
-                FormPromptType::SELECT
+            'pageLayout_' . $row['id'] => [
+                $values ?? [],
+                FormPromptType::SELECT,
+                [
+                    'label'       => 'Seitenlayout zuordnen',
+                    'description' => 'Das Seitenlayout (' . $row['layout'] . ') für die Seite (' . $row['id'] . ') muss neu verknüpft werden.',
+                    'info'        => 'Beim Importieren einer Seite konnte ein zugewiesenes Layout nicht aufgelöst werden. Wählen Sie bitte ein Layout aus Ihrer Contao-Instanz um eine Verknüpfung zwischen Seite und Layout herzustellen.<br/><br/><b>Verknüpfung für alle weiteren Layouts mit dieser ID anwenden:</b><br/>Bei Auswahl dieser Einstellung, wird die zugewiesene Layout-ID für alle weiteren Seiten verwendet, wo die Verknüpfung auf dasselbe nicht zuweisbare Layout zeigen.',
+                    'class'       => 'w50'
+                ]
+            ],
+            'rememberLayout_' . $row['id'] => [
+                [
+                    [
+                        'value'   => 1,
+                        'text'    => 'Verknüpfung für alle weiteren Layouts mit dieser ID anwenden.',
+                        'options' => [
+                            'checked' => true
+                        ]
+                    ]
+                ],
+                FormPromptType::CHECKBOX,
+                [
+                    'class'       => 'w50 m12'
+                ]
             ]
         ];
     }
 
     return null;
-});*/
+});

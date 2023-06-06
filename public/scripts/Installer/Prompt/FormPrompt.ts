@@ -1,5 +1,5 @@
 import Prompt from "./Prompt";
-import FormField, {FormFieldConfig, FormFieldType} from "../Form/FormField";
+import FormField, {FormFieldType} from "../Form/FormField";
 import TextField from "../Form/TextField";
 import SelectField from "../Form/SelectField";
 import CheckboxField from "../Form/CheckboxField";
@@ -9,7 +9,8 @@ import {i18n} from "../Language"
  * Prompt configurations.
  */
 export interface FormPromptConfig {
-    fields: FormFieldConfig[]
+    fields: any[]
+    options: {}
 }
 
 /**

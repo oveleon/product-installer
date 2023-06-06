@@ -1,4 +1,6 @@
 import ContainerComponent from "../Components/ContainerComponent";
+import {i18n} from "../Language"
+import PopupComponent, {PopupType} from "../Components/PopupComponent";
 
 export enum FormFieldType {
     TEXT = 'text',
@@ -6,10 +8,16 @@ export enum FormFieldType {
     CHECKBOX = 'checkbox'
 }
 
-export interface FormFieldConfig {
-    name: string,
-    value: any,
-    type: string
+export type FormFieldConfig = {
+    name: string
+    value: any
+    type: string,
+    options?: {
+        label: string
+        description: string
+        class: string
+        info: string
+    }
 }
 
 /**
@@ -28,18 +36,75 @@ export default abstract class FormField extends ContainerComponent
      * Creates a drop menu instance.
      */
     constructor(
-        protected options: FormFieldConfig
+        protected config: FormFieldConfig
     ){
         // Auto-increment id
         FormField.fieldId++
 
         // Create container
         super('field' + FormField.fieldId)
+
+        if(this.config?.options?.class)
+        {
+            // Handle whitespaces
+            if(/\s/.test(this.config.options.class))
+            {
+                for (const token of this.config.options.class.split(" "))
+                {
+                    this.addClass(token)
+                }
+            }else{
+                this.addClass(this.config.options.class)
+            }
+        }
     }
 
     get name(): string
     {
-        return this.options.name
+        return this.config.name
+    }
+
+    get label(): string
+    {
+        return this.config?.options?.label ? this.config.options.label : i18n('form.field.' + this.config.name + '.label')
+    }
+
+    get description(): string
+    {
+        return this.config?.options?.description ? this.config.options.description : i18n('form.field.' + this.config.name + '.desc')
+    }
+
+    content(html: string): void
+    {
+        super.content(html);
+
+        if(this.config?.options?.info)
+        {
+            let infoElement = this.element('legend')
+
+            if (!infoElement)
+                infoElement = this.element('label')
+
+            if (infoElement) {
+                const popup = new PopupComponent({
+                    type: PopupType.HTML,
+                    appendTo: () => this.template.closest('.inside'),
+                    title: 'Feldbeschreibung',
+                    content: this.config.options.info,
+                    closeable: true
+                })
+
+                const helper = document.createElement('span')
+
+                helper.innerHTML = '?'
+                helper.className = 'info-helper'
+                helper.addEventListener('click', () => {
+                    popup.show()
+                })
+
+                infoElement.appendChild(helper)
+            }
+        }
     }
 
     abstract getValue(): string|string[];

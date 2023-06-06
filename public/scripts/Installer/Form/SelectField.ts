@@ -1,10 +1,15 @@
-import FormField, {FormFieldConfig} from "./FormField";
-import {i18n} from "../Language"
+import FormField, {FormFieldConfig} from "./FormField"
+import TomSelect from "tom-select"
 
-export interface SelectFieldConfig extends FormFieldConfig {
-    value: [],
+import "tom-select/dist/css/tom-select.bootstrap5.css"
+
+export type SelectFieldConfig = FormFieldConfig & {
+    value: []
     options?: {
         required: boolean
+        multiple: boolean
+        placeholder: string,
+        default: string[]
     }
 }
 
@@ -15,14 +20,16 @@ export interface SelectFieldConfig extends FormFieldConfig {
  */
 export default class SelectField extends FormField
 {
+    select: TomSelect
+
     /**
      * Creates a select field instance.
      */
     constructor(
-        protected  options: SelectFieldConfig
+        protected  config: SelectFieldConfig
     ){
         // Create container
-        super(options)
+        super(config)
 
         // Add class
         this.addClass('select', 'widget')
@@ -40,32 +47,26 @@ export default class SelectField extends FormField
     {
         this.content(`
             <h3>
-                <label for="ctrl_${this.options.name}">${i18n('form.field.' + this.options.name + '.label')}</label>
+                <label for="ctrl_${this.config.name}">${this.label}</label>
             </h3>
-            <select name="${this.options.name}" id="ctrl_${this.options.name}" class="tl_select" ${this.options.options.required ? 'required' : ''}></select>
-            <p>${i18n('form.field.' + this.options.name + '.desc')}</p>
+            <input />
+            <p>${this.description}</p>
         `)
 
-        const select = this.element('select')
+        this.select = new TomSelect(<HTMLInputElement> this.element('input'), {
+            options: this.config.value,
+            items: this.config.options?.default ?? [],
 
-        for (const key in this.options.value)
-        {
-            if(!this.options.value.hasOwnProperty(key))
-            {
-                continue
-            }
+            create: false,
+            allowEmptyOption: true,
 
-            const opt = document.createElement('option')
-
-            opt.value = key
-            opt.innerHTML = this.options.value[key]
-
-            select.appendChild(opt)
-        }
+            maxItems: this.config?.options?.multiple ? null : 1,
+            placeholder: this.config?.options?.placeholder ? this.config.options.placeholder : 'Bitte wählen...'
+        })
     }
 
-    public getValue(): string
+    public getValue(): string|string[]
     {
-        return (this.element('select') as HTMLSelectElement).value;
+        return this.select.getValue()
     }
 }
