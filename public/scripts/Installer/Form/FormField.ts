@@ -107,5 +107,5 @@ export default abstract class FormField extends ContainerComponent
         }
     }
 
-    abstract getValue(): string|string[];
+    abstract getValue(): string|string[]|object|object[];
 }

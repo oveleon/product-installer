@@ -3,6 +3,7 @@ import {i18n} from "../Language"
 
 export type CheckboxFieldConfig = FormFieldConfig & {
     value: [{
+        name: string
         value: string
         text: string
         options?: {
@@ -13,7 +14,8 @@ export type CheckboxFieldConfig = FormFieldConfig & {
     }],
     options?: {
         required: boolean
-        multiple: boolean
+        multiple: boolean,
+        checkAll: boolean
     }
 }
 
@@ -28,15 +30,15 @@ export default class CheckboxField extends FormField
      * Creates a checkbox field instance.
      */
     constructor(
-        protected options: CheckboxFieldConfig
+        protected config: CheckboxFieldConfig
     ){
         // Create container
-        super(options)
+        super(config)
 
         // Add class
         this.addClass('checkbox', 'widget')
 
-        if(this.options?.options?.multiple)
+        if(this.config?.options?.multiple)
         {
             this.addClass('multiple')
         }
@@ -54,46 +56,69 @@ export default class CheckboxField extends FormField
     {
         let fieldset: HTMLDivElement
 
-        if(this.options.options.multiple)
+        if(this.config.options.multiple)
         {
             this.content(`
-                <fieldset id="ctrl_${this.options.name}" class="tl_checkbox_container">
-                    <legend>${(this.options.options.label ? this.options.options.label : i18n('form.field.' + this.options.name + '.label'))}</legend>
-                    
-                    <input type="hidden" name="${this.options.name}" value="">
-                    
-                    <div class="check-all" ${this.options.options.multiple ? '' : 'style="display:none;"'}>
-                        <input type="checkbox" id="check_all_${this.options.name}" class="tl_checkbox" onclick="Backend.toggleCheckboxGroup(this,'ctrl_${this.options.name}')"> 
-                        <label for="check_all_${this.options.name}">Alle auswählen</label><br>
-                    </div>  
+                <fieldset id="ctrl_${this.config.name}" class="tl_checkbox_container">
+                    <legend>${(this.config.options.label ? this.config.options.label : i18n('form.field.' + this.config.name + '.label'))}</legend>
                 </fieldset>
                 
-                <p>${(this.options.options.description ? this.options.options.description : i18n('form.field.' + this.options.name + '.desc'))}</p>
+                <p>${(this.config.options.description ? this.config.options.description : i18n('form.field.' + this.config.name + '.desc'))}</p>
             `)
 
             fieldset = <HTMLDivElement> this.element('fieldset')
+
+            // Create check all element
+            if(this.config.options.checkAll)
+            {
+                const container = document.createElement('div')
+
+                container.innerHTML = `
+                    <div class="check-all" ${this.config.options.multiple ? '' : 'style="display:none;"'}>
+                        <input type="checkbox" id="check_all_${this.config.name}" class="tl_checkbox check_all"> 
+                        <label for="check_all_${this.config.name}">Alle auswählen</label><br>
+                    </div>
+                `
+
+                container.querySelector('input').addEventListener('change', (e) => {
+                    const trigger = <HTMLInputElement> e.currentTarget
+                    const inputs = this.elements('.input-' + this.name)
+
+                    for(const input of inputs)
+                    {
+                        const field = input as HTMLInputElement
+
+                        if(!field.disabled)
+                        {
+                            field.checked = trigger.checked
+                        }
+                    }
+                })
+
+                fieldset.appendChild(container)
+            }
         }
         else
         {
             fieldset = <HTMLDivElement> this.template
         }
 
-        for (const key in this.options.value)
+        for (const key in this.config.value)
         {
-            if(!this.options.value.hasOwnProperty(key))
+            if(!this.config.value.hasOwnProperty(key))
             {
                 continue
             }
 
-            const option = this.options.value[key]
+            const option = this.config.value[key]
             const label: HTMLLabelElement = document.createElement('label')
             const input: HTMLInputElement = document.createElement('input')
 
-            label.htmlFor   = this.options.name + '_' + key
-            input.name      = this.getName()
+            label.htmlFor   = option.name
+            input.name      = option.name
             input.type      = 'checkbox'
             input.id        = label.htmlFor
-            input.className = 'tl_checkbox'
+            input.className = 'tl_checkbox input-' + this.name
 
             label.innerHTML = option.text + (option.options?.description ? '<span>' + option.options?.description + '</span>' : '')
             input.value     = option.value
@@ -104,7 +129,7 @@ export default class CheckboxField extends FormField
             if(option.options?.disabled)
                 input.disabled = true
 
-            if(this.options?.options?.required)
+            if(this.config?.options?.required)
                 input.required = true
 
             fieldset.appendChild(input)
@@ -112,28 +137,20 @@ export default class CheckboxField extends FormField
         }
     }
 
-    private getName(): string
+    public getValue(): object|object[]
     {
-        if(this.options.options.multiple)
-        {
-            return this.options.name + '[]'
-        }
-
-        return this.options.name
-    }
-
-    public getValue(): string[]
-    {
-        const values: string[] = []
-        const inputs = this.elements('input[name="' + this.getName() + '"]')
+        let values: {} = {}
+        const inputs = this.elements('.input-' + this.name)
 
         for(const input of inputs)
         {
             const field = input as HTMLInputElement
 
-            if(field.checked)
+            values[field.name] = field.checked ? field.value : ""
+
+            if(!this.config.options.multiple)
             {
-                values.push(field.value)
+                return values[field.name]
             }
         }
 

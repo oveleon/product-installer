@@ -3,8 +3,10 @@
 namespace Oveleon\ProductInstaller\Import;
 
 use Contao\Controller;
+use Contao\DataContainer;
 use Contao\DC_Table;
 use Contao\Model;
+use Contao\PageModel;
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
 
@@ -19,6 +21,11 @@ class TableImport extends AbstractPromptImport
      * Defines the content of the currently handled table.
      */
     protected ?array $content = null;
+
+    /**
+     * Temporary connections which exist only during runtime
+     */
+    protected array $flashConnections = [];
 
     /**
      * Starts importing the tables and returns prompts.
@@ -74,6 +81,32 @@ class TableImport extends AbstractPromptImport
     }
 
     /**
+     * Adds a temporary connection.
+     */
+    public function addFlashConnection(string|int $a, string|int $b, string $scope): void
+    {
+        if(!\array_key_exists($scope, $this->flashConnections))
+        {
+            $this->flashConnections[$scope] = [];
+        }
+
+        $this->flashConnections[$scope][$a] = $b;
+    }
+
+    /**
+     * Get a temporary connection.
+     */
+    public function getFlashConnection(string|int $a, string $scope): null|string|int
+    {
+        return $this->flashConnections[$scope][$a] ?? null;
+    }
+
+    public function getFlash(): array
+    {
+        return $this->flashConnections;
+    }
+
+    /**
      * Adds a connection between two records and make them available for further processing.
      */
     public function addConnection(string|int $a, string|int $b, ?string $table = null): void
@@ -124,7 +157,7 @@ class TableImport extends AbstractPromptImport
 
         if(\array_key_exists($this->table, $prompts))
         {
-            $prompts[$this->table] = $prompts[$this->table] + $result;
+            $prompts[$this->table] = $result + $prompts[$this->table];
         }else{
             $prompts[$this->table] = $result;
         }
@@ -195,13 +228,13 @@ class TableImport extends AbstractPromptImport
         $conf = $GLOBALS['TL_DCA'][$this->table]['config'];
         $list = $GLOBALS['TL_DCA'][$this->table]['list'];
 
+        $info->sortingMode = $list['sorting']['mode'] ?? null;
         $info->dataContainer = $conf['dataContainer'] ?? null;
-        $info->ptable = $conf['ptable'] ?? null;
         $info->ctable = $conf['ctable'] ?? null;
         $info->dynamicPtable = $conf['dynamicPtable'] ?? null;
-        $info->sortingMode = $list['sorting']['mode'] ?? null;
+        $info->ptable = $conf['ptable'] ?? ($info->sortingMode === DataContainer::MODE_TREE ? $this->table : null);
 
-        $info->hasParent = $info->ptable || $info->dynamicPtable;
+        $info->hasParent = $info->ptable || $info->dynamicPtable || $info->sortingMode === DataContainer::MODE_TREE;
 
         return $info;
     }
@@ -223,15 +256,9 @@ class TableImport extends AbstractPromptImport
             // ToDo: CancelPrompt
         }
 
-        /**
-         * ToDo:
-         * There is still the problem of firing prompts during runtime, for this we might have to save which row you
-         * are in and skip...
-         */
-
         foreach ($content as &$row)
         {
-            foreach(Validator::getValidators($this->table) as $validator)
+            foreach(Validator::getValidators($this->table) ?? [] as $validator)
             {
                 if($validatorFields = call_user_func_array($validator, [&$row, $this]))
                 {
@@ -284,6 +311,8 @@ class TableImport extends AbstractPromptImport
         $tableInfo = $this->getTableInformation();
         $hasParent = $tableInfo->hasParent;
 
+        // ToDo: sql autocommit false?
+
         foreach ($validatedRows as $row)
         {
             if(\array_key_exists('_skip', $row))
@@ -291,31 +320,60 @@ class TableImport extends AbstractPromptImport
                 continue;
             }
 
+            // Get vars before clean up the row
             $exportId = $row['id'];
+            $isRoot = $this->isRootRecord($row);
 
+            // Clean up row
             $this->removeUnnecessaryFields($row);
 
+            // Create model and set data
             $model = new $modelClass();
             $model->setRow($row);
 
-            if($hasParent)
+            // Check for parent-connections
+            if($hasParent && !$isRoot)
             {
                 $parentId = $this->getConnection($row['pid'], $tableInfo->ptable);
 
                 $model->pid = $parentId;
             }
 
+            // Add connection
             $this->addConnection($exportId, ($model->save())->id);
         }
+
+        // ToDo: sql commit? Then we're able to check if something gone wrong?
 
         $this->setState(ImportStateType::FINISH);
     }
 
+    /**
+     * Returns if a row is a root record.
+     */
+    protected function isRootRecord(array $row): bool
+    {
+        // Unknown tables or vendor validators must define their root pages as such if they do not have type=root
+        // like tl_pages, otherwise we only check for the passed type
+        if(
+             \array_key_exists('_root', $row) ||
+            (\array_key_exists('type', $row) && $row['type'] === 'root')
+        ){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Removed unnecessary fields from row.
+     */
     protected function removeUnnecessaryFields(array &$row): void
     {
         unset(
             $row['id'],
-            $row['_create']
+            $row['_create'],
+            $row['_root']
         );
     }
 }

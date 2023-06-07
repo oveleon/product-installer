@@ -14,11 +14,6 @@ abstract class AbstractPromptImport
     protected ?AbstractPrompt $prompt = null;
 
     /**
-     * Defines conditions.
-     */
-    protected ?array $conditions = null;
-
-    /**
      * Contains the PromptResponse.
      */
     protected PromptResponse $promptResponse;
@@ -57,26 +52,5 @@ abstract class AbstractPromptImport
     public function setPrompt(AbstractPrompt $prompt): void
     {
         $this->prompt = $prompt;
-    }
-
-    /**
-     * Set import conditions.
-     */
-    public function setConditions(array $conditions): void
-    {
-        $this->conditions = $conditions;
-    }
-
-    /**
-     * Return conditions by key.
-     */
-    protected function getConditions(string $key): ?array
-    {
-        if(\array_key_exists($key, $this->conditions))
-        {
-            return $this->conditions[$key];
-        }
-
-        return null;
     }
 }

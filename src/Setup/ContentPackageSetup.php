@@ -108,8 +108,9 @@ class ContentPackageSetup
             if($blnConfig ?? false)
             {
                 $fields = $promptResponse->get('result');
+                $fields = array_keys(array_filter($fields['tables']));
 
-                $this->setupLock->set('config', $fields);
+                $this->setupLock->set('config', ['tables' => $fields]);
                 $this->setupLock->save();
             }
             elseif(!$this->setupLock->get('config'))
@@ -118,36 +119,30 @@ class ContentPackageSetup
 
                 foreach ($tableStructure as $table)
                 {
+                    /** @var Model $tableModel */
+                    $tableModel = Model::getClassFromTable($table);
+                    $hasRows = $tableModel::countAll() > 0;
+
                     $values[] = [
-                        'value' => $table,
-                        'text'  => $table, // ToDo: Translate e.g. tl_page -> Seitenstruktur,
+                        'name'  => $table,
+                        'value' => 1,
+                        'text'  => $table, // ToDo: Translate e.g. tl_page -> Seitenstruktur
                         'options' => [
                             'checked' => true,
-                            'description' => 'Achtung!',
+                            'disabled' => !$hasRows,
+                            'description' => !$hasRows ? 'Fehlende Datensätze im System' : null
                         ]
                     ];
                 }
 
                 return (new FormPrompt('setupConfig'))
-                    ->field('tables', $values, FormPromptType::CHECKBOX, ['checked' => true, 'multiple' => true, 'info'  => 'blabla info'])
+                    ->field('tables', $values, FormPromptType::CHECKBOX, ['checked' => true, 'multiple' => true, 'checkAll' => true, 'info' => 'ToDo ...'])
                     ->getResponse();
             }
         }
 
+        // Set prompt response (importer)
         $this->tableImporter->setPromptResponse($promptResponse);
-        $this->tableImporter->setConditions([
-            'tl_page' => [                       // ToDo: Choose root page condition
-                [
-                    'type'      => 'field',      // Typ der Condition
-                    'condition' => 'type=root',  // Condition (field)
-                    'callback'  => [             // Callback-Informationen
-                        'fn'    => 'connect',    // Callback-Methode
-                        'table' => 'tl_theme',   // Callback-Param: Table
-                        'field' => 'id',         // Callback-Param: Field
-                    ]
-                ]
-            ]
-        ]);
 
         // Get selected tables to import
         $skipTables = [];
