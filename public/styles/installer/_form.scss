@@ -217,4 +217,36 @@ $input-border-color: #afafaf;
       margin: 3px 0;
     }
   }
+
+  .ts-dropdown{
+
+    .option{
+
+      &.level_0{
+        position: relative;
+        padding-left: 30px;
+
+        &:before{
+          content: "";
+          position: absolute;
+          left: 8px;
+          top: 5px;
+
+          width: 18px;
+          height: 18px;
+
+          background: url("/system/themes/flexible/icons/pagemounts.svg") no-repeat;
+        }
+      }
+      &.level_1{
+        padding-left: 40px;
+      }
+      &.level_2{
+        padding-left: 60px;
+      }
+      &.level_3{
+        padding-left: 80px;
+      }
+    }
+  }
 }

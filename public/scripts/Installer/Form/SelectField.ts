@@ -9,7 +9,10 @@ export type SelectFieldConfig = FormFieldConfig & {
         required: boolean
         multiple: boolean
         placeholder: string,
-        default: string[]
+        default: string[],
+        optgroupField: string,
+        optgroups: [],
+        sortField: []
     }
 }
 
@@ -53,7 +56,9 @@ export default class SelectField extends FormField
             <p>${this.description}</p>
         `)
 
-        this.select = new TomSelect(<HTMLInputElement> this.element('input'), {
+        console.log(this.config.value)
+
+        const selectOptions = {
             options: this.config.value,
             items: this.config.options?.default ?? [],
 
@@ -61,8 +66,25 @@ export default class SelectField extends FormField
             allowEmptyOption: true,
 
             maxItems: this.config?.options?.multiple ? null : 1,
-            placeholder: this.config?.options?.placeholder ? this.config.options.placeholder : 'Bitte wählen...'
-        })
+            placeholder: this.config?.options?.placeholder ? this.config.options.placeholder : 'Bitte wählen...',
+
+            render: {
+                option: function(data, escape) {
+                    return `<div class="${data?.level ? 'level_' + data.level : ''}">${escape(data.text)}</div>`
+                }
+            }
+        }
+
+        if(this.config.options?.optgroupField)
+            selectOptions['optgroupField'] = this.config.options.optgroupField
+
+        if(this.config.options?.optgroups)
+            selectOptions['optgroups'] = this.config.options.optgroups
+
+        if(this.config.options?.sortField)
+            selectOptions['sortField'] = this.config.options.sortField
+
+        this.select = new TomSelect(<HTMLInputElement> this.element('input'), selectOptions)
     }
 
     public getValue(): string|string[]

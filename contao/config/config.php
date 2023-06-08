@@ -34,10 +34,65 @@ Validator::addValidator(PageModel::getTable(), static function (array &$row, Abs
 
     if(null === ($rootPage = $importer->getPromptValue('rootPage')))
     {
+        $pageCollection = [];
+
+        // ToDo: Get correct order
+        $determinePageLevel = function ($page) use (&$pageCollection): int {
+
+            if($page->type === 'root')
+            {
+                $pageCollection[$page->id] = [];
+                return 0;
+            }
+
+            if(\array_key_exists($page->pid, $pageCollection))
+            {
+                $pageCollection[$page->pid][$page->id] = [];
+                return 1;
+            }
+
+            $search = function ($page, &$pageCollection, $level) use (&$search): int
+            {
+                if(\array_key_exists($page->pid, $pageCollection))
+                {
+                    $pageCollection[$page->pid][$page->id] = [];
+
+                    return $level;
+                }
+
+                ++$level;
+
+                foreach ($pageCollection as $collection)
+                {
+                    return $search($page, $collection, $level);
+                }
+
+                /*foreach ($pageCollection as $parentId => &$subpages)
+                {
+                    if(\array_key_exists($page->pid, $subpages))
+                    {
+                        $pageCollection[$parentId][$page->pid][$page->id] = [];
+                        return $level;
+                    }
+
+                    foreach ($subpages ?? [] as $subpage)
+                    {
+                        return $search($page, $subpage, ++$level);
+                    }
+                }*/
+
+                return 0;
+            };
+
+            return $search($page, $pageCollection, 2);
+        };
+
         $values = [
             [
                 'value' => '0',
-                'text'  => 'Neue Seite anlegen (' . $row['title'] . ')'
+                'text'  => 'Neue Seite anlegen (' . $row['title'] . ')',
+                'group' => 'create',
+                'level' => '0'
             ]
         ];
 
@@ -47,7 +102,10 @@ Validator::addValidator(PageModel::getTable(), static function (array &$row, Abs
             {
                 $values[] = [
                     'value' => $page->id,
-                    'text'  => $page->title
+                    'text'  => $page->title,
+                    'sorting'  => $page->sorting,
+                    'group' => 'page',
+                    'level' => $determinePageLevel($page)
                 ];
             }
         }
@@ -57,7 +115,19 @@ Validator::addValidator(PageModel::getTable(), static function (array &$row, Abs
                 $values,
                 FormPromptType::SELECT,
                 [
-                    'default' => ['0']
+                    'default' => ['0'],
+                    'sortField' => ['level', 'sorting'],
+                    'optgroupField' => 'group',
+                    'optgroups' => [
+                        [
+                            'label' => 'Neue Seite anlegen',
+                            'value' => 'create'
+                        ],
+                        [
+                            'label' => 'In bestehende Seiten integrieren',
+                            'value' => 'page'
+                        ]
+                    ]
                 ]
             ]
         ];

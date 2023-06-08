@@ -300,6 +300,28 @@
   width: 100%;
   margin: 3px 0;
 }
+#installer .ts-dropdown .option.level_0 {
+  position: relative;
+  padding-left: 30px;
+}
+#installer .ts-dropdown .option.level_0:before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 5px;
+  width: 18px;
+  height: 18px;
+  background: url("/system/themes/flexible/icons/pagemounts.svg") no-repeat;
+}
+#installer .ts-dropdown .option.level_1 {
+  padding-left: 40px;
+}
+#installer .ts-dropdown .option.level_2 {
+  padding-left: 60px;
+}
+#installer .ts-dropdown .option.level_3 {
+  padding-left: 80px;
+}
 
 .products .no-products {
   margin-bottom: 25px;

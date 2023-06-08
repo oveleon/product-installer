@@ -101,11 +101,6 @@ class TableImport extends AbstractPromptImport
         return $this->flashConnections[$scope][$a] ?? null;
     }
 
-    public function getFlash(): array
-    {
-        return $this->flashConnections;
-    }
-
     /**
      * Adds a connection between two records and make them available for further processing.
      */
