@@ -3,6 +3,12 @@
 use Contao\PageModel;
 use Contao\LayoutModel;
 use Contao\ThemeModel;
+use Contao\ModuleModel;
+use Contao\FaqModel;
+use Contao\FaqCategoryModel;
+use Contao\NewsModel;
+use Contao\NewsArchiveModel;
+
 use Oveleon\ProductInstaller\EventListener\LicenseConnector\Upload\UploadMatchProductsListener;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
@@ -20,8 +26,11 @@ $GLOBALS['PI_HOOKS']['matchProducts'][] = [
     'matchProducts'
 ];
 
+
 /**
- * Add default import validators
+ * Add default import validators.
+ *
+ * Page Validators:
  */
 // Select a root page to import
 Validator::addValidator(PageModel::getTable(), static function (array &$row, AbstractPromptImport $importer): ?array
@@ -36,76 +45,45 @@ Validator::addValidator(PageModel::getTable(), static function (array &$row, Abs
     {
         $pageCollection = [];
 
-        // ToDo: Get correct order
         $determinePageLevel = function ($page) use (&$pageCollection): int {
-
-            if($page->type === 'root')
-            {
-                $pageCollection[$page->id] = [];
-                return 0;
-            }
 
             if(\array_key_exists($page->pid, $pageCollection))
             {
-                $pageCollection[$page->pid][$page->id] = [];
-                return 1;
+                $pageCollection[$page->id] = $pageCollection[$page->pid] + 1;
+
+                return $pageCollection[$page->id];
             }
 
-            $search = function ($page, &$pageCollection, $level) use (&$search): int
-            {
-                if(\array_key_exists($page->pid, $pageCollection))
-                {
-                    $pageCollection[$page->pid][$page->id] = [];
+            $pageCollection[$page->id] = 0;
 
-                    return $level;
-                }
-
-                ++$level;
-
-                foreach ($pageCollection as $collection)
-                {
-                    return $search($page, $collection, $level);
-                }
-
-                /*foreach ($pageCollection as $parentId => &$subpages)
-                {
-                    if(\array_key_exists($page->pid, $subpages))
-                    {
-                        $pageCollection[$parentId][$page->pid][$page->id] = [];
-                        return $level;
-                    }
-
-                    foreach ($subpages ?? [] as $subpage)
-                    {
-                        return $search($page, $subpage, ++$level);
-                    }
-                }*/
-
-                return 0;
-            };
-
-            return $search($page, $pageCollection, 2);
+            return $pageCollection[$page->id];
         };
 
         $values = [
             [
                 'value' => '0',
-                'text'  => 'Neue Seite anlegen (' . $row['title'] . ')',
+                'text'  => $row['title'],
                 'group' => 'create',
+                'sorting' => 0,
+                'class' => 'root',
                 'level' => '0'
             ]
         ];
 
-        if($pages = PageModel::findAll())
+        if($pages = PageModel::findAll(['order' => 'id ASC, sorting ASC']))
         {
+            $index = 0;
+
             foreach ($pages as $page)
             {
                 $values[] = [
-                    'value' => $page->id,
-                    'text'  => $page->title,
-                    'sorting'  => $page->sorting,
-                    'group' => 'page',
-                    'level' => $determinePageLevel($page)
+                    'value'  => $page->id,
+                    'text'   => $page->title,
+                    'sorting'=> ++$index, // ToDo: Sorting is still wrong
+                    'class'  => $page->type,
+                    'info'   => $page->id,
+                    'group'  => 'page',
+                    'level'  => $determinePageLevel($page)
                 ];
             }
         }
@@ -115,6 +93,7 @@ Validator::addValidator(PageModel::getTable(), static function (array &$row, Abs
                 $values,
                 FormPromptType::SELECT,
                 [
+                    'class'   => 'pages',
                     'default' => ['0'],
                     'sortField' => ['level', 'sorting'],
                     'optgroupField' => 'group',
@@ -147,6 +126,9 @@ Validator::addValidator(PageModel::getTable(), static function (array &$row, Abs
     return null;
 });
 
+/**
+ * Layout Validators:
+ */
 // Set page-layout connections
 Validator::addValidator(PageModel::getTable(), static function (array &$row, AbstractPromptImport $importer): ?array
 {
@@ -160,10 +142,19 @@ Validator::addValidator(PageModel::getTable(), static function (array &$row, Abs
     $layoutId = $row['layout'];
 
     // Skip if we find a connection
-    if($connectedId = $importer->getConnection($layoutId, LayoutModel::getTable()))
+    if(($connectedId = $importer->getConnection($layoutId, LayoutModel::getTable())) !== null)
     {
+        // Disconnect layout
+        if((int) $connectedId === 0)
+        {
+            $row['includeLayout'] = 0;
+            $row['layout'] = 0;
+        }
         // Set new layout id to the page
-        $row['layout'] = $connectedId;
+        else
+        {
+            $row['layout'] = $connectedId;
+        }
 
         return null;
     }
@@ -178,10 +169,19 @@ Validator::addValidator(PageModel::getTable(), static function (array &$row, Abs
     }
 
     // Check if we have already received a user decision
-    if($connectedId = (int) $importer->getPromptValue($connectionFieldName))
+    if(($connectedId = $importer->getPromptValue($connectionFieldName)) !== null)
     {
+        // Disconnect layout
+        if((int) $connectedId === 0)
+        {
+            $row['includeLayout'] = 0;
+            $row['layout'] = 0;
+        }
         // Set new layout id to the page
-        $row['layout'] = $connectedId;
+        else
+        {
+            $row['layout'] = $connectedId;
+        }
 
         // Add id connection for child tables
         $importer->addConnection($layoutId, $connectedId, LayoutModel::getTable());
@@ -195,26 +195,68 @@ Validator::addValidator(PageModel::getTable(), static function (array &$row, Abs
 
         $importer->addFlashConnection($layoutId, $pageId, 'layout_page_connection');
 
+        $values = [
+            [
+                'value' => 0,
+                'text'  => 'Verknüfung aufheben',
+                'class' => 'disconnect',
+                'group' => 'actions'
+            ]
+        ];
+
+        $optgroups = [
+            [
+                'label' => 'Aktionen',
+                'value' => 'actions'
+            ]
+        ];
+
         if($layouts = LayoutModel::findAll())
         {
+            $themeIds = [];
+
             foreach ($layouts as $layout)
             {
                 $values[] = [
                     'value' => $layout->id,
-                    'text'  => $layout->name
+                    'text'  => $layout->name,
+                    'class' => 'layout',
+                    'info'  => $layout->id,
+                    'group' => $layout->pid
+                ];
+
+                $themeIds[] = $layout->pid;
+            }
+
+            foreach (ThemeModel::findMultipleByIds($themeIds) ?? [] as $theme)
+            {
+                $optgroups[] = [
+                    'label' => 'Theme: ' . $theme->name,
+                    'value' => $theme->id
                 ];
             }
         }
+
+        $layoutStructure = $importer->getArchiveContentByTable(LayoutModel::getTable(), [
+            'value' => $row['layout'],
+            'field' => 'id'
+        ]);
 
         return [
             $connectionFieldName => [
                 $values ?? [],
                 FormPromptType::SELECT,
                 [
-                    'label'       => 'Seitenlayout zuordnen',
-                    'description' => 'Das Seitenlayout für die Seite "' . $row['title'] . '" (' . $row['id'] . ') muss neu zugeordnet werden.',
-                    'info'        => 'Beim Importieren der Seite "' . $row['title'] . '" (' . $row['id'] . ') konnte ein zugewiesenes Layout nicht aufgelöst werden. Wählen Sie bitte ein Layout aus Ihrer Contao-Instanz um eine Verknüpfung zwischen Seite und Layout herzustellen.<br/><br/><b>Verknüpfung für alle weiteren Layouts mit dieser ID anwenden:</b><br/>Bei Auswahl dieser Einstellung, wird die zugewiesene Layout-ID für alle weiteren Seiten verwendet, wo die Verknüpfung auf dasselbe nicht zuweisbare Layout zeigen.',
-                    'class'       => 'w50'
+                    'label'         => 'Layout → Seite zuordnen',
+                    'description'   => 'Das Layout' . (($layoutStructure['name'] ?? false) ? ' "' . $layoutStructure['name'] . '"' : '') . ' wird von ein oder mehreren zu importierenden Seiten verwenden und muss neu zugeordnet werden. Ihre Auswahl wird für alle weiteren Seiten, welche auf dieses Layout referenzieren, übernommen.',
+                    'explanation'   => [
+                        'type'        => 'TABLE',
+                        'description' => 'Beim Importieren einer oder mehrerer Seiten konnte ein zugewiesenes Layout nicht aufgelöst werden. Wählen Sie bitte ein Layout aus Ihrer Contao-Instanz um eine Verknüpfung zwischen diesen Seiten und einem Layout herzustellen.<br/><br/><b>Folgendes Layout wurde nicht importiert und benötigt eine Alternative:</b>',
+                        'content'     => $layoutStructure ?? []
+                    ],
+                    'class'         => 'w50',
+                    'optgroupField' => 'group',
+                    'optgroups'     => $optgroups ?? []
                 ]
             ]
         ];
@@ -223,257 +265,91 @@ Validator::addValidator(PageModel::getTable(), static function (array &$row, Abs
     return null;
 });
 
-/*Validator::addValidator(PageModel::getTable(), static function (array &$row, AbstractPromptImport $importer): ?array
-{
-    $pageId = $row['id'];
-    $layoutId = $row['layout'];
-
-    // Skip if the page has no own layout connection
-    if(!$row['includeLayout'])
-    {
-        return null;
-    }
-
-    // Skip if we find a connection
-    if($connectedId = $importer->getConnection($layoutId, LayoutModel::getTable()))
-    {
-        // Set new layout id to the page
-        $row['layout'] = $connectedId;
-        return null;
-    }
-
-    $skip = [];
-
-    $pageLayoutId = 'pageLayout_' . $row['id'];
-    $rememberLayoutId = 'rememberLayout_' . $row['id'];
-
-    // Check if we got a prompt response and should skip layout prompts of the same ID
-    if((int) $importer->getPromptValue($rememberLayoutId) || $importer->getFlashConnection($layoutId, 'layout_page_connection'))
-    {
-        $skip[] = $pageId;
-    }
-
-    // Check if we have already received a user decision
-    if($connectedId = (int) $importer->getPromptValue($pageLayoutId))
-    {
-        // Set new layout id to the page
-        $row['layout'] = $connectedId;
-
-        // Add id connection for child tables
-        $importer->addConnection($layoutId, $connectedId, LayoutModel::getTable());
-    }
-    else
-    {
-        if(\in_array($pageId, $skip))
-        {
-            return null;
-        }
-
-        $importer->addFlashConnection($layoutId, $pageId, 'layout_page_connection');
-
-        if($layouts = LayoutModel::findAll())
-        {
-            foreach ($layouts as $layout)
-            {
-                $values[] = [
-                    'value' => $layout->id,
-                    'text'  => $layout->name
-                ];
-            }
-        }
-
-        $fields = [$pageLayoutId => [
-                $values ?? [],
-                FormPromptType::SELECT,
-                [
-                    'label'       => 'Seitenlayout zuordnen',
-                    'description' => 'Das Seitenlayout für die Seite "' . $row['title'] . '" (' . $row['id'] . ') muss neu zugeordnet werden.',
-                    'info'        => 'Beim Importieren der Seite "' . $row['title'] . '" (' . $row['id'] . ') konnte ein zugewiesenes Layout nicht aufgelöst werden. Wählen Sie bitte ein Layout aus Ihrer Contao-Instanz um eine Verknüpfung zwischen Seite und Layout herzustellen.<br/><br/><b>Verknüpfung für alle weiteren Layouts mit dieser ID anwenden:</b><br/>Bei Auswahl dieser Einstellung, wird die zugewiesene Layout-ID für alle weiteren Seiten verwendet, wo die Verknüpfung auf dasselbe nicht zuweisbare Layout zeigen.',
-                    'class'       => 'w50'
-                ]
-            ]
-        ];
-
-        if($importer->getPromptValue($rememberLayoutId) !== "")
-        {
-            $fields[$rememberLayoutId] = [
-                [
-                    [
-                        'name'    => $rememberLayoutId,
-                        'value'   => $pageId,
-                        'text'    => 'Zuordnung für alle weiteren Layouts mit dieser ID anwenden.',
-                        'options' => [
-                            'checked' => true
-                        ]
-                    ]
-                ],
-                FormPromptType::CHECKBOX,
-                [
-                    'class'       => 'w50 m12'
-                ]
-            ];
-        }
-
-        return $fields;
-    }
-
-    return null;
-});*/
-
 // Set layout-theme connections
-/*Validator::addValidator(LayoutModel::getTable(), static function (array &$row, AbstractPromptImport $importer): ?array
-{
-    $themeId = $row['pid'];
-    $layoutId = $row['id'];
-
-    // Skip if we find a connection
-    if($importer->getConnection($themeId, ThemeModel::getTable()))
-    {
-        return null;
-    }
-
-    $skip = [];
-
-    $layoutThemeId = 'layoutTheme_' . $row['id'];
-    $rememberThemeId = 'rememberTheme_' . $row['id'];
-
-    // Check if we got a prompt response and should skip theme prompts of the same ID
-    if(
-        (
-            (int) $importer->getPromptValue($rememberThemeId) &&
-            (int) $importer->getPromptValue($layoutThemeId)
-        ) ||
-        $importer->getFlashConnection($themeId, 'theme_layout_connection')
-    ){
-        $skip[] = $themeId;
-    }
-
-    // Check if we have already received a user decision
-    if($connectedId = (int) $importer->getPromptValue($layoutThemeId))
-    {
-        // Add id connection for child tables
-        $importer->addConnection($layoutId, $connectedId, ThemeModel::getTable());
-    }
-
-    if(!(int) $importer->getPromptValue($rememberThemeId))
-    {
-        if(\in_array($themeId, $skip))
-        {
-            return null;
-        }
-
-        // Add a flash connection to display prompts for the same connections only once for the first time
-        $importer->addFlashConnection($themeId, $layoutId, 'theme_layout_connection');
-
-        if($themes = ThemeModel::findAll())
-        {
-            foreach ($themes as $theme)
-            {
-                $values[] = [
-                    'value' => $theme->id,
-                    'text'  => $theme->name
-                ];
-            }
-        }
-
-        $fields = [$layoutThemeId => [
-                $values ?? [],
-                FormPromptType::SELECT,
-                [
-                    'label'       => 'Layout zuordnen',
-                    'description' => 'Das Layout "' . $row['name'] . '" (' . $row['id'] . ') muss einem Theme zugeordnet werden.',
-                    'info'        => 'Beim Importieren der Seite "' . $row['name'] . '" (' . $row['id'] . ') konnte ein zugewiesenes Layout nicht aufgelöst werden. Wählen Sie bitte ein Layout aus Ihrer Contao-Instanz um eine Verknüpfung zwischen Seite und Layout herzustellen.<br/><br/><b>Verknüpfung für alle weiteren Layouts mit dieser ID anwenden:</b><br/>Bei Auswahl dieser Einstellung, wird die zugewiesene Layout-ID für alle weiteren Seiten verwendet, wo die Verknüpfung auf dasselbe nicht zuweisbare Layout zeigen.',
-                    'class'       => 'w50'
-                ]
-            ]
-        ];
-
-        if($importer->getPromptValue($rememberThemeId) !== "" || !$connectedId)
-        {
-            $fields[$rememberThemeId] = [
-                [
-                    [
-                        'name'    => $rememberThemeId,
-                        'value'   => $themeId,
-                        'text'    => 'Zuordnung für alle weiteren Layouts mit dieser Theme-ID anwenden.',
-                        'options' => [
-                            'checked' => true
-                        ]
-                    ]
-                ],
-                FormPromptType::CHECKBOX,
-                [
-                    'class'       => 'w50 m12'
-                ]
-            ];
-        }
-
-        return $fields;
-    }
-
-    return null;
-});*/
-
 Validator::addValidator(LayoutModel::getTable(), static function (array &$row, AbstractPromptImport $importer): ?array
 {
-    $parentId = $row['pid'];
-    $id       = $row['id'];
+    $themeStructure = $importer->getArchiveContentByTable(ThemeModel::getTable(), [
+        'value' => $row['pid'],
+        'field' => 'id'
+    ]);
 
-    // Skip if we find a connection
-    if($importer->getConnection($parentId, ThemeModel::getTable()))
-    {
-        return null;
-    }
+    return $importer->useParentConnectionLogic($row, LayoutModel::getTable(), ThemeModel::getTable(), [
+        'label'       => 'Layout → Theme zuordnen',
+        'description' => 'Ein oder mehrere Layouts konnten keinem Theme zugeordnet werden. Ihre Auswahl wird für alle weiteren Layouts, welche auf das selbe Theme referenzieren, übernommen.',
+        'explanation' => [
+            'type'        => 'TABLE',
+            'description' => 'Beim Importieren eines oder mehrerer Layouts konnte das zugehörige Theme nicht gefunden werden. Wählen Sie bitte ein Theme aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Layouts und einem Theme herzustellen.<br/><br/><b>Folgendes Theme wurde nicht importiert und benötigt ein Alternative:</b>',
+            'content'     => $themeStructure ?? []
+        ],
+        'class'       => 'w50'
+    ]);
+});
 
-    $skip = [];
-    $connectionFieldName = 'connection_' . $id;
+/**
+ * Module Validators:
+ */
+// Set module-theme connections
+Validator::addValidator(ModuleModel::getTable(), static function (array &$row, AbstractPromptImport $importer): ?array
+{
+    $themeStructure = $importer->getArchiveContentByTable(ThemeModel::getTable(), [
+        'value' => $row['pid'],
+        'field' => 'id'
+    ]);
 
-    // Check if we got a prompt response and should skip prompts of the same ID
-    if($importer->getFlashConnection($parentId, 'theme_layout_connection'))
-    {
-        $skip[] = $parentId;
-    }
+    return $importer->useParentConnectionLogic($row, ModuleModel::getTable(), ThemeModel::getTable(), [
+        'label'       => 'Module → Theme zuordnen',
+        'description' => 'Ein oder mehrere Module konnten keinem Theme zugeordnet werden. Ihre Auswahl wird für alle weiteren Module, welche auf das selbe Theme referenzieren, übernommen.',
+        'explanation' => [
+            'type'        => 'TABLE',
+            'description' => 'Beim Importieren eines oder mehrerer Module konnte das zugehörige Theme nicht gefunden werden. Wählen Sie bitte ein Theme aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Modulen und einem Theme herzustellen.<br/><br/><b>Folgendes Theme wurde nicht importiert und benötigt ein Alternative:</b>',
+            'content'     => $themeStructure ?? []
+        ],
+        'class'       => 'w50'
+    ]);
+});
 
-    // Check if we have already received a user decision
-    if($connectedId = (int) $importer->getPromptValue($connectionFieldName))
-    {
-        // Add id connection for child row
-        $importer->addConnection($parentId, $connectedId, ThemeModel::getTable());
-    }
-    else
-    {
-        if(\in_array($parentId, $skip))
-        {
-            return null;
-        }
+/**
+ * FAQ Validators:
+ */
+// Set faq-faq_category connections
+Validator::addValidator(FaqModel::getTable(), static function (array &$row, AbstractPromptImport $importer): ?array
+{
+    $faqCategoryStructure = $importer->getArchiveContentByTable(FaqCategoryModel::getTable(), [
+        'value' => $row['pid'],
+        'field' => 'id'
+    ]);
 
-        // Add a flash connection to display prompts for the same connections only once
-        $importer->addFlashConnection($parentId, $id, 'theme_layout_connection');
+    return $importer->useParentConnectionLogic($row, FaqModel::getTable(), FaqCategoryModel::getTable(), [
+        'label'       => 'FAQ → FAQ-Kategorie zuordnen',
+        'description' => 'Ein oder mehrere FAQs konnten keiner FAQ-Kategorie zugeordnet werden. Ihre Auswahl wird für alle weiteren FAQs, welche auf die selbe FAQ-Kategorie referenzieren, übernommen.',
+        'explanation' => [
+            'type'        => 'TABLE',
+            'description' => 'Beim Importieren eines oder mehrerer FAQs konnte die zugehörige FAQ-Kategorie nicht gefunden werden. Wählen Sie bitte eine FAQ-Kategorie aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen FAQs und der Kategorie herzustellen.<br/><br/><b>Folgende FAQ-Kategorie wurde nicht importiert und benötigt ein Alternative:</b>',
+            'content'     => $faqCategoryStructure ?? []
+        ],
+        'class'       => 'w50'
+    ]);
+});
 
-        if($themes = ThemeModel::findAll())
-        {
-            foreach ($themes as $theme)
-            {
-                $values[] = [
-                    'value' => $theme->id,
-                    'text'  => $theme->name
-                ];
-            }
-        }
+/**
+ * News Validators:
+ */
+// Set news-news_archive connections
+Validator::addValidator(NewsModel::getTable(), static function (array &$row, AbstractPromptImport $importer): ?array
+{
+    $newsArchiveStructure = $importer->getArchiveContentByTable(NewsArchiveModel::getTable(), [
+        'value' => $row['pid'],
+        'field' => 'id'
+    ]);
 
-        return [
-            $connectionFieldName => [
-                $values ?? [],
-                FormPromptType::SELECT,
-                [
-                    'label'       => 'Layout zuordnen',
-                    'description' => 'Das Layout "' . $row['name'] . '" (' . $row['id'] . ') muss einem Theme zugeordnet werden.',
-                    'info'        => 'Beim Importieren der Seite "' . $row['name'] . '" (' . $row['id'] . ') konnte ein zugewiesenes Layout nicht aufgelöst werden. Wählen Sie bitte ein Layout aus Ihrer Contao-Instanz um eine Verknüpfung zwischen Seite und Layout herzustellen.<br/><br/><b>Verknüpfung für alle weiteren Layouts mit dieser ID anwenden:</b><br/>Bei Auswahl dieser Einstellung, wird die zugewiesene Layout-ID für alle weiteren Seiten verwendet, wo die Verknüpfung auf dasselbe nicht zuweisbare Layout zeigen.',
-                    'class'       => 'w50'
-                ]
-            ]
-        ];
-    }
-
-    return null;
+    return $importer->useParentConnectionLogic($row, NewsModel::getTable(), NewsArchiveModel::getTable(), [
+        'label'       => 'News → News-Archiv zuordnen',
+        'description' => 'Ein oder mehrere News konnten keinem News-Archive zugeordnet werden. Ihre Auswahl wird für alle weiteren News, welche auf das selbe News-Archiv referenzieren, übernommen.',
+        'explanation' => [
+            'type'        => 'TABLE',
+            'description' => 'Beim Importieren eines oder mehrerer News konnte das zugehörige News-Archiv nicht gefunden werden. Wählen Sie bitte ein News-Archiv aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen News und dem News-Archiv herzustellen.<br/><br/><b>Folgendes News-Archiv wurde nicht importiert und benötigt ein Alternative:</b>',
+            'content'     => $newsArchiveStructure ?? []
+        ],
+        'class'       => 'w50'
+    ]);
 });

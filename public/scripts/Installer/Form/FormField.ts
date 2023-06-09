@@ -1,6 +1,10 @@
 import ContainerComponent from "../Components/ContainerComponent";
 import {i18n} from "../Language"
-import PopupComponent, {PopupType} from "../Components/PopupComponent";
+import PopupComponent, {PopupConfig, PopupType} from "../Components/PopupComponent";
+
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/light-border.css';
 
 export enum FormFieldType {
     TEXT = 'text',
@@ -16,7 +20,7 @@ export type FormFieldConfig = {
         label: string
         description: string
         class: string
-        info: string
+        explanation: PopupConfig
     }
 }
 
@@ -78,19 +82,22 @@ export default abstract class FormField extends ContainerComponent
     {
         super.content(html);
 
-        if(this.config?.options?.info)
+        if(this.config?.options?.explanation)
         {
+            let explanation = this.config.options.explanation
             let infoElement = this.element('legend')
 
             if (!infoElement)
                 infoElement = this.element('label')
 
-            if (infoElement) {
+            if (infoElement)
+            {
                 const popup = new PopupComponent({
-                    type: PopupType.HTML,
+                    type: explanation?.type ?? PopupType.HTML,
                     appendTo: () => this.template.closest('.inside'),
-                    title: 'Feldbeschreibung',
-                    content: this.config.options.info,
+                    title: explanation?.title ?? 'Feldinformationen',
+                    description: explanation?.description,
+                    content: explanation.content,
                     closeable: true
                 })
 
@@ -105,6 +112,18 @@ export default abstract class FormField extends ContainerComponent
                 infoElement.appendChild(helper)
             }
         }
+
+        // Description tooltips
+        this.template.querySelectorAll('.field-desc')?.forEach((tip) => {
+            tippy(tip, {
+                allowHTML: true,
+                ignoreAttributes: true,
+                placement: 'auto',
+                content: tip.innerHTML,
+                delay: [500, 0],
+                theme: 'light-border'
+            })
+        })
     }
 
     abstract getValue(): string|string[]|object|object[];

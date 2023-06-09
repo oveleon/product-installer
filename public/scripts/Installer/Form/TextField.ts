@@ -42,7 +42,7 @@ export default class TextField extends FormField
                 <label for="ctrl_${this.options.name}">${i18n('form.field.' + this.options.name + '.label')}</label>
             </h3>
             <input type="text" name="${this.options.name}" id="ctrl_${this.options.name}" class="tl_text" value="${this.options.value}" ${this.options.options.required ? 'required' : ''}>
-            <p>${i18n('form.field.' + this.options.name + '.desc')}</p>
+            <p class="field-desc">${i18n('form.field.' + this.options.name + '.desc')}</p>
         `)
     }
 

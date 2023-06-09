@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "dropzone": "^6.0.0-beta.2",
+        "tippy.js": "^6.3.7",
         "tom-select": "^2.2.2"
     }
 }

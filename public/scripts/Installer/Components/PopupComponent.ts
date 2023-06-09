@@ -5,18 +5,19 @@ import {i18n} from "../Language"
  * Popup Types.
  */
 export enum PopupType {
-    HTML,
-    TABLE,
-    AJAX,
-    IFRAME
+    HTML   = 'HTML',
+    TABLE  = 'TABLE',
+    AJAX   = 'AJAX',
+    IFRAME = 'IFRAME'
 }
 
 /**
  * Popup config.
  */
-export interface PopupConfig {
+export type PopupConfig = {
     type: PopupType,
     title: string,
+    description?: string,
     content: string|any,
     appendTo: HTMLElement|Function
     closeable?: boolean
@@ -75,7 +76,8 @@ export default class PopupComponent extends ContainerComponent
     private setContent(): void
     {
         let content: string;
-        let actions: string;
+        let actions: string = '';
+        let description: string = '';
 
         if(this.options?.closeable)
         {
@@ -86,12 +88,18 @@ export default class PopupComponent extends ContainerComponent
             `
         }
 
+        if(this.options?.description)
+        {
+            description = `<p class="desc">${this.options.description}</p>`
+        }
+
         switch (this.options.type)
         {
             case PopupType.IFRAME:
                 content = `
                     <div class="iframe">
                         <h2>${this.options.title}</h2>
+                        ${description}
                         <iframe src="${this.options.content}" width="100%" height="100%"></iframe>
                         ${actions}
                     </div>
@@ -107,6 +115,7 @@ export default class PopupComponent extends ContainerComponent
                 content = `
                     <div class="table scrollable">
                         <h2>${this.options.title}</h2>
+                        ${description}
                         ${this.arrayToTable(this.options.content)}
                         ${actions}
                     </div>
@@ -117,6 +126,7 @@ export default class PopupComponent extends ContainerComponent
                 content = `
                     <div class="html scrollable">
                         <h2>${this.options.title}</h2>
+                        ${description}
                         ${this.options.content}
                         ${actions}
                     </div>
@@ -147,6 +157,11 @@ export default class PopupComponent extends ContainerComponent
 
         for (const label in data)
         {
+            if(!data.hasOwnProperty(label))
+            {
+                continue
+            }
+
             const value = data[label]
 
             let row = document.createElement('tr');

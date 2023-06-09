@@ -1,4 +1,4 @@
-$input-border-color: #afafaf;
+$input-border-color: #688191;
 
 #installer{
 
@@ -25,6 +25,17 @@ $input-border-color: #afafaf;
     p{
       font-size: .8rem;
       margin: 2px 0 0;
+
+      &.field-desc{
+        height: 18px;
+        width: auto;
+        max-width: 100%;
+        align-self: flex-start;
+        overflow: hidden;
+        cursor: help;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
 
     label{
@@ -82,7 +93,7 @@ $input-border-color: #afafaf;
       input{
         font-size: .9rem;
         line-height: 0;
-        border: 1px solid #688191;
+        border: 1px solid $input-border-color;
         border-radius: 3px;
         outline-color: $background-color;
 
@@ -218,35 +229,80 @@ $input-border-color: #afafaf;
     }
   }
 
+  /**
+   * Tom-Select overwrites
+   */
+  .focus .ts-control{
+    box-shadow: none;
+    outline-width: 1px;
+    outline-style:solid;
+  }
+
+  .ts-control{
+    border-radius: 3px;
+    border-color: $input-border-color;
+    outline-color: $background-color;
+  }
+
   .ts-dropdown{
 
     .option{
+      position: relative;
 
-      &.level_0{
-        position: relative;
-        padding-left: 30px;
+      span.info{
+        position: absolute;
+        right: 10px;
+        top: 3px;
+        color: $text-color-info;
+      }
+
+      span.text{
+        padding-left: calc(var(--level, 0) * 18px);
 
         &:before{
-          content: "";
-          position: absolute;
-          left: 8px;
-          top: 5px;
+          display: inline-block;
+
+          position: relative;
+          top: 4px;
 
           width: 18px;
           height: 18px;
+          margin-right: 5px;
 
-          background: url("/system/themes/flexible/icons/pagemounts.svg") no-repeat;
+          background-repeat: no-repeat;
         }
       }
-      &.level_1{
-        padding-left: 40px;
+
+      &.disconnect span:before{
+        content: "";
+        background-image: url("/system/themes/flexible/icons/parent.svg");
       }
-      &.level_2{
-        padding-left: 60px;
+
+      &.layout span:before{
+        content: "";
+        background-image: url("/system/themes/flexible/icons/layout.svg");
       }
-      &.level_3{
-        padding-left: 80px;
+
+      &.root span:before{
+        content: "";
+        background-image: url("/system/themes/flexible/icons/pagemounts.svg");
+      }
+
+      &.copy span:before{
+        content: "";
+        background-image: url("/system/themes/flexible/icons/copy.svg");
+      }
+
+      &.forward span:before{
+        content: "";
+        background-image: url("/system/themes/flexible/icons/forward.svg");
+      }
+
+      &.regular span:before{
+        content: "";
+        background-image: url("/system/themes/flexible/icons/regular.svg");
       }
     }
   }
+
 }

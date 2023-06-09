@@ -53,10 +53,8 @@ export default class SelectField extends FormField
                 <label for="ctrl_${this.config.name}">${this.label}</label>
             </h3>
             <input />
-            <p>${this.description}</p>
+            <p class="field-desc">${this.description}</p>
         `)
-
-        console.log(this.config.value)
 
         const selectOptions = {
             options: this.config.value,
@@ -70,7 +68,17 @@ export default class SelectField extends FormField
 
             render: {
                 option: function(data, escape) {
-                    return `<div class="${data?.level ? 'level_' + data.level : ''}">${escape(data.text)}</div>`
+                    let info: string = ''
+
+                    if(data?.info)
+                        info = `<span class="info">${data.info}</span>`
+
+                    return `
+                        <div class="${data?.class ? data.class : ''}">
+                            <span class="text" ${data?.level ? 'style="--level:' + data?.level + ';"' : ''}>${escape(data.text)}</span>
+                            ${info}
+                        </div>
+                    `
                 }
             }
         }

@@ -6,9 +6,10 @@ use Contao\Controller;
 use Contao\DataContainer;
 use Contao\DC_Table;
 use Contao\Model;
-use Contao\PageModel;
+
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
+use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 
 class TableImport extends AbstractPromptImport
 {
@@ -71,12 +72,6 @@ class TableImport extends AbstractPromptImport
         if(DC_Table::class === $tableInfo->dataContainer)
         {
             $this->importTable();
-
-            /*// Determine the type of the import
-            if(DataContainer::MODE_TREE === $info['sortingMode'])
-            {
-                $this->importTreeTable();
-            }*/
         }
     }
 
@@ -370,5 +365,78 @@ class TableImport extends AbstractPromptImport
             $row['_create'],
             $row['_root']
         );
+    }
+
+    /**
+     * Create new connections between two tables and handle prompts, should they be necessary.
+     */
+    public function useParentConnectionLogic(array $row, string $tableA, string $tableB, array $promptOptions, string $aField = 'id', string $bField = 'pid'): ?array
+    {
+        $parentId = $row[$bField];
+        $id       = $row[$aField];
+
+        /** @var Model $aModel */
+        $aModel   = Model::getClassFromTable($tableA);
+
+        /** @var Model $bModel */
+        $bModel   = Model::getClassFromTable($tableB);
+
+        $aTable   = $aModel::getTable();
+        $bTable   = $bModel::getTable();
+
+        // Skip if we find a connection
+        if($this->getConnection($parentId, $bTable))
+        {
+            return null;
+        }
+
+        $connectorName = $bTable . '_' .  $aTable . '_connection';
+        $fieldName = $tableA . '_connection_' . $id;
+        $skip = [];
+
+        // Check if we got a prompt response and should skip prompts of the same ID
+        if($this->getFlashConnection($parentId, $connectorName))
+        {
+            $skip[] = $parentId;
+        }
+
+        // Check if we have already received a user decision
+        if($connectedId = (int) $this->getPromptValue($fieldName))
+        {
+            // Add id connection for child row
+            $this->addConnection($parentId, $connectedId, $bTable);
+        }
+        else
+        {
+            if(\in_array($parentId, $skip))
+            {
+                return null;
+            }
+
+            // Add a flash connection to display prompts for the same connections only once
+            $this->addFlashConnection($parentId, $id, $connectorName);
+
+            if($records = $bModel::findAll())
+            {
+                foreach ($records as $record)
+                {
+                    $values[] = [
+                        'value' => $record->id,
+                        'text'  => $record->name ?? $record->title,
+                        'info'  => $record->id
+                    ];
+                }
+            }
+
+            return [
+                $fieldName => [
+                    $values ?? [],
+                    FormPromptType::SELECT,
+                    $promptOptions
+                ]
+            ];
+        }
+
+        return null;
     }
 }

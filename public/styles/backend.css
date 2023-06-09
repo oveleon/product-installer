@@ -145,6 +145,11 @@
     border-color: #e57c11;
   }
 }
+#installer {
+  /**
+   * Tom-Select overwrites
+   */
+}
 #installer form.fields {
   display: flex;
   flex-wrap: wrap;
@@ -163,6 +168,16 @@
 #installer .widget p {
   font-size: 0.8rem;
   margin: 2px 0 0;
+}
+#installer .widget p.field-desc {
+  height: 18px;
+  width: auto;
+  max-width: 100%;
+  align-self: flex-start;
+  overflow: hidden;
+  cursor: help;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 #installer .widget label {
   display: inline-block;
@@ -263,7 +278,7 @@
   width: 20px;
   height: 20px;
   border-radius: 5px;
-  border: 1px solid #afafaf;
+  border: 1px solid #688191;
   background-color: #fbfbfb;
   transition: color 0.2s linear, background-color 0.2s ease-in-out;
   position: absolute;
@@ -300,27 +315,60 @@
   width: 100%;
   margin: 3px 0;
 }
-#installer .ts-dropdown .option.level_0 {
-  position: relative;
-  padding-left: 30px;
+#installer .focus .ts-control {
+  box-shadow: none;
+  outline-width: 1px;
+  outline-style: solid;
 }
-#installer .ts-dropdown .option.level_0:before {
-  content: "";
+#installer .ts-control {
+  border-radius: 3px;
+  border-color: #688191;
+  outline-color: #688191;
+}
+#installer .ts-dropdown .option {
+  position: relative;
+}
+#installer .ts-dropdown .option span.info {
   position: absolute;
-  left: 8px;
-  top: 5px;
+  right: 10px;
+  top: 3px;
+  color: #a6a6a6;
+}
+#installer .ts-dropdown .option span.text {
+  padding-left: calc(var(--level, 0) * 18px);
+}
+#installer .ts-dropdown .option span.text:before {
+  display: inline-block;
+  position: relative;
+  top: 4px;
   width: 18px;
   height: 18px;
-  background: url("/system/themes/flexible/icons/pagemounts.svg") no-repeat;
+  margin-right: 5px;
+  background-repeat: no-repeat;
 }
-#installer .ts-dropdown .option.level_1 {
-  padding-left: 40px;
+#installer .ts-dropdown .option.disconnect span:before {
+  content: "";
+  background-image: url("/system/themes/flexible/icons/parent.svg");
 }
-#installer .ts-dropdown .option.level_2 {
-  padding-left: 60px;
+#installer .ts-dropdown .option.layout span:before {
+  content: "";
+  background-image: url("/system/themes/flexible/icons/layout.svg");
 }
-#installer .ts-dropdown .option.level_3 {
-  padding-left: 80px;
+#installer .ts-dropdown .option.root span:before {
+  content: "";
+  background-image: url("/system/themes/flexible/icons/pagemounts.svg");
+}
+#installer .ts-dropdown .option.copy span:before {
+  content: "";
+  background-image: url("/system/themes/flexible/icons/copy.svg");
+}
+#installer .ts-dropdown .option.forward span:before {
+  content: "";
+  background-image: url("/system/themes/flexible/icons/forward.svg");
+}
+#installer .ts-dropdown .option.regular span:before {
+  content: "";
+  background-image: url("/system/themes/flexible/icons/regular.svg");
 }
 
 .products .no-products {
@@ -972,7 +1020,7 @@
   position: absolute;
   inset: 0;
   z-index: 500;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.4;
 }
 #installer .popup > div {
@@ -987,6 +1035,7 @@
 #installer .popup table {
   border: 0 none;
   border-spacing: 0;
+  word-break: break-word;
 }
 #installer .popup table p {
   font-size: 0.91rem;

@@ -63,7 +63,7 @@ export default class CheckboxField extends FormField
                     <legend>${(this.config.options.label ? this.config.options.label : i18n('form.field.' + this.config.name + '.label'))}</legend>
                 </fieldset>
                 
-                <p>${(this.config.options.description ? this.config.options.description : i18n('form.field.' + this.config.name + '.desc'))}</p>
+                <p class="field-desc">${(this.config.options.description ? this.config.options.description : i18n('form.field.' + this.config.name + '.desc'))}</p>
             `)
 
             fieldset = <HTMLDivElement> this.element('fieldset')

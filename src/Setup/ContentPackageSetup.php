@@ -136,13 +136,16 @@ class ContentPackageSetup
                 }
 
                 return (new FormPrompt('setupConfig'))
-                    ->field('tables', $values, FormPromptType::CHECKBOX, ['checked' => true, 'multiple' => true, 'checkAll' => true, 'info' => 'ToDo ...'])
+                    ->field('tables', $values, FormPromptType::CHECKBOX, ['checked' => true, 'multiple' => true, 'checkAll' => true])
                     ->getResponse();
             }
         }
 
         // Set prompt response (importer)
         $this->tableImporter->setPromptResponse($promptResponse);
+
+        // Set archive
+        $this->tableImporter->setArchive($destination);
 
         // Get selected tables to import
         $skipTables = [];
@@ -163,7 +166,7 @@ class ContentPackageSetup
         }
 
         // Running through the tables in the correct order
-        foreach ($tableStructure as $tableName)
+        foreach ($tableStructure ?? [] as $tableName)
         {
             // Skip table if needed
             if(\in_array($tableName, $skipTables))
@@ -197,6 +200,8 @@ class ContentPackageSetup
     public function getTableStructure(string $archiveDestination): array
     {
         // ToDo: Get structure from config yml
+        // ToDo: Check if e.g. news bundle is installed
+
         // Get table structure by config
         $tableOrder = [
             'tl_theme',
