@@ -34,9 +34,14 @@ class TableImport extends AbstractPromptImport
      */
     public function import(string $tableName, array $tableContent): ?AbstractPrompt
     {
+        // Set class variables
         $this->table = $tableName;
         $this->content = $tableContent;
 
+        // Apply default validators
+        Validator::useDefaultTableValidators();
+
+        // Check import state
         switch($this->getState())
         {
             case ImportStateType::INIT->value:

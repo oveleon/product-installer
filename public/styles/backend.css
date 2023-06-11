@@ -220,10 +220,10 @@
   line-height: 0;
   border: 1px solid #688191;
   border-radius: 3px;
-  outline-color: #688191;
+  outline-color: rgba(104, 129, 145, 0.33);
 }
 #installer .widget.text input:focus {
-  outline-width: 1px;
+  outline-width: 3px;
   outline-style: solid;
 }
 #installer .widget.text input::placeholder {

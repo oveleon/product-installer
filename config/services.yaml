@@ -6,4 +6,4 @@ services:
 
     Oveleon\ProductInstaller\:
         resource: '../src/'
-        exclude: '../src/{Model,DependencyInjection,Resources,LicenseConnector,Import/Prompt,Import/Validator.php}'
+        exclude: '../src/{Model,DependencyInjection,Resources,LicenseConnector,Import/Prompt,Import/Validator,Import/Validator.php}'
