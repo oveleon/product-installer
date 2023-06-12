@@ -13,6 +13,7 @@ use Oveleon\ProductInstaller\Import\TableImport;
 use Oveleon\ProductInstaller\SetupLock;
 use Oveleon\ProductInstaller\Util\ArchiveUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Content package setup initiator.
@@ -26,7 +27,8 @@ class ContentPackageSetup
     public function __construct(
         protected readonly ArchiveUtil $archiveUtil,
         protected readonly TableImport $tableImporter,
-        protected readonly SetupLock $setupLock
+        protected readonly SetupLock $setupLock,
+        protected readonly TranslatorInterface $translator,
     ){}
 
     public function run($task, PromptResponse $promptResponse): JsonResponse
@@ -36,7 +38,7 @@ class ContentPackageSetup
         {
             return new JsonResponse([
                 'error'   => true,
-                'message' => 'Zieldatei konnte nicht gefunden werden.'
+                'message' => $this->translator->trans('setup.error.fileNotFound', [], 'setup')
             ]);
         }
 
@@ -64,9 +66,9 @@ class ContentPackageSetup
             {
                 // Return a confirm prompt
                 return (new ConfirmPrompt('runningSetup'))
-                            ->question('Wir haben festgestellt, dass die vorherige Einrichtung nicht vollständig abgeschlossen wurde. Möchten Sie mit der Einrichtung fortfahren oder erneut starten?')
-                            ->answer('Einrichtung neu starten', 0)
-                            ->answer('Einrichtung fortsetzen',1)
+                            ->question($this->translator->trans('setup.prompt.running.question', [], 'setup'))
+                            ->answer($this->translator->trans('setup.prompt.running.answerFalse', [], 'setup'), 0)
+                            ->answer($this->translator->trans('setup.prompt.running.answerTrue', [], 'setup'),1)
                             ->getResponse();
             }
         }
@@ -103,17 +105,17 @@ class ContentPackageSetup
                 foreach ($tableStructure as $table)
                 {
                     /** @var Model $tableModel */
-                    $tableModel = Model::getClassFromTable($table);
+                    $tableModel = $this->tableImporter->getClassFromFileName($table);
                     $hasRows = $tableModel::countAll() > 0;
 
                     $values[] = [
                         'name'  => $table,
                         'value' => 1,
-                        'text'  => $table, // ToDo: Translate e.g. tl_page -> Seitenstruktur
+                        'text'  => $this->translator->trans('setup.tables.' . $table, [], 'setup'),
                         'options' => [
                             'checked' => true,
                             'disabled' => !$hasRows,
-                            'description' => !$hasRows ? 'Fehlende Datensätze im System' : null
+                            'description' => !$hasRows ? $this->translator->trans('setup.global.systemNoContent', [], 'setup') : null
                         ]
                     ];
                 }
@@ -246,46 +248,6 @@ class ContentPackageSetup
         return array_merge($tableOrder, $archiveTablesOnTop);
     }
 
-    /**
-     * Returns the model based on a filename with table name verification.
-     */
-    /*protected function getClassFromFileName(string $filename): string
-    {
-        return Model::getClassFromTable($this->getTableFromFileName($filename));
-    }*/
-
-    /**
-     * Returns the table based on a table with table name verification.
-     */
-    /*protected function getTableFromFileName(string $filename): string
-    {
-        return strtok($filename, '.');
-    }*/
-
-    /**
-     * Overwrites connected ids in a content element.
-     */
-    /*private function overwriteContentElement($model): void
-    {
-        switch($model->type)
-        {
-            case 'article':
-                $model->articleAlias = $this->connections['tl_article'][ $model->articleAlias ] ?? 0;
-                break;
-
-            case 'form':
-                $model->form = $this->connections['tl_form'][ $model->form ] ?? 0;
-                break;
-
-            case 'module':
-                $model->module = $this->connections['tl_module'][ $model->module ] ?? 0;
-                break;
-
-            case 'teaser':
-                $model->article = $this->connections['tl_article'][ $model->article ] ?? 0;
-                break;
-        }
-    }*/
 
     /**
      * Overwrites the connection from one content element to another (Include: Content Element).

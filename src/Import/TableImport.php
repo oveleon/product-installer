@@ -211,17 +211,19 @@ class TableImport extends AbstractPromptImport
      */
     public function getTableInformation(): ?\stdClass
     {
-        // Load data container for the current table
-        Controller::loadDataContainer($this->table);
+        $table = $this->getTableFromFileName($this->table);
 
-        if(!isset($GLOBALS['TL_DCA'][$this->table]['config']))
+        // Load data container for the current table
+        Controller::loadDataContainer($table);
+
+        if(!isset($GLOBALS['TL_DCA'][$table]['config']))
         {
             return null;
         }
 
         $info = new \stdClass();
-        $conf = $GLOBALS['TL_DCA'][$this->table]['config'];
-        $list = $GLOBALS['TL_DCA'][$this->table]['list'];
+        $conf = $GLOBALS['TL_DCA'][$table]['config'];
+        $list = $GLOBALS['TL_DCA'][$table]['list'];
 
         $info->sortingMode = $list['sorting']['mode'] ?? null;
         $info->dataContainer = $conf['dataContainer'] ?? null;
@@ -229,7 +231,7 @@ class TableImport extends AbstractPromptImport
         $info->dynamicPtable = $conf['dynamicPtable'] ?? null;
         $info->ptable = $conf['ptable'] ?? ($info->sortingMode === DataContainer::MODE_TREE ? $this->table : null);
 
-        $info->hasParent = $info->ptable || $info->dynamicPtable || $info->sortingMode === DataContainer::MODE_TREE;
+        $info->hasParent = $info->ptable || $info->dynamicPtable;
 
         return $info;
     }
@@ -246,7 +248,7 @@ class TableImport extends AbstractPromptImport
         $content = $this->content;
 
         // Get model class by table
-        if(!$modelClass = Model::getClassFromTable($this->table))
+        if(!$modelClass = $this->getClassFromFileName($this->table))
         {
             // ToDo: CancelPrompt
         }
@@ -302,11 +304,9 @@ class TableImport extends AbstractPromptImport
             return;
         }
 
-        $modelClass = Model::getClassFromTable($this->table);
+        $modelClass = $this->getClassFromFileName($this->table);
         $tableInfo = $this->getTableInformation();
         $hasParent = $tableInfo->hasParent;
-
-        // ToDo: sql autocommit false?
 
         foreach ($validatedRows as $row)
         {
@@ -329,7 +329,14 @@ class TableImport extends AbstractPromptImport
             // Check for parent-connections
             if($hasParent && !$isRoot)
             {
-                $parentId = $this->getConnection($row['pid'], $tableInfo->ptable);
+                $parentTable = $tableInfo->ptable;
+
+                if($tableInfo?->dynamicPtable)
+                {
+                    $parentTable = $row['ptable'];
+                }
+
+                $parentId = $this->getConnection($row['pid'], $parentTable);
 
                 $model->pid = $parentId;
             }
@@ -337,8 +344,6 @@ class TableImport extends AbstractPromptImport
             // Add connection
             $this->addConnection($exportId, ($model->save())->id);
         }
-
-        // ToDo: sql commit? Then we're able to check if something gone wrong?
 
         $this->setState(ImportStateType::FINISH);
     }
@@ -373,18 +378,34 @@ class TableImport extends AbstractPromptImport
     }
 
     /**
+     * Returns the model based on a filename with table name verification.
+     */
+    public static function getClassFromFileName(string $filename): string
+    {
+        return Model::getClassFromTable( self::getTableFromFileName($filename) );
+    }
+
+    /**
+     * Returns the base table of the given filename.
+     */
+    public static function getTableFromFileName(string $filename): string
+    {
+        return strtok($filename, '.');
+    }
+
+    /**
      * Create new connections between two tables and handle prompts, should they be necessary.
      */
-    public function useParentConnectionLogic(array $row, string $tableA, string $tableB, array $promptOptions, string $aField = 'id', string $bField = 'pid'): ?array
+    public function useParentConnectionLogic(array $row, string $tableA, string $tableB, array $promptOptions, ?array $selectableValues = null, string $aField = 'id', string $bField = 'pid'): ?array
     {
         $parentId = $row[$bField];
         $id       = $row[$aField];
 
         /** @var Model $aModel */
-        $aModel   = Model::getClassFromTable($tableA);
+        $aModel   = $this->getClassFromFileName($tableA);
 
         /** @var Model $bModel */
-        $bModel   = Model::getClassFromTable($tableB);
+        $bModel   = $this->getClassFromFileName($tableB);
 
         $aTable   = $aModel::getTable();
         $bTable   = $bModel::getTable();
@@ -421,15 +442,20 @@ class TableImport extends AbstractPromptImport
             // Add a flash connection to display prompts for the same connections only once
             $this->addFlashConnection($parentId, $id, $connectorName);
 
-            if($records = $bModel::findAll())
+            $values = $selectableValues ?? [];
+
+            if($selectableValues === null)
             {
-                foreach ($records as $record)
+                if($records = $bModel::findAll())
                 {
-                    $values[] = [
-                        'value' => $record->id,
-                        'text'  => $record->name ?? $record->title,
-                        'info'  => $record->id
-                    ];
+                    foreach ($records as $record)
+                    {
+                        $values[] = [
+                            'value' => $record->id,
+                            'text'  => $record->name ?: ($record->title ?: $record->headline),
+                            'info'  => $record->id
+                        ];
+                    }
                 }
             }
 

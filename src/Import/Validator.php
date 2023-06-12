@@ -4,6 +4,9 @@ namespace Oveleon\ProductInstaller\Import;
 
 use Contao\FormFieldModel;
 use Oveleon\ProductInstaller\Import\Validator\ArticleValidator;
+use Oveleon\ProductInstaller\Import\Validator\ContentArticleValidator;
+use Oveleon\ProductInstaller\Import\Validator\ContentEventValidator;
+use Oveleon\ProductInstaller\Import\Validator\ContentNewsValidator;
 use Oveleon\ProductInstaller\Import\Validator\EventValidator;
 use Oveleon\ProductInstaller\Import\Validator\FaqValidator;
 use Oveleon\ProductInstaller\Import\Validator\FormFieldValidator;
@@ -45,6 +48,18 @@ class Validator
 
         // Article
         self::addValidator(ArticleValidator::getTrigger(), [ArticleValidator::class, 'setPageConnection']);
+
+        // Content-Article
+        self::addValidator(ContentArticleValidator::getTrigger(), [ContentArticleValidator::class, 'setArticleConnection']);
+        self::addValidator(ContentArticleValidator::getTrigger(), [ContentArticleValidator::class, 'setIncludes']);
+
+        // Content-News
+        self::addValidator(ContentNewsValidator::getTrigger(), [ContentNewsValidator::class, 'setNewsConnection']);
+        self::addValidator(ContentNewsValidator::getTrigger(), [ContentNewsValidator::class, 'setIncludes']);
+
+        // Content-Event
+        self::addValidator(ContentEventValidator::getTrigger(), [ContentEventValidator::class, 'setEventConnection']);
+        self::addValidator(ContentEventValidator::getTrigger(), [ContentEventValidator::class, 'setIncludes']);
     }
 
     /**

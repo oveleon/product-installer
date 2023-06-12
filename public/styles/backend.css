@@ -317,13 +317,13 @@
 }
 #installer .focus .ts-control {
   box-shadow: none;
-  outline-width: 1px;
+  outline-width: 3px;
   outline-style: solid;
 }
 #installer .ts-control {
   border-radius: 3px;
   border-color: #688191;
-  outline-color: #688191;
+  outline-color: rgba(104, 129, 145, 0.33);
 }
 #installer .ts-dropdown .option {
   position: relative;
@@ -335,39 +335,36 @@
   color: #a6a6a6;
 }
 #installer .ts-dropdown .option span.text {
-  padding-left: calc(var(--level, 0) * 18px);
+  padding-left: calc(var(--level, 0) * 15px);
 }
 #installer .ts-dropdown .option span.text:before {
+  content: "";
   display: inline-block;
   position: relative;
   top: 4px;
   width: 18px;
   height: 18px;
   margin-right: 5px;
+  background-image: url("/bundles/productinstaller/icons/connect.svg");
+  background-size: contain;
   background-repeat: no-repeat;
 }
 #installer .ts-dropdown .option.disconnect span:before {
-  content: "";
   background-image: url("/system/themes/flexible/icons/parent.svg");
 }
 #installer .ts-dropdown .option.layout span:before {
-  content: "";
   background-image: url("/system/themes/flexible/icons/layout.svg");
 }
 #installer .ts-dropdown .option.root span:before {
-  content: "";
   background-image: url("/system/themes/flexible/icons/pagemounts.svg");
 }
 #installer .ts-dropdown .option.copy span:before {
-  content: "";
   background-image: url("/system/themes/flexible/icons/copy.svg");
 }
 #installer .ts-dropdown .option.forward span:before {
-  content: "";
   background-image: url("/system/themes/flexible/icons/forward.svg");
 }
 #installer .ts-dropdown .option.regular span:before {
-  content: "";
   background-image: url("/system/themes/flexible/icons/regular.svg");
 }
 

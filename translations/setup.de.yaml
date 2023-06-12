@@ -1,0 +1,119 @@
+setup:
+    tables:
+        tl_theme:                       'Themes'
+        tl_style_sheet:                 'Stylesheets'
+        tl_style:                       'Formatdefinitionen'
+        tl_image_size:                  'Bildgrößen'
+        tl_image_size_item:             'Media-Queries'
+        tl_module:                      'Module'
+        tl_layout:                      'Layouts'
+        tl_user_group:                  'Benutzergruppen'
+        tl_member_group:                'Mitgliedergruppen'
+        tl_faq_category:                'FAQ-Kategorien'
+        tl_faq:                         'FAQs'
+        tl_news_archive:                'News-Archive'
+        tl_news_feed:                   'News-Feeds'
+        tl_news:                        'News'
+        tl_calendar:                    'Event-Archive'
+        tl_calendar_feed:               'Event-Feeds'
+        tl_calendar_events:             'Events'
+        tl_comments:                    'Kommentare'
+        tl_comments_notify:             'Kommentar-Benachrichtigungen'
+        tl_newsletter_channel:          'Newsletter Channel'
+        tl_newsletter_deny_list:        'Newsletter Ablehnungsliste'
+        tl_newsletter:                  'Newsletter'
+        tl_newsletter_recipients:       'Newsletter Empfängerliste'
+        tl_form:                        'Formulare'
+        tl_form_field:                  'Formularfelder'
+        tl_page:                        'Seitenstruktur'
+        tl_article:                     'Artikel'
+        tl_content:
+            tl_article:                 'Inhaltselemente (Artikel)'
+            tl_news:                    'Inhaltselemente (News)'
+            tl_calendar_events:         'Inhaltselemente (Events)'
+    global:
+        systemNoContent:                'Fehlende Datensätze im System'
+        actions:                        'Aktionen'
+        unlink:                         'Verknüfung aufheben'
+    error:
+        fileNotFound:                   'Zieldatei konnte nicht gefunden werden.'
+    prompt:
+        running:
+            question:                   'Wir haben festgestellt, dass die vorherige Einrichtung nicht vollständig abgeschlossen wurde. Möchten Sie mit der Einrichtung fortfahren oder erneut starten?'
+            answerTrue:                 'Einrichtung fortsetzen'
+            answerFalse:                'Einrichtung neu starten'
+        content:
+            content:
+                includes:
+                    articleAlias:
+                        title:          'Inhaltselement (verweist) → Artikel'
+                        description:    'Ein oder mehrere Verweisungen aus einem Inhaltselement konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Inhaltselemente, welche auf den selben Artikel referenzieren, übernommen.'
+                        explanation:    'Beim Importieren eines oder mehrerer Inhaltselemente konnte das zugehörige Event nicht gefunden werden. Wählen Sie bitte ein Event aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Inhaltselementen und einem Event herzustellen.<br/><br/><b>Folgendes Event wurde nicht importiert und benötigt ein Alternative:</b>'
+                    form:
+                        title:          'Inhaltselement (verweist) → Formular'
+                        description:    'Ein oder mehrere Verweisungen aus einem Inhaltselement konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Inhaltselemente, welche auf das selbe Formular referenzieren, übernommen.'
+                        explanation:    ''
+                    module:
+                        title:          'Inhaltselement (verweist) → Modul'
+                        description:    'Ein oder mehrere Verweisungen aus einem Inhaltselement konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Inhaltselemente, welche auf das selbe Modul referenzieren, übernommen.'
+                        explanation:    ''
+                    article:
+                        title:          'Inhaltselement (verweist) → Teaser'
+                        description:    'Ein oder mehrere Verweisungen aus einem Inhaltselement konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Inhaltselemente, welche auf den selben Artikel-Teaser referenzieren, übernommen.'
+                        explanation:    ''
+            event:
+                label:                  'Inhaltselement → Event'
+                description:            'Ein oder mehrere Inhaltselemente konnten keinem Event zugeordnet werden. Ihre Auswahl wird für alle weiteren Inhaltselemente, welche auf das selbe Event referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Inhaltselemente konnte das zugehörige Event nicht gefunden werden. Wählen Sie bitte ein Event aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Inhaltselementen und einem Event herzustellen.<br/><br/><b>Folgendes Event wurde nicht importiert und benötigt ein Alternative:</b>'
+            article:
+                label:                  'Inhaltselement → Artikel'
+                description:            'Ein oder mehrere Inhaltselemente konnten keinem Artikel zugeordnet werden. Ihre Auswahl wird für alle weiteren Inhaltselemente, welche auf den selben Artikel referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Inhaltselemente konnte der zugehörige Artikel nicht gefunden werden. Wählen Sie bitte einen Artikel aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Inhaltselementen und einem Artikel herzustellen.<br/><br/><b>Folgender Artikel wurde nicht importiert und benötigt ein Alternative:</b>'
+            news:
+                label:                  'Inhaltselement → News'
+                description:            'Ein oder mehrere Inhaltselemente konnten keiner News zugeordnet werden. Ihre Auswahl wird für alle weiteren Inhaltselemente, welche auf die selbe News referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Inhaltselemente konnte die zugehörige News nicht gefunden werden. Wählen Sie bitte einen Artikel aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Inhaltselementen und einer News herzustellen.<br/><br/><b>Folgender Artikel wurde nicht importiert und benötigt ein Alternative:</b>'
+        article:
+            page:
+                label:                  'Artikel → Seite'
+                description:            'Ein oder mehrere Artikel konnten keiner Seite zugeordnet werden. Ihre Auswahl wird für alle weiteren Artikel, welche auf die selbe Seite referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Artikel konnte die zugehörige Seite nicht gefunden werden. Wählen Sie bitte eine Seite aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Artikeln und einer Seite herzustellen.<br/><br/><b>Folgende Seite wurde nicht importiert und benötigt ein Alternative:</b>'
+        event:
+            archive:
+                label:                  'Events → Event-Archive'
+                description:            'Ein oder mehrere Events konnten keinem Event-Archive zugeordnet werden. Ihre Auswahl wird für alle weiteren Events, welche auf das selbe Event-Archiv referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Events konnte das zugehörige Event-Archiv nicht gefunden werden. Wählen Sie bitte ein Event-Archiv aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Events und einem Event-Archiv herzustellen.<br/><br/><b>Folgendes Event-Archiv wurde nicht importiert und benötigt ein Alternative:</b>'
+        faq:
+            category:
+                label:                  'FAQ → FAQ-Kategorie'
+                description:            'Ein oder mehrere FAQs konnten keiner FAQ-Kategorie zugeordnet werden. Ihre Auswahl wird für alle weiteren FAQs, welche auf die selbe FAQ-Kategorie referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer FAQs konnte die zugehörige FAQ-Kategorie nicht gefunden werden. Wählen Sie bitte eine FAQ-Kategorie aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen FAQs und einer FAQ-Kategorie herzustellen.<br/><br/><b>Folgende FAQ-Kategorie wurde nicht importiert und benötigt ein Alternative:</b>'
+        form_field:
+            form:
+                label:                  'Formularfelder → Formular'
+                description:            'Ein oder mehrere Formularfelder konnten keinem Formular zugeordnet werden. Ihre Auswahl wird für alle weiteren Formularfelder, welche auf das selbe Formular referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Formularfelder konnte das zugehörige Formular nicht gefunden werden. Wählen Sie bitte ein Formular aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Formularfelder und einem Formular herzustellen.<br/><br/><b>Folgendes Formular wurde nicht importiert und benötigt ein Alternative:</b>'
+        layout:
+            theme:
+                label:                  'Layout → Theme'
+                description:            'Ein oder mehrere Layouts konnten keinem Theme zugeordnet werden. Ihre Auswahl wird für alle weiteren Layouts, welche auf das selbe Theme referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Layouts konnte das zugehörige Theme nicht gefunden werden. Wählen Sie bitte ein Theme aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Layouts und einem Theme herzustellen.<br/><br/><b>Folgendes Theme wurde nicht importiert und benötigt ein Alternative:</b>'
+        module:
+            theme:
+                label:                  'Module → Theme'
+                description:            'Ein oder mehrere Module konnten keinem Theme zugeordnet werden. Ihre Auswahl wird für alle weiteren Module, welche auf das selbe Theme referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Module konnte das zugehörige Theme nicht gefunden werden. Wählen Sie bitte ein Theme aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Modulen und einem Theme herzustellen.<br/><br/><b>Folgendes Theme wurde nicht importiert und benötigt ein Alternative:</b>'
+        news:
+            archive:
+                label:                  'News → News-Archiv'
+                description:            'Ein oder mehrere News konnten keinem News-Archive zugeordnet werden. Ihre Auswahl wird für alle weiteren News, welche auf das selbe News-Archiv referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer News konnte das zugehörige News-Archiv nicht gefunden werden. Wählen Sie bitte ein News-Archiv aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen News und einem News-Archiv herzustellen.<br/><br/><b>Folgendes News-Archiv wurde nicht importiert und benötigt ein Alternative:</b>'
+        page:
+            root:
+                create:                 'Neue Seite anlegen'
+                extend:                 'In bestehende Seiten integrieren'
+            layout:
+                label:                  'Layout → Seite'
+                description:            'Ein oder mehrere referenzierte Layouts konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Seiten, welche auf das selbe Layout referenzieren, übernommen.'
+                explanation:            'Beim Importieren einer oder mehrerer Seiten konnte ein zugewiesenes Layout nicht aufgelöst werden. Wählen Sie bitte ein Layout aus Ihrer Contao-Instanz um eine Verknüpfung zwischen diesen Seiten und einem Layout herzustellen.<br/><br/><b>Folgendes Layout wurde nicht importiert und benötigt eine Alternative:</b>'
+

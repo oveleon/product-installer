@@ -235,14 +235,14 @@ $input-outline-color: rgb(104 129 145 / 33%);
    */
   .focus .ts-control{
     box-shadow: none;
-    outline-width: 1px;
+    outline-width: 3px;
     outline-style:solid;
   }
 
   .ts-control{
     border-radius: 3px;
     border-color: $input-border-color;
-    outline-color: $background-color;
+    outline-color: $input-outline-color;
   }
 
   .ts-dropdown{
@@ -258,9 +258,10 @@ $input-outline-color: rgb(104 129 145 / 33%);
       }
 
       span.text{
-        padding-left: calc(var(--level, 0) * 18px);
+        padding-left: calc(var(--level, 0) * 15px);
 
         &:before{
+          content: "";
           display: inline-block;
 
           position: relative;
@@ -270,37 +271,33 @@ $input-outline-color: rgb(104 129 145 / 33%);
           height: 18px;
           margin-right: 5px;
 
+          background-image: url("/bundles/productinstaller/icons/connect.svg");
+          background-size: contain;
           background-repeat: no-repeat;
         }
       }
 
       &.disconnect span:before{
-        content: "";
         background-image: url("/system/themes/flexible/icons/parent.svg");
       }
 
       &.layout span:before{
-        content: "";
         background-image: url("/system/themes/flexible/icons/layout.svg");
       }
 
       &.root span:before{
-        content: "";
         background-image: url("/system/themes/flexible/icons/pagemounts.svg");
       }
 
       &.copy span:before{
-        content: "";
         background-image: url("/system/themes/flexible/icons/copy.svg");
       }
 
       &.forward span:before{
-        content: "";
         background-image: url("/system/themes/flexible/icons/forward.svg");
       }
 
       &.regular span:before{
-        content: "";
         background-image: url("/system/themes/flexible/icons/regular.svg");
       }
     }

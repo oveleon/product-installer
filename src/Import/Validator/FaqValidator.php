@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Import\Validator;
 
+use Contao\Controller;
 use Contao\FaqCategoryModel;
 use Contao\FaqModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
@@ -15,17 +16,19 @@ class FaqValidator implements ValidatorInterface
 
     static function setFaqCategoryConnection(array &$row, AbstractPromptImport $importer): ?array
     {
+        $translator = Controller::getContainer()->get('translator');
+
         $faqCategoryStructure = $importer->getArchiveContentByTable(FaqCategoryModel::getTable(), [
             'value' => $row['pid'],
             'field' => 'id'
         ]);
 
         return $importer->useParentConnectionLogic($row, FaqModel::getTable(), FaqCategoryModel::getTable(), [
-            'label'       => 'FAQ → FAQ-Kategorie zuordnen',
-            'description' => 'Ein oder mehrere FAQs konnten keiner FAQ-Kategorie zugeordnet werden. Ihre Auswahl wird für alle weiteren FAQs, welche auf die selbe FAQ-Kategorie referenzieren, übernommen.',
+            'label'       => $translator->trans('setup.prompt.faq.category.label', [], 'setup'),
+            'description' => $translator->trans('setup.prompt.faq.category.description', [], 'setup'),
             'explanation' => [
                 'type'        => 'TABLE',
-                'description' => 'Beim Importieren eines oder mehrerer FAQs konnte die zugehörige FAQ-Kategorie nicht gefunden werden. Wählen Sie bitte eine FAQ-Kategorie aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen FAQs und einer FAQ-Kategorie herzustellen.<br/><br/><b>Folgende FAQ-Kategorie wurde nicht importiert und benötigt ein Alternative:</b>',
+                'description' => $translator->trans('setup.prompt.faq.category.explanation', [], 'setup'),
                 'content'     => $faqCategoryStructure ?? []
             ],
             'class'       => 'w50'

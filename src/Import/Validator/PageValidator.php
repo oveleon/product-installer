@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Import\Validator;
 
+use Contao\Controller;
 use Contao\LayoutModel;
 use Contao\PageModel;
 use Contao\ThemeModel;
@@ -25,6 +26,8 @@ class PageValidator implements ValidatorInterface
 
         if(null === ($rootPage = $importer->getPromptValue('rootPage')))
         {
+            $translator = Controller::getContainer()->get('translator');
+
             $pageCollection = [];
 
             $determinePageLevel = function ($page) use (&$pageCollection): int {
@@ -81,11 +84,11 @@ class PageValidator implements ValidatorInterface
                         'optgroupField' => 'group',
                         'optgroups' => [
                             [
-                                'label' => 'Neue Seite anlegen',
+                                'label' => $translator->trans('setup.prompt.page.root.create', [], 'setup'),
                                 'value' => 'create'
                             ],
                             [
-                                'label' => 'In bestehende Seiten integrieren',
+                                'label' => $translator->trans('setup.prompt.page.root.extend', [], 'setup'),
                                 'value' => 'page'
                             ]
                         ]
@@ -118,6 +121,8 @@ class PageValidator implements ValidatorInterface
 
         $pageId = $row['id'];
         $layoutId = $row['layout'];
+
+        $translator = Controller::getContainer()->get('translator');
 
         // Skip if we find a connection
         if(($connectedId = $importer->getConnection($layoutId, LayoutModel::getTable())) !== null)
@@ -176,7 +181,7 @@ class PageValidator implements ValidatorInterface
             $values = [
                 [
                     'value' => 0,
-                    'text'  => 'Verknüfung aufheben',
+                    'text'  => $translator->trans('setup.global.unlink', [], 'setup'),
                     'class' => 'disconnect',
                     'group' => 'actions'
                 ]
@@ -184,7 +189,7 @@ class PageValidator implements ValidatorInterface
 
             $optgroups = [
                 [
-                    'label' => 'Aktionen',
+                    'label' => $translator->trans('setup.global.actions', [], 'setup'),
                     'value' => 'actions'
                 ]
             ];
@@ -209,7 +214,7 @@ class PageValidator implements ValidatorInterface
                 foreach (ThemeModel::findMultipleByIds($themeIds) ?? [] as $theme)
                 {
                     $optgroups[] = [
-                        'label' => 'Theme: ' . $theme->name,
+                        'label' => $theme->name,
                         'value' => $theme->id
                     ];
                 }
@@ -225,11 +230,11 @@ class PageValidator implements ValidatorInterface
                     $values ?? [],
                     FormPromptType::SELECT,
                     [
-                        'label'         => 'Layout → Seite zuordnen',
-                        'description'   => 'Das Layout' . (($layoutStructure['name'] ?? false) ? ' "' . $layoutStructure['name'] . '"' : '') . ' wird von ein oder mehreren zu importierenden Seiten verwenden und muss neu zugeordnet werden. Ihre Auswahl wird für alle weiteren Seiten, welche auf dieses Layout referenzieren, übernommen.',
+                        'label'         => $translator->trans('setup.prompt.page.layout.label', [], 'setup'),
+                        'description'   => $translator->trans('setup.prompt.page.layout.description', [], 'setup'),
                         'explanation'   => [
                             'type'        => 'TABLE',
-                            'description' => 'Beim Importieren einer oder mehrerer Seiten konnte ein zugewiesenes Layout nicht aufgelöst werden. Wählen Sie bitte ein Layout aus Ihrer Contao-Instanz um eine Verknüpfung zwischen diesen Seiten und einem Layout herzustellen.<br/><br/><b>Folgendes Layout wurde nicht importiert und benötigt eine Alternative:</b>',
+                            'description' => $translator->trans('setup.prompt.page.layout.explanation', [], 'setup'),
                             'content'     => $layoutStructure ?? []
                         ],
                         'class'         => 'w50',

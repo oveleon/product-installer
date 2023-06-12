@@ -3,6 +3,7 @@
 namespace Oveleon\ProductInstaller\Import\Validator;
 
 use Contao\ArticleModel;
+use Contao\Controller;
 use Contao\PageModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 
@@ -17,17 +18,19 @@ class ArticleValidator implements ValidatorInterface
     {
         // ToDo: Get page structure for select
 
+        $translator = Controller::getContainer()->get('translator');
+
         $pageStructure = $importer->getArchiveContentByTable(PageModel::getTable(), [
             'value' => $row['pid'],
             'field' => 'id'
         ]);
 
         return $importer->useParentConnectionLogic($row, ArticleModel::getTable(), PageModel::getTable(), [
-            'label'       => 'Artikel → Seite zuordnen',
-            'description' => 'Ein oder mehrere Artikel konnten keiner Seite zugeordnet werden. Ihre Auswahl wird für alle weiteren Artikel, welche auf die selbe Seite referenzieren, übernommen.',
+            'label'       => $translator->trans('setup.prompt.article.page.label', [], 'setup'),
+            'description' => $translator->trans('setup.prompt.article.page.description', [], 'setup'),
             'explanation' => [
                 'type'        => 'TABLE',
-                'description' => 'Beim Importieren eines oder mehrerer Artikel konnte die zugehörige Seite nicht gefunden werden. Wählen Sie bitte eine Seite aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Artikeln und einer Seite herzustellen.<br/><br/><b>Folgende Seite wurde nicht importiert und benötigt ein Alternative:</b>',
+                'description' => $translator->trans('setup.prompt.article.page.explanation', [], 'setup'),
                 'content'     => $pageStructure ?? []
             ],
             'class'       => 'w50'
