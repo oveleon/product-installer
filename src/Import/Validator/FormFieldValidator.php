@@ -7,6 +7,11 @@ use Contao\FormFieldModel;
 use Contao\FormModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 
+/**
+ * Validator class for validating the form field records during and after import.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class FormFieldValidator implements ValidatorInterface
 {
     static public function getTrigger(): string
@@ -14,6 +19,9 @@ class FormFieldValidator implements ValidatorInterface
         return FormFieldModel::getTable();
     }
 
+    /**
+     * Deals with the relationship with the parent element.
+     */
     static function setFormConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');

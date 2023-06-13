@@ -1,40 +1,135 @@
 setup:
     tables:
-        tl_theme:                   'Themes'
-        tl_style_sheet:             'Stylesheets'
-        tl_style:                   'Format definitions'
-        tl_image_size:              'Image sizes'
-        tl_image_size_item:         'Media-Queries'
-        tl_module:                  'Modules'
-        tl_layout:                  'Layouts'
-        tl_user_group:              'User groups'
-        tl_member_group:            'Member groups'
-        tl_faq_category:            'FAQ categories'
-        tl_faq:                     'FAQs'
-        tl_news_archive:            'News archives'
-        tl_news_feed:               'News feeds'
-        tl_news:                    'News'
-        tl_calendar:                'Event Archives'
-        tl_calendar_feed:           'Event feeds'
-        tl_calendar_events:         'Events'
-        tl_comments:                'Comments'
-        tl_comments_notify:         'Comment notifications'
-        tl_newsletter_channel:      'Newsletter Channel'
-        tl_newsletter_deny_list:    'Newsletter deny list'
-        tl_newsletter:              'Newsletter'
-        tl_newsletter_recipients:   'Newsletter recipient list'
-        tl_form:                    'Forms'
-        tl_form_field:              'Form fields'
-        tl_page:                    'Site structure'
-        tl_article:                 'Article'
+        tl_theme:                       'Themes'
+        tl_style_sheet:                 'Stylesheets'
+        tl_style:                       'Format definitions'
+        tl_image_size:                  'Image sizes'
+        tl_image_size_item:             'Media-Queries'
+        tl_module:                      'Modules'
+        tl_layout:                      'Layouts'
+        tl_user_group:                  'User groups'
+        tl_member_group:                'Member groups'
+        tl_faq_category:                'FAQ categories'
+        tl_faq:                         'FAQs'
+        tl_news_archive:                'News archives'
+        tl_news_feed:                   'News feeds'
+        tl_news:                        'News'
+        tl_calendar:                    'Event Archives'
+        tl_calendar_feed:               'Event feeds'
+        tl_calendar_events:             'Events'
+        tl_comments:                    'Comments'
+        tl_comments_notify:             'Comment notifications'
+        tl_newsletter_channel:          'Newsletter Channel'
+        tl_newsletter_deny_list:        'Newsletter deny list'
+        tl_newsletter:                  'Newsletter'
+        tl_newsletter_recipients:       'Newsletter recipient list'
+        tl_form:                        'Forms'
+        tl_form_field:                  'Form fields'
+        tl_page:                        'Site structure'
+        tl_article:                     'Article'
         tl_content:
-            tl_article:             'Content elements (Articles)'
-            tl_news:                'Content elements (News)'
-            tl_calendar_events:     'Content elements (Events)'
+            tl_article:                 'Content elements (Articles)'
+            tl_news:                    'Content elements (News)'
+            tl_calendar_events:         'Content elements (Events)'
     global:
-        systemNoContent:            'Missing records in the system'
+        systemNoContent:                'Missing records in the system'
+        actions:                        'Actions'
+        unlink:                         'Unlink'
+    placeholder:
+        contentElement:                 'Content-Element %id%'
+    error:
+        fileNotFound:                   'Target file could not be found.'
     prompt:
         running:
-            question:               'We have detected that the previous setup did not complete. Do you want to continue with the setup or start again?'
-            answerTrue:             'Continue setup'
-            answerFalse:            'Restart setup'
+            question:                   'We have detected that the previous setup did not complete. Do you want to continue with the setup or start again?'
+            answerTrue:                 'Continue'
+            answerFalse:                'Restart'
+        content:
+            content:
+                includes:
+                    cteAlias:
+                        title:          'Content element (refers) → Content element'
+                        description:    'One or more references from a content element could not be assigned. Your selection will be applied to all other content elements that reference the same content element.'
+                        explanation:    'When importing one or more content elements, the associated content element could not be found. Please select a content element from your Contao instance to create a link between these content elements and a content element.<br/><br/><b>The following content element was not imported and needs an alternative:</b>'
+                    articleAlias:
+                        title:          'Content element (refers) → Article'
+                        description:    'One or more references from a content element could not be assigned. Your selection will be applied to all other content elements that reference the same article.'
+                        explanation:    'When importing one or more content elements, the associated event could not be found. Please select an event from your Contao instance to create a link between these content elements and an event.<br/><br/><b>The following event was not imported and needs an alternative:</b>'
+                    form:
+                        title:          'Content element (refers) → Form'
+                        description:    'One or more references from a content element could not be assigned. Your selection will be applied to all other content elements that reference the same form.'
+                        explanation:    'When importing one or more content elements, the corresponding form could not be found. Please select a form from your Contao instance to create a link between these content elements and a form.<br/><br/><b>The following form was not imported and needs an alternative:</b>'
+                    module:
+                        title:          'Content element (refers) → Module'
+                        description:    'One or more references from a content element could not be assigned. Your selection will be applied to all other content elements that reference the same module.'
+                        explanation:    'When importing one or more content elements, the corresponding module could not be found. Please select a module from your Contao instance to create a link between these content elements and a module.<br/><br/><b>The following module was not imported and needs an alternative:</b>'
+                    article:
+                        title:          'Content element (refers) → Teaser'
+                        description:    'One or more references from a content element could not be assigned. Your selection will be applied to all other content elements that reference the same article teaser.'
+                        explanation:    'When importing one or more content elements, the associated article could not be found. Please select an article from your Contao instance to create a link between these content elements and an article.<br/><br/><b>The following article was not imported and needs an alternative:</b>'
+            event:
+                label:                  'Content element → Event'
+                description:            'One or more content elements could not be assigned to an event. Your selection will be applied to all other content elements that reference the same event.'
+                explanation:            'When importing one or more content elements, the associated event could not be found. Please select an event from your Contao instance to create a link between these content elements and an event.<br/><br/><b>The following event was not imported and needs an alternative:</b>'
+            article:
+                label:                  'Content item → Article'
+                description:            'One or more content elements could not be assigned to an article. Your selection will be applied to all other content elements that reference the same article.'
+                explanation:            'When importing one or more content elements, the corresponding article could not be found. Please select an article from your Contao instance to create a link between these content elements and an article.<br/><br/><b>The following article was not imported and needs an alternative:</b>'
+            news:
+                label:                  'Content item → News'
+                description:            'One or more content elements could not be assigned to a news item. Your selection will be applied to all other content elements that reference the same news.'
+                explanation:            'When importing one or more content items, the associated news could not be found. Please select an article from your Contao instance to create a link between these content elements and a news.<br/><br/><b>The following article was not imported and needs an alternative:</b>'
+        article:
+            page:
+                label:                  'Article → Page'
+                description:            'One or more articles could not be assigned to a page. Your selection will be applied to all other articles that reference the same page.'
+                explanation:            'When importing one or more articles, the corresponding page could not be found. Please select a page from your Contao instance to create a link between these articles and a page.<br/><br/><b>The following page was not imported and needs an alternative:</b>'
+        event:
+            archive:
+                label:                  'Events → Event-Archive'
+                description:            'One or more events could not be assigned to an event archive. Your selection will be applied to all further events that reference the same event archive.'
+                explanation:            'When importing one or more events, the corresponding event archive could not be found. Please select an event archive from your Contao instance to create a link between these events and an event archive.<br/><br/><b>The following event archive was not imported and needs an alternative:</b>'
+        faq:
+            category:
+                label:                  'FAQ → FAQ-Category'
+                description:            'One or more FAQs could not be assigned to a FAQ category. Your selection will be applied to all other FAQs that reference the same FAQ category.'
+                explanation:            'When importing one or more FAQs, the corresponding FAQ category could not be found. Please select an FAQ category from your Contao instance to create a link between these FAQs and an FAQ category.<br/><br/><b>The following FAQ category was not imported and needs an alternative:</b>'
+        form_field:
+            form:
+                label:                  'Form fields → Form'
+                description:            'One or more form fields could not be assigned to a form. Your selection will be applied to all other form fields that reference the same form.'
+                explanation:            'When importing one or more form fields, the corresponding form could not be found. Please select a form from your Contao instance to create a link between these form fields and a form.<br/><br/><b>The following form was not imported and needs an alternative:</b>'
+        layout:
+            theme:
+                label:                  'Layout → Theme'
+                description:            'One or more layouts could not be assigned to a theme. Your selection is applied to all other layouts that reference the same theme.'
+                explanation:            'When importing one or more layouts, the corresponding theme could not be found. Please select a theme from your Contao instance to create a link between these layouts and a theme.<br/><br/><b>The following theme was not imported and needs an alternative:</b>'
+        module:
+            theme:
+                label:                  'Module → Theme'
+                description:            'One or more modules could not be assigned to a theme. Your selection will be applied to all other modules that reference the same theme.'
+                explanation:            'When importing one or more modules, the corresponding theme could not be found. Please select a theme from your Contao instance to create a link between these modules and a theme.<br/><br/><b>The following theme was not imported and needs an alternative:</b>'
+        news:
+            archive:
+                label:                  'News → News-Archive'
+                description:            'One or more news could not be assigned to a news archive. Your selection will be applied to all other news that reference the same news archive.'
+                explanation:            'When importing one or more news items, the corresponding news archive could not be found. Please select a news archive from your Contao instance to create a link between these news and a news archive.<br/><br/><b>The following news archive was not imported and needs an alternative:</b>'
+        newsletter:
+            channel:
+                label:                  'Newsletter → Newsletter Channel'
+                description:            'One or more newsletters could not be assigned to a newsletter channel. Your selection will be applied to all further newsletters that reference the same newsletter channel.'
+                explanation:            'When importing one or more newsletters, the corresponding newsletter channel could not be found. Please select a newsletter channel from your Contao instance to create a link between these newsletters and a newsletter channel.<br/><br/><b>The following newsletter channel was not imported and needs an alternative:</b>'
+            recipient_channel:
+                label:                  'Newsletter Recipients → Newsletter Channel'
+                description:            'One or more newsletter recipient lists could not be assigned to a newsletter channel. Your selection will be applied to all other recipient lists that reference the same newsletter channel.'
+                explanation:            'When importing one or more newsletter recipient lists, the corresponding newsletter channel could not be found. Please select a newsletter channel from your Contao instance to create a link between these newsletters and a newsletter channel.<br/><br/><b>The following newsletter channel was not imported and needs an alternative:</b>'
+        page:
+            root:
+                create:                 'Create new page'
+                extend:                 'Integrate into existing pages'
+            layout:
+                label:                  'Layout → Page'
+                description:            'One or more referenced layouts could not be assigned. Your selection will be applied to all other pages that reference the same layout.'
+                explanation:            'When importing one or more pages, an assigned layout could not be resolved. Please select a layout from your Contao instance to create a link between these pages and a layout.<br/><br/><b>The following layout was not imported and needs an alternative:</b>'
+
+

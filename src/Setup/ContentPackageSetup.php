@@ -16,14 +16,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Content package setup initiator.
+ * Content package setup class.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
 class ContentPackageSetup
 {
-    const TABLE_FILE_EXTENSION = '.table'; // Fixme: Move to TableImport::class
+    /**
+     * Table file extension.
+     */
+    const TABLE_FILE_EXTENSION = '.table';
 
+    /**
+     * Create the content package setup class.
+     */
     public function __construct(
         protected readonly ArchiveUtil $archiveUtil,
         protected readonly TableImport $tableImporter,
@@ -31,6 +37,9 @@ class ContentPackageSetup
         protected readonly TranslatorInterface $translator,
     ){}
 
+    /**
+     * Run the setup.
+     */
     public function run($task, PromptResponse $promptResponse): JsonResponse
     {
         // Catch possible errors and check if the task destination exists
@@ -132,6 +141,9 @@ class ContentPackageSetup
         // Set archive
         $this->tableImporter->setArchive($destination);
 
+        // Use default table validator
+        $this->tableImporter->useDefaultTableValidators();
+
         // Get selected tables to import
         $skipTables = [];
 
@@ -184,6 +196,9 @@ class ContentPackageSetup
         ]);
     }
 
+    /**
+     * Returns the table structure to import.
+     */
     public function getTableStructure(string $archiveDestination): array
     {
         // ToDo: Get structure from config yml
@@ -247,24 +262,4 @@ class ContentPackageSetup
         // Append unknown tables and return full structure
         return array_merge($tableOrder, $archiveTablesOnTop);
     }
-
-
-    /**
-     * Overwrites the connection from one content element to another (Include: Content Element).
-     */
-    /*private function overwriteAliasContentElement(?array $contentIds): void
-    {
-        if(null === $contentIds)
-        {
-            return;
-        }
-
-        if($models = ContentModel::findBy(["type=? AND id IN ('" . implode("', '", array_values($contentIds)) . "')"], ['alias']))
-        {
-            foreach ($models as $model)
-            {
-                $model->cteAlias = $contentIds[ $model->cteAlias ];
-            }
-        }
-    }*/
 }

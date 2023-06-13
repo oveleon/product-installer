@@ -7,6 +7,11 @@ use Contao\CalendarModel;
 use Contao\Controller;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 
+/**
+ * Validator class for validating the event records during and after import.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class EventValidator implements ValidatorInterface
 {
     static public function getTrigger(): string
@@ -14,6 +19,9 @@ class EventValidator implements ValidatorInterface
         return CalendarEventsModel::getTable();
     }
 
+    /**
+     * Deals with the relationship with the parent element.
+     */
     static function setEventArchiveConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');

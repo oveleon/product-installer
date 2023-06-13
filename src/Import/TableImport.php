@@ -10,7 +10,13 @@ use Contao\Model;
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
+use Oveleon\ProductInstaller\Import\Validator\ValidatorMode;
 
+/**
+ * Import class to import table records.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class TableImport extends AbstractPromptImport
 {
     /**
@@ -37,9 +43,6 @@ class TableImport extends AbstractPromptImport
         // Set class variables
         $this->table = $tableName;
         $this->content = $tableContent;
-
-        // Apply default validators
-        Validator::useDefaultTableValidators();
 
         // Check import state
         switch($this->getState())
@@ -207,6 +210,14 @@ class TableImport extends AbstractPromptImport
     }
 
     /**
+     * Returns the current table.
+     */
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    /**
      * Returns information about the specified table or null if no information can be determined.
      */
     public function getTableInformation(): ?\stdClass
@@ -234,6 +245,15 @@ class TableImport extends AbstractPromptImport
         $info->hasParent = $info->ptable || $info->dynamicPtable;
 
         return $info;
+    }
+
+    /**
+     * Apply default table validators.
+     */
+    public static function useDefaultTableValidators(): void
+    {
+        // Apply default validators
+        Validator::useDefaultTableValidators();
     }
 
     /**
@@ -304,6 +324,7 @@ class TableImport extends AbstractPromptImport
             return;
         }
 
+        $modelCollection = [];
         $modelClass = $this->getClassFromFileName($this->table);
         $tableInfo = $this->getTableInformation();
         $hasParent = $tableInfo->hasParent;
@@ -326,6 +347,9 @@ class TableImport extends AbstractPromptImport
             $model = new $modelClass();
             $model->setRow($row);
 
+            // Add model to collection for validators in mode AFTER_IMPORT
+            $modelCollection[] = $model;
+
             // Check for parent-connections
             if($hasParent && !$isRoot)
             {
@@ -343,6 +367,17 @@ class TableImport extends AbstractPromptImport
 
             // Add connection
             $this->addConnection($exportId, ($model->save())->id);
+        }
+
+        if($validators = Validator::getValidators($this->table, ValidatorMode::AFTER_IMPORT))
+        {
+            foreach ($modelCollection as $model)
+            {
+                foreach($validators as $validator)
+                {
+                    call_user_func_array($validator, [$model, $this]);
+                }
+            }
         }
 
         $this->setState(ImportStateType::FINISH);

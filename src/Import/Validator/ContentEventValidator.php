@@ -7,6 +7,11 @@ use Contao\ContentModel;
 use Contao\Controller;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 
+/**
+ * Validator class for validating the content records within events during and after import.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class ContentEventValidator extends ContentValidator implements ValidatorInterface
 {
     static public function getTrigger(): string
@@ -14,6 +19,9 @@ class ContentEventValidator extends ContentValidator implements ValidatorInterfa
         return ContentModel::getTable() . '.' . CalendarEventsModel::getTable();
     }
 
+    /**
+     * Deals with the relationship with the parent element.
+     */
     static function setEventConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');

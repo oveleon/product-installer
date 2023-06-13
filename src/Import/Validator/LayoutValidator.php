@@ -7,6 +7,11 @@ use Contao\LayoutModel;
 use Contao\ThemeModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 
+/**
+ * Validator class for validating the layout records during and after import.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class LayoutValidator implements ValidatorInterface
 {
     static public function getTrigger(): string
@@ -14,6 +19,9 @@ class LayoutValidator implements ValidatorInterface
         return LayoutModel::getTable();
     }
 
+    /**
+     * Deals with the relationship with the parent element.
+     */
     static function setThemeConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');

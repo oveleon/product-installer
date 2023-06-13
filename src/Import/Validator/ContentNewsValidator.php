@@ -8,6 +8,11 @@ use Contao\NewsArchiveModel;
 use Contao\NewsModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 
+/**
+ * Validator class for validating the content records within news during and after import.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class ContentNewsValidator extends ContentValidator implements ValidatorInterface
 {
     static public function getTrigger(): string
@@ -15,6 +20,9 @@ class ContentNewsValidator extends ContentValidator implements ValidatorInterfac
         return ContentModel::getTable() . '.' . NewsModel::getTable();
     }
 
+    /**
+     * Deals with the relationship with the parent element.
+     */
     static function setNewsConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');

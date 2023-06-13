@@ -9,6 +9,11 @@ use Contao\ThemeModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 
+/**
+ * Validator class for validating the page records during and after import.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class PageValidator implements ValidatorInterface
 {
     static public function getTrigger(): string
@@ -16,6 +21,9 @@ class PageValidator implements ValidatorInterface
         return PageModel::getTable();
     }
 
+    /**
+     * Handles the selection of a page root.
+     */
     static public function selectRootPage(array &$row, AbstractPromptImport $importer): ?array
     {
         // Skip the validator if it is not a root page or no pages exists
@@ -111,6 +119,9 @@ class PageValidator implements ValidatorInterface
         return null;
     }
 
+    /**
+     * Deals with the relationship between a page and its layout.
+     */
     static public function setLayoutConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         // Skip if the page has no own layout connection

@@ -7,6 +7,11 @@ use Contao\ContentModel;
 use Contao\Controller;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 
+/**
+ * Validator class for validating the content records within articles during and after import.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class ContentArticleValidator extends ContentValidator implements ValidatorInterface
 {
     static public function getTrigger(): string
@@ -14,6 +19,9 @@ class ContentArticleValidator extends ContentValidator implements ValidatorInter
         return ContentModel::getTable() . '.' . ArticleModel::getTable();
     }
 
+    /**
+     * Deals with the relationship with the parent element.
+     */
     static function setArticleConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');

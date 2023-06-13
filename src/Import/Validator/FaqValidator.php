@@ -7,6 +7,11 @@ use Contao\FaqCategoryModel;
 use Contao\FaqModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 
+/**
+ * Validator class for validating the faq records during and after import.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class FaqValidator implements ValidatorInterface
 {
     static public function getTrigger(): string
@@ -14,6 +19,9 @@ class FaqValidator implements ValidatorInterface
         return FaqModel::getTable();
     }
 
+    /**
+     * Deals with the relationship with the parent element.
+     */
     static function setFaqCategoryConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');

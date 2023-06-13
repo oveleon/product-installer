@@ -7,6 +7,11 @@ use Contao\Controller;
 use Contao\PageModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 
+/**
+ * Validator class for validating the article records during and after import.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class ArticleValidator implements ValidatorInterface
 {
     static public function getTrigger(): string
@@ -14,6 +19,9 @@ class ArticleValidator implements ValidatorInterface
         return ArticleModel::getTable();
     }
 
+    /**
+     * Deals with the relationship with the parent element.
+     */
     static function setPageConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         // ToDo: Get page structure for select

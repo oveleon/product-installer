@@ -3,18 +3,26 @@
 namespace Oveleon\ProductInstaller\Import\Validator;
 
 use Contao\ArticleModel;
+use Contao\ContentModel;
 use Contao\Controller;
 use Contao\FormModel;
 use Contao\ModuleModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 
+/**
+ * Validator class for validating the content records during and after import.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 abstract class ContentValidator implements ValidatorInterface
 {
+    /**
+     * Deals with the relationship between content elements and its references except the
+     * relationship between content elements among themselves.
+     */
     static function setIncludes(array &$row, AbstractPromptImport $importer): ?array
     {
-        // ToDo: cteAlias
-
         switch($row['type'])
         {
             case 'article':
@@ -89,13 +97,28 @@ abstract class ContentValidator implements ValidatorInterface
             {
                 foreach ($records as $record)
                 {
+                    if($record?->headline && (@unserialize($record->headline) !== false))
+                    {
+                        // If headline is still empty, show placeholder
+                        if(!$record->headline = unserialize($record->headline)['value'])
+                        {
+                            $record->headline = $translator->trans('setup.placeholder.contentElement', ['%id%' => $record->id], 'setup');
+                        }
+                    }
+
                     $values[] = [
                         'value' => $record->id,
-                        'text'  => $record->name ?: ($record->title ?: $record->headline),
+                        'text'  => $record?->name ?: ($record?->title ?: $record->headline),
                         'info'  => $record->id
                     ];
                 }
             }
+
+            // Try to get missing record
+            $parentStructure = $importer->getArchiveContentByTable($importer->getTable(), [
+                'value' => $row['pid'],
+                'field' => 'id'
+            ]);
 
             return [
                 $fieldName => [
@@ -107,7 +130,7 @@ abstract class ContentValidator implements ValidatorInterface
                         'explanation' => [
                             'type'        => 'TABLE',
                             'description' => $translator->trans('setup.prompt.content.content.includes.' . $connectorField . '.explanation', [], 'setup'),
-                            'content'     => $articleStructure ?? []
+                            'content'     => $parentStructure ?? []
                         ],
                         'class'       => 'w50'
                     ]
@@ -117,5 +140,23 @@ abstract class ContentValidator implements ValidatorInterface
 
 
         return null;
+    }
+
+    /**
+     * Deals with the relationship between content elements among themselves.
+     */
+    static function setContentIncludes(ContentModel $model, AbstractPromptImport $importer): void
+    {
+        if($model->type !== 'alias')
+        {
+            return;
+        }
+
+        if(($connectedId = $importer->getConnection($model->cteAlias, $importer->getTable())) !== null)
+        {
+            // Set connection and save model
+            $model->cteAlias = $connectedId;
+            $model->save();
+        }
     }
 }
