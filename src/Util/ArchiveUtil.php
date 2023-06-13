@@ -12,7 +12,7 @@ class ArchiveUtil
         return new ZipReader(str_replace(Controller::getContainer()->getParameter('kernel.project_dir'), '', $archivePath));
     }
 
-    public function getFileContent($archivePath, $fileName, $parseJSON = false): ?array
+    public function getFileContent($archivePath, $fileName, $parseJSON = false): null|array|string
     {
         $file = null;
 

@@ -26,7 +26,7 @@ class ContentArticleValidator extends ContentValidator implements ValidatorInter
     {
         $translator = Controller::getContainer()->get('translator');
 
-        $articleStructure = $importer->getArchiveContentByTable(ArticleModel::getTable(), [
+        $articleStructure = $importer->getArchiveContentByFilename(ArticleModel::getTable(), [
             'value' => $row['pid'],
             'field' => 'id'
         ]);

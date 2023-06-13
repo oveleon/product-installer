@@ -2,7 +2,9 @@
 
 namespace Oveleon\ProductInstaller\Setup;
 
+use Contao\FilesModel;
 use Contao\Model;
+use Oveleon\ProductInstaller\Import\FileImport;
 use Oveleon\ProductInstaller\Import\ImportStateType;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
@@ -23,16 +25,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ContentPackageSetup
 {
     /**
-     * Table file extension.
-     */
-    const TABLE_FILE_EXTENSION = '.table';
-
-    /**
      * Create the content package setup class.
      */
     public function __construct(
         protected readonly ArchiveUtil $archiveUtil,
         protected readonly TableImport $tableImporter,
+        protected readonly FileImport $fileImporter,
         protected readonly SetupLock $setupLock,
         protected readonly TranslatorInterface $translator,
     ){}
@@ -86,6 +84,14 @@ class ContentPackageSetup
         $this->setupLock->setScope($task['hash']);
         $this->tableImporter->setScope($task['hash']);
 
+        // Set archive to all importer
+        $this->tableImporter->setArchive($destination);
+        $this->fileImporter->setArchive($destination);
+
+        // Set file extension
+        $this->tableImporter->setFileExtension('table');
+        $this->fileImporter->setFileExtension('json');
+
         // Get table structure
         $tableStructure = $this->getTableStructure($destination);
 
@@ -135,18 +141,17 @@ class ContentPackageSetup
             }
         }
 
-        // Set prompt response (importer)
+        // Set prompt response to all importer
         $this->tableImporter->setPromptResponse($promptResponse);
+        $this->fileImporter->setPromptResponse($promptResponse);
 
-        // Set archive
-        $this->tableImporter->setArchive($destination);
+        // Use default validators
+        $this->tableImporter->useDefaultValidators();
+        $this->fileImporter->useDefaultValidators();
 
-        // Use default table validator
-        $this->tableImporter->useDefaultTableValidators();
-
-        // Get selected tables to import
         $skipTables = [];
 
+        // Get selected tables to import
         if($config = $this->setupLock->get('config'))
         {
             if($tables = ($config['tables'] ?? false))
@@ -162,6 +167,22 @@ class ContentPackageSetup
             $skipTables = $skipTables + (array_keys($scope, ImportStateType::FINISH->value) ?? []);
         }
 
+        // Check if files need to be filed
+        if(!in_array(FilesModel::getTable(), $skipTables))
+        {
+            if($filePrompt = $this->fileImporter->importFromManifest('content.manifest'))
+            {
+                // ToDo: Handle file prompts
+            }
+            // Set files-Table to state FINISH to skip import for further runs
+            else
+            {
+                // ToDo: Darf nicht an der tl_files gekoppelt sein?
+                //$this->setupLock->set(FilesModel::getTable(), ImportStateType::FINISH->value);
+                //$this->setupLock->save();
+            }
+        }
+
         // Running through the tables in the correct order
         foreach ($tableStructure ?? [] as $tableName)
         {
@@ -172,7 +193,7 @@ class ContentPackageSetup
             }
 
             // Get table content or skip if empty
-            if(!$tableContent = $this->archiveUtil->getFileContent($destination, $tableName . self::TABLE_FILE_EXTENSION, true))
+            if(!$tableContent = $this->tableImporter->getArchiveContentByFilename($tableName))
             {
                 continue;
             }
@@ -201,11 +222,10 @@ class ContentPackageSetup
      */
     public function getTableStructure(string $archiveDestination): array
     {
-        // ToDo: Get structure from config yml
-        // ToDo: Check if e.g. news bundle is installed
-
-        // Get table structure by config
+        // Fixme: Get structure from config yml
+        // Get predefined table structure and order
         $tableOrder = [
+            'tl_files',
             'tl_theme',
             'tl_style_sheet',
             'tl_style',
@@ -238,10 +258,13 @@ class ContentPackageSetup
             'tl_content.tl_calendar_events'
         ];
 
+        // Get file extension
+        $fileExtension = '.' . $this->tableImporter->getFileExtension();
+
         // Get table structure by archive and remove file extension
         $archiveTables = array_map(
-            fn($table): string => str_replace(self::TABLE_FILE_EXTENSION, '', $table),
-            $this->archiveUtil->getFileList($archiveDestination, self::TABLE_FILE_EXTENSION)
+            fn($table): string => str_replace($fileExtension, '', $table),
+            $this->archiveUtil->getFileList($archiveDestination, $fileExtension)
         );
 
         // Retrieve tables that are not in the configuration but are in the archive in order to attach them afterward

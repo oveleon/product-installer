@@ -26,7 +26,7 @@ class FormFieldValidator implements ValidatorInterface
     {
         $translator = Controller::getContainer()->get('translator');
 
-        $formStructure = $importer->getArchiveContentByTable(FormModel::getTable(), [
+        $formStructure = $importer->getArchiveContentByFilename(FormModel::getTable(), [
             'value' => $row['pid'],
             'field' => 'id'
         ]);

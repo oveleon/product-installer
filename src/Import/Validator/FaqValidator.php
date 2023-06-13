@@ -26,7 +26,7 @@ class FaqValidator implements ValidatorInterface
     {
         $translator = Controller::getContainer()->get('translator');
 
-        $faqCategoryStructure = $importer->getArchiveContentByTable(FaqCategoryModel::getTable(), [
+        $faqCategoryStructure = $importer->getArchiveContentByFilename(FaqCategoryModel::getTable(), [
             'value' => $row['pid'],
             'field' => 'id'
         ]);

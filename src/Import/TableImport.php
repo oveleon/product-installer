@@ -4,6 +4,7 @@ namespace Oveleon\ProductInstaller\Import;
 
 use Contao\Controller;
 use Contao\DataContainer;
+use Contao\DC_Folder;
 use Contao\DC_Table;
 use Contao\Model;
 
@@ -76,8 +77,11 @@ class TableImport extends AbstractPromptImport
     {
         $tableInfo = $this->getTableInformation();
 
-        // Consider only data container of type DC_Table
-        if(DC_Table::class === $tableInfo->dataContainer)
+        // Consider only data container of type DC_Table and DC_Folder
+        if(
+            DC_Table::class === $tableInfo->dataContainer ||
+            DC_Folder::class === $tableInfo->dataContainer
+        )
         {
             $this->importTable();
         }
@@ -250,7 +254,7 @@ class TableImport extends AbstractPromptImport
     /**
      * Apply default table validators.
      */
-    public static function useDefaultTableValidators(): void
+    public static function useDefaultValidators(): void
     {
         // Apply default validators
         Validator::useDefaultTableValidators();
@@ -270,7 +274,7 @@ class TableImport extends AbstractPromptImport
         // Get model class by table
         if(!$modelClass = $this->getClassFromFileName($this->table))
         {
-            // ToDo: CancelPrompt
+            // ToDo: CancelPrompt / SkipPrompt (e.g. news-bundle is not installed -> no model -> skip)
         }
 
         foreach ($content as &$row)

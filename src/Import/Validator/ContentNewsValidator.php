@@ -28,7 +28,7 @@ class ContentNewsValidator extends ContentValidator implements ValidatorInterfac
         $translator = Controller::getContainer()->get('translator');
 
         // Try to get the non-imported content to give the user a possibility to reference a similar content
-        $newsStructure = $importer->getArchiveContentByTable(NewsModel::getTable(), [
+        $newsStructure = $importer->getArchiveContentByFilename(NewsModel::getTable(), [
             'value' => $row['pid'],
             'field' => 'id'
         ]);

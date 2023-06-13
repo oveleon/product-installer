@@ -26,7 +26,7 @@ class LayoutValidator implements ValidatorInterface
     {
         $translator = Controller::getContainer()->get('translator');
 
-        $themeStructure = $importer->getArchiveContentByTable(ThemeModel::getTable(), [
+        $themeStructure = $importer->getArchiveContentByFilename(ThemeModel::getTable(), [
             'value' => $row['pid'],
             'field' => 'id'
         ]);

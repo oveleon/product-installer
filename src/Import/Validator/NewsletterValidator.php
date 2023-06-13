@@ -28,7 +28,7 @@ class NewsletterValidator implements ValidatorInterface
     {
         $translator = Controller::getContainer()->get('translator');
 
-        $newsArchiveStructure = $importer->getArchiveContentByTable(NewsletterChannelModel::getTable(), [
+        $newsArchiveStructure = $importer->getArchiveContentByFilename(NewsletterChannelModel::getTable(), [
             'value' => $row['pid'],
             'field' => 'id'
         ]);

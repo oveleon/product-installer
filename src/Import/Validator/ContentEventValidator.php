@@ -26,7 +26,7 @@ class ContentEventValidator extends ContentValidator implements ValidatorInterfa
     {
         $translator = Controller::getContainer()->get('translator');
 
-        $newsStructure = $importer->getArchiveContentByTable(CalendarEventsModel::getTable(), [
+        $newsStructure = $importer->getArchiveContentByFilename(CalendarEventsModel::getTable(), [
             'value' => $row['pid'],
             'field' => 'id'
         ]);

@@ -115,7 +115,7 @@ abstract class ContentValidator implements ValidatorInterface
             }
 
             // Try to get missing record
-            $parentStructure = $importer->getArchiveContentByTable($importer->getTable(), [
+            $parentStructure = $importer->getArchiveContentByFilename($importer->getTable(), [
                 'value' => $row['pid'],
                 'field' => 'id'
             ]);

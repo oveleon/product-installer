@@ -231,7 +231,7 @@ class PageValidator implements ValidatorInterface
                 }
             }
 
-            $layoutStructure = $importer->getArchiveContentByTable(LayoutModel::getTable(), [
+            $layoutStructure = $importer->getArchiveContentByFilename(LayoutModel::getTable(), [
                 'value' => $row['layout'],
                 'field' => 'id'
             ]);

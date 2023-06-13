@@ -1,5 +1,6 @@
 setup:
     tables:
+        tl_files:                       'Dateien'
         tl_theme:                       'Themes'
         tl_style_sheet:                 'Stylesheets'
         tl_style:                       'Formatdefinitionen'
@@ -42,8 +43,8 @@ setup:
     prompt:
         running:
             question:                   'Wir haben festgestellt, dass die vorherige Einrichtung nicht vollständig abgeschlossen wurde. Möchten Sie mit der Einrichtung fortfahren oder erneut starten?'
-            answerTrue:                 'fortsetzen'
-            answerFalse:                'neu starten'
+            answerTrue:                 'Fortsetzen'
+            answerFalse:                'Neustarten'
         content:
             content:
                 includes:

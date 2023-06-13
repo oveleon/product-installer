@@ -28,7 +28,7 @@ class ArticleValidator implements ValidatorInterface
 
         $translator = Controller::getContainer()->get('translator');
 
-        $pageStructure = $importer->getArchiveContentByTable(PageModel::getTable(), [
+        $pageStructure = $importer->getArchiveContentByFilename(PageModel::getTable(), [
             'value' => $row['pid'],
             'field' => 'id'
         ]);

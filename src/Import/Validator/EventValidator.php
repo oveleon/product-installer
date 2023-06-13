@@ -26,7 +26,7 @@ class EventValidator implements ValidatorInterface
     {
         $translator = Controller::getContainer()->get('translator');
 
-        $calendarStructure = $importer->getArchiveContentByTable(CalendarModel::getTable(), [
+        $calendarStructure = $importer->getArchiveContentByFilename(CalendarModel::getTable(), [
             'value' => $row['pid'],
             'field' => 'id'
         ]);
