@@ -240,14 +240,13 @@ class TableImport extends AbstractPromptImport
         $conf = $GLOBALS['TL_DCA'][$table]['config'];
         $list = $GLOBALS['TL_DCA'][$table]['list'];
 
-        $info->sortingMode = $list['sorting']['mode'] ?? null;
-        $info->dataContainer = $conf['dataContainer'] ?? null;
+        $info->sortingMode      = $list['sorting']['mode'] ?? null;
+        $info->dataContainer    = $conf['dataContainer'] ?? null;
         $info->databaseAssisted = $conf['databaseAssisted'] ?? null;
-        $info->ctable = $conf['ctable'] ?? null;
-        $info->dynamicPtable = $conf['dynamicPtable'] ?? null;
-        $info->ptable = $conf['ptable'] ?? ($info->sortingMode === DataContainer::MODE_TREE ? $this->table : null);
-
-        $info->hasParent = $info->ptable || $info->dynamicPtable;
+        $info->ctable           = $conf['ctable'] ?? null;
+        $info->dynamicPtable    = $conf['dynamicPtable'] ?? null;
+        $info->ptable           = $conf['ptable'] ?? ($info->sortingMode === DataContainer::MODE_TREE ? $this->table : null);
+        $info->hasParent        = $info->ptable || $info->dynamicPtable;
 
         return $info;
     }

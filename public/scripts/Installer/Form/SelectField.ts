@@ -90,7 +90,9 @@ export default class SelectField extends FormField
             selectOptions['optgroups'] = this.config.options.optgroups
 
         if(this.config.options?.sortField)
-            selectOptions['sortField'] = this.config.options.sortField
+            selectOptions['sortField'] = this.config.options?.sortField ?? [{field:'$order'},{field:'$score'}]
+        else
+            selectOptions['sortField'] = [{field:'$order'},{field:'$score'}]
 
         this.select = new TomSelect(<HTMLInputElement> this.element('input'), selectOptions)
     }

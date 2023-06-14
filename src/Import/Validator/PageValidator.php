@@ -5,9 +5,11 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 use Contao\Controller;
 use Contao\LayoutModel;
 use Contao\PageModel;
+use Contao\System;
 use Contao\ThemeModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
+use Oveleon\ProductInstaller\Util\PageUtil;
 
 /**
  * Validator class for validating the page records during and after import.
@@ -36,22 +38,6 @@ class PageValidator implements ValidatorInterface
         {
             $translator = Controller::getContainer()->get('translator');
 
-            $pageCollection = [];
-
-            $determinePageLevel = function ($page) use (&$pageCollection): int {
-
-                if(\array_key_exists($page->pid, $pageCollection))
-                {
-                    $pageCollection[$page->id] = $pageCollection[$page->pid] + 1;
-
-                    return $pageCollection[$page->id];
-                }
-
-                $pageCollection[$page->id] = 0;
-
-                return $pageCollection[$page->id];
-            };
-
             $values = [
                 [
                     'value' => '0',
@@ -65,18 +51,20 @@ class PageValidator implements ValidatorInterface
 
             if($pages = PageModel::findAll(['order' => 'id ASC, sorting ASC']))
             {
-                $index = 0;
+                /** @var PageUtil $pageUtil */
+                $pageUtil = System::getContainer()
+                                ->get("Oveleon\ProductInstaller\Util\PageUtil")
+                                ->set($pages);
 
-                foreach ($pages as $page)
+                foreach ($pageUtil->getFlat() as $page)
                 {
                     $values[] = [
-                        'value'  => $page->id,
-                        'text'   => $page->title,
-                        'sorting'=> ++$index, // ToDo: Sorting is still wrong
-                        'class'  => $page->type,
-                        'info'   => $page->id,
+                        'value'  => $page['id'],
+                        'text'   => $page['title'],
+                        'class'  => $page['type'],
+                        'info'   => $page['id'],
                         'group'  => 'page',
-                        'level'  => $determinePageLevel($page)
+                        'level'  => $page['_level']
                     ];
                 }
             }
@@ -88,7 +76,6 @@ class PageValidator implements ValidatorInterface
                     [
                         'class'   => 'pages',
                         'default' => ['0'],
-                        'sortField' => ['level', 'sorting'],
                         'optgroupField' => 'group',
                         'optgroups' => [
                             [

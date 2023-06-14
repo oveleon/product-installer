@@ -6,6 +6,7 @@ use Contao\FilesModel;
 use Contao\StringUtil;
 use Contao\System;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
+use Oveleon\ProductInstaller\Import\FileImport;
 
 /**
  * Validator class for validating the file records during and after import.
@@ -26,7 +27,9 @@ class FileValidator implements ValidatorInterface
     {
         if($row['type'] === 'file')
         {
+            /** @var FileImport $fileImporter */
             $fileImporter = System::getContainer()->get('Oveleon\ProductInstaller\Import\FileImport');
+            $fileImporter->setArchive($importer->getArchive());
 
             /** @var FilesModel $fileModel */
             if($fileModel = $fileImporter->importFileByPath($row['path']))
@@ -35,7 +38,7 @@ class FileValidator implements ValidatorInterface
             }
         }
 
-        // Skip import, because the database has already been updated by the import
+        // Skip import, because the database has already been updated by the file creation
         $row['_skip'] = true;
 
         return null;
