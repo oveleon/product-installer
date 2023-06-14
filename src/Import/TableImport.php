@@ -79,8 +79,8 @@ class TableImport extends AbstractPromptImport
 
         // Consider only data container of type DC_Table and DC_Folder
         if(
-            DC_Table::class === $tableInfo->dataContainer ||
-            DC_Folder::class === $tableInfo->dataContainer
+             DC_Table::class === $tableInfo->dataContainer ||
+            (DC_Folder::class === $tableInfo->dataContainer && $tableInfo->databaseAssisted)
         )
         {
             $this->importTable();
@@ -242,6 +242,7 @@ class TableImport extends AbstractPromptImport
 
         $info->sortingMode = $list['sorting']['mode'] ?? null;
         $info->dataContainer = $conf['dataContainer'] ?? null;
+        $info->databaseAssisted = $conf['databaseAssisted'] ?? null;
         $info->ctable = $conf['ctable'] ?? null;
         $info->dynamicPtable = $conf['dynamicPtable'] ?? null;
         $info->ptable = $conf['ptable'] ?? ($info->sortingMode === DataContainer::MODE_TREE ? $this->table : null);
@@ -370,7 +371,7 @@ class TableImport extends AbstractPromptImport
             }
 
             // Add connection
-            $this->addConnection($exportId, ($model->save())->id);
+             $this->addConnection($exportId, ($model->save())->id);
         }
 
         if($validators = Validator::getValidators($this->table, ValidatorMode::AFTER_IMPORT))

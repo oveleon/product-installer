@@ -2,7 +2,6 @@
 
 namespace Oveleon\ProductInstaller\Setup;
 
-use Contao\FilesModel;
 use Contao\Model;
 use Oveleon\ProductInstaller\Import\FileImport;
 use Oveleon\ProductInstaller\Import\ImportStateType;
@@ -92,8 +91,8 @@ class ContentPackageSetup
         $this->tableImporter->setFileExtension('table');
         $this->fileImporter->setFileExtension('json');
 
-        // Get table structure
-        $tableStructure = $this->getTableStructure($destination);
+        // Get valid table
+        $tableStructure = $this->getTables($destination);
 
         // Initial 'expert' prompt (choose tables to import)
         if(
@@ -119,9 +118,16 @@ class ContentPackageSetup
 
                 foreach ($tableStructure as $table)
                 {
-                    /** @var Model $tableModel */
-                    $tableModel = $this->tableImporter->getClassFromFileName($table);
-                    $hasRows = $tableModel::countAll() > 0;
+                    // Set default value to true so that file tables can be deselected at any time
+                    $hasRows = true;
+
+                    // Get the model of the table to check if records are present
+                    if(!\in_array($table, $this->getFileTables()))
+                    {
+                        /** @var Model $tableModel */
+                        $tableModel = $this->tableImporter->getClassFromFileName($table);
+                        $hasRows = $tableModel::countAll() > 0;
+                    }
 
                     $values[] = [
                         'name'  => $table,
@@ -147,7 +153,6 @@ class ContentPackageSetup
 
         // Use default validators
         $this->tableImporter->useDefaultValidators();
-        $this->fileImporter->useDefaultValidators();
 
         $skipTables = [];
 
@@ -167,28 +172,28 @@ class ContentPackageSetup
             $skipTables = $skipTables + (array_keys($scope, ImportStateType::FINISH->value) ?? []);
         }
 
-        // Check if files need to be filed
-        if(!in_array(FilesModel::getTable(), $skipTables))
-        {
-            if($filePrompt = $this->fileImporter->importFromManifest('content.manifest'))
-            {
-                // ToDo: Handle file prompts
-            }
-            // Set files-Table to state FINISH to skip import for further runs
-            else
-            {
-                // ToDo: Darf nicht an der tl_files gekoppelt sein?
-                //$this->setupLock->set(FilesModel::getTable(), ImportStateType::FINISH->value);
-                //$this->setupLock->save();
-            }
-        }
-
         // Running through the tables in the correct order
         foreach ($tableStructure ?? [] as $tableName)
         {
             // Skip table if needed
             if(\in_array($tableName, $skipTables))
             {
+                continue;
+            }
+
+            // Check for non-database-assisted tables
+            if(\in_array($tableName, $this->getFileTables()))
+            {
+                if(($prompt = $this->fileImporter->importDirectoriesByManifest('content.manifest')) !== null)
+                {
+                    // Import need user input
+                    return $prompt->getResponse();
+                }
+
+                // Set table state
+                $this->setupLock->set($tableName, ImportStateType::FINISH->value);
+                $this->setupLock->save();
+
                 continue;
             }
 
@@ -220,7 +225,7 @@ class ContentPackageSetup
     /**
      * Returns the table structure to import.
      */
-    public function getTableStructure(string $archiveDestination): array
+    public function getTables(string $archiveDestination): array
     {
         // Fixme: Get structure from config yml
         // Get predefined table structure and order
@@ -258,6 +263,11 @@ class ContentPackageSetup
             'tl_content.tl_calendar_events'
         ];
 
+        $tableOrder = array_merge(
+            $this->getFileTables(),
+            $tableOrder
+        );
+
         // Get file extension
         $fileExtension = '.' . $this->tableImporter->getFileExtension();
 
@@ -272,10 +282,15 @@ class ContentPackageSetup
 
         if($diffTables = array_diff($tableOrder, $archiveTables))
         {
-            // Clean up order structure (Consider only tables that are available in the archive)
+            // Clean up order structure (Consider only tables that exist in the archive or are of type file table)
             foreach ($diffTables as $removeTable)
             {
-                if($index = array_search($removeTable, $tableOrder))
+                if(\in_array($removeTable, $this->getFileTables()))
+                {
+                    continue;
+                }
+
+                if($index = \array_search($removeTable, $tableOrder))
                 {
                     unset($tableOrder[$index]);
                 }
@@ -284,5 +299,12 @@ class ContentPackageSetup
 
         // Append unknown tables and return full structure
         return array_merge($tableOrder, $archiveTablesOnTop);
+    }
+
+    public function getFileTables(): array
+    {
+        return [
+            'tl_templates'
+        ];
     }
 }

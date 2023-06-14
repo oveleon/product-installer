@@ -8,6 +8,7 @@ use Oveleon\ProductInstaller\Import\Validator\ContentEventValidator;
 use Oveleon\ProductInstaller\Import\Validator\ContentNewsValidator;
 use Oveleon\ProductInstaller\Import\Validator\EventValidator;
 use Oveleon\ProductInstaller\Import\Validator\FaqValidator;
+use Oveleon\ProductInstaller\Import\Validator\FileValidator;
 use Oveleon\ProductInstaller\Import\Validator\FormFieldValidator;
 use Oveleon\ProductInstaller\Import\Validator\LayoutValidator;
 use Oveleon\ProductInstaller\Import\Validator\ModuleValidator;
@@ -31,6 +32,9 @@ class Validator
      */
     public static function useDefaultTableValidators(): void
     {
+        // File
+        self::addValidator(FileValidator::getTrigger(), [FileValidator::class, 'createFile']);
+
         // Page
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'selectRootPage']);
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setLayoutConnection']);
@@ -65,16 +69,19 @@ class Validator
         // Content-Article
         self::addValidator(ContentArticleValidator::getTrigger(), [ContentArticleValidator::class, 'setArticleConnection']);
         self::addValidator(ContentArticleValidator::getTrigger(), [ContentArticleValidator::class, 'setIncludes']);
+        self::addValidator(ContentArticleValidator::getTrigger(), [ContentArticleValidator::class, 'setImageConnection']);
         self::addValidator(ContentArticleValidator::getTrigger(), [ContentArticleValidator::class, 'setContentIncludes'], ValidatorMode::AFTER_IMPORT);
 
         // Content-News
         self::addValidator(ContentNewsValidator::getTrigger(), [ContentNewsValidator::class, 'setNewsConnection']);
         self::addValidator(ContentNewsValidator::getTrigger(), [ContentNewsValidator::class, 'setIncludes']);
+        self::addValidator(ContentNewsValidator::getTrigger(), [ContentNewsValidator::class, 'setImageConnection']);
         self::addValidator(ContentNewsValidator::getTrigger(), [ContentNewsValidator::class, 'setContentIncludes'], ValidatorMode::AFTER_IMPORT);
 
         // Content-Event
         self::addValidator(ContentEventValidator::getTrigger(), [ContentEventValidator::class, 'setEventConnection']);
         self::addValidator(ContentEventValidator::getTrigger(), [ContentEventValidator::class, 'setIncludes']);
+        self::addValidator(ContentEventValidator::getTrigger(), [ContentEventValidator::class, 'setImageConnection']);
         self::addValidator(ContentEventValidator::getTrigger(), [ContentEventValidator::class, 'setContentIncludes'], ValidatorMode::AFTER_IMPORT);
     }
 

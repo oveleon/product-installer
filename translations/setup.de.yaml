@@ -1,6 +1,7 @@
 setup:
     tables:
         tl_files:                       'Dateien'
+        tl_templates:                   'Templates'
         tl_theme:                       'Themes'
         tl_style_sheet:                 'Stylesheets'
         tl_style:                       'Formatdefinitionen'

@@ -4,7 +4,6 @@ namespace Oveleon\ProductInstaller\Import;
 
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\PromptResponse;
-use Oveleon\ProductInstaller\Setup\ContentPackageSetup;
 use Oveleon\ProductInstaller\SetupLock;
 use Oveleon\ProductInstaller\Util\ArchiveUtil;
 

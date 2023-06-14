@@ -5,8 +5,10 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 use Contao\ArticleModel;
 use Contao\ContentModel;
 use Contao\Controller;
+use Contao\FilesModel;
 use Contao\FormModel;
 use Contao\ModuleModel;
+use Contao\StringUtil;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 
@@ -141,6 +143,25 @@ abstract class ContentValidator implements ValidatorInterface
 
         return null;
     }
+    /**
+     * Deals with images (UUIDs) in content elements.
+     */
+    static function setImageConnection(array &$row, AbstractPromptImport $importer): ?array
+    {
+        if($row['singleSRC'])
+        {
+            if($connectedUuid = $importer->getConnection($row['singleSRC'], FilesModel::getTable()))
+            {
+                $row['singleSRC'] = StringUtil::uuidToBin($connectedUuid);
+            }
+            else
+            {
+                // ToDo: Prompt -> Pick another file
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Deals with the relationship between content elements among themselves.
@@ -159,4 +180,6 @@ abstract class ContentValidator implements ValidatorInterface
             $model->save();
         }
     }
+
+
 }

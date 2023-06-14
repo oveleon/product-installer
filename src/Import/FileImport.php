@@ -3,14 +3,17 @@
 namespace Oveleon\ProductInstaller\Import;
 
 use Contao\File;
+use Contao\FilesModel;
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 
 class FileImport extends AbstractPromptImport
 {
     /**
-     * Import files from manifest file.
+     * Import directory files, which are also present in the manifest file.
+     *
+     * ToDo: Validators and the possibility to send prompts must be enabled.
      */
-    public function importFromManifest($manifestFileName): ?AbstractPrompt
+    public function importDirectoriesByManifest(string $manifestFileName, array $skipDirectories = ['files']): ?AbstractPrompt
     {
         // Get manifest from archive
         $manifest = $this->getArchiveContentByFilename($manifestFileName);
@@ -19,9 +22,17 @@ class FileImport extends AbstractPromptImport
         {
             foreach ($this->archiveUtil->getFileList($this->getArchive()) ?? [] as $filePath)
             {
-                // Check if it is a folder and the filename starts with the base directory of my exports
-                if(in_array(strtok($filePath, '/'), $manifest['directories']))
+                $baseDirectory = strtok($filePath, '/');
+
+                // Check if it is a folder and the file name starts with the base directory of my exports and the directory should not be skipped
+                if(
+                     in_array($baseDirectory, $manifest['directories']) &&
+                    !in_array($baseDirectory, $skipDirectories)
+                )
                 {
+                    // ToDo: Parse validators and set prompt if needed
+
+                    // Fixme: Create file with Symfony to avoid overhead, e.g. dbafs / database
                     // Create file
                     $archive = new File($filePath);
                     $archive->write($this->archiveUtil->getFileContent($this->getArchive(), $filePath));
@@ -34,11 +45,19 @@ class FileImport extends AbstractPromptImport
     }
 
     /**
-     * Apply default table validators.
+     * Imports a file based on an archive file and synchronizes the database.
      */
-    public static function useDefaultValidators(): void
+    public function importFileByPath($filePath): ?FilesModel
     {
-        // Apply default validators
-        // Validator::useDefaultFileValidators();
+        if($content = $this->archiveUtil->getFileContent($this->getArchive(), $filePath))
+        {
+            $file = new File($filePath);
+            $file->write($content);
+            $file->close();
+
+            return $file->getModel();
+        }
+
+        return null;
     }
 }
