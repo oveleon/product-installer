@@ -235,7 +235,6 @@ class PageValidator implements ValidatorInterface
                             'description' => $translator->trans('setup.prompt.page.layout.explanation', [], 'setup'),
                             'content'     => $layoutStructure ?? []
                         ],
-                        'class'         => 'w50',
                         'optgroupField' => 'group',
                         'optgroups'     => $optgroups ?? []
                     ]

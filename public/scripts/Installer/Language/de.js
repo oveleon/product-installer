@@ -8,6 +8,7 @@ module.exports = {
     "actions.back":                                 "Zurück",
     "actions.next":                                 "Weiter",
     "actions.start":                                "Starten",
+    "actions.products":                             "Produktübersicht",
 
     "type.product":                                 "Produkt",
     "type.package":                                 "Produktpaket",

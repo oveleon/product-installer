@@ -43,6 +43,7 @@ class SetupController
         {
             // Extend task options with expert-mode information
             $task['expert'] = $parameter['expert'];
+            $task['productHash'] = $parameter['product'];
 
             // Get current task
             if($task['hash'] === $taskHash)

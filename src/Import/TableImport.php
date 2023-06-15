@@ -180,6 +180,11 @@ class TableImport extends AbstractPromptImport
             $mappedValue = $prompts[ $this->table ][ $fieldName ] ?? null;
         }
 
+        if($mappedValue === '')
+        {
+            return null;
+        }
+
         return $mappedValue;
     }
 

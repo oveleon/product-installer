@@ -2,8 +2,8 @@ import StepComponent from "../Components/StepComponent";
 import {i18n} from "../Language"
 import {call} from "../../Utils/network"
 import State from "../State";
-import {ProductConfig, TaskConfig, TaskType} from "../Product/Product";
-import ProductComponent, {ProductOptions} from "../Components/ProductComponent";
+import {TaskConfig} from "../Product/Product";
+import ProductComponent from "../Components/ProductComponent";
 import SetupPromptStep from "./SetupPromptStep";
 import DropMenuComponent from "../Components/DropMenuComponent";
 
@@ -33,9 +33,7 @@ export default class SetupStep extends StepComponent
             <h2>${i18n('setup.headline')}</h2>
             <div class="product-overview"></div>
             <h4 class="setup-headline">${i18n('setup.available_imports.headline')} (<span></span>)</h4>
-            <div class="tasks-overview">
-                
-            </div>
+            <div class="tasks-overview"></div>
             <div class="actions">
                 <button class="prev">${i18n('actions.back')}</button>
             </div>
@@ -74,7 +72,7 @@ export default class SetupStep extends StepComponent
             {
                 super.error(response)
 
-                // Go back to the dachboard
+                // Go back to the dashboard
                 this.gotToDashboard()
 
                 return
@@ -120,12 +118,12 @@ export default class SetupStep extends StepComponent
                 {
                     label: 'Einrichtung starten',
                     highlight: !product.get('setup'),
-                    value: () => this.runSetup(task)
+                    value: () => this.runSetup(task, product)
                 },
                 {
                     label: 'Im Expertenmodus starten',
                     highlight: !product.get('setup'),
-                    value: () => this.runSetup(task, true)
+                    value: () => this.runSetup(task, product, true)
                 },
             ]).appendTo(
                 <HTMLDivElement> taskElement.querySelector('.actions')
@@ -135,12 +133,13 @@ export default class SetupStep extends StepComponent
         }
     }
 
-    private runSetup(task, expert: boolean = false)
+    private runSetup(task, product: ProductComponent, expert: boolean = false)
     {
         // Get current setup state
         const setup = State.get('setup')
 
         setup['task'] = task.hash
+        setup['product'] = product.get('hash')
         setup['expert'] = expert
 
         // Set new task hash (used to start an import process and further steps)

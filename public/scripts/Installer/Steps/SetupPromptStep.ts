@@ -18,13 +18,23 @@ export default class SetupPromptStep extends StepComponent
     /**
      * @inheritDoc
      */
+    // ToDo: Close button need to reset everything
     protected getTemplate(): string
     {
         return `
-            <h2>${i18n('setup.prompt.headline')}</h2>
-            <div class="prompts inherit"></div>
-            <div class="step-progress" hidden>
-                <div class="progress-scroll"></div>
+            <div class="setup inherit">
+                <h2>${i18n('setup.prompt.headline')}</h2>
+                <div class="prompts inherit"></div>
+                <div class="step-progress" hidden>
+                    <div class="progress-scroll"></div>
+                </div>
+            </div>
+            <div class="complete inherit" hidden>
+                <div class="setup-complete"></div>
+                <div class="actions">
+                    <button class="goto-products">${i18n('actions.products')}</button>
+                    <button data-close class="primary">${i18n('actions.close')}</button>
+                </div>
             </div>
         `
     }
@@ -34,6 +44,8 @@ export default class SetupPromptStep extends StepComponent
      */
     protected events(): void
     {
+        window.addEventListener('beforeunload', this.preventUnload);
+
         this.run({
             promptResponse: {
                 checkRunningSetup: true
@@ -58,7 +70,13 @@ export default class SetupPromptStep extends StepComponent
 
             if(response.complete)
             {
-                alert('FERTIG 🎉')
+                window.removeEventListener('beforeunload', this.preventUnload);
+
+                this.progressItems = [];
+
+                this.element('.setup').hidden = true
+                this.element('.complete').hidden = false
+                this.element('.goto-products').addEventListener('click', () => this.modal.open(this.modal.getStepIndex('DashboardStep')))
 
                 return
             }
@@ -73,10 +91,12 @@ export default class SetupPromptStep extends StepComponent
             switch(response.type)
             {
                 case PromptType.CONFIRM:
+                    // Create confirm prompt
                     prompt = new ConfirmPrompt(response.data)
                     break
 
                 case PromptType.FORM:
+                    // Create form prompt
                     prompt = new FormPrompt(response.data)
                     break;
 
@@ -100,8 +120,19 @@ export default class SetupPromptStep extends StepComponent
         }).catch((e: Error) => super.error(e))
     }
 
+    private preventUnload(e): void
+    {
+        e.returnValue = `You are about to cancel the setup, do you really want to leave the site?`
+    }
+
     private updateProgress(progress): void
     {
+        // Skip process if there is only one table to import
+        if(Object.keys(progress.list).length <= 1)
+        {
+            return
+        }
+
         if(this.progressItems.length === 0)
         {
             // Add items

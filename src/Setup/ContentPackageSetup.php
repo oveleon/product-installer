@@ -11,6 +11,7 @@ use Oveleon\ProductInstaller\Import\Prompt\ImportPromptType;
 use Oveleon\ProductInstaller\Import\Prompt\ConfirmPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\PromptResponse;
 use Oveleon\ProductInstaller\Import\TableImport;
+use Oveleon\ProductInstaller\InstallerLock;
 use Oveleon\ProductInstaller\SetupLock;
 use Oveleon\ProductInstaller\Util\ArchiveUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,6 +32,7 @@ class ContentPackageSetup
         protected readonly TableImport $tableImporter,
         protected readonly FileImport $fileImporter,
         protected readonly SetupLock $setupLock,
+        protected readonly InstallerLock $installerLock,
         protected readonly TranslatorInterface $translator,
     ){}
 
@@ -239,13 +241,24 @@ class ContentPackageSetup
             }
         }
 
+        // Get full setup log
+        $log = $this->setupLock->getScope($task['hash']);
+
         // Remove scope to reset the setup for this task
         $this->setupLock->removeScope($task['hash']);
         $this->setupLock->save();
 
-        // ToDo: Update product in installer-lock; Set setup -> true
+        // Update product in installer-lock
+        if($product = $this->installerLock->getProduct($task['productHash']))
+        {
+            $product['setup'] = true;
+
+            $this->installerLock->setProduct($product);
+            $this->installerLock->save();
+        }
 
         return new JsonResponse([
+            'log'      => $log,
             'complete' => 1
         ]);
     }
