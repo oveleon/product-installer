@@ -7,6 +7,11 @@ use Symfony\Component\Filesystem\Exception\RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * Abstract class to simplify working with local JSON files.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 abstract class InstallerFile
 {
     protected Filesystem $filesystem;

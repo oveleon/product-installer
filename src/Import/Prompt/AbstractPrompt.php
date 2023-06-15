@@ -4,6 +4,11 @@ namespace Oveleon\ProductInstaller\Import\Prompt;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * Abstract class to create a prompt.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 abstract class AbstractPrompt
 {
     protected array $customResponseData = [];

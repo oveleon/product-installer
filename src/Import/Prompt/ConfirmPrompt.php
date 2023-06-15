@@ -2,6 +2,12 @@
 
 namespace Oveleon\ProductInstaller\Import\Prompt;
 
+/**
+ * Class to generate confirm prompts.
+ * These are capable of defining multiple answers to a question and returning the user's decision.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class ConfirmPrompt extends AbstractPrompt
 {
     private string $question;

@@ -2,6 +2,12 @@
 
 namespace Oveleon\ProductInstaller\Import\Prompt;
 
+/**
+ * Class to generate form prompts.
+ * These are able to generate forms and return the user input.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class FormPrompt extends AbstractPrompt
 {
     protected array $fields = [];

@@ -2,6 +2,11 @@
 
 namespace Oveleon\ProductInstaller;
 
+/**
+ * Class to edit the local JSON file setup-lock.json.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class SetupLock extends InstallerFile
 {
     /**

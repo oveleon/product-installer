@@ -2,6 +2,11 @@
 
 namespace Oveleon\ProductInstaller\Import\Prompt;
 
+/**
+ * Class to simplify working with arrays created by a prompt.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class PromptResponse
 {
     public function __construct(private ?array $response)

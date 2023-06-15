@@ -8,6 +8,11 @@ use Oveleon\ProductInstaller\LicenseConnector\Step\AbstractStep;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Component\HttpClient\HttpClient;
 
+/**
+ * Class with helper functions for working with various connectors.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class ConnectorUtil
 {
     public function post(AbstractLicenseConnector $connector, string $route, array $body = []): ResponseInterface

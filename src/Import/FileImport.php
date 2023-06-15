@@ -6,12 +6,17 @@ use Contao\File;
 use Contao\FilesModel;
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 
+/**
+ * Class to import files.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class FileImport extends AbstractPromptImport
 {
     /**
      * Import directory files, which are also present in the manifest file.
      *
-     * ToDo: Validators and the possibility to send prompts must be enabled.
+     * ToDo: Validators and the ability to send prompts need to be developed.
      */
     public function importDirectoriesByManifest(string $manifestFileName, array $skipDirectories = ['files']): ?AbstractPrompt
     {
@@ -31,8 +36,8 @@ class FileImport extends AbstractPromptImport
                 )
                 {
                     // ToDo: Parse validators and set prompt if needed
-
                     // Fixme: Create file with Symfony to avoid overhead, e.g. dbafs / database
+
                     // Create file
                     $archive = new File($filePath);
                     $archive->write($this->archiveUtil->getFileContent($this->getArchive(), $filePath));

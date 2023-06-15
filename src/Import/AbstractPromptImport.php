@@ -7,6 +7,11 @@ use Oveleon\ProductInstaller\Import\Prompt\PromptResponse;
 use Oveleon\ProductInstaller\SetupLock;
 use Oveleon\ProductInstaller\Util\ArchiveUtil;
 
+/**
+ * Abstract class for various importers which work with prompts.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 abstract class AbstractPromptImport
 {
     /**

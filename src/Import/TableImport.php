@@ -14,7 +14,7 @@ use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\Validator\ValidatorMode;
 
 /**
- * Import class to import table records.
+ * Class to import table records.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
