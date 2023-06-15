@@ -54,9 +54,9 @@ class PageValidator implements ValidatorInterface
                 /** @var PageUtil $pageUtil */
                 $pageUtil = System::getContainer()
                                 ->get("Oveleon\ProductInstaller\Util\PageUtil")
-                                ->set($pages);
+                                ->setPages($pages);
 
-                foreach ($pageUtil->getFlat() as $page)
+                foreach ($pageUtil->getPagesFlat() as $page)
                 {
                     $values[] = [
                         'value'  => $page['id'],

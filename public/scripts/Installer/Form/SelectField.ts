@@ -1,4 +1,5 @@
 import FormField, {FormFieldConfig} from "./FormField"
+import {createPopper} from "@popperjs/core"
 import TomSelect from "tom-select"
 
 import "tom-select/dist/css/tom-select.bootstrap5.css"
@@ -65,6 +66,13 @@ export default class SelectField extends FormField
 
             maxItems: this.config?.options?.multiple ? null : 1,
             placeholder: this.config?.options?.placeholder ? this.config.options.placeholder : 'Bitte wählen...',
+
+            onInitialize: function(){
+                this.popper = createPopper(this.control,this.dropdown);
+            },
+            onDropdownOpen: function(){
+                this.popper.update();
+            },
 
             render: {
                 option: function(data, escape) {

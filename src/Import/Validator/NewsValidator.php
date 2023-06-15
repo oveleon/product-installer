@@ -38,8 +38,7 @@ class NewsValidator implements ValidatorInterface
                 'type'        => 'TABLE',
                 'description' => $translator->trans('setup.prompt.news.archive.explanation', [], 'setup'),
                 'content'     => $newsArchiveStructure ?? []
-            ],
-            'class'       => 'w50'
+            ]
         ]);
     }
 }

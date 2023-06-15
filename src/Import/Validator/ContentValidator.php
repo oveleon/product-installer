@@ -133,8 +133,7 @@ abstract class ContentValidator implements ValidatorInterface
                             'type'        => 'TABLE',
                             'description' => $translator->trans('setup.prompt.content.content.includes.' . $connectorField . '.explanation', [], 'setup'),
                             'content'     => $parentStructure ?? []
-                        ],
-                        'class'       => 'w50'
+                        ]
                     ]
                 ]
             ];

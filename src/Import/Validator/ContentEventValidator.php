@@ -38,8 +38,7 @@ class ContentEventValidator extends ContentValidator implements ValidatorInterfa
                 'type'        => 'TABLE',
                 'description' => $translator->trans('setup.prompt.content.event.explanation', [], 'setup'),
                 'content'     => $newsStructure ?? []
-            ],
-            'class'       => 'w50'
+            ]
         ]);
     }
 }

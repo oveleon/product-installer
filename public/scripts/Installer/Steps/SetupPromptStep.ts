@@ -13,6 +13,8 @@ import FormPrompt from "../Prompt/FormPrompt";
  */
 export default class SetupPromptStep extends StepComponent
 {
+    private progressItems: HTMLDivElement[] = []
+
     /**
      * @inheritDoc
      */
@@ -21,6 +23,9 @@ export default class SetupPromptStep extends StepComponent
         return `
             <h2>${i18n('setup.prompt.headline')}</h2>
             <div class="prompts inherit"></div>
+            <div class="step-progress" hidden>
+                <div class="progress-scroll"></div>
+            </div>
         `
     }
 
@@ -58,6 +63,11 @@ export default class SetupPromptStep extends StepComponent
                 return
             }
 
+            if(response.progress)
+            {
+                this.updateProgress(response.progress)
+            }
+
             let prompt: Prompt
 
             switch(response.type)
@@ -88,5 +98,66 @@ export default class SetupPromptStep extends StepComponent
             console.log(response);
 
         }).catch((e: Error) => super.error(e))
+    }
+
+    private updateProgress(progress): void
+    {
+        if(this.progressItems.length === 0)
+        {
+            // Add items
+            for(let key in progress.list)
+            {
+                if(!progress.list.hasOwnProperty(key))
+                {
+                    continue
+                }
+
+                const item = document.createElement('div')
+                const label = progress.list[key]
+
+                item.classList.add('progress-item')
+                item.dataset.key = key
+                item.innerHTML = `
+                    <span class="indicator"></span>
+                    <span class="label">${label}</span>
+                `
+
+                this.progressItems.push(item)
+                this.element('.step-progress .progress-scroll').appendChild(item)
+            }
+        }
+
+        let passedActive: boolean = false;
+
+        for(const item of this.progressItems)
+        {
+            if(!passedActive)
+            {
+                item.classList.add('finish')
+                item.classList.remove('pending', 'active')
+            }
+            else
+            {
+                item.classList.add('pending')
+            }
+
+            if(item.dataset.key === progress.current)
+            {
+                passedActive = true;
+
+                setTimeout(() => {
+                    item.scrollIntoView({
+                        behavior: "smooth",
+                        block:    "center",
+                        inline:   "center"
+                    });
+                }, 300)
+
+                item.classList.add('active')
+                item.classList.remove('pending')
+            }
+        }
+
+        this.element(".step-progress").hidden = false
     }
 }

@@ -198,13 +198,12 @@
   font-size: 11px;
   font-weight: 400;
   color: #fff;
-  background: #688191;
+  background: #c9c9c9;
   border-radius: 50%;
   cursor: pointer;
-  opacity: 0.8;
 }
 #installer .widget label .info-helper:hover, #installer .widget legend .info-helper:hover {
-  opacity: 1;
+  background: #688191;
 }
 #installer .widget.w50 {
   width: 48%;
@@ -335,7 +334,7 @@
   color: #a6a6a6;
 }
 #installer .ts-dropdown .option span.text {
-  padding-left: calc(var(--level, 0) * 15px);
+  padding-left: calc(var(--level, 0) * 10px);
 }
 #installer .ts-dropdown .option span.text:before {
   content: "";
@@ -367,7 +366,18 @@
 #installer .ts-dropdown .option.regular span:before {
   background-image: url("/system/themes/flexible/icons/regular.svg");
 }
+#installer .ts-dropdown .option.article span:before {
+  background-image: url("/system/themes/flexible/icons/articles.svg");
+}
+#installer .ts-dropdown .option.article_inv span:before {
+  background-image: url("/system/themes/flexible/icons/articles_.svg");
+}
 
+@media (min-width: 600px) {
+  #installer .widget.w50 {
+    width: 48%;
+  }
+}
 .products .no-products {
   margin-bottom: 25px;
   text-align: center;
@@ -1137,6 +1147,104 @@
   flex-direction: column;
   flex-grow: 1;
   background: #fff;
+}
+
+#installer .step-progress {
+  position: relative;
+  max-width: 100%;
+  margin: 20px auto 0;
+  border-top: 1px solid #f3f3f3;
+  padding-top: 30px;
+  overflow: hidden;
+  pointer-events: none;
+}
+#installer .step-progress .progress-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  padding: 0 2px;
+}
+#installer .step-progress .progress-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  word-break: keep-all;
+  white-space: nowrap;
+  max-width: 164px;
+  min-width: 164px;
+  padding: 5px 0;
+}
+#installer .step-progress .progress-item .label {
+  color: #7a7a7a;
+  font-size: 12px;
+}
+#installer .step-progress .progress-item .indicator {
+  position: relative;
+  z-index: 10;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 11px;
+  height: 11px;
+  margin: 0 auto 13px;
+  border-radius: 50%;
+  background-color: #cdcdcd;
+  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.21);
+  outline: 3px solid white;
+}
+#installer .step-progress .progress-item .indicator:before, #installer .step-progress .progress-item .indicator:after {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  top: 5px;
+  width: 100px;
+  border-bottom: 2px solid #a4c9a8;
+}
+#installer .step-progress .progress-item .indicator:before {
+  right: 100%;
+}
+#installer .step-progress .progress-item .indicator:after {
+  left: 100%;
+}
+#installer .step-progress .progress-item.finish .indicator {
+  background-color: #89bb87;
+}
+#installer .step-progress .progress-item.pending .indicator:before, #installer .step-progress .progress-item.pending .indicator:after {
+  border-bottom-style: dashed;
+  border-bottom-color: #e7e7e7;
+}
+#installer .step-progress .progress-item.active {
+  font-weight: 500;
+}
+#installer .step-progress .progress-item.active .indicator {
+  background-color: #e7db42;
+}
+#installer .step-progress .progress-item.active .indicator:before {
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to right, #a4c9a8 0%, #e7db42 100%);
+}
+#installer .step-progress .progress-item.active .indicator:after {
+  border-bottom-style: dashed;
+  border-bottom-color: #e7e7e7;
+}
+#installer .step-progress:before, #installer .step-progress:after {
+  display: block;
+  position: absolute;
+  content: "";
+  z-index: 30;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+  pointer-events: none;
+}
+#installer .step-progress:before {
+  left: 0;
+  background: linear-gradient(to right, white 0%, rgba(255, 255, 255, 0) 100%);
+}
+#installer .step-progress:after {
+  right: 0;
+  background: linear-gradient(to left, white 0%, rgba(255, 255, 255, 0) 100%);
 }
 
 [hidden] {

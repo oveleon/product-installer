@@ -1,0 +1,132 @@
+#installer{
+
+  .step-progress{
+    position: relative;
+    max-width: 100%;
+    margin: 20px auto 0;
+    border-top: 1px solid #f3f3f3;
+    padding-top: 30px;
+    overflow: hidden;
+    pointer-events: none;
+
+    .progress-scroll{
+      display: flex;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      padding: 0 2px;
+    }
+
+    .progress-item{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+
+      word-break: keep-all;
+      white-space: nowrap;
+
+      max-width: 164px;
+      min-width: 164px;
+      padding: 5px 0;
+
+      .label{
+        color: #7a7a7a;
+        font-size: 12px;
+      }
+
+      .indicator{
+        position: relative;
+        z-index: 10;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 11px;
+        height: 11px;
+        margin: 0 auto 13px;
+
+        border-radius: 50%;
+        background-color: #cdcdcd;
+        box-shadow: 0 0 5px 3px rgb(0 0 0 / 21%);
+        outline: 3px solid white;
+
+        &:before, &:after{
+          position: absolute;
+          z-index: -1;
+          content: "";
+          top: 5px;
+
+          width: 100px;
+          border-bottom: 2px solid #a4c9a8;
+        }
+
+        &:before{
+          right: 100%;
+        }
+
+        &:after{
+          left: 100%;
+        }
+      }
+
+      &.finish{
+
+        .indicator{
+          background-color: #89bb87;
+        }
+      }
+
+      &.pending{
+
+        .indicator{
+
+          &:before, &:after{
+            border-bottom-style: dashed;
+            border-bottom-color: #e7e7e7;
+          }
+        }
+      }
+
+      &.active{
+        font-weight: 500;
+
+        .indicator{
+          background-color: #e7db42;
+
+          &:before{
+            border-image-slice: 1;
+            border-image-source: linear-gradient(to right, rgba(164,201,168,1) 0%,rgba(231,219,66,1) 100%);
+          }
+
+          &:after{
+            border-bottom-style: dashed;
+            border-bottom-color: #e7e7e7;
+          }
+        }
+      }
+    }
+
+    &:before, &:after{
+      display: block;
+      position: absolute;
+      content: "";
+      z-index: 30;
+
+      top: 0;
+      bottom: 0;
+      width: 50px;
+
+      pointer-events: none;
+    }
+
+    &:before{
+      left: 0;
+      background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+    }
+
+    &:after{
+      right: 0;
+      background: linear-gradient(to left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+    }
+  }
+}

@@ -40,8 +40,7 @@ class NewsletterRecipientValidator implements ValidatorInterface
                 'type'        => 'TABLE',
                 'description' => $translator->trans('setup.prompt.newsletter.recipient_channel.explanation', [], 'setup'),
                 'content'     => $newsArchiveStructure ?? []
-            ],
-            'class'       => 'w50'
+            ]
         ]);
     }
 }

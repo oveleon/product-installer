@@ -38,8 +38,7 @@ class FaqValidator implements ValidatorInterface
                 'type'        => 'TABLE',
                 'description' => $translator->trans('setup.prompt.faq.category.explanation', [], 'setup'),
                 'content'     => $faqCategoryStructure ?? []
-            ],
-            'class'       => 'w50'
+            ]
         ]);
     }
 }

@@ -38,8 +38,7 @@ class FormFieldValidator implements ValidatorInterface
                 'type'        => 'TABLE',
                 'description' => $translator->trans('setup.prompt.form_field.form.explanation', [], 'setup'),
                 'content'     => $formStructure ?? []
-            ],
-            'class'       => 'w50'
+            ]
         ]);
     }
 }

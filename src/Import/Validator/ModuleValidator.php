@@ -38,8 +38,7 @@ class ModuleValidator implements ValidatorInterface
                 'type'        => 'TABLE',
                 'description' => $translator->trans('setup.prompt.module.theme.explanation', [], 'setup'),
                 'content'     => $themeStructure ?? []
-            ],
-            'class'       => 'w50'
+            ]
         ]);
     }
 }

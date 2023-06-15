@@ -64,7 +64,6 @@ class ContentNewsValidator extends ContentValidator implements ValidatorInterfac
                 'description' => $translator->trans('setup.prompt.content.news.explanation', [], 'setup'),
                 'content'     => $newsStructure ?? []
             ],
-            'class'         => 'w50',
             'optgroupField' => 'group',
             'optgroups'     => $groups
         ], $values);

@@ -4,20 +4,35 @@ namespace Oveleon\ProductInstaller\Util;
 
 use Model\Collection;
 
+/**
+ * Class with helper functions for working with pages and articles.
+ *
+ * @method Collection|null getPageCollection()
+ * @method Collection|null getArticleCollection()
+ * @method array|null      getPagesStructured()
+ * @method array|null      getPagesFlat()
+ * @method array|null      getArticlesFlat()
+ * @method array|null      getPageLevel(int $pageId)
+ * @method array|null      getPageSorting(int $pageId)
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class PageUtil
 {
-    static private ?Collection $pageCollection = null;
+    static private ?Collection $articleCollection = null;
+    static private ?Collection $pageCollection    = null;
 
-    static private array $structured = [];
-    static private array $flat = [];
+    static private array $pagesStructured = [];
+    static private array $pagesFlat       = [];
+    static private array $articlesFlat    = [];
 
     /**
-     * Initialize PageUtil with a new collection of pages / set page collection.
+     * Initialize PageUtil with a new collection of pages.
      */
-    public function set(Collection $pageModelCollection): self
+    public function setPages(Collection $pageModelCollection): self
     {
         self::$pageCollection = $pageModelCollection;
-        self::$flat = [];
+        self::$pagesFlat      = [];
 
         $pages = array_combine(
             $pageModelCollection->fetchEach('id'),
@@ -79,54 +94,101 @@ class PageUtil
             $flatten($item);
         }
 
-        self::$structured = $nested;
-        self::$flat = $flat;
+        self::$pagesStructured = $nested;
+        self::$pagesFlat       = $flat;
 
         return $this;
     }
 
     /**
-     * Returns the full page model collection.
+     * Initialize PageUtil with a new collection of articles.
      */
-    public function getCollection(): ?Collection
+    public function setArticles(Collection $articleModelCollection): self
     {
-        return self::$pageCollection;
+        self::$articleCollection = $articleModelCollection;
+
+        $pages = self::getPagesFlat();
+
+        $articles = array_reverse(array_combine(
+            $articleModelCollection->fetchEach('id'),
+            $articleModelCollection->fetchAll()
+        ));
+
+        foreach ($articles as $article)
+        {
+            if(\array_key_exists($article['pid'], $pages))
+            {
+                // Get page
+                $page  = $pages[$article['pid']];
+
+                // Determine index to push in
+                $index = array_search($article['pid'], array_keys($pages));
+
+                // Set article information
+                $article['_level'] = ++$page['_level'];
+                $article['_isArticle'] = true;
+
+                // Push to pages array
+                self::array_splice_preserve_keys( $pages, ++$index, 0, ['art_' . $article['id'] => $article]);
+            }
+        }
+
+        self::$articlesFlat = $pages;
+
+        return $this;
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        if(null === self::$pageCollection)
+        {
+            throw new \RuntimeException('There is no page collection available. Add pages before using this method.');
+        }
+
+        switch ($name)
+        {
+            case 'getPageCollection':
+                return self::$pageCollection;
+
+            case 'getArticleCollection':
+                return self::$articleCollection;
+
+            case 'getPagesStructured':
+                return self::$pagesStructured;
+
+            case 'getPagesFlat':
+                return self::$pagesFlat;
+
+            case 'getArticlesFlat':
+                return self::$articlesFlat;
+
+            case 'getPageLevel':
+                return self::$pagesFlat[$arguments[0] ]['_level'] ?? 0;
+
+            case 'getPageSorting':
+                return array_search($arguments[0], array_keys(self::$pagesFlat)) ?: 0;
+        }
     }
 
     /**
-     * Returns the level of a page by id.
+     * Array splice with preserving keys.
+     *
+     * @author Lode <https://stackoverflow.com/users/230422/lode>
+     * @link https://stackoverflow.com/questions/16585502/array-splice-preserving-keys
      */
-    public function getLevel(int $pageId): int
+    public static function array_splice_preserve_keys(&$input, $offset, $length=null, $replacement=array()): ?array
     {
-        return self::$flat[ $pageId ]['_level'] ?? 0;
-    }
+        if (empty($replacement))
+        {
+            return array_splice($input, $offset, $length);
+        }
 
-    /**
-     * Returns the sorting of a page by id.
-     */
-    public function getSorting(int $pageId): int
-    {
-        return array_search($pageId, array_keys(self::$flat)) ?: 0;
-    }
+        $part_before  = array_slice($input, 0, $offset, $preserve_keys=true);
+        $part_removed = array_slice($input, $offset, $length, $preserve_keys=true);
+        $part_after   = array_slice($input, $offset+$length, null, $preserve_keys=true);
 
-    /**
-     * Returns the number of children of a page by id.
-     */
-    public function getNumberOfChildren(int $pageId): int
-    {
-        return count(self::$flat[ $pageId ]['_children'] ?? []);
-    }
+        $input = $part_before + $replacement + $part_after;
 
-    /**
-     * Returns an array with all pages and their nested child pages.
-     */
-    public function getStructured(): array
-    {
-        return self::$structured;
-    }
-
-    public function getFlat(): array
-    {
-        return self::$flat;
+        return $part_removed;
     }
 }

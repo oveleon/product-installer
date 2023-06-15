@@ -38,8 +38,7 @@ class EventValidator implements ValidatorInterface
                 'type'        => 'TABLE',
                 'description' => $translator->trans('setup.prompt.event.archive.explanation', [], 'setup'),
                 'content'     => $calendarStructure ?? []
-            ],
-            'class'       => 'w50'
+            ]
         ]);
     }
 }

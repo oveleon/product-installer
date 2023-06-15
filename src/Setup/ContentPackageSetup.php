@@ -186,6 +186,20 @@ class ContentPackageSetup
             {
                 if(($prompt = $this->fileImporter->importDirectoriesByManifest('content.manifest')) !== null)
                 {
+                    // Extend prompt response data
+                    $prompt->setCustomResponseData([
+                       'progress' => [
+                           'list'    => array_combine(
+                               $tablesToImport = array_diff($tableStructure, $skipTables),
+                               array_map(
+                                   fn($table): string => $this->translator->trans('setup.tables.' . $table, [], 'setup'),
+                                   $tablesToImport
+                               )
+                           ),
+                           'current' => $this->tableImporter->getTable()
+                       ]
+                    ]);
+
                     // Import need user input
                     return $prompt->getResponse();
                 }
@@ -206,6 +220,20 @@ class ContentPackageSetup
             // Start the import and expect a prompt
             if(($prompt = $this->tableImporter->import($tableName, $tableContent)) !== null)
             {
+                // Extend prompt response data
+                $prompt->setCustomResponseData([
+                   'progress' => [
+                       'list'    => array_combine(
+                           $tablesToImport = array_diff($tableStructure, $skipTables),
+                           array_map(
+                               fn($table): string => $this->translator->trans('setup.tables.' . $table, [], 'setup'),
+                               $tablesToImport
+                           )
+                       ),
+                       'current' => $this->tableImporter->getTable()
+                   ]
+                ]);
+
                 // Import need user input
                 return $prompt->getResponse();
             }
