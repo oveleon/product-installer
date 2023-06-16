@@ -7,6 +7,7 @@ use Contao\ContentModel;
 use Contao\Controller;
 use Contao\FilesModel;
 use Contao\FormModel;
+use Contao\Model;
 use Contao\ModuleModel;
 use Contao\StringUtil;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
@@ -20,7 +21,7 @@ use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 abstract class ContentValidator implements ValidatorInterface
 {
     /**
-     * Deals with the relationship between content elements and its references except the
+     * Treats the relationship between content elements and its references except the
      * relationship between content elements among themselves.
      */
     static function setIncludes(array &$row, AbstractPromptImport $importer): ?array
@@ -117,8 +118,8 @@ abstract class ContentValidator implements ValidatorInterface
             }
 
             // Try to get missing record
-            $parentStructure = $importer->getArchiveContentByFilename($importer->getTable(), [
-                'value' => $row['pid'],
+            $parentStructure = $importer->getArchiveContentByFilename($connectorTable, [
+                'value' => $parentId,
                 'field' => 'id'
             ]);
 
@@ -143,7 +144,7 @@ abstract class ContentValidator implements ValidatorInterface
         return null;
     }
     /**
-     * Deals with images (UUIDs) in content elements.
+     * Treats with images (UUIDs) in content elements.
      */
     static function setImageConnection(array &$row, AbstractPromptImport $importer): ?array
     {
@@ -163,7 +164,7 @@ abstract class ContentValidator implements ValidatorInterface
     }
 
     /**
-     * Deals with the relationship between content elements among themselves.
+     * Treats the relationship between content elements among themselves.
      */
     static function setContentIncludes(ContentModel $model, AbstractPromptImport $importer): void
     {

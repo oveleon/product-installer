@@ -18,9 +18,16 @@ use Oveleon\ProductInstaller\Util\PageUtil;
  */
 class PageValidator implements ValidatorInterface
 {
+    use ValidatorTrait;
+
     static public function getTrigger(): string
     {
         return PageModel::getTable();
+    }
+
+    static public function getModel(): string
+    {
+        return PageModel::class;
     }
 
     /**
@@ -107,7 +114,7 @@ class PageValidator implements ValidatorInterface
     }
 
     /**
-     * Deals with the relationship between a page and its layout.
+     * Treats the relationship between a page and its layout.
      */
     static public function setLayoutConnection(array &$row, AbstractPromptImport $importer): ?array
     {
@@ -243,5 +250,42 @@ class PageValidator implements ValidatorInterface
         }
 
         return null;
+    }
+
+    /**
+     * Treats the relationship with the field jumpTo / twoFactorJumpTo and connected pages.
+     */
+    static function setPageJumpToConnection(array &$row, AbstractPromptImport $importer): ?array
+    {
+        switch ($row['type'])
+        {
+            case 'root':
+            case 'rootfallback':
+                if($row['enforceTwoFactor'])
+                {
+                    return self::setFieldPageConnection(self::getModel(), 'twoFactorJumpTo', $row, $importer);
+                }
+
+                return null;
+
+            case 'error_401':
+            case 'error_403':
+            case 'error_404':
+            case 'error_503':
+                if(!$row['autoforward'])
+                {
+                    return null;
+                }
+
+                break;
+
+            default:
+                if(!$row['jumpTo'])
+                {
+                    return null;
+                }
+        }
+
+        return self::setFieldPageConnection(self::getModel(), 'jumpTo', $row, $importer);
     }
 }

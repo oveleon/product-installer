@@ -19,8 +19,13 @@ class FormFieldValidator implements ValidatorInterface
         return FormFieldModel::getTable();
     }
 
+    static public function getModel(): string
+    {
+        return FormFieldModel::class;
+    }
+
     /**
-     * Deals with the relationship with the parent element.
+     * Treats the relationship with the parent element.
      */
     static function setFormConnection(array &$row, AbstractPromptImport $importer): ?array
     {

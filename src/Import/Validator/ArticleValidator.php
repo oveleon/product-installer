@@ -21,33 +21,25 @@ class ArticleValidator implements ValidatorInterface
         return ArticleModel::getTable();
     }
 
+    static public function getModel(): string
+    {
+        return ArticleModel::class;
+    }
+
     /**
-     * Deals with the relationship with the parent element.
+     * Treats the relationship with the parent element.
      */
     static function setPageConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');
-
-        $values = [];
         $pages = PageModel::findAll(['order' => 'id ASC, sorting ASC']);
 
         /** @var PageUtil $pageUtil */
-        $pageUtil = System::getContainer()
+        /** @var PageUtil $pageUtil */
+        $values = System::getContainer()
             ->get("Oveleon\ProductInstaller\Util\PageUtil")
-            ->setPages($pages);
-
-        foreach ($pageUtil->getPagesFlat() as $page)
-        {
-            $values[] = [
-                'value'     => $page['id'],
-                'text'      => $page['title'],
-                'class'     => $page['type'],
-                'info'      => $page['type'] === 'root' ? '' : $page['id'],
-                'group'     => 'page',
-                'level'     => $page['_level'],
-                'disabled'  => $page['type'] === 'root',
-            ];
-        }
+            ->setPages($pages)
+            ->getPagesSelectable(true);
 
         $pageStructure = $importer->getArchiveContentByFilename(PageModel::getTable(), [
             'value' => $row['pid'],

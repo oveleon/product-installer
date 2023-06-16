@@ -91,11 +91,21 @@ setup:
                 label:                  'Events → Event-Archive'
                 description:            'One or more events could not be assigned to an event archive. Your selection will be applied to all further events that reference the same event archive.'
                 explanation:            'When importing one or more events, the corresponding event archive could not be found. Please select an event archive from your Contao instance to create a link between these events and an event archive.<br/><br/><b>The following event archive was not imported and needs an alternative:</b>'
+        faq_category:
+            page:
+                label:                  'FAQ category redirect → page'
+                description:            'One or more FAQ categories refer to a redirect page that cannot be resolved. Your selection will be applied to all other FAQ categories that reference the same redirect page.'
+                explanation:            'When importing one or more FAQ categories, the corresponding redirect page could not be found. Please select a page from your Contao instance to create a link between these FAQ categories and a page.<br/><br/><b>The following page was not imported and needs an alternative:</b>'
         faq:
             category:
                 label:                  'FAQ → FAQ-Category'
                 description:            'One or more FAQs could not be assigned to a FAQ category. Your selection will be applied to all other FAQs that reference the same FAQ category.'
                 explanation:            'When importing one or more FAQs, the corresponding FAQ category could not be found. Please select an FAQ category from your Contao instance to create a link between these FAQs and an FAQ category.<br/><br/><b>The following FAQ category was not imported and needs an alternative:</b>'
+        form:
+            page:
+                label:                  'Form Forwarding → Page'
+                description:            'One or more forms reference a redirect page that cannot be resolved. Your selection will be applied to all other redirects that reference the same page.'
+                explanation:            'When importing one or more forms, the associated redirect page could not be found. Please select a page from your Contao instance to create a link between these forms and a page.<br/><br/><b>The following page was not imported and needs an alternative:</b>'
         form_field:
             form:
                 label:                  'Form fields → Form'

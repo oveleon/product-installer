@@ -14,6 +14,8 @@ use Model\Collection;
  * @method array|null      getArticlesFlat()
  * @method array|null      getPageLevel(int $pageId)
  * @method array|null      getPageSorting(int $pageId)
+ * @method array|null      getPagesSelectable(bool $disableRoot)
+ * @method array|null      getArticleSelectable()
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
@@ -167,14 +169,51 @@ class PageUtil
 
             case 'getPageSorting':
                 return array_search($arguments[0], array_keys(self::$pagesFlat)) ?: 0;
+
+            case 'getPagesSelectable':
+                $options = [];
+                $disableRoot = $arguments[0] ?? false;
+
+                foreach (self::getPagesFlat() as $page)
+                {
+                    $options[] = [
+                        'value'     => $page['id'],
+                        'text'      => $page['title'],
+                        'class'     => $page['type'],
+                        'info'      => $page['type'] === 'root' && $disableRoot ? '' : $page['id'],
+                        'group'     => 'page',
+                        'level'     => $page['_level'],
+                        'disabled'  => $disableRoot && ($page['type'] === 'root'),
+                    ];
+                }
+
+                return $options;
+
+            case 'getArticleSelectable':
+                $options = [];
+
+                foreach (self::getArticlesFlat() as $pageArticles)
+                {
+                    $options[] = [
+                        'value'     => ($pageArticles['_isArticle'] ?? false) ? $pageArticles['id'] : 'page_' . $pageArticles['id'],
+                        'text'      => $pageArticles['title'],
+                        'class'     => ($pageArticles['_isArticle'] ?? false) ? ($pageArticles['published'] ? 'article' : 'article_inv') : $pageArticles['type'],
+                        'info'      => ($pageArticles['_isArticle'] ?? false) ? $pageArticles['id'] : '',
+                        'group'     => 'page',
+                        'level'     => $pageArticles['_level'],
+                        'disabled'  => !($pageArticles['_isArticle'] ?? false),
+                    ];
+                }
+
+                return $options;
         }
     }
 
     /**
      * Array splice with preserving keys.
      *
-     * @author Lode <https://stackoverflow.com/users/230422/lode>
-     * @link https://stackoverflow.com/questions/16585502/array-splice-preserving-keys
+     * @author  Lode <https://stackoverflow.com/users/230422/lode>
+     * @link    https://stackoverflow.com/questions/16585502/array-splice-preserving-keys
      */
     public static function array_splice_preserve_keys(&$input, $offset, $length=null, $replacement=array()): ?array
     {

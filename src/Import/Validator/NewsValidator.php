@@ -19,8 +19,13 @@ class NewsValidator implements ValidatorInterface
         return NewsModel::getTable();
     }
 
+    static public function getModel(): string
+    {
+        return NewsModel::class;
+    }
+
     /**
-     * Deals with the relationship with the parent element.
+     * Treats the relationship with the parent element.
      */
     static function setNewsArchiveConnection(array &$row, AbstractPromptImport $importer): ?array
     {

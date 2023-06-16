@@ -1222,7 +1222,7 @@
 }
 #installer .step-progress .progress-item.active .indicator:before {
   border-image-slice: 1;
-  border-image-source: linear-gradient(to right, #a4c9a8 0%, #e7db42 100%);
+  border-image-source: linear-gradient(to right, #a4c9a8 50%, #e7db42 100%);
 }
 #installer .step-progress .progress-item.active .indicator:after {
   border-bottom-style: dashed;
@@ -1320,6 +1320,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
+  z-index: 100;
   padding: 25px;
   pointer-events: none;
 }

@@ -2,20 +2,28 @@
 
 namespace Oveleon\ProductInstaller\Import;
 
+use Contao\Model;
 use Oveleon\ProductInstaller\Import\Validator\ArticleValidator;
+use Oveleon\ProductInstaller\Import\Validator\CollectionValidator;
 use Oveleon\ProductInstaller\Import\Validator\ContentArticleValidator;
 use Oveleon\ProductInstaller\Import\Validator\ContentEventValidator;
 use Oveleon\ProductInstaller\Import\Validator\ContentNewsValidator;
+use Oveleon\ProductInstaller\Import\Validator\ContentValidator;
 use Oveleon\ProductInstaller\Import\Validator\EventValidator;
+use Oveleon\ProductInstaller\Import\Validator\FaqCategoryValidator;
 use Oveleon\ProductInstaller\Import\Validator\FaqValidator;
 use Oveleon\ProductInstaller\Import\Validator\FileValidator;
 use Oveleon\ProductInstaller\Import\Validator\FormFieldValidator;
+use Oveleon\ProductInstaller\Import\Validator\FormValidator;
 use Oveleon\ProductInstaller\Import\Validator\LayoutValidator;
+use Oveleon\ProductInstaller\Import\Validator\MemberGroupValidator;
 use Oveleon\ProductInstaller\Import\Validator\ModuleValidator;
+use Oveleon\ProductInstaller\Import\Validator\NewsArchiveValidator;
 use Oveleon\ProductInstaller\Import\Validator\NewsletterRecipientValidator;
 use Oveleon\ProductInstaller\Import\Validator\NewsletterValidator;
 use Oveleon\ProductInstaller\Import\Validator\NewsValidator;
 use Oveleon\ProductInstaller\Import\Validator\PageValidator;
+use Oveleon\ProductInstaller\Import\Validator\ValidatorInterface;
 use Oveleon\ProductInstaller\Import\Validator\ValidatorMode;
 
 /**
@@ -38,12 +46,16 @@ class Validator
         // Page
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'selectRootPage']);
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setLayoutConnection']);
+        self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setPageJumpToConnection']);
 
         // Layout
         self::addValidator(LayoutValidator::getTrigger(), [LayoutValidator::class, 'setThemeConnection']);
 
         // Module
         self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setThemeConnection']);
+        self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setRegPageConnection']);
+        self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setRootPageConnection']);
+        self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setPagesConnection']);
 
         // FAQ
         self::addValidator(FaqValidator::getTrigger(), [FaqValidator::class, 'setFaqCategoryConnection']);
@@ -68,21 +80,32 @@ class Validator
 
         // Content-Article
         self::addValidator(ContentArticleValidator::getTrigger(), [ContentArticleValidator::class, 'setArticleConnection']);
-        self::addValidator(ContentArticleValidator::getTrigger(), [ContentArticleValidator::class, 'setIncludes']);
-        self::addValidator(ContentArticleValidator::getTrigger(), [ContentArticleValidator::class, 'setImageConnection']);
-        self::addValidator(ContentArticleValidator::getTrigger(), [ContentArticleValidator::class, 'setContentIncludes'], ValidatorMode::AFTER_IMPORT);
 
         // Content-News
         self::addValidator(ContentNewsValidator::getTrigger(), [ContentNewsValidator::class, 'setNewsConnection']);
-        self::addValidator(ContentNewsValidator::getTrigger(), [ContentNewsValidator::class, 'setIncludes']);
-        self::addValidator(ContentNewsValidator::getTrigger(), [ContentNewsValidator::class, 'setImageConnection']);
-        self::addValidator(ContentNewsValidator::getTrigger(), [ContentNewsValidator::class, 'setContentIncludes'], ValidatorMode::AFTER_IMPORT);
 
         // Content-Event
         self::addValidator(ContentEventValidator::getTrigger(), [ContentEventValidator::class, 'setEventConnection']);
-        self::addValidator(ContentEventValidator::getTrigger(), [ContentEventValidator::class, 'setIncludes']);
-        self::addValidator(ContentEventValidator::getTrigger(), [ContentEventValidator::class, 'setImageConnection']);
-        self::addValidator(ContentEventValidator::getTrigger(), [ContentEventValidator::class, 'setContentIncludes'], ValidatorMode::AFTER_IMPORT);
+
+        // Connects content includes
+        self::addValidatorCollection([
+            ContentEventValidator::class,
+            ContentNewsValidator::class,
+            ContentArticleValidator::class
+        ], [
+            [ContentValidator::class, 'setIncludes'],
+            [ContentValidator::class, 'setImageConnection'],
+            [ContentValidator::class, 'setContentIncludes', ValidatorMode::AFTER_IMPORT],
+        ]);
+
+        // Connects jumpTo pages
+        self::addValidatorCollection([
+            FormValidator::class,
+            FaqCategoryValidator::class,
+            NewsArchiveValidator::class,
+            MemberGroupValidator::class,
+            ModuleValidator::class,
+        ], ['setJumpToPageConnection']);
     }
 
     /**
@@ -115,5 +138,52 @@ class Validator
         }
 
         self::$validators[$mode->value][$trigger] = [$fn];
+    }
+
+    /**
+     * Adds an import validator collection.
+     */
+    public static function addValidatorCollection(array $validators, array $collectionFnNames): void
+    {
+        /** @var ValidatorInterface $validator */
+        foreach ($validators as $validator)
+        {
+            foreach ($collectionFnNames as $collectionFnName)
+            {
+                // Set default class ($collectionFnNames could be an array or a string, if a string is passed we use the CollectionValidator as class)
+                $collectionClass = CollectionValidator::class;
+                $validatorMode = ValidatorMode::BEFORE_IMPORT;
+
+                if(is_array($collectionFnName))
+                {
+                    $collectionClass  = $collectionFnName[0] ?? $collectionClass;
+                    $validatorMode    = $collectionFnName[2] ?? $validatorMode;
+                    $collectionFnName = $collectionFnName[1];
+                }
+
+                switch ($validatorMode)
+                {
+                    case ValidatorMode::BEFORE_IMPORT:
+
+                        self::addValidator(
+                            $validator::getTrigger(),
+                            fn (array &$row, AbstractPromptImport $importer) => call_user_func_array([$collectionClass, $collectionFnName], [&$row, $importer, $validator::getModel()]),
+                            $validatorMode
+                        );
+
+                        break;
+
+                    case ValidatorMode::AFTER_IMPORT:
+
+                        self::addValidator(
+                            $validator::getTrigger(),
+                            fn(Model $model, AbstractPromptImport $importer) => call_user_func_array([$collectionClass, $collectionFnName], [$model, $importer]),
+                            $validatorMode
+                        );
+
+                        break;
+                }
+            }
+        }
     }
 }

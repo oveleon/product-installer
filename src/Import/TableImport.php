@@ -380,7 +380,7 @@ class TableImport extends AbstractPromptImport
 
         if($validators = Validator::getValidators($this->table, ValidatorMode::AFTER_IMPORT))
         {
-            foreach ($modelCollection as $model)
+            foreach ($modelCollection ?? [] as $model)
             {
                 foreach($validators as $validator)
                 {
@@ -514,4 +514,83 @@ class TableImport extends AbstractPromptImport
 
         return null;
     }
+
+    /**
+     * Create new connections between two tables, overwrite the field and handle prompts, should they be necessary.
+     */
+    public function useIdentifierConnectionLogic(array &$row, string $field, string $tableA, string $tableB, array $promptOptions, ?array $selectableValues = null, bool $skipSameConnection = true): ?array
+    {
+        $trigger = $row[$field];
+        $id      = $row['id'];
+
+        /** @var Model $aModel */
+        $aModel   = $this->getClassFromFileName($tableA);
+
+        /** @var Model $bModel */
+        $bModel   = $this->getClassFromFileName($tableB);
+
+        $aTable   = $aModel::getTable();
+        $bTable   = $bModel::getTable();
+
+        if(!$trigger)
+        {
+            return null;
+        }
+
+        $connection = $aTable . '_' . $bTable . '_' . $field;
+        $fieldName  = $field . '_' . $id;
+
+        // Check if the field is already prompted
+        if($skipSameConnection && $this->getFlashConnection($trigger, $connection))
+        {
+            return null;
+        }
+
+        // Check if we have a connection through an existing connection or received through a prompt
+        if(
+            ($connectedId = $this->getConnection($trigger, $bTable))     !== null ||
+            ($connectedId = $this->getConnection($trigger, $connection)) !== null ||
+            ($connectedId = $this->getPromptValue($fieldName))           !== null
+        ){
+            // Add field connection
+            $this->addConnection($trigger, $connectedId, $connection);
+
+            // Overwrite field value
+            $row[$field] = $connectedId;
+        }
+        // Generate fields for the form prompt.
+        else
+        {
+            // Add a flash connection to display prompts for the same connections only once
+            $this->addFlashConnection($trigger, 1, $connection);
+
+            $values = $selectableValues ?? [];
+
+            if($selectableValues === null)
+            {
+                if($records = $bModel::findAll())
+                {
+                    foreach ($records as $record)
+                    {
+                        $values[] = [
+                            'value' => $record->id,
+                            'text'  => $record->name ?: ($record->title ?: $record->headline),
+                            'info'  => $record->id
+                        ];
+                    }
+                }
+            }
+
+            return [
+                $fieldName => [
+                    $values ?? [],
+                    FormPromptType::SELECT,
+                    $promptOptions
+                ]
+            ];
+        }
+
+        return null;
+    }
+
 }

@@ -20,6 +20,11 @@ class FileValidator implements ValidatorInterface
         return FilesModel::getTable();
     }
 
+    static public function getModel(): string
+    {
+        return FilesModel::class;
+    }
+
     /**
      * Creates a file from row.
      */

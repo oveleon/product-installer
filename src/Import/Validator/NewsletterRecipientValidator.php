@@ -21,8 +21,13 @@ class NewsletterRecipientValidator implements ValidatorInterface
         return NewsletterRecipientsModel::getTable();
     }
 
+    static public function getModel(): string
+    {
+        return NewsletterRecipientsModel::class;
+    }
+
     /**
-     * Deals with the relationship with the parent element.
+     * Treats the relationship with the parent element.
      */
     static function setChannelConnection(array &$row, AbstractPromptImport $importer): ?array
     {

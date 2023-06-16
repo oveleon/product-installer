@@ -19,8 +19,13 @@ class FaqValidator implements ValidatorInterface
         return FaqModel::getTable();
     }
 
+    static public function getModel(): string
+    {
+        return FaqModel::class;
+    }
+
     /**
-     * Deals with the relationship with the parent element.
+     * Treats the relationship with the parent element.
      */
     static function setFaqCategoryConnection(array &$row, AbstractPromptImport $importer): ?array
     {

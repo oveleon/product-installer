@@ -85,7 +85,7 @@ class ContentPackageSetup
         $this->setupLock->setScope($task['hash']);
         $this->tableImporter->setScope($task['hash']);
 
-        // Set archive to all importer
+        // Set archive destination to all importer
         $this->tableImporter->setArchive($destination);
         $this->fileImporter->setArchive($destination);
 

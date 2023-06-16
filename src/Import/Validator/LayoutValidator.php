@@ -19,8 +19,13 @@ class LayoutValidator implements ValidatorInterface
         return LayoutModel::getTable();
     }
 
+    static public function getModel(): string
+    {
+        return LayoutModel::class;
+    }
+
     /**
-     * Deals with the relationship with the parent element.
+     * Treats the relationship with the parent element.
      */
     static function setThemeConnection(array &$row, AbstractPromptImport $importer): ?array
     {

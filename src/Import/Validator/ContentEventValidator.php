@@ -19,8 +19,13 @@ class ContentEventValidator extends ContentValidator implements ValidatorInterfa
         return ContentModel::getTable() . '.' . CalendarEventsModel::getTable();
     }
 
+    static public function getModel(): string
+    {
+        return ContentModel::class;
+    }
+
     /**
-     * Deals with the relationship with the parent element.
+     * Treats the relationship with the parent element.
      */
     static function setEventConnection(array &$row, AbstractPromptImport $importer): ?array
     {

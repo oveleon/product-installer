@@ -95,7 +95,7 @@
 
           &:before{
             border-image-slice: 1;
-            border-image-source: linear-gradient(to right, rgba(164,201,168,1) 0%,rgba(231,219,66,1) 100%);
+            border-image-source: linear-gradient(to right, rgba(164,201,168,1) 50%,rgba(231,219,66,1) 100%);
           }
 
           &:after{

@@ -20,8 +20,13 @@ class ContentNewsValidator extends ContentValidator implements ValidatorInterfac
         return ContentModel::getTable() . '.' . NewsModel::getTable();
     }
 
+    static public function getModel(): string
+    {
+        return ContentModel::class;
+    }
+
     /**
-     * Deals with the relationship with the parent element.
+     * Treats the relationship with the parent element.
      */
     static function setNewsConnection(array &$row, AbstractPromptImport $importer): ?array
     {

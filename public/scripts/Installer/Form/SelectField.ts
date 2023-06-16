@@ -93,6 +93,8 @@ export default class SelectField extends FormField
 
         if(this.config.options?.optgroupField)
             selectOptions['optgroupField'] = this.config.options.optgroupField
+        else
+            selectOptions['optgroupField'] = 'group'
 
         if(this.config.options?.optgroups)
             selectOptions['optgroups'] = this.config.options.optgroups

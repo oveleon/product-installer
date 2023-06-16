@@ -2,6 +2,8 @@
 
 namespace Oveleon\ProductInstaller\Import\Validator;
 
+use Contao\Model;
+
 /**
  * Validator interface, which must be used for all validators.
  *
@@ -10,4 +12,5 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 interface ValidatorInterface
 {
     static public function getTrigger(): string;
+    static public function getModel(): string|Model;
 }

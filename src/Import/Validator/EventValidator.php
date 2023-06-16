@@ -19,8 +19,13 @@ class EventValidator implements ValidatorInterface
         return CalendarEventsModel::getTable();
     }
 
+    static public function getModel(): string
+    {
+        return CalendarEventsModel::class;
+    }
+
     /**
-     * Deals with the relationship with the parent element.
+     * Treats the relationship with the parent element.
      */
     static function setEventArchiveConnection(array &$row, AbstractPromptImport $importer): ?array
     {

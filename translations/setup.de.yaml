@@ -91,11 +91,21 @@ setup:
                 label:                  'Events → Event-Archiv'
                 description:            'Ein oder mehrere Events konnten keinem Event-Archive zugeordnet werden. Ihre Auswahl wird für alle weiteren Events, welche auf das selbe Event-Archiv referenzieren, übernommen.'
                 explanation:            'Beim Importieren eines oder mehrerer Events konnte das zugehörige Event-Archiv nicht gefunden werden. Wählen Sie bitte ein Event-Archiv aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Events und einem Event-Archiv herzustellen.<br/><br/><b>Folgendes Event-Archiv wurde nicht importiert und benötigt ein Alternative:</b>'
+        faq_category:
+            page:
+                label:                  'FAQ-Kategorie Weiterleitung → Seite'
+                description:            'Ein oder mehrere FAQ-Kategorien verweisen auf eine Weiterleitungsseite, welche nicht aufgelöst werden kann. Ihre Auswahl wird für alle weiteren FAQ-Kategorien, welche auf die selbe Weiterleitungsseite referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer FAQ-Kategorien konnte die zugehörige Weiterleitungsseite nicht gefunden werden. Wählen Sie bitte eine Seite aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen FAQ-Kategorien und einer Seite herzustellen.<br/><br/><b>Folgende Seite wurde nicht importiert und benötigt ein Alternative:</b>'
         faq:
             category:
                 label:                  'FAQ → FAQ-Kategorie'
                 description:            'Ein oder mehrere FAQs konnten keiner FAQ-Kategorie zugeordnet werden. Ihre Auswahl wird für alle weiteren FAQs, welche auf die selbe FAQ-Kategorie referenzieren, übernommen.'
                 explanation:            'Beim Importieren eines oder mehrerer FAQs konnte die zugehörige FAQ-Kategorie nicht gefunden werden. Wählen Sie bitte eine FAQ-Kategorie aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen FAQs und einer FAQ-Kategorie herzustellen.<br/><br/><b>Folgende FAQ-Kategorie wurde nicht importiert und benötigt ein Alternative:</b>'
+        form:
+            page:
+                label:                  'Formular Weiterleitung → Seite'
+                description:            'Ein oder mehrere Formulare verweisen auf eine Weiterleitungsseite, welche nicht aufgelöst werden kann. Ihre Auswahl wird für alle weiteren Weiterleitungen, welche auf die selbe Seite referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Formulare konnte die zugehörige Weiterleitungsseite nicht gefunden werden. Wählen Sie bitte eine Seite aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Formularen und einer Seite herzustellen.<br/><br/><b>Folgende Seite wurde nicht importiert und benötigt ein Alternative:</b>'
         form_field:
             form:
                 label:                  'Formularfelder → Formular'
