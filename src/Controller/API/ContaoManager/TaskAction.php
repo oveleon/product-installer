@@ -2,6 +2,11 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
+/**
+ * Defines the action of a contao manager task.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 enum TaskAction: string
 {
     case COMPOSER_UPDATE        = 'composer/update';

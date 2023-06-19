@@ -8,7 +8,6 @@ use Contao\DC_Folder;
 use Contao\DC_Table;
 use Contao\Model;
 
-use Contao\StringUtil;
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;

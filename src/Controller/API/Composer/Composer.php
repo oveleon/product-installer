@@ -7,6 +7,11 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+/**
+ * Class with helper functions for working with the composer file.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class Composer
 {
     protected ?object $composer = null;

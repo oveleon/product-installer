@@ -23,12 +23,4 @@ class FaqCategoryValidator implements ValidatorInterface
     {
         return FaqCategoryModel::class;
     }
-
-    /**
-     * Treats the connection to a redirect page.
-     */
-    static function setRedirectPageConnection(array &$row, AbstractPromptImport $importer): ?array
-    {
-        return self::setFieldPageConnection(FaqCategoryModel::class, 'jumpTo', $row, $importer);
-    }
 }

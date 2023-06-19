@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class to write the "repositories" branch to the composer file.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('%contao.backend.route_prefix%/api/composer/repositories',
     name:       Repository::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],

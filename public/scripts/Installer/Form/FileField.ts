@@ -44,7 +44,7 @@ export default class FileField extends FormField
             <h3>
                 <label>${this.label}</label>
             </h3>
-            <input type="text" name="${this.options.name}" id="ctrl_${this.options.name}" class="tl_file" readonly placeholder="Dateien öffnen">
+            <input type="text" name="${this.options.name}" id="ctrl_${this.options.name}" class="tl_file" readonly placeholder="${i18n('form.field.files.browse')}">
             <p class="field-desc">${this.description}</p>
         `)
 
@@ -53,7 +53,7 @@ export default class FileField extends FormField
 
             Backend.openModalSelector({
                 "id":    "tl_listing",
-                "title": this.options.options?.popupTitle ?? 'Datei auswählen',
+                "title": this.options.options?.popupTitle ?? i18n('form.field.files.browse'),
                 "url":    '/contao/picker?context=file&amp;extras%5BfieldType%5D=radio&amp;extras%5BfilesOnly%5D=1&amp;extras%5Bextensions%5D=jpg,jpeg,gif,png,tif,tiff,bmp,svg,svgz',
                 "callback": (table, value) => {
 

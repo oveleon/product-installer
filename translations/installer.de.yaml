@@ -1,14 +1,18 @@
 installer:
     menu:
-        label: Produktverwaltung
-        title: Installiere und Verwalte deine Produkte
+        label:                          Produktverwaltung
+        title:                          Installiere und Verwalte deine Produkte
     license:
         errors:
-            license_not_found: Die Angegebene Lizenz konnte nicht gefunden werden, bitte überprüfen Sie Ihre Eingabe und achten Sie auf Groß- und Kleinschreibung.
-            license_empty:     Bitte geben Sie eine gültige Lizenz an.
+            license_not_found:          Die Angegebene Lizenz konnte nicht gefunden werden, bitte überprüfen Sie Ihre Eingabe und achten Sie auf Groß- und Kleinschreibung.
+            license_empty:              Bitte geben Sie eine gültige Lizenz an.
     connector:
         upload:
-            title:             Upload
-            description:       Sollten Sie Produkte als Datei vorliegen haben, können Sie diese hier hochladen und anschließend Einrichten.
+            title:                      Upload
+            description:                Sollten Sie Produkte als Datei vorliegen haben, können Sie diese hier hochladen und anschließend Einrichten.
         errors:
-            connection_failed: Es konnte keine Verbindung zum %connectorTitle% hergestellt werden.
+            connection_failed:          Es konnte keine Verbindung zum %connectorTitle% hergestellt werden.
+            connection_failed_global:   Im Moment kann keine Verbindung hergestellt werden, bitte versuchen Sie es später noch einmal.
+            package_incomplete:         Das hochgeladene Paket ist unvollständig und kann nicht erkannt werden.
+            connector_not_available:    Es konnte keine Lizenz-Verbinder gefunden werden.
+            registration_failed:        Das Produkt konnte nicht registriert werden, bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.

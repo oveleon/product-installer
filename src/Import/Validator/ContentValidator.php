@@ -197,12 +197,12 @@ abstract class ContentValidator implements ValidatorInterface
                         FormPromptType::FILE,
                         [
                             'class'       => 'w50',
-                            'popupTitle'  => $translator->trans('setup.prompt.content.singleSRC.popup', [], 'setup'),
+                            'popupTitle'  => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
                             'label'       => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
                             'description' => $translator->trans('setup.prompt.content.singleSRC.description', [], 'setup'),
                             'explanation' => [
                                 'type'        => 'TABLE',
-                                'description' => $translator->trans('setup.prompt.content.content.singleSRC.explanation', [], 'setup'),
+                                'description' => $translator->trans('setup.prompt.content.singleSRC.explanation', [], 'setup'),
                                 'content'     => $parentStructure ?? []
                             ]
                         ]

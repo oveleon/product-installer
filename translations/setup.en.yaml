@@ -41,6 +41,11 @@ setup:
         contentElement:                 'Content-Element %id%'
     error:
         fileNotFound:                   'Target file could not be found.'
+        productNotFound:                'Product cannot be found or is no longer installed.'
+        productIncomplete:              'The product cannot be set up because it has not been fully installed. Please register the product again before starting the setup.'
+        fileNotFoundExtended:           'The product cannot be set up because the installation file cannot be found. Please register the product again before starting the setup.'
+        fileBroken:                     'The product cannot be set up because the installation file is corrupted. Please register the product again before starting the setup.'
+        setupNotFound:                  'The installation type is not supported by the installer. Please update the installer and try again.'
     prompt:
         running:
             question:                   'We have detected that the previous setup did not complete. Do you want to continue with the setup or start again?'

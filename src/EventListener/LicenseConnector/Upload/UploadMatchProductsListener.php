@@ -5,6 +5,11 @@ namespace Oveleon\ProductInstaller\EventListener\LicenseConnector\Upload;
 use Contao\System;
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * Class for verification of products of the Upload License Connector.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class UploadMatchProductsListener
 {
     public function matchProducts(string $connectorName, array $remoteProducts, array $clientProducts, array &$collection): bool

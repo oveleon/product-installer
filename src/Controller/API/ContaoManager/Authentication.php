@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class to handle authentication with the Contao Manager.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('%contao.backend.route_prefix%/api/contao_manager/auth',
     name:       Authentication::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],

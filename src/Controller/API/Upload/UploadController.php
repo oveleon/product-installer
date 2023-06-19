@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Class to upload files via License Connector Upload.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('api/upload/product/upload',
     name:       UploadController::class,
     defaults:   ['_scope' => 'frontend', '_token_check' => false],
@@ -64,7 +69,7 @@ class UploadController
         {
             $manifest = [
                 'error'   => true,
-                'message' => 'Das hochgeladene Paket ist unvollständig und kann nicht erkannt werden.'
+                'message' => $this->translator->trans('installer.connector.upload.errors.package_incomplete', [], 'installer')
             ];
         }
 

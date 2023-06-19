@@ -1,14 +1,18 @@
 installer:
     menu:
-        label: Product management
-        title: Install and manage your Product
+        label:                          Product management
+        title:                          Install and manage your Product
     license:
         errors:
-            license_not_found:  The specified license could not be found, please check your input and pay attention to upper and lower case.
-            license_empty:      Please enter a valid license.
+            license_not_found:          The specified license could not be found, please check your input and pay attention to upper and lower case.
+            license_empty:              Please enter a valid license.
     connector:
         upload:
-            title:              Upload
-            description:        If you have products as a file, you can upload them here and then set them up.
+            title:                      Upload
+            description:                If you have products as a file, you can upload them here and then set them up.
         errors:
-            connection_failed: No connection to %connectorTitle% could be established.
+            connection_failed:          No connection to %connectorTitle% could be established.
+            connection_failed_global:   No connection can be established at the moment, please try again later.
+            package_incomplete:         The uploaded package is incomplete and cannot be recognized.
+            connector_not_available:    No license connector found.
+            registration_failed:        The product could not be registered, please try again later.

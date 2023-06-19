@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Check and prepare a setup.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('%contao.backend.route_prefix%/api/setup/init',
     name:       SetupInitController::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],
@@ -39,8 +44,8 @@ class SetupInitController
         if(!$product = $this->installerLock->getProduct($parameter['hash']))
         {
             return new JsonResponse([
-                'error' => true,
-                'message' => 'Produkt kann nicht gefunden werden oder ist nicht mehr installiert.'
+                'error'   => true,
+                'message' => $this->translator->trans('setup.error.productNotFound', [], 'setup')
             ]);
         }
 
@@ -68,8 +73,8 @@ class SetupInitController
                         $this->installerLock->save();
 
                         return new JsonResponse([
-                            'error' => true,
-                            'message' => 'Das Produkt kann nicht eingerichtet werden, da es nicht vollständig installiert wurde. Bitte registrieren Sie das Produkt erneut, bevor Sie die Einrichtung starten.'
+                            'error'   => true,
+                            'message' => $this->translator->trans('setup.error.productIncomplete', [], 'setup')
                         ]);
                     }
 
@@ -83,8 +88,8 @@ class SetupInitController
                         $this->installerLock->save();
 
                         return new JsonResponse([
-                            'error' => true,
-                            'message' => 'Das Produkt kann nicht eingerichtet werden, da die Installationsdatei nicht gefunden werden kann. Bitte registrieren Sie das Produkt erneut, bevor Sie die Einrichtung starten.'
+                            'error'   => true,
+                            'message' => $this->translator->trans('setup.error.fileNotFoundExtended', [], 'setup')
                         ]);
                     }
 
@@ -99,7 +104,7 @@ class SetupInitController
 
                         return new JsonResponse([
                             'error' => true,
-                            'message' => 'Das Produkt kann nicht eingerichtet werden, da die Installationsdatei fehlerhaft ist. Bitte registrieren Sie das Produkt erneut, bevor Sie die Einrichtung starten.'
+                            'message' => $this->translator->trans('setup.error.fileBroken', [], 'setup')
                         ]);
                     }
 

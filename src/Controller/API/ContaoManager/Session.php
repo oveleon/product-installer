@@ -9,6 +9,11 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class to handle the session of the Contao Manager.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('%contao.backend.route_prefix%/api/contao_manager/session',
     name:       Session::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],

@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Checks advertising measures using the given license connector.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('%contao.backend.route_prefix%/api/license_connector/advertising',
     name:       AdvertisingController::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],
@@ -17,6 +22,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AdvertisingController
 {
     public function __construct(
+        private readonly TranslatorInterface $translator,
         private readonly RequestStack $requestStack,
         private readonly ConnectorUtil $connectorUtil
     ){}
@@ -34,7 +40,7 @@ class AdvertisingController
         {
             return new JsonResponse([
                 'error'  => true,
-                'message' => 'No license connector found.'
+                'message' => $this->translator->trans('installer.connector.errors.connector_not_available', [], 'installer')
             ]);
         }
 
@@ -49,7 +55,7 @@ class AdvertisingController
         {
             return new JsonResponse([
                 'error'  => true,
-                'message' => 'No connection can be established at the moment, please try again later.'
+                'message' => $this->translator->trans('installer.connector.errors.connection_failed_global', [], 'installer')
             ]);
         }
 

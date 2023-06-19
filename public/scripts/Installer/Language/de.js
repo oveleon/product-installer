@@ -123,4 +123,6 @@ module.exports = {
 
     "form.field.rootPage.label":                    "Seitenstartpunkt",
     "form.field.rootPage.desc":                     "Bitte definieren Sie, wo die neue Seitenstruktur eingebettet werden soll.",
+
+    "form.field.files.browse":                     "Dateien durchsuchen",
 }

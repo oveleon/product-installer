@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class to download data from various sources.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('%contao.backend.route_prefix%/api/content/download',
     name:       DownloadController::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],

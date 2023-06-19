@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Starts the setup based on a task type.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('%contao.backend.route_prefix%/api/setup/run',
     name:       SetupController::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],
@@ -58,7 +63,7 @@ class SetupController
 
         return new JsonResponse([
             'error'   => true,
-            'message' => 'Installation type is not supported by the installer. Please update the installer and try again.'
+            'message' => $this->translator->trans('setup.error.setupNotFound', [], 'setup')
         ]);
     }
 }

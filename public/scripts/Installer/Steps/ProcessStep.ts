@@ -5,10 +5,6 @@ import {createInstance} from "../Utils/InstanceUtils";
 import State from "../State";
 
 /**
- * ToDo: Register onunload event (prompt) to prevent reload while installing...
- */
-
-/**
  * Process step class.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>

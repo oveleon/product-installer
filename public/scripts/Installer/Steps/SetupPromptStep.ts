@@ -18,7 +18,7 @@ export default class SetupPromptStep extends StepComponent
     /**
      * @inheritDoc
      */
-    // ToDo: Close button need to reset everything
+    // ToDo: Close button need to reset everything (?)
     protected getTemplate(): string
     {
         return `

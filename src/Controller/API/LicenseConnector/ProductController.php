@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Detects and validates the products in the given License Connector.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('%contao.backend.route_prefix%/api/license_connector/products',
     name:       ProductController::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],
@@ -38,7 +43,7 @@ class ProductController
         {
             return new JsonResponse([
                 'error' => true,
-                'message' => 'No license connector found.'
+                'message' => $this->translator->trans('installer.connector.errors.connector_not_available', [], 'installer')
             ]);
         }
 

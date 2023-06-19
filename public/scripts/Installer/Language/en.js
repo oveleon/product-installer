@@ -123,4 +123,6 @@ module.exports = {
 
     "form.field.rootPage.label":                    "Root page",
     "form.field.rootPage.desc":                     "Please define where the new page structure should be embedded.",
+
+    "form.field.files.browse":                     "Browse files",
 }

@@ -13,6 +13,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
+/**
+ * Class for installing manager artifacts via the Contao Manager.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('%contao.backend.route_prefix%/api/contao_manager/package',
     name:       Package::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],

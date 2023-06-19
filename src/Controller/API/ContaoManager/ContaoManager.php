@@ -10,6 +10,11 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
+/**
+ * Class with helper functions for working with Contao Manager.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 class ContaoManager
 {
     /**

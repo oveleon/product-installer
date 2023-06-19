@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Registers a product in the given License Connector.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('%contao.backend.route_prefix%/api/license_connector/register',
     name:       RegisterProductController::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],
@@ -38,7 +43,7 @@ class RegisterProductController
             return new JsonResponse([
                 'error'  => true,
                 'fields' => [
-                    'license' => 'No license connector found.'
+                    'license' => $this->translator->trans('installer.connector.errors.connector_not_available', [], 'installer')
                 ]
             ]);
         }
@@ -60,8 +65,8 @@ class RegisterProductController
         if($response->getStatusCode() !== Response::HTTP_OK)
         {
             return new JsonResponse([
-                'error'  => true,
-                'message' => 'No connection can be established at the moment, please try again later.'
+                'error'   => true,
+                'message' => $this->translator->trans('installer.connector.errors.connection_failed_global', [], 'installer')
             ]);
         }
 
@@ -70,8 +75,8 @@ class RegisterProductController
         if($responseData['error'] ?? false)
         {
             return new JsonResponse([
-                'error'  => true,
-                'message' => 'Das Produkt konnte nicht registriert werden, bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.'
+                'error'   => true,
+                'message' => $this->translator->trans('installer.connector.errors.registration_failed', [], 'installer')
             ]);
         }
 

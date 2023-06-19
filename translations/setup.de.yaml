@@ -41,6 +41,11 @@ setup:
         contentElement:                 'Inhaltselement %id%'
     error:
         fileNotFound:                   'Zieldatei konnte nicht gefunden werden.'
+        productNotFound:                'Produkt kann nicht gefunden werden oder ist nicht mehr installiert.'
+        productIncomplete:              'Das Produkt kann nicht eingerichtet werden, da es nicht vollständig installiert wurde. Bitte registrieren Sie das Produkt erneut, bevor Sie die Einrichtung starten.'
+        fileNotFoundExtended:           'Das Produkt kann nicht eingerichtet werden, da die Installationsdatei nicht gefunden werden kann. Bitte registrieren Sie das Produkt erneut, bevor Sie die Einrichtung starten.'
+        fileBroken:                     'Das Produkt kann nicht eingerichtet werden, da die Installationsdatei fehlerhaft ist. Bitte registrieren Sie das Produkt erneut, bevor Sie die Einrichtung starten.'
+        setupNotFound:                  'Der Installationstyp wird vom Installationsprogramm nicht unterstützt. Bitte aktualisieren Sie das Installationsprogramm und versuchen Sie es erneut.'
     prompt:
         running:
             question:                   'Wir haben festgestellt, dass die vorherige Einrichtung nicht vollständig abgeschlossen wurde. Möchten Sie mit der Einrichtung fortfahren oder erneut starten?'

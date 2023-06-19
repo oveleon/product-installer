@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Helper functions to edit the installer lock file via the API.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 #[Route('%contao.backend.route_prefix%/api/license_connector/lock',
     name:       InstallerLockController::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],
