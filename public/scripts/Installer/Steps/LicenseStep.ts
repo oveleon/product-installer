@@ -20,7 +20,7 @@ export default class LicenseStep extends StepComponent
             <p>${this.getAttribute('description', i18n('license.description'))}</p>
             <form id="license-form" class="inherit" autocomplete="off">
                 <div class="widget text">
-                    <label for="license">${i18n('license.form.label.license')}</label>
+                    <h3><label for="license">${i18n('license.form.label.license')}</label></h3>
                     <input type="text" name="license" id="license" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" autocomplete="off" required/>
                 </div>
             </form>

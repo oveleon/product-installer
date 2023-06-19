@@ -18,7 +18,7 @@ trait ValidatorTrait
     /**
      * Connects the specified field of the passed source models to a new page.
      */
-    public static function setFieldPageConnection(string|Model $sourceModel, string $field, array &$row, AbstractPromptImport $importer): ?array
+    public static function setFieldPageConnection(string|Model $sourceModel, string $field, array &$row, AbstractPromptImport $importer, ?array $extendPromptOptions = null): ?array
     {
         $translator = System::getContainer()->get('translator');
         $pages = PageModel::findAll(['order' => 'id ASC, sorting ASC']);
@@ -35,15 +35,35 @@ trait ValidatorTrait
         ]);
 
         $translatorNamePart = str_replace("tl_", "", $sourceModel::getTable());
+        $promptOptions = [
+            'class'         => 'w50',
+            'label'         => $translator->trans('setup.prompt.'.$translatorNamePart.'.'.$field.'.label', [], 'setup'),
+            'description'   => $translator->trans('setup.prompt.'.$translatorNamePart.'.'.$field.'.description', [], 'setup')
+        ];
 
-        return $importer->useIdentifierConnectionLogic($row, $field, $sourceModel::getTable(), PageModel::getTable(), [
-            'label'         => $translator->trans('setup.prompt.'.$translatorNamePart.'.page.label', [], 'setup'),
-            'description'   => $translator->trans('setup.prompt.'.$translatorNamePart.'.page.description', [], 'setup'),
-            'explanation'   => [
-                'type'        => 'TABLE',
-                'description' => $translator->trans('setup.prompt.'.$translatorNamePart.'.page.explanation', [], 'setup'),
-                'content'     => $missingStructure ?? []
-            ]
-        ], $values);
+        $explanationField = 'setup.prompt.'.$translatorNamePart.'.'.$field.'.explanation';
+        $explanationText  = $translator->trans($explanationField, [], 'setup');
+        $hasExplanation   = $explanationText !== $explanationField;
+
+        if($hasExplanation)
+        {
+            $promptOptions['explanation'] = [
+                'type'        => 'HTML',
+                'description' => $explanationText,
+            ];
+
+            if(!empty($missingStructure))
+            {
+                $promptOptions['explanation']['type'] = 'TABLE';
+                $promptOptions['explanation']['content'] = $missingStructure;
+            }
+        }
+
+        if(null !== $extendPromptOptions)
+        {
+            $promptOptions = $promptOptions + $extendPromptOptions;
+        }
+
+        return $importer->useIdentifierConnectionLogic($row, $field, $sourceModel::getTable(), PageModel::getTable(), $promptOptions, $values);
     }
 }

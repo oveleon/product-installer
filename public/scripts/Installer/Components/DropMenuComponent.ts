@@ -66,7 +66,7 @@ export default class DropMenuComponent extends ContainerComponent
     private setContent(): void
     {
         this.content(`
-            <button>
+            <button id="${this.id}">
                 <img src="/bundles/productinstaller/icons/menu.svg" alt="⋮"/>
             </button>
             <div class="drop-list"></div>
@@ -111,7 +111,7 @@ export default class DropMenuComponent extends ContainerComponent
         }
 
         // Add toggle and close event
-        this.element('button')
+        this.element(`button#${this.id}`)
             .addEventListener('click', () => this.toggle())
 
         // Close drop-list when click outside

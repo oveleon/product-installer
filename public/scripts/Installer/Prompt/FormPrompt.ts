@@ -4,6 +4,7 @@ import TextField from "../Form/TextField";
 import SelectField from "../Form/SelectField";
 import CheckboxField from "../Form/CheckboxField";
 import {i18n} from "../Language"
+import FileField from "../Form/FileField";
 
 /**
  * Prompt configurations.
@@ -36,7 +37,7 @@ export default class FormPrompt extends Prompt
         this.content(`
             <form class="fields"></form>
             <div class="actions">
-                <button type="button">${i18n('actions.next')}</button>            
+                <button type="button" id="resolve">${i18n('actions.next')}</button>            
             </div>
         `)
 
@@ -49,6 +50,10 @@ export default class FormPrompt extends Prompt
             {
                 case FormFieldType.TEXT:
                     field = new TextField(fieldOptions)
+                    break
+
+                case FormFieldType.FILE:
+                    field = new FileField(fieldOptions)
                     break
 
                 case FormFieldType.SELECT:
@@ -67,7 +72,7 @@ export default class FormPrompt extends Prompt
             field.appendTo(fieldContainer)
         }
 
-        this.element('button').addEventListener('click', () => {
+        this.element('button#resolve').addEventListener('click', () => {
 
             const collection: {} = {};
 

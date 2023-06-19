@@ -235,6 +235,7 @@ class PageValidator implements ValidatorInterface
                     $values ?? [],
                     FormPromptType::SELECT,
                     [
+                        'class'         => 'w50',
                         'label'         => $translator->trans('setup.prompt.page.layout.label', [], 'setup'),
                         'description'   => $translator->trans('setup.prompt.page.layout.description', [], 'setup'),
                         'explanation'   => [

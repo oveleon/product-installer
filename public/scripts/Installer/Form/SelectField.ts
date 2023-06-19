@@ -57,6 +57,11 @@ export default class SelectField extends FormField
             <p class="field-desc">${this.description}</p>
         `)
 
+        this.select = new TomSelect(<HTMLInputElement> this.element('input'), this.getOptions())
+    }
+
+    private getOptions(): {}
+    {
         const selectOptions = {
             options: this.config.value,
             items: this.config.options?.default ?? [],
@@ -73,7 +78,6 @@ export default class SelectField extends FormField
             onDropdownOpen: function(){
                 this.popper.update();
             },
-
             render: {
                 option: function(data, escape) {
                     let info: string = ''
@@ -91,20 +95,35 @@ export default class SelectField extends FormField
             }
         }
 
+        // Set plugins
+        const plugins: string[] = [];
+
+        if(this.config?.options?.multiple)
+        {
+            plugins.push('checkbox_options')
+            plugins.push('clear_button')
+        }
+
+        // Set option group field
         if(this.config.options?.optgroupField)
             selectOptions['optgroupField'] = this.config.options.optgroupField
         else
             selectOptions['optgroupField'] = 'group'
 
+        // Set option groups
         if(this.config.options?.optgroups)
             selectOptions['optgroups'] = this.config.options.optgroups
 
+        // Apply sorting
         if(this.config.options?.sortField)
             selectOptions['sortField'] = this.config.options?.sortField ?? [{field:'$order'},{field:'$score'}]
         else
             selectOptions['sortField'] = [{field:'$order'},{field:'$score'}]
 
-        this.select = new TomSelect(<HTMLInputElement> this.element('input'), selectOptions)
+        // Add plugins
+        selectOptions['plugins'] = plugins
+
+        return selectOptions
     }
 
     public getValue(): string|string[]

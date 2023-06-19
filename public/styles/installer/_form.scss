@@ -83,11 +83,7 @@ $input-outline-color: rgb(104 129 145 / 33%);
       align-items: center;
     }
 
-    &.text{
-
-      label{
-        margin-bottom: 6px;
-      }
+    &.text, &.file{
 
       input{
         font-size: .9rem;
@@ -112,6 +108,17 @@ $input-outline-color: rgb(104 129 145 / 33%);
         &#license{
           letter-spacing: .8px;
         }
+      }
+    }
+
+    &.file{
+
+      input{
+        cursor: pointer;
+        background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgZmlsbD0ibm9uZSIgaGVpZ2h0PSIyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0xMyAyMUgzLjZDMy4yNjg2MyAyMSAzIDIwLjczMTQgMyAyMC40VjMuNkMzIDMuMjY4NjMgMy4yNjg2MyAzIDMuNiAzSDIwLjRDMjAuNzMxNCAzIDIxIDMuMjY4NjMgMjEgMy42VjEzIiBzdHJva2U9IiM1NjY5NzQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0zIDE2TDEwIDEzTDE1LjUgMTUuNSIgc3Ryb2tlPSIjNTY2OTc0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTYgMTBDMTQuODk1NCAxMCAxNCA5LjEwNDU3IDE0IDhDMTQgNi44OTU0MyAxNC44OTU0IDYgMTYgNkMxNy4xMDQ2IDYgMTggNi44OTU0MyAxOCA4QzE4IDkuMTA0NTcgMTcuMTA0NiAxMCAxNiAxMFoiIHN0cm9rZT0iIzU2Njk3NCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTE2IDE5SDE5TTIyIDE5SDE5TTE5IDE5VjE2TTE5IDE5VjIyIiBzdHJva2U9IiM2ODgxOTEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg==);
+        background-repeat: no-repeat;
+        background-position: right 7px center;
+        background-size: 20px;
       }
     }
 
@@ -231,6 +238,10 @@ $input-outline-color: rgb(104 129 145 / 33%);
   /**
    * Tom-Select overwrites
    */
+  .ts-wrapper.multi .ts-control > div.active {
+    background: #688191;
+  }
+
   .focus .ts-control{
     box-shadow: none;
     outline-width: 3px;
@@ -251,11 +262,15 @@ $input-outline-color: rgb(104 129 145 / 33%);
       span.info{
         position: absolute;
         right: 10px;
-        top: 3px;
+        top: 4px;
         color: $text-color-info;
+        background: rgba(255,255,255,.8);
+        border-radius: 4px;
+        padding: 0 4px;
       }
 
       span.text{
+        display: inline-block;
         padding-left: calc(var(--level, 0) * 10px);
 
         &:before{

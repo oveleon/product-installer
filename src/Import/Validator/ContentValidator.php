@@ -7,7 +7,6 @@ use Contao\ContentModel;
 use Contao\Controller;
 use Contao\FilesModel;
 use Contao\FormModel;
-use Contao\Model;
 use Contao\ModuleModel;
 use Contao\StringUtil;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
@@ -128,6 +127,7 @@ abstract class ContentValidator implements ValidatorInterface
                     $values ?? [],
                     FormPromptType::SELECT,
                     [
+                        'class'       => 'w50',
                         'label'       => $translator->trans('setup.prompt.content.content.includes.' . $connectorField . '.title', [], 'setup'),
                         'description' => $translator->trans('setup.prompt.content.content.includes.' . $connectorField . '.description', [], 'setup'),
                         'explanation' => [
@@ -150,13 +150,64 @@ abstract class ContentValidator implements ValidatorInterface
     {
         if($row['singleSRC'])
         {
-            if($connectedUuid = $importer->getConnection($row['singleSRC'], FilesModel::getTable()))
+            $source     = StringUtil::binToUuid($row['singleSRC']);
+            $connection = 'singleSRC_connection';
+            $fieldName  = $connection . '_' . $row['id'];
+
+            // Check if we got a prompt response and should skip prompts of the same ID
+            if($importer->getFlashConnection($source, $connection))
             {
-                $row['singleSRC'] = StringUtil::uuidToBin($connectedUuid);
+                return null;
+            }
+
+            if(
+                ($connectedUuid = $importer->getConnection($source, FilesModel::getTable())) ||
+                ($connectedFile = $importer->getPromptValue($fieldName))
+            )
+            {
+                // get uuid by file
+                if($connectedFile ?? null)
+                {
+                    if($file = FilesModel::findByPath($connectedFile))
+                    {
+                        $connectedUuid = $file->uuid;
+                    }
+                }
+                else
+                {
+                    $connectedUuid = StringUtil::uuidToBin($connectedUuid);
+                }
+
+                // Overwrite source
+                $row['singleSRC'] = $connectedUuid;
+
+                // Set connection
+                $importer->addConnection($source, StringUtil::binToUuid($connectedUuid), FilesModel::getTable());
             }
             else
             {
-                // ToDo: Prompt -> Pick another file
+                // Add a flash connection to display prompts for the same connections only once
+                $importer->addFlashConnection($source, 1, $connection);
+
+                $translator = Controller::getContainer()->get('translator');
+
+                return [
+                    $fieldName => [
+                        $values ?? [],
+                        FormPromptType::FILE,
+                        [
+                            'class'       => 'w50',
+                            'popupTitle'  => $translator->trans('setup.prompt.content.singleSRC.popup', [], 'setup'),
+                            'label'       => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
+                            'description' => $translator->trans('setup.prompt.content.singleSRC.description', [], 'setup'),
+                            'explanation' => [
+                                'type'        => 'TABLE',
+                                'description' => $translator->trans('setup.prompt.content.content.singleSRC.explanation', [], 'setup'),
+                                'content'     => $parentStructure ?? []
+                            ]
+                        ]
+                    ]
+                ];
             }
         }
 

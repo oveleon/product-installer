@@ -62,7 +62,7 @@ class ModuleValidator implements ValidatorInterface
      */
     static function setPagesConnection(array &$row, AbstractPromptImport $importer): ?array
     {
-        // ToDo: Logic +  Select -> Multiple
+        return self::setFieldPageConnection(self::getModel(), 'pages', $row, $importer, ['multiple' => true]);
     }
 
     /**

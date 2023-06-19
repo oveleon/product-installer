@@ -127,7 +127,7 @@ export default class PopupComponent extends ContainerComponent
                     <div class="html scrollable">
                         <h2>${this.options.title}</h2>
                         ${description}
-                        ${this.options.content}
+                        ${this.options.content ?? ''}
                         ${actions}
                     </div>
                 `

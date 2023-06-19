@@ -8,6 +8,7 @@ import 'tippy.js/themes/light-border.css';
 
 export enum FormFieldType {
     TEXT = 'text',
+    FILE = 'file',
     SELECT = 'select',
     CHECKBOX = 'checkbox'
 }

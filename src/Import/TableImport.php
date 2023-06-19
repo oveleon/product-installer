@@ -8,6 +8,7 @@ use Contao\DC_Folder;
 use Contao\DC_Table;
 use Contao\Model;
 
+use Contao\StringUtil;
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
@@ -552,6 +553,12 @@ class TableImport extends AbstractPromptImport
             ($connectedId = $this->getConnection($trigger, $connection)) !== null ||
             ($connectedId = $this->getPromptValue($fieldName))           !== null
         ){
+            // Check for serializes / multiple values
+            if(\array_key_exists('multiple', $promptOptions))
+            {
+                $connectedId = serialize(explode(",", $connectedId));
+            }
+
             // Add field connection
             $this->addConnection($trigger, $connectedId, $connection);
 

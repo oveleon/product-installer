@@ -49,6 +49,7 @@ class ContentArticleValidator extends ContentValidator implements ValidatorInter
         ]);
 
         return $importer->useParentConnectionLogic($row, ContentModel::getTable(), ArticleModel::getTable(), [
+            'class'       => 'w50',
             'label'       => $translator->trans('setup.prompt.content.article.label', [], 'setup'),
             'description' => $translator->trans('setup.prompt.content.article.description', [], 'setup'),
             'explanation' => [

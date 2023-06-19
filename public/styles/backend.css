@@ -211,28 +211,32 @@
 #installer .widget.center {
   align-items: center;
 }
-#installer .widget.text label {
-  margin-bottom: 6px;
-}
-#installer .widget.text input {
+#installer .widget.text input, #installer .widget.file input {
   font-size: 0.9rem;
   line-height: 0;
   border: 1px solid #688191;
   border-radius: 3px;
   outline-color: rgba(104, 129, 145, 0.33);
 }
-#installer .widget.text input:focus {
+#installer .widget.text input:focus, #installer .widget.file input:focus {
   outline-width: 3px;
   outline-style: solid;
 }
-#installer .widget.text input::placeholder {
+#installer .widget.text input::placeholder, #installer .widget.file input::placeholder {
   color: #a6a6a6;
 }
-#installer .widget.text input[type=text] {
+#installer .widget.text input[type=text], #installer .widget.file input[type=text] {
   padding: 6px 10px;
 }
-#installer .widget.text input#license {
+#installer .widget.text input#license, #installer .widget.file input#license {
   letter-spacing: 0.8px;
+}
+#installer .widget.file input {
+  cursor: pointer;
+  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgZmlsbD0ibm9uZSIgaGVpZ2h0PSIyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0xMyAyMUgzLjZDMy4yNjg2MyAyMSAzIDIwLjczMTQgMyAyMC40VjMuNkMzIDMuMjY4NjMgMy4yNjg2MyAzIDMuNiAzSDIwLjRDMjAuNzMxNCAzIDIxIDMuMjY4NjMgMjEgMy42VjEzIiBzdHJva2U9IiM1NjY5NzQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0zIDE2TDEwIDEzTDE1LjUgMTUuNSIgc3Ryb2tlPSIjNTY2OTc0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTYgMTBDMTQuODk1NCAxMCAxNCA5LjEwNDU3IDE0IDhDMTQgNi44OTU0MyAxNC44OTU0IDYgMTYgNkMxNy4xMDQ2IDYgMTggNi44OTU0MyAxOCA4QzE4IDkuMTA0NTcgMTcuMTA0NiAxMCAxNiAxMFoiIHN0cm9rZT0iIzU2Njk3NCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTE2IDE5SDE5TTIyIDE5SDE5TTE5IDE5VjE2TTE5IDE5VjIyIiBzdHJva2U9IiM2ODgxOTEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg==);
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  background-size: 20px;
 }
 #installer .widget.checkbox:not(.multiple) {
   height: 19px;
@@ -314,6 +318,9 @@
   width: 100%;
   margin: 3px 0;
 }
+#installer .ts-wrapper.multi .ts-control > div.active {
+  background: #688191;
+}
 #installer .focus .ts-control {
   box-shadow: none;
   outline-width: 3px;
@@ -330,10 +337,14 @@
 #installer .ts-dropdown .option span.info {
   position: absolute;
   right: 10px;
-  top: 3px;
+  top: 4px;
   color: #a6a6a6;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+  padding: 0 4px;
 }
 #installer .ts-dropdown .option span.text {
+  display: inline-block;
   padding-left: calc(var(--level, 0) * 10px);
 }
 #installer .ts-dropdown .option span.text:before {

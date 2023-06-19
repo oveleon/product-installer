@@ -10,6 +10,7 @@ namespace Oveleon\ProductInstaller\Import\Prompt;
 enum FormPromptType: string
 {
     case TEXT = 'text';
+    case FILE = 'file';
     case SELECT = 'select';
     case CHECKBOX = 'checkbox';
 }
