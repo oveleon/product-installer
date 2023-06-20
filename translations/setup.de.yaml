@@ -143,6 +143,11 @@ setup:
                 label:                  'News → News-Archiv'
                 description:            'Ein oder mehrere News konnten keinem News-Archive zugeordnet werden. Ihre Auswahl wird für alle weiteren News, welche auf das selbe News-Archiv referenzieren, übernommen.'
                 explanation:            'Beim Importieren eines oder mehrerer News konnte das zugehörige News-Archiv nicht gefunden werden. Wählen Sie bitte ein News-Archiv aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen News und einem News-Archiv herzustellen.<br/><br/><b>Folgendes News-Archiv wurde nicht importiert und benötigt eine Alternative:</b>'
+        news_archive:
+            jumpTo:
+                label:                  'News Archiv Weiterleitung → Seite'
+                description:            'Ein oder mehrere News-Archive verweisen auf eine Weiterleitungsseite, welche nicht aufgelöst werden kann. Ihre Auswahl wird für alle weiteren Weiterleitungen, welche auf die selbe Seite referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer News-Archive konnte die zugehörige Weiterleitungsseite nicht gefunden werden. Wählen Sie bitte eine Seite aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen News-Archiven und einer Seite herzustellen.<br/><br/><b>Folgende Seite wurde nicht importiert und benötigt eine Alternative:</b>'
         newsletter:
             channel:
                 label:                  'Newsletter → Newsletter-Kanal'

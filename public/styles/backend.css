@@ -622,6 +622,10 @@
 #installer .product .info .version + .version {
   margin-top: 7px;
 }
+#installer .product .widget {
+  width: auto;
+  margin: 0;
+}
 #installer .product .drop-menu {
   margin-left: 10px;
 }
@@ -1279,7 +1283,7 @@
   position: relative;
   vertical-align: middle;
   width: 100%;
-  max-width: 710px;
+  max-width: 760px;
   min-height: 530px;
   max-height: 100%;
   background: #fff;

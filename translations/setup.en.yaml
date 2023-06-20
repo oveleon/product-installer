@@ -143,6 +143,11 @@ setup:
                 label:                  'News → News-Archive'
                 description:            'One or more news could not be assigned to a news archive. Your selection will be applied to all other news that reference the same news archive.'
                 explanation:            'When importing one or more news items, the corresponding news archive could not be found. Please select a news archive from your Contao instance to create a link between these news and a news archive.<br/><br/><b>The following news archive was not imported and needs an alternative:</b>'
+        news_archive:
+            jumpTo:
+                label:                  'News Archive Redirect → Page'
+                description:            'One or more news archives refer to a redirect page that cannot be resolved. Your selection will be applied to all other redirects that reference the same page.'
+                explanation:            'When importing one or more news archives, the associated redirect page could not be found. Please select a page from your Contao instance to create a link between these news archives and a page.<br/><br/><b>The following page was not imported and needs an alternative:</b>'
         newsletter:
             channel:
                 label:                  'Newsletter → Newsletter Channel'
