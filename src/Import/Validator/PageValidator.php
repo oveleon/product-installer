@@ -35,9 +35,18 @@ class PageValidator implements ValidatorInterface
      */
     static public function selectRootPage(array &$row, AbstractPromptImport $importer): ?array
     {
+        // Check existing pages
+        $skipExistingPages = $importer->getPromptValue('skipExistingPages');
+
         // Skip the validator if it is not a root page or no pages exists
         if($row['type'] !== 'root' || PageModel::countAll() === 0)
         {
+            // Check if the page already exists
+            if($skipExistingPages && PageModel::countByAlias($row['alias']) > 0)
+            {
+                $row['_skip'] = true;
+            }
+
             return null;
         }
 
@@ -81,7 +90,7 @@ class PageValidator implements ValidatorInterface
                     $values,
                     FormPromptType::SELECT,
                     [
-                        'class'   => 'pages',
+                        'class'   => 'pages w50',
                         'default' => ['0'],
                         'optgroupField' => 'group',
                         'optgroups' => [
@@ -95,7 +104,19 @@ class PageValidator implements ValidatorInterface
                             ]
                         ]
                     ]
-                ]
+                ],
+                'skipExistingPages' => [
+                    [
+                        [
+                            'value' => 1,
+                            'text'  => $translator->trans('setup.prompt.page.skip.label', [], 'setup'),
+                        ]
+                    ],
+                    FormPromptType::CHECKBOX,
+                    [
+                        'class'     => 'w50 m22'
+                    ]
+                ],
             ];
         }
         else

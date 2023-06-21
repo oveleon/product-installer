@@ -208,6 +208,9 @@
 #installer .widget.w50 {
   width: 48%;
 }
+#installer .widget.m22 {
+  padding-top: 22px;
+}
 #installer .widget.center {
   align-items: center;
 }

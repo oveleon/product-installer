@@ -161,6 +161,8 @@ setup:
             root:
                 create:                 'Create new page'
                 extend:                 'Integrate into existing pages'
+            skip:
+                label:                  'Skip existing pages'
             layout:
                 label:                  'Layout → Page'
                 description:            'One or more referenced layouts could not be assigned. Your selection will be applied to all other pages that reference the same layout.'

@@ -67,6 +67,7 @@ export default class SelectField extends FormField
             items: this.config.options?.default ?? [],
 
             create: false,
+            maxOptions: null,
             allowEmptyOption: true,
 
             maxItems: this.config?.options?.multiple ? null : 1,

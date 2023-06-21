@@ -161,6 +161,8 @@ setup:
             root:
                 create:                 'Neue Seite anlegen'
                 extend:                 'In bestehender Seiten integrieren'
+            skip:
+                label:                  'Bestehende Seiten überspringen'
             layout:
                 label:                  'Layout → Seite'
                 description:            'Ein oder mehrere referenzierte Layouts konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Seiten, welche auf das selbe Layout referenzieren, übernommen.'

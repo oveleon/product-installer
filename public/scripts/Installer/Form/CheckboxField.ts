@@ -60,10 +60,10 @@ export default class CheckboxField extends FormField
         {
             this.content(`
                 <fieldset id="ctrl_${this.config.name}" class="tl_checkbox_container">
-                    <legend>${(this.config.options.label ? this.config.options.label : i18n('form.field.' + this.config.name + '.label'))}</legend>
+                    <legend>${this.label}</legend>
                 </fieldset>
                 
-                <p class="field-desc">${(this.config.options.description ? this.config.options.description : i18n('form.field.' + this.config.name + '.desc'))}</p>
+                <p class="field-desc">${this.description}</p>
             `)
 
             fieldset = <HTMLDivElement> this.element('fieldset')
