@@ -191,6 +191,23 @@ abstract class ContentValidator implements ValidatorInterface
 
                 $translator = Controller::getContainer()->get('translator');
 
+                // Try to get the original image from archive
+                if($fileStructure = $importer->getArchiveContentByFilename(FilesModel::getTable()))
+                {
+                    $fileRows = \array_filter($fileStructure, function ($item) use ($row) {
+                        return StringUtil::binToUuid($row['singleSRC']) === StringUtil::binToUuid($item['uuid']);
+                    });
+
+                    $images = '';
+
+                    foreach ($fileRows ?? [] as $fileRow)
+                    {
+                        $imageContent  = $importer->getArchiveContentByFilename($fileRow['path'], null, false, false);
+                        $imageBase64   = 'data:image/' . $fileRow['extension'] . ';base64,' . base64_encode($imageContent);
+                        $images       .= sprintf('<img src="%s" alt="original"/>', $imageBase64);
+                    }
+                }
+
                 return [
                     $fieldName => [
                         $values ?? [],
@@ -201,9 +218,9 @@ abstract class ContentValidator implements ValidatorInterface
                             'label'       => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
                             'description' => $translator->trans('setup.prompt.content.singleSRC.description', [], 'setup'),
                             'explanation' => [
-                                'type'        => 'TABLE',
+                                'type'        => 'HTML',
                                 'description' => $translator->trans('setup.prompt.content.singleSRC.explanation', [], 'setup'),
-                                'content'     => $parentStructure ?? []
+                                'content'     => $images ?? ''
                             ]
                         ]
                     ]

@@ -112,11 +112,31 @@ export default class PopupComponent extends ContainerComponent
                     break
                 }
 
+                let table = '';
+
+                // Check multiple tables
+                if(this.isNumeric(Object.keys(this.options.content)[0]))
+                {
+                    for(const index in Object.keys(this.options.content))
+                    {
+                        if(!this.options.content.hasOwnProperty(index))
+                        {
+                            continue
+                        }
+
+                        table += this.arrayToTable(this.options.content[index])
+                    }
+                }
+                else
+                {
+                    table = this.arrayToTable(this.options.content)
+                }
+
                 content = `
                     <div class="table scrollable">
                         <h2>${this.options.title}</h2>
                         ${description}
-                        ${this.arrayToTable(this.options.content)}
+                        ${table}
                         ${actions}
                     </div>
                 `
@@ -177,5 +197,9 @@ export default class PopupComponent extends ContainerComponent
         }
 
         return table.outerHTML
+    }
+
+    private isNumeric(n): boolean {
+        return !isNaN(parseFloat(n)) && isFinite(n);
     }
 }

@@ -1,5 +1,4 @@
 import FormField, {FormFieldConfig} from "./FormField";
-import {i18n} from "../Language"
 
 export type CheckboxFieldConfig = FormFieldConfig & {
     value: [{
@@ -56,7 +55,7 @@ export default class CheckboxField extends FormField
     {
         let fieldset: HTMLDivElement
 
-        if(this.config.options.multiple)
+        if(this.config.options?.multiple)
         {
             this.content(`
                 <fieldset id="ctrl_${this.config.name}" class="tl_checkbox_container">
@@ -134,7 +133,18 @@ export default class CheckboxField extends FormField
 
             fieldset.appendChild(input)
             fieldset.appendChild(label)
+
+            if(!this.config.options?.multiple && this.config?.options?.description)
+            {
+                const desc:  HTMLParagraphElement = document.createElement('p')
+                desc.className  = 'field-desc'
+                desc.innerHTML  = this.description
+
+                fieldset.appendChild(desc)
+            }
         }
+
+        this.addHelpers()
     }
 
     public getValue(): object|object[]

@@ -55,7 +55,7 @@ setup:
             singleSRC:
                 title:                  'Inhaltselement (verweist) → Bild'
                 description:            'Ein oder mehrere Bilder aus einem Inhaltselement konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Inhaltselemente, welche auf das selben Bild referenzieren, übernommen.'
-                explanation:            'Beim Importieren eines oder mehrerer Inhaltselemente konnte das zugehörige Bild nicht gefunden werden. Wählen Sie bitte ein Inhaltselement aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Inhaltselementen und einem Bild herzustellen.'
+                explanation:            'Beim Importieren eines oder mehrerer Inhaltselemente konnte das zugehörige Bild nicht gefunden werden. Wählen Sie bitte ein Bild aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Inhaltselementen und einem Bild herzustellen.<br/><br/><b>Folgendes Bild wurde nicht importiert und benötigt eine Alternative:</b>'
             content:
                 includes:
                     cteAlias:
@@ -131,9 +131,9 @@ setup:
                 description:            'Ein oder mehrere Module verweisen auf eine Weiterleitungsseite, welche nicht aufgelöst werden kann. Ihre Auswahl wird für alle weiteren Weiterleitungen, welche auf die selbe Seite referenzieren, übernommen.'
                 explanation:            'Beim Importieren eines oder mehrerer Module konnte die zugehörige Weiterleitungsseite nicht gefunden werden. Wählen Sie bitte eine Seite aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Modulen und einer Seite herzustellen.<br/><br/><b>Folgende Seite wurde nicht importiert und benötigt eine Alternative:</b>'
             pages:
-                label:                  'Seiten → Modul'
+                label:                  'Modul → Seiten'
                 description:            'Ein oder mehrere Seiten, welche im Modul ausgewählt waren konnten nicht ermittelt werden. Ihre Auswahl wird für alle weiteren Module, welche auf die selben Seiten referenzieren, übernommen.'
-                explanation:            'Beim Importieren eines oder mehrerer Module konnten Seiten, welche dem Modul zugeordnet waren nicht ermittelt werden. Wählen Sie bitte Seiten aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Seiten und dem Modul herzustellen.'
+                explanation:            'Beim Importieren eines oder mehrerer Module konnten Seiten, welche dem Modul zugeordnet waren nicht ermittelt werden. Wählen Sie bitte Seiten aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Seiten und dem Modul herzustellen.<br/><br/><b>Folgende Seiten wurden im Modul referenziert und benötigen eine Alternative:</b>'
             theme:
                 label:                  'Modul → Theme'
                 description:            'Ein oder mehrere Module konnten keinem Theme zugeordnet werden. Ihre Auswahl wird für alle weiteren Module, welche auf das selbe Theme referenzieren, übernommen.'
@@ -161,8 +161,6 @@ setup:
             root:
                 create:                 'Neue Seite anlegen'
                 extend:                 'In bestehender Seiten integrieren'
-            skip:
-                label:                  'Bestehende Seiten überspringen'
             layout:
                 label:                  'Layout → Seite'
                 description:            'Ein oder mehrere referenzierte Layouts konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Seiten, welche auf das selbe Layout referenzieren, übernommen.'

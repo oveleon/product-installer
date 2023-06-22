@@ -220,6 +220,7 @@
   border: 1px solid #688191;
   border-radius: 3px;
   outline-color: rgba(104, 129, 145, 0.33);
+  padding: 6px 10px;
 }
 #installer .widget.text input:focus, #installer .widget.file input:focus {
   outline-width: 3px;
@@ -227,9 +228,6 @@
 }
 #installer .widget.text input::placeholder, #installer .widget.file input::placeholder {
   color: #a6a6a6;
-}
-#installer .widget.text input[type=text], #installer .widget.file input[type=text] {
-  padding: 6px 10px;
 }
 #installer .widget.text input#license, #installer .widget.file input#license {
   letter-spacing: 0.8px;
@@ -240,6 +238,8 @@
   background-repeat: no-repeat;
   background-position: right 7px center;
   background-size: 20px;
+  padding: 6px 30px 6px 10px;
+  text-overflow: ellipsis;
 }
 #installer .widget.checkbox:not(.multiple) {
   height: 19px;
@@ -1057,10 +1057,19 @@
   background: #fff;
   animation: zoom-in 0.25s forwards ease-in-out;
 }
+#installer .popup img {
+  outline: 3px solid #f1f1f1;
+  border-radius: 3px;
+}
 #installer .popup table {
   border: 0 none;
   border-spacing: 0;
   word-break: break-word;
+  outline: 3px solid #f1f1f1;
+  border-radius: 3px;
+}
+#installer .popup table + table {
+  margin-top: 20px;
 }
 #installer .popup table p {
   font-size: 0.91rem;
@@ -1075,7 +1084,7 @@
 }
 #installer .popup table td {
   min-width: 190px;
-  padding: 5px;
+  padding: 2px 10px;
   height: 40px;
 }
 

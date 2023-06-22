@@ -95,6 +95,7 @@ $input-outline-color: rgb(104 129 145 / 33%);
         border: 1px solid $input-border-color;
         border-radius: 3px;
         outline-color: $input-outline-color;
+        padding: 6px 10px;
 
         &:focus{
           outline-width: 3px;
@@ -103,10 +104,6 @@ $input-outline-color: rgb(104 129 145 / 33%);
 
         &::placeholder {
           color: $text-color-info;
-        }
-
-        &[type="text"]{
-          padding: 6px 10px;
         }
 
         &#license{
@@ -123,6 +120,9 @@ $input-outline-color: rgb(104 129 145 / 33%);
         background-repeat: no-repeat;
         background-position: right 7px center;
         background-size: 20px;
+
+        padding: 6px 30px 6px 10px;
+        text-overflow:ellipsis
       }
     }
 

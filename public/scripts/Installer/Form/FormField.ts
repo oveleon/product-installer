@@ -82,7 +82,11 @@ export default abstract class FormField extends ContainerComponent
     content(html: string): void
     {
         super.content(html);
+        this.addHelpers();
+    }
 
+    addHelpers(): void
+    {
         if(this.config?.options?.explanation)
         {
             let explanation = this.config.options.explanation

@@ -4,6 +4,7 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 
 use Contao\Model;
 use Contao\PageModel;
+use Contao\StringUtil;
 use Contao\System;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Util\PageUtil;
@@ -29,9 +30,20 @@ trait ValidatorTrait
             ->setPages($pages)
             ->getPagesSelectable(true);
 
+
+        // Fetch missing structure from the archive to give the user an overview of which page from his own structure would fit
+        // Try to deserialize the field value for multiple pages (e.g. field `pages`)
         $missingStructure = $importer->getArchiveContentByFilename(PageModel::getTable(), [
-            'value' => $row[$field],
-            'field' => 'id'
+            'value' => StringUtil::deserialize($row[$field]),
+            'field' => 'id',
+            'keys'  => [
+                'id',
+                'title',
+                'pageTitle',
+                'type',
+                'alias',
+                'layout'
+            ]
         ]);
 
         $translatorNamePart = str_replace("tl_", "", $sourceModel::getTable());

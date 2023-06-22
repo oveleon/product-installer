@@ -112,20 +112,43 @@ abstract class AbstractPromptImport
      * $filter:   Filter the content rows
      * - field:   The field to filter on
      * - value:   The value that must exist in the field
+     *
+     * - keys:    Filters the keys and retains only keys that have been handed over
      */
-    public function getArchiveContentByFilename(string $fileName, array $filter = null, $parseJSON = true): ?array
+    public function getArchiveContentByFilename(string $fileName, array $filter = null, $parseJSON = true, $extendFileExtension = true): null|array|string
     {
-        $content = $this->archiveUtil->getFileContent($this->archiveDestination, $fileName . '.' . $this->fileExtension, $parseJSON);
+        $content = $this->archiveUtil->getFileContent($this->archiveDestination, $fileName . ($extendFileExtension ? '.' . $this->fileExtension : ''), $parseJSON);
 
         if($content && null !== $filter)
         {
-            $content = array_filter($content, function ($item) use ($filter) {
-                return $item[ $filter['field'] ] === $filter['value'];
-            });
-
-            if(!empty($content))
+            // field-value filter
+            if(\array_key_exists('field', $filter) && \array_key_exists('value', $filter))
             {
-                $content = current($content);
+                if(\is_array($filter['value']))
+                {
+                    $content = \array_filter($content, function ($item) use ($filter) {
+                        return \in_array($item[ $filter['field'] ], $filter['value']);
+                    });
+                }
+                else
+                {
+                    $content = \array_filter($content, function ($item) use ($filter) {
+                        return $item[ $filter['field'] ] === $filter['value'];
+                    });
+                }
+            }
+
+            if(\array_key_exists('keys', $filter) && $content)
+            {
+                foreach ($content as &$row)
+                {
+                    $row = \array_intersect_key($row, array_flip($filter['keys']));
+                }
+            }
+
+            if(!empty($content) && !\is_array($filter['value']))
+            {
+                $content = \current($content);
             }
         }
 
