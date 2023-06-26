@@ -10,7 +10,6 @@ use Contao\ThemeModel;
 use Oveleon\ProductInstaller\Import\ImportStateType;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\TableImport;
-use Oveleon\ProductInstaller\Import\Validator;
 use Oveleon\ProductInstaller\Util\PageUtil;
 
 /**
@@ -105,12 +104,21 @@ class PageValidator implements ValidatorInterface
         else
         {
             // If another root page was selected, the given root page won't be imported
-            if($rootPage !== '0')
+            /*if($rootPage !== '0')
             {
                 $row['_skip'] = true;
 
                 // Add id connection for child tables
                 $importer->addConnection($row['id'], $rootPage);
+            }*/
+
+            if($rootPage !== '0')
+            {
+                // Overriding the page root check during import
+                $row['_keep'] = true;
+
+                // Add id connection for child tables
+                $importer->addConnection(0, $rootPage);
             }
         }
 
@@ -144,13 +152,11 @@ class PageValidator implements ValidatorInterface
             $importer->willBeImported(LayoutModel::getTable())
         )
         {
-            // ToDo: Added to often!!
-
             // Add page-layout connection to retrieve them in the new validator (layoutId, pageId). See method `connectLayout` for more information.
             $importer->addConnection($row['layout'], $row['id'], '_connectLayout');
 
             // Add persist layout validator
-            $importer->addLifecycleValidator(LayoutModel::getTable(), [self::class, 'connectLayout'], ValidatorMode::AFTER_IMPORT);
+            $importer->addLifecycleValidator('connectLayout_' . $row['layout'], LayoutModel::getTable(), [self::class, 'connectLayout'], ValidatorMode::AFTER_IMPORT);
 
             return null;
         }
@@ -293,26 +299,27 @@ class PageValidator implements ValidatorInterface
      */
     static function connectLayout(array $collection, TableImport $importer): void
     {
-        // TODO: NOT FULLY TESTED
-
         /** @var LayoutModel $model*/
         [$model, $row] = $collection;
 
         // Skip all layouts that not includes in the _connectLayout-connection
-        if(!$pageIds = $importer->getConnection($row['id'], '_connectLayout'))
+        if(!$pageId = $importer->getConnection($row['id'], '_connectLayout'))
+        {
+            return;
+        }
+
+        // Get new page id by page connections
+        if(!$pageId = $importer->getConnection($pageId, PageModel::getTable()))
         {
             return;
         }
 
         // Get page to set the layout connection afterward
-        if($pages = PageModel::findMultipleByIds((array) $pageIds))
+        if($page = PageModel::findByPk($pageId))
         {
-            foreach ($pages as $page)
-            {
-                // Overwrite page-layout with the new id of the layout
-                $page->layout = $model->id;
-                $page->save();
-            }
+            // Overwrite page-layout with the new id of the layout
+            $page->layout = $model->id;
+            $page->save();
         }
     }
 

@@ -99,7 +99,7 @@ class TableImport extends AbstractPromptImport
         }
 
         // Check if the table key exists and check if our table is set
-        if(($tables = ($config['config']['tables'] ?? null)) && \array_key_exists($tables, $tables))
+        if(($tables = ($config['tables'] ?? null)) && \in_array($table, $tables))
         {
             return true;
         }
@@ -171,14 +171,14 @@ class TableImport extends AbstractPromptImport
      * Adds a validator, which is created from other validators or during runtime.
      * Validators added via this function are restored when the import process is called up again.
      */
-    public function addLifecycleValidator(string $trigger, string|array $fn, ValidatorMode $mode): void
+    public function addLifecycleValidator(string $identifier, string $trigger, string|array $fn, ValidatorMode $mode): void
     {
         if(!$validators = $this->setupLock->get('validators'))
         {
             $validators = [];
         }
 
-        $validators[] = [$trigger, $fn, $mode->name];
+        $validators[$identifier] = [$trigger, $fn, $mode->name];
 
         $this->setupLock->set('validators', $validators);
         $this->setupLock->save();
@@ -297,7 +297,7 @@ class TableImport extends AbstractPromptImport
         $info = new \stdClass();
 
         $conf = $GLOBALS['TL_DCA'][$table]['config'];
-        $list = $GLOBALS['TL_DCA'][$table]['list'];
+        $list = $GLOBALS['TL_DCA'][$table]['list'] ?? null;
 
         $info->dca              = $GLOBALS['TL_DCA'][$table];
         $info->fields           = $GLOBALS['TL_DCA'][$table]['fields'] ?? [];
@@ -473,8 +473,9 @@ class TableImport extends AbstractPromptImport
         // Unknown tables or vendor validators must define their root pages as such if they do not have type=root
         // like tl_pages, otherwise we only check for the passed type
         if(
-             \array_key_exists('_root', $row) ||
-            (\array_key_exists('type', $row) && $row['type'] === 'root')
+            (\array_key_exists('_root', $row) ||
+            (\array_key_exists('type', $row) && $row['type'] === 'root')) &&
+            !\array_key_exists('_keep', $row)
         ){
             return true;
         }
@@ -490,7 +491,8 @@ class TableImport extends AbstractPromptImport
         unset(
             $row['id'],
             $row['_create'],
-            $row['_root']
+            $row['_root'],
+            $row['_keep']
         );
     }
 
