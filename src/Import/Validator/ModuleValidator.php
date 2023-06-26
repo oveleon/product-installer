@@ -54,6 +54,11 @@ class ModuleValidator implements ValidatorInterface
      */
     static function setRegPageConnection(array &$row, AbstractPromptImport $importer): ?array
     {
+        if(!$row['reg_activate'] || !$row['reg_jumpTo'])
+        {
+            return null;
+        }
+
         return self::setFieldPageConnection(self::getModel(), 'reg_jumpTo', $row, $importer);
     }
 
@@ -62,6 +67,11 @@ class ModuleValidator implements ValidatorInterface
      */
     static function setPagesConnection(array &$row, AbstractPromptImport $importer): ?array
     {
+        if(null === $row['pages'])
+        {
+            return null;
+        }
+
         return self::setFieldPageConnection(self::getModel(), 'pages', $row, $importer, ['multiple' => true]);
     }
 

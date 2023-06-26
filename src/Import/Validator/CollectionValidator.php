@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Import\Validator;
 
+use Contao\MemberGroupModel;
 use Contao\Model;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 
@@ -20,6 +21,21 @@ class CollectionValidator
      */
     static function setJumpToPageConnection(array &$row, AbstractPromptImport $importer, string|Model $model): ?array
     {
+        switch(true)
+        {
+            case $model instanceof MemberGroupModel:
+                if(!$row['redirect'])
+                {
+                    return null;
+                }
+
+            default:
+                if(!$row['jumpTo'])
+                {
+                    return null;
+                }
+        }
+
         return self::setFieldPageConnection($model, 'jumpTo', $row, $importer);
     }
 }

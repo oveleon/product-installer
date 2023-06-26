@@ -8,6 +8,7 @@ use Contao\DC_Folder;
 use Contao\DC_Table;
 use Contao\Model;
 
+use Contao\StringUtil;
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
@@ -612,6 +613,7 @@ class TableImport extends AbstractPromptImport
             return null;
         }
 
+        $isMultiple = \array_key_exists('multiple', $promptOptions);
         $connection = $aTable . '_' . $bTable . '_' . $field;
         $fieldName  = $field . '_' . $id;
 
@@ -621,16 +623,44 @@ class TableImport extends AbstractPromptImport
             return null;
         }
 
-        // Check if we have a connection through an existing connection or received through a prompt
+        // Check connection of multiple values
+        if($isMultiple)
+        {
+            $values = StringUtil::deserialize($trigger, true);
+            $connections = [];
+
+            foreach ($values as $singleValue)
+            {
+                if($connectedId = $this->getConnection($singleValue, $bTable))
+                    $connections[] = $connectedId;
+            }
+
+            // Check if connections could be found, otherwise prompt
+            if(!empty($connections))
+            {
+                $multipleConnections = $connections;
+            }
+        }
+
         if(
-            ($connectedId = $this->getConnection($trigger, $bTable))     !== null ||
+            // Check if we have a connection through an existing table-connection
+            ($connectedId = $this->getConnection($trigger, $bTable)) !== null ||
+            // Check if we have a connection through an existing table-field-connection
             ($connectedId = $this->getConnection($trigger, $connection)) !== null ||
-            ($connectedId = $this->getPromptValue($fieldName))           !== null
+            // Check if we have a connection received through a prompt
+            ($connectedId = $connectedPromptId = $this->getPromptValue($fieldName)) !== null ||
+            // Check if we have a collection of connections from multiple values
+            ($isMultiple && ($connectedId = ($multipleConnections ?? null)))
         ){
-            // Check for serializes / multiple values
-            if(\array_key_exists('multiple', $promptOptions))
+            // Check for serializes / multiple values by prompt
+            if($isMultiple && ($connectedPromptId ?? false))
             {
                 $connectedId = serialize(explode(",", $connectedId));
+            }
+            // Check for serializes values from a multiple value
+            elseif($isMultiple)
+            {
+                $connectedId = serialize($connectedId);
             }
 
             // Add field connection
