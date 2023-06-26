@@ -306,12 +306,28 @@ $input-outline-color: rgb(104 129 145 / 33%);
         background-image: url("/system/themes/flexible/icons/pagemounts.svg");
       }
 
+      &.error_401 span:before{
+        background-image: url("/system/themes/flexible/icons/error_401.svg");
+      }
+
+      &.error_403 span:before{
+        background-image: url("/system/themes/flexible/icons/error_403.svg");
+      }
+
+      &.error_404 span:before{
+        background-image: url("/system/themes/flexible/icons/error_404.svg");
+      }
+
       &.copy span:before{
         background-image: url("/system/themes/flexible/icons/copy.svg");
       }
 
       &.forward span:before{
         background-image: url("/system/themes/flexible/icons/forward.svg");
+      }
+
+      &.redirect span:before{
+        background-image: url("/system/themes/flexible/icons/redirect_1.svg");
       }
 
       &.regular span:before{

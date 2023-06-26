@@ -46,7 +46,7 @@ class Validator
         // Page
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'selectRootPage']);
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setLayoutConnection']);
-        self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setPageJumpToConnection']);
+        self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setPageJumpToConnection'], ValidatorMode::AFTER_IMPORT);
 
         // Layout
         self::addValidator(LayoutValidator::getTrigger(), [LayoutValidator::class, 'setThemeConnection']);

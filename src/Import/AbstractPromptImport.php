@@ -67,6 +67,14 @@ abstract class AbstractPromptImport
     }
 
     /**
+     * Returns the setup scope.
+     */
+    public function getScope(string $scope, null|string|array $default = null): ?array
+    {
+        return $this->setupLock->getScope($scope, $default);
+    }
+
+    /**
      * Sets the prompt to be returned.
      */
     public function setPrompt(AbstractPrompt $prompt): void

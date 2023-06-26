@@ -47,6 +47,8 @@ class PageUtil
         {
             if (!$pid = $s['pid'])
             {
+                $s['title'] = html_entity_decode($s['title']);
+
                 $nested[ $s['id'] ] = &$s;
             }
             else
@@ -57,6 +59,8 @@ class PageUtil
                     {
                         $pages[$pid]['_children'] = [];
                     }
+
+                    $s['title'] = html_entity_decode($s['title']);
 
                     $pages[$pid]['_children'][ $s['id'] ] = &$s;
                 }
@@ -129,6 +133,7 @@ class PageUtil
                 // Set article information
                 $article['_level'] = ++$page['_level'];
                 $article['_isArticle'] = true;
+                $article['title'] = html_entity_decode($article['title']);
 
                 // Push to pages array
                 self::array_splice_preserve_keys( $pages, ++$index, 0, ['art_' . $article['id'] => $article]);

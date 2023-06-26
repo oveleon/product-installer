@@ -1,5 +1,6 @@
 import ContainerComponent from "./ContainerComponent"
 import {i18n} from "../Language"
+import {unserialize} from 'serialize-like-php'
 
 /**
  * Popup Types.
@@ -182,7 +183,35 @@ export default class PopupComponent extends ContainerComponent
                 continue
             }
 
-            const value = data[label]
+            let value = data[label]
+
+            try{
+                const valueObject = unserialize(value)
+                const valueArray = []
+
+                let separator = ' '
+
+                for (const [key, part] of Object.entries(valueObject)) {
+
+                    if(part === "")
+                    {
+                        continue
+                    }
+
+                    if(typeof part !== "object")
+                    {
+                        valueArray.push(part)
+                        separator = ', '
+                    }
+                    else
+                    {
+                        valueArray.push(this.arrayToTable(part))
+                        separator = ' '
+                    }
+                }
+
+                value = valueArray.join(separator)
+            }catch (e){}
 
             let row = document.createElement('tr');
             let labelCell = document.createElement('td');

@@ -95,6 +95,8 @@ export default class SetupStep extends StepComponent
         const taskContainer: HTMLDivElement = <HTMLDivElement> this.element('.tasks-overview')
         const setupHeadline: HTMLHeadingElement = <HTMLHeadingElement> this.element('.setup-headline')
 
+        // ToDo: Check whether the setup can be run (check requirements 'composer_update' with version compare)
+
         // Set task number
         setupHeadline.querySelector('span').innerHTML = tasks.length.toString()
 

@@ -12,6 +12,6 @@ namespace Oveleon\ProductInstaller\Import\Validator;
  */
 enum ValidatorMode: string
 {
-    case BEFORE_IMPORT = 'BEFORE';
-    case AFTER_IMPORT = 'AFTER';
+    case BEFORE_IMPORT      = 'BEFORE';
+    case AFTER_IMPORT       = 'AFTER';
 }

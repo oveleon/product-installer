@@ -162,7 +162,7 @@ setup:
                 create:                 'Create new page'
                 extend:                 'Integrate into existing pages'
             layout:
-                label:                  'Layout → Page'
+                label:                  'Page → Layout'
                 description:            'One or more referenced layouts could not be assigned. Your selection will be applied to all other pages that reference the same layout.'
                 explanation:            'When importing one or more pages, an assigned layout could not be resolved. Please select a layout from your Contao instance to create a link between these pages and a layout.<br/><br/><b>The following layout was not imported and needs an alternative:</b>'
 

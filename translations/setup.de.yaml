@@ -162,7 +162,7 @@ setup:
                 create:                 'Neue Seite anlegen'
                 extend:                 'In bestehender Seiten integrieren'
             layout:
-                label:                  'Layout → Seite'
+                label:                  'Seite → Layout'
                 description:            'Ein oder mehrere referenzierte Layouts konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Seiten, welche auf das selbe Layout referenzieren, übernommen.'
                 explanation:            'Beim Importieren einer oder mehrerer Seiten konnte ein zugewiesenes Layout nicht aufgelöst werden. Wählen Sie bitte ein Layout aus Ihrer Contao-Instanz um eine Verknüpfung zwischen diesen Seiten und einem Layout herzustellen.<br/><br/><b>Folgendes Layout wurde nicht importiert und benötigt eine Alternative:</b>'
 

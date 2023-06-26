@@ -7,8 +7,10 @@ use Contao\LayoutModel;
 use Contao\PageModel;
 use Contao\System;
 use Contao\ThemeModel;
-use Oveleon\ProductInstaller\Import\AbstractPromptImport;
+use Oveleon\ProductInstaller\Import\ImportStateType;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
+use Oveleon\ProductInstaller\Import\TableImport;
+use Oveleon\ProductInstaller\Import\Validator;
 use Oveleon\ProductInstaller\Util\PageUtil;
 
 /**
@@ -32,8 +34,10 @@ class PageValidator implements ValidatorInterface
 
     /**
      * Handles the selection of a page root.
+     *
+     * @category BEFORE_IMPORT
      */
-    static public function selectRootPage(array &$row, AbstractPromptImport $importer): ?array
+    static public function selectRootPage(array &$row, TableImport $importer): ?array
     {
         // Skip the validator if it is not a root page or no pages exists
         if($row['type'] !== 'root' || PageModel::countAll() === 0)
@@ -115,12 +119,39 @@ class PageValidator implements ValidatorInterface
 
     /**
      * Treats the relationship between a page and its layout.
+     *
+     * @category BEFORE_IMPORT
      */
-    static public function setLayoutConnection(array &$row, AbstractPromptImport $importer): ?array
+    static public function setLayoutConnection(array &$row, TableImport $importer): ?array
     {
         // Skip if the page has no own layout connection
         if(!$row['includeLayout'])
         {
+            return null;
+        }
+
+        // In empty Contao instances, it will happen at this point that no layouts exist yet. In this case, the row
+        // that references a layout is stored as a new layout-validator in order to be able to establish the connection
+        // after importing the layouts.
+        //
+        // This is done under the following conditions:
+        //  1. The table has not yet been imported
+        //  2. The table will be imported
+        //
+        // If this is not the case, layouts must already exist in the system, which must be connected by the user.
+        if(
+            $importer->getState(LayoutModel::getTable()) !== ImportStateType::FINISH &&
+            $importer->willBeImported(LayoutModel::getTable())
+        )
+        {
+            // ToDo: Added to often!!
+
+            // Add page-layout connection to retrieve them in the new validator (layoutId, pageId). See method `connectLayout` for more information.
+            $importer->addConnection($row['layout'], $row['id'], '_connectLayout');
+
+            // Add persist layout validator
+            $importer->addLifecycleValidator(LayoutModel::getTable(), [self::class, 'connectLayout'], ValidatorMode::AFTER_IMPORT);
+
             return null;
         }
 
@@ -254,20 +285,63 @@ class PageValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship with the field jumpTo / twoFactorJumpTo and connected pages.
+     * Treats the relationship between a page and its layout after layouts are imported (set by self::setLayoutConnection).
+     *
+     * @category AFTER_IMPORT
+     *
+     * @param array<PageModel, array> $collection
      */
-    static function setPageJumpToConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function connectLayout(array $collection, TableImport $importer): void
     {
+        // TODO: NOT FULLY TESTED
+
+        /** @var LayoutModel $model*/
+        [$model, $row] = $collection;
+
+        // Skip all layouts that not includes in the _connectLayout-connection
+        if(!$pageIds = $importer->getConnection($row['id'], '_connectLayout'))
+        {
+            return;
+        }
+
+        // Get page to set the layout connection afterward
+        if($pages = PageModel::findMultipleByIds((array) $pageIds))
+        {
+            foreach ($pages as $page)
+            {
+                // Overwrite page-layout with the new id of the layout
+                $page->layout = $model->id;
+                $page->save();
+            }
+        }
+    }
+
+    /**
+     * Treats the relationship with the field jumpTo / twoFactorJumpTo and connected pages.
+     *
+     * @category AFTER_IMPORT
+     *
+     * @param array<PageModel, array> $collection
+     */
+    static function setPageJumpToConnection(array $collection, TableImport $importer): void
+    {
+        /** @var PageModel $model*/
+        [$model, $row] = $collection;
+
         switch ($row['type'])
         {
             case 'root':
             case 'rootfallback':
                 if($row['enforceTwoFactor'])
                 {
-                    return self::setFieldPageConnection(self::getModel(), 'twoFactorJumpTo', $row, $importer);
+                    if($connectedId = $importer->getConnection($row['twoFactorJumpTo']))
+                    {
+                        $model->twoFactorJumpTo = $connectedId;
+                        $model->save();
+                    }
                 }
 
-                return null;
+                break;
 
             case 'error_401':
             case 'error_403':
@@ -275,18 +349,20 @@ class PageValidator implements ValidatorInterface
             case 'error_503':
                 if(!$row['autoforward'])
                 {
-                    return null;
+                    return;
                 }
 
-                break;
-
-            default:
-                if(!$row['jumpTo'])
+            case 'redirect':
+                // ToDo: Handle insert tags
+            case 'forward':
+                if($row['jumpTo'])
                 {
-                    return null;
+                    if($connectedId = $importer->getConnection($row['jumpTo']))
+                    {
+                        $model->jumpTo = $connectedId;
+                        $model->save();
+                    }
                 }
         }
-
-        return self::setFieldPageConnection(self::getModel(), 'jumpTo', $row, $importer);
     }
 }

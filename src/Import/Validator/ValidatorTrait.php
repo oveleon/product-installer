@@ -22,14 +22,15 @@ trait ValidatorTrait
     public static function setFieldPageConnection(string|Model $sourceModel, string $field, array &$row, AbstractPromptImport $importer, ?array $extendPromptOptions = null): ?array
     {
         $translator = System::getContainer()->get('translator');
-        $pages = PageModel::findAll(['order' => 'id ASC, sorting ASC']);
 
-        /** @var PageUtil $pageUtil */
-        $values = System::getContainer()
-            ->get("Oveleon\ProductInstaller\Util\PageUtil")
-            ->setPages($pages)
-            ->getPagesSelectable(true);
-
+        if($pages = PageModel::findAll(['order' => 'id ASC, sorting ASC']))
+        {
+            /** @var PageUtil $pageUtil */
+            $values = System::getContainer()
+                ->get("Oveleon\ProductInstaller\Util\PageUtil")
+                ->setPages($pages)
+                ->getPagesSelectable(true);
+        }
 
         // Fetch missing structure from the archive to give the user an overview of which page from his own structure would fit
         // Try to deserialize the field value for multiple pages (e.g. field `pages`)
@@ -76,6 +77,6 @@ trait ValidatorTrait
             $promptOptions = $promptOptions + $extendPromptOptions;
         }
 
-        return $importer->useIdentifierConnectionLogic($row, $field, $sourceModel::getTable(), PageModel::getTable(), $promptOptions, $values);
+        return $importer->useIdentifierConnectionLogic($row, $field, $sourceModel::getTable(), PageModel::getTable(), $promptOptions, $values ?? []);
     }
 }

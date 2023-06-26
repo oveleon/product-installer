@@ -20,8 +20,10 @@ use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 abstract class ContentValidator implements ValidatorInterface
 {
     /**
-     * Treats the relationship between content elements and its references except the
-     * relationship between content elements among themselves.
+     * Treats the relationship between content elements and its references except the relationship between content
+     * elements among themselves.
+     *
+     * @category BEFORE_IMPORT
      */
     static function setIncludes(array &$row, AbstractPromptImport $importer): ?array
     {
@@ -145,6 +147,8 @@ abstract class ContentValidator implements ValidatorInterface
     }
     /**
      * Treats with images (UUIDs) in content elements.
+     *
+     * @category BEFORE_IMPORT
      */
     static function setImageConnection(array &$row, AbstractPromptImport $importer): ?array
     {
@@ -233,9 +237,16 @@ abstract class ContentValidator implements ValidatorInterface
 
     /**
      * Treats the relationship between content elements among themselves.
+     *
+     * @category AFTER_IMPORT
+     *
+     * @param array<ContentModel, array> $collection
      */
-    static function setContentIncludes(ContentModel $model, AbstractPromptImport $importer): void
+    static function setContentIncludes(array $collection, AbstractPromptImport $importer): void
     {
+        /** @var ContentModel $model*/
+        [$model, $row] = $collection;
+
         if($model->type !== 'alias')
         {
             return;

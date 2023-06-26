@@ -371,11 +371,23 @@
 #installer .ts-dropdown .option.root span:before {
   background-image: url("/system/themes/flexible/icons/pagemounts.svg");
 }
+#installer .ts-dropdown .option.error_401 span:before {
+  background-image: url("/system/themes/flexible/icons/error_401.svg");
+}
+#installer .ts-dropdown .option.error_403 span:before {
+  background-image: url("/system/themes/flexible/icons/error_403.svg");
+}
+#installer .ts-dropdown .option.error_404 span:before {
+  background-image: url("/system/themes/flexible/icons/error_404.svg");
+}
 #installer .ts-dropdown .option.copy span:before {
   background-image: url("/system/themes/flexible/icons/copy.svg");
 }
 #installer .ts-dropdown .option.forward span:before {
   background-image: url("/system/themes/flexible/icons/forward.svg");
+}
+#installer .ts-dropdown .option.redirect span:before {
+  background-image: url("/system/themes/flexible/icons/redirect_1.svg");
 }
 #installer .ts-dropdown .option.regular span:before {
   background-image: url("/system/themes/flexible/icons/regular.svg");
@@ -1084,8 +1096,7 @@
 }
 #installer .popup table td {
   min-width: 190px;
-  padding: 2px 10px;
-  height: 40px;
+  padding: 9px 10px;
 }
 
 @keyframes zoom-in {

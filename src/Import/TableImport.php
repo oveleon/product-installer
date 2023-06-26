@@ -46,7 +46,7 @@ class TableImport extends AbstractPromptImport
         $this->content = $tableContent;
 
         // Check import state
-        switch($this->getState())
+        switch($this->getNextState())
         {
             case ImportStateType::INIT->value:
 
@@ -88,6 +88,26 @@ class TableImport extends AbstractPromptImport
     }
 
     /**
+     * Checks if a table will be imported.
+     */
+    public function willBeImported($table): bool
+    {
+        // If no config is set, we know that all tables will be imported
+        if(!$config = $this->setupLock->get('config'))
+        {
+            return true;
+        }
+
+        // Check if the table key exists and check if our table is set
+        if(($tables = ($config['config']['tables'] ?? null)) && \array_key_exists($tables, $tables))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Adds a temporary connection.
      */
     public function addFlashConnection(string|int $a, string|int $b, string $scope): void
@@ -111,11 +131,11 @@ class TableImport extends AbstractPromptImport
     /**
      * Adds a connection between two records and make them available for further processing.
      */
-    public function addConnection(string|int $a, string|int $b, ?string $table = null): void
+    public function addConnection(string|int $a, string|int $b, ?string $table = null, string $subScope = 'connections'): void
     {
         $table = $table ?? $this->table;
 
-        if(!$connections = $this->setupLock->get('connections'))
+        if(!$connections = $this->setupLock->get($subScope))
         {
             $connections = [];
         }
@@ -127,24 +147,49 @@ class TableImport extends AbstractPromptImport
             $connections[$table] = [$a => $b];
         }
 
-        $this->setupLock->set('connections', $connections);
+        $this->setupLock->set($subScope, $connections);
         $this->setupLock->save();
     }
 
     /**
      * Returns the value of a mapped field.
      */
-    public function getConnection(string|int $a, ?string $table = null): null|string|int
+    public function getConnection(string|int $a, ?string $table = null, string $subScope = 'connections'): null|string|int
     {
         $connectedValue = null;
         $table = $table ?? $this->table;
 
-        if($connections = $this->setupLock->get('connections'))
+        if($connections = $this->setupLock->get($subScope))
         {
             $connectedValue = $connections[ $table ][ $a ] ?? null;
         }
 
         return $connectedValue;
+    }
+
+    /**
+     * Adds a validator, which is created from other validators or during runtime.
+     * Validators added via this function are restored when the import process is called up again.
+     */
+    public function addLifecycleValidator(string $trigger, string|array $fn, ValidatorMode $mode): void
+    {
+        if(!$validators = $this->setupLock->get('validators'))
+        {
+            $validators = [];
+        }
+
+        $validators[] = [$trigger, $fn, $mode->name];
+
+        $this->setupLock->set('validators', $validators);
+        $this->setupLock->save();
+    }
+
+    /**
+     * Returns all validators that were added during runtime.
+     */
+    public function getLifecycleValidators(): ?array
+    {
+        return $this->setupLock->get('validators');
     }
 
     /**
@@ -200,7 +245,15 @@ class TableImport extends AbstractPromptImport
     /**
      * Returns the current state of the table.
      */
-    protected function getState(): string
+    public function getState(?string $table = null): ?string
+    {
+        return $this->setupLock->get($table ?? $this->table);
+    }
+
+    /**
+     * Returns the next state of the table based on current state.
+     */
+    protected function getNextState(): string
     {
         // Return init state if the table was not found
         if(!$tableMode = $this->setupLock->get($this->table))
@@ -214,7 +267,7 @@ class TableImport extends AbstractPromptImport
             return ImportStateType::SKIP->value;
         }
 
-        // Return state
+        // Return current state
         return $tableMode;
     }
 
@@ -242,9 +295,12 @@ class TableImport extends AbstractPromptImport
         }
 
         $info = new \stdClass();
+
         $conf = $GLOBALS['TL_DCA'][$table]['config'];
         $list = $GLOBALS['TL_DCA'][$table]['list'];
 
+        $info->dca              = $GLOBALS['TL_DCA'][$table];
+        $info->fields           = $GLOBALS['TL_DCA'][$table]['fields'] ?? [];
         $info->sortingMode      = $list['sorting']['mode'] ?? null;
         $info->dataContainer    = $conf['dataContainer'] ?? null;
         $info->databaseAssisted = $conf['databaseAssisted'] ?? null;
@@ -259,10 +315,23 @@ class TableImport extends AbstractPromptImport
     /**
      * Apply default table validators.
      */
-    public static function useDefaultValidators(): void
+    public function useDefaultValidators(): void
     {
         // Apply default validators
         Validator::useDefaultTableValidators();
+
+        // Check for persist validators
+        if($validators = $this->getLifecycleValidators())
+        {
+            foreach($validators as $validator)
+            {
+                [$trigger, $fn, $mode] = $validator;
+
+                $reflection = new \ReflectionEnum(ValidatorMode::class);
+
+                Validator::addValidator($trigger, $fn, $reflection->getCase($mode)->getValue());
+            }
+        }
     }
 
     /**
@@ -333,7 +402,7 @@ class TableImport extends AbstractPromptImport
             return;
         }
 
-        $modelCollection = [];
+        $importCollection = [];
         $modelClass = $this->getClassFromFileName($this->table);
         $tableInfo = $this->getTableInformation();
         $hasParent = $tableInfo->hasParent;
@@ -346,6 +415,7 @@ class TableImport extends AbstractPromptImport
             }
 
             // Get vars before clean up the row
+            $importRow = $row;
             $exportId = $row['id'];
             $isRoot = $this->isRootRecord($row);
 
@@ -355,9 +425,6 @@ class TableImport extends AbstractPromptImport
             // Create model and set data
             $model = new $modelClass();
             $model->setRow($row);
-
-            // Add model to collection for validators in mode AFTER_IMPORT
-            $modelCollection[] = $model;
 
             // Check for parent-connections
             if($hasParent && !$isRoot)
@@ -374,17 +441,23 @@ class TableImport extends AbstractPromptImport
                 $model->pid = $parentId;
             }
 
+            // Save model and get new id
+            $id = ($model->save())->id;
+
+            // Add original row and model to collection for validators in mode AFTER_IMPORT
+            $importCollection[$id] = [$model, $importRow];
+
             // Add connection
-             $this->addConnection($exportId, ($model->save())->id);
+            $this->addConnection($exportId, $id);
         }
 
         if($validators = Validator::getValidators($this->table, ValidatorMode::AFTER_IMPORT))
         {
-            foreach ($modelCollection ?? [] as $model)
+            foreach ($importCollection ?? [] as $collection)
             {
                 foreach($validators as $validator)
                 {
-                    call_user_func_array($validator, [$model, $this]);
+                    call_user_func_array($validator, [$collection, $this]);
                 }
             }
         }
