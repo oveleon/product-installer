@@ -42,6 +42,7 @@ class Validator
     {
         // File
         self::addValidator(FileValidator::getTrigger(), [FileValidator::class, 'createFile']);
+        // ToDo: Add file validator (AFTER_IMPORT) to detect dot-files from archive and create them
 
         // Page
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'selectRootPage']);
