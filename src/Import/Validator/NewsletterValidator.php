@@ -27,7 +27,7 @@ class NewsletterValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship with the parent element.
+     * Handles the relationship with the parent element.
      */
     static function setChannelConnection(array &$row, AbstractPromptImport $importer): ?array
     {

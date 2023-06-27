@@ -2,6 +2,8 @@
 
 namespace Oveleon\ProductInstaller\Util;
 
+use Contao\ArticleModel;
+use Contao\PageModel;
 use Model\Collection;
 
 /**
@@ -24,17 +26,30 @@ class PageUtil
     static private ?Collection $articleCollection = null;
     static private ?Collection $pageCollection    = null;
 
-    static private array $pagesStructured = [];
-    static private array $pagesFlat       = [];
-    static private array $articlesFlat    = [];
+    static private array $pagesStructured  = [];
+    static private array $pagesFlat        = [];
+    static private array $articlesFlat     = [];
 
     /**
      * Initialize PageUtil with a new collection of pages.
+     * If no pages have been passed, the entire page structure is loaded or fetched from the cache.
      */
-    public function setPages(Collection $pageModelCollection): self
+    public function setPages(?Collection $pageModelCollection = null, bool $useCache = true): self
     {
-        self::$pageCollection = $pageModelCollection;
-        self::$pagesFlat      = [];
+        // Skip if we already have a page collection, and it is not a manually set page collection
+        if(null === $pageModelCollection)
+        {
+            if(null !== self::$pageCollection && $useCache)
+            {
+                return $this;
+            }
+
+            // Load all pages
+            $pageModelCollection = PageModel::findAll(['order' => 'id ASC, sorting ASC']);
+        }
+
+        self::$pageCollection   = $pageModelCollection;
+        self::$pagesFlat        = [];
 
         $pages = array_combine(
             $pageModelCollection->fetchEach('id'),
@@ -80,7 +95,6 @@ class PageUtil
             $page['_level'] = $level;
             $flat[ $page['id'] ] = $page;
 
-
             if($children = ($page['_children'] ?? false))
             {
                 $oldLevel = $level;
@@ -109,8 +123,20 @@ class PageUtil
     /**
      * Initialize PageUtil with a new collection of articles.
      */
-    public function setArticles(Collection $articleModelCollection): self
+    public function setArticles(?Collection $articleModelCollection = null, bool $useCache = true): self
     {
+        // Skip if we already have an article collection, and it is not a manually set article collection
+        if(null === $articleModelCollection)
+        {
+            if(null !== self::$articleCollection && $useCache)
+            {
+                return $this;
+            }
+
+            // Load all articles
+            $articleModelCollection = ArticleModel::findAll();
+        }
+
         self::$articleCollection = $articleModelCollection;
 
         $pages = self::getPagesFlat();

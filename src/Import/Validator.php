@@ -94,7 +94,7 @@ class Validator
             ContentArticleValidator::class
         ], [
             [ContentValidator::class, 'setIncludes'],
-            [ContentValidator::class, 'setImageConnection'],
+            [ContentValidator::class, 'setFileConnection'],
             [ContentValidator::class, 'setContentIncludes', ValidatorMode::AFTER_IMPORT],
         ]);
 
@@ -177,7 +177,7 @@ class Validator
 
                         self::addValidator(
                             $validator::getTrigger(),
-                            fn(Model $model, AbstractPromptImport $importer) => call_user_func_array([$collectionClass, $collectionFnName], [$model, $importer]),
+                            fn(array $modelRowCollection, AbstractPromptImport $importer) => call_user_func_array([$collectionClass, $collectionFnName], [$modelRowCollection, $importer]),
                             $validatorMode
                         );
 

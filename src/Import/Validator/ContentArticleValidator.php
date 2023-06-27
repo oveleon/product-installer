@@ -28,19 +28,17 @@ class ContentArticleValidator extends ContentValidator implements ValidatorInter
     }
 
     /**
-     * Treats the relationship with the parent element.
+     * Handles the relationship with the parent element.
      */
     static function setArticleConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');
-        $pages      = PageModel::findAll(['order' => 'id ASC, sorting ASC']);
-        $articles   = ArticleModel::findAll();
 
         /** @var PageUtil $pageUtil */
         $values = System::getContainer()
             ->get("Oveleon\ProductInstaller\Util\PageUtil")
-            ->setPages($pages)
-            ->setArticles($articles)
+            ->setPages()
+            ->setArticles()
             ->getArticleSelectable();
 
         $articleStructure = $importer->getArchiveContentByFilename(ArticleModel::getTable(), [

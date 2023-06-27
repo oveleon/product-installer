@@ -25,7 +25,7 @@ class EventValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship with the parent element.
+     * Handles the relationship with the parent element.
      */
     static function setEventArchiveConnection(array &$row, AbstractPromptImport $importer): ?array
     {

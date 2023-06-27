@@ -25,7 +25,7 @@ class NewsValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship with the parent element.
+     * Handles the relationship with the parent element.
      */
     static function setNewsArchiveConnection(array &$row, AbstractPromptImport $importer): ?array
     {

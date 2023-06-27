@@ -26,7 +26,7 @@ class ContentNewsValidator extends ContentValidator implements ValidatorInterfac
     }
 
     /**
-     * Treats the relationship with the parent element.
+     * Handles the relationship with the parent element.
      */
     static function setNewsConnection(array &$row, AbstractPromptImport $importer): ?array
     {

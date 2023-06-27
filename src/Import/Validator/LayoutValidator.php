@@ -25,7 +25,7 @@ class LayoutValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship with the parent element.
+     * Handles the relationship with the parent element.
      */
     static function setThemeConnection(array &$row, AbstractPromptImport $importer): ?array
     {

@@ -20,7 +20,7 @@ use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 abstract class ContentValidator implements ValidatorInterface
 {
     /**
-     * Treats the relationship between content elements and its references except the relationship between content
+     * Handles the relationship between content elements and its references except the relationship between content
      * elements among themselves.
      *
      * @category BEFORE_IMPORT
@@ -145,98 +145,181 @@ abstract class ContentValidator implements ValidatorInterface
 
         return null;
     }
+
     /**
-     * Treats with images (UUIDs) in content elements.
+     * Handles single files (singleSRC, posterSRC) in content elements and cleans up fields which should not be set.
      *
      * @category BEFORE_IMPORT
      */
-    static function setImageConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function setFileConnection(array &$row, AbstractPromptImport $importer): ?array
     {
-        if($row['singleSRC'])
+        $connectionField = null;
+
+        // Method to clean up the rows to the essential fields
+        $cleaner = static function(?array $keepFields = null) use (&$row): void
         {
-            $source     = StringUtil::binToUuid($row['singleSRC']);
-            $connection = 'singleSRC_connection';
-            $fieldName  = $connection . '_' . $row['id'];
+            $fields = ['singleSRC', 'posterSRC'];
 
-            // Check if we got a prompt response and should skip prompts of the same ID
-            if($importer->getFlashConnection($source, $connection))
+            // Remove all fields from row
+            if(null === $keepFields)
             {
-                return null;
+                foreach ($fields as $field)
+                {
+                    $row[$field] = null;
+                }
+            }else{
+                foreach (array_diff($fields, $keepFields) as $field)
+                {
+                    $row[$field] = null;
+                }
             }
+        };
 
-            if(
-                ($connectedUuid = $importer->getConnection($source, FilesModel::getTable())) ||
-                ($connectedFile = $importer->getPromptValue($fieldName))
-            )
+        switch($row['type'])
+        {
+            case 'accordionSingle':
+            case 'text':
+                if(!$row['addImage'])
+                {
+                    $cleaner();
+                    return null;
+                }else{
+                    $cleaner(['singleSRC']);
+                }
+
+                $connectionField = 'singleSRC';
+                break;
+
+            case 'hyperlink':
+                if(!$row['useImage'])
+                {
+                    $cleaner();
+                    return null;
+                }else{
+                    $cleaner(['singleSRC']);
+                }
+
+                $connectionField = 'singleSRC';
+                break;
+
+            case 'youtube':
+            case 'vimeo':
+                if(!$row['splashImage'])
+                {
+                    $cleaner();
+                    return null;
+                }else{
+                    $cleaner(['singleSRC']);
+                }
+
+                $connectionField = 'singleSRC';
+                break;
+
+            case 'player':
+                $cleaner(['posterSRC']);
+                $connectionField = 'posterSRC';
+                break;
+
+            case 'image':
+            case 'download':
+                $cleaner(['singleSRC']);
+                $connectionField = 'singleSRC';
+                break;
+
+            // Sometimes it happens that content element types have changed and thus a UUID still exists within the
+            // possible fields. In this case, these fields must be cleaned up.
+            default:
+                $cleaner();
+        }
+
+        // Skip if no connection field is set or the field is empty
+        if(!$connectionField || !$row[$connectionField])
+        {
+            return null;
+        }
+
+        $source = $row[$connectionField];
+        $connection = $connectionField. '_connection';
+        $fieldName  = $connection . '_' . $row['id'];
+
+        // Check if we got a prompt response and should skip prompts of the same ID
+        if($importer->getFlashConnection($source, $connection))
+        {
+            return null;
+        }
+
+        if(
+            ($connectedUuid = $importer->getConnection($source, FilesModel::getTable())) ||
+            ($connectedFile = $importer->getPromptValue($fieldName))
+        )
+        {
+            // get uuid by file
+            if($connectedFile ?? null)
             {
-                // get uuid by file
-                if($connectedFile ?? null)
+                if($file = FilesModel::findByPath($connectedFile))
                 {
-                    if($file = FilesModel::findByPath($connectedFile))
-                    {
-                        $connectedUuid = $file->uuid;
-                    }
+                    $connectedUuid = $file->uuid;
                 }
-                else
-                {
-                    $connectedUuid = StringUtil::uuidToBin($connectedUuid);
-                }
-
-                // Overwrite source
-                $row['singleSRC'] = $connectedUuid;
-
-                // Set connection
-                $importer->addConnection($source, StringUtil::binToUuid($connectedUuid), FilesModel::getTable());
             }
             else
             {
-                // Add a flash connection to display prompts for the same connections only once
-                $importer->addFlashConnection($source, 1, $connection);
+                $connectedUuid = StringUtil::uuidToBin($connectedUuid);
+            }
 
-                $translator = Controller::getContainer()->get('translator');
+            // Overwrite source
+            $row[$connectionField] = $connectedUuid;
 
-                // Try to get the original image from archive
-                if($fileStructure = $importer->getArchiveContentByFilename(FilesModel::getTable()))
+            // Set connection
+            $importer->addConnection($source, StringUtil::binToUuid($connectedUuid), FilesModel::getTable());
+        }
+        else
+        {
+            // Add a flash connection to display prompts for the same connections only once
+            $importer->addFlashConnection($source, 1, $connection);
+
+            $translator = Controller::getContainer()->get('translator');
+
+            // Try to get the original image from archive
+            if($fileStructure = $importer->getArchiveContentByFilename(FilesModel::getTable()))
+            {
+                $fileRows = \array_filter($fileStructure, function ($item) use ($row, $connectionField) {
+                    return $row[$connectionField] === $item['uuid'];
+                });
+
+                $images = '';
+
+                foreach ($fileRows ?? [] as $fileRow)
                 {
-                    $fileRows = \array_filter($fileStructure, function ($item) use ($row) {
-                        return StringUtil::binToUuid($row['singleSRC']) === StringUtil::binToUuid($item['uuid']);
-                    });
-
-                    $images = '';
-
-                    foreach ($fileRows ?? [] as $fileRow)
-                    {
-                        $imageContent  = $importer->getArchiveContentByFilename($fileRow['path'], null, false, false);
-                        $imageBase64   = 'data:image/' . $fileRow['extension'] . ';base64,' . base64_encode($imageContent);
-                        $images       .= sprintf('<img src="%s" alt="original"/>', $imageBase64);
-                    }
+                    $imageContent  = $importer->getArchiveContentByFilename($fileRow['path'], null, false, false);
+                    $imageBase64   = 'data:image/' . $fileRow['extension'] . ';base64,' . base64_encode($imageContent);
+                    $images       .= sprintf('<img src="%s" alt="original"/>', $imageBase64);
                 }
+            }
 
-                return [
-                    $fieldName => [
-                        $values ?? [],
-                        FormPromptType::FILE,
-                        [
-                            'class'       => 'w50',
-                            'popupTitle'  => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
-                            'label'       => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
-                            'description' => $translator->trans('setup.prompt.content.singleSRC.description', [], 'setup'),
-                            'explanation' => [
-                                'type'        => 'HTML',
-                                'description' => $translator->trans('setup.prompt.content.singleSRC.explanation', [], 'setup'),
-                                'content'     => $images ?? ''
-                            ]
+            return [
+                $fieldName => [
+                    $values ?? [],
+                    FormPromptType::FILE,
+                    [
+                        'class'       => 'w50',
+                        'popupTitle'  => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
+                        'label'       => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
+                        'description' => $translator->trans('setup.prompt.content.singleSRC.description', [], 'setup'),
+                        'explanation' => [
+                            'type'        => 'HTML',
+                            'description' => $translator->trans('setup.prompt.content.singleSRC.explanation', [], 'setup'),
+                            'content'     => $images ?? ''
                         ]
                     ]
-                ];
-            }
+                ]
+            ];
         }
 
         return null;
     }
 
     /**
-     * Treats the relationship between content elements among themselves.
+     * Handles the relationship between content elements among themselves.
      *
      * @category AFTER_IMPORT
      *
@@ -259,6 +342,4 @@ abstract class ContentValidator implements ValidatorInterface
             $model->save();
         }
     }
-
-
 }

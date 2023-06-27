@@ -7,8 +7,8 @@ use Contao\DataContainer;
 use Contao\DC_Folder;
 use Contao\DC_Table;
 use Contao\Model;
-
 use Contao\StringUtil;
+
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
@@ -166,6 +166,11 @@ class TableImport extends AbstractPromptImport
         }
 
         return $connectedValue;
+    }
+
+    public function log(): void
+    {
+        // ToDo: Log errors in the setup-lock-file and make them available in expert mode at the end.
     }
 
     /**
@@ -443,7 +448,16 @@ class TableImport extends AbstractPromptImport
             }
 
             // Save model and get new id
-            $id = ($model->save())->id;
+            try{
+                $id = ($model->save())->id;
+            }
+            catch (\Exception $e)
+            {
+                // Log errors
+                $catch = true;
+
+
+            }
 
             // Add original row and model to collection for validators in mode AFTER_IMPORT
             $importCollection[$id] = [$model, $importRow];

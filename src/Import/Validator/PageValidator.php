@@ -59,24 +59,21 @@ class PageValidator implements ValidatorInterface
                 ]
             ];
 
-            if($pages = PageModel::findAll(['order' => 'id ASC, sorting ASC']))
-            {
-                /** @var PageUtil $pageUtil */
-                $pageUtil = System::getContainer()
-                                ->get("Oveleon\ProductInstaller\Util\PageUtil")
-                                ->setPages($pages);
+            /** @var PageUtil $pageUtil */
+            $pageUtil = System::getContainer()
+                ->get("Oveleon\ProductInstaller\Util\PageUtil")
+                ->setPages();
 
-                foreach ($pageUtil->getPagesFlat() as $page)
-                {
-                    $values[] = [
-                        'value'  => $page['id'],
-                        'text'   => $page['title'],
-                        'class'  => $page['type'],
-                        'info'   => $page['id'],
-                        'group'  => 'page',
-                        'level'  => $page['_level']
-                    ];
-                }
+            foreach ($pageUtil->getPagesFlat() as $page)
+            {
+                $values[] = [
+                    'value'  => $page['id'],
+                    'text'   => $page['title'],
+                    'class'  => $page['type'],
+                    'info'   => $page['id'],
+                    'group'  => 'page',
+                    'level'  => $page['_level']
+                ];
             }
 
             return [
@@ -126,7 +123,7 @@ class PageValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship between a page and its layout.
+     * Handles the relationship between a page and its layout.
      *
      * @category BEFORE_IMPORT
      */
@@ -291,7 +288,7 @@ class PageValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship between a page and its layout after layouts are imported (set by self::setLayoutConnection).
+     * Handles the relationship between a page and its layout after layouts are imported (set by self::setLayoutConnection).
      *
      * @category AFTER_IMPORT
      *
@@ -324,7 +321,7 @@ class PageValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship with the field jumpTo / twoFactorJumpTo and connected pages.
+     * Handles the relationship with the field jumpTo / twoFactorJumpTo and connected pages.
      *
      * @category AFTER_IMPORT
      *

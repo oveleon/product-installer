@@ -54,6 +54,7 @@ class FileImport extends AbstractPromptImport
      */
     public function importFileByPath($filePath): ?FilesModel
     {
+        // ToDo: Allow empty files like .public
         if($content = $this->archiveUtil->getFileContent($this->getArchive(), $filePath))
         {
             $file = new File($filePath);

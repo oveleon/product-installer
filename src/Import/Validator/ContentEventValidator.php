@@ -25,7 +25,7 @@ class ContentEventValidator extends ContentValidator implements ValidatorInterfa
     }
 
     /**
-     * Treats the relationship with the parent element.
+     * Handles the relationship with the parent element.
      */
     static function setEventConnection(array &$row, AbstractPromptImport $importer): ?array
     {

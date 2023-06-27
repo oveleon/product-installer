@@ -25,7 +25,7 @@ class FormFieldValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship with the parent element.
+     * Handles the relationship with the parent element.
      */
     static function setFormConnection(array &$row, AbstractPromptImport $importer): ?array
     {

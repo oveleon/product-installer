@@ -17,7 +17,7 @@ class CollectionValidator
     use ValidatorTrait;
 
     /**
-     * Treats the connection to a redirect page.
+     * Handles the connection to a redirect page.
      */
     static function setJumpToPageConnection(array &$row, AbstractPromptImport $importer, string|Model $model): ?array
     {

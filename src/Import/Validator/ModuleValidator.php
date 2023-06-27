@@ -27,7 +27,7 @@ class ModuleValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship with the parent element.
+     * Handles the relationship with the parent element.
      */
     static function setThemeConnection(array &$row, AbstractPromptImport $importer): ?array
     {
@@ -50,7 +50,7 @@ class ModuleValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship with the field reg_jumpTo.
+     * Handles the relationship with the field reg_jumpTo.
      */
     static function setRegPageConnection(array &$row, AbstractPromptImport $importer): ?array
     {
@@ -63,7 +63,7 @@ class ModuleValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship with the field pages.
+     * Handles the relationship with the field pages.
      */
     static function setPagesConnection(array &$row, AbstractPromptImport $importer): ?array
     {
@@ -76,7 +76,7 @@ class ModuleValidator implements ValidatorInterface
     }
 
     /**
-     * Treats the relationship with the field rootPage.
+     * Handles the relationship with the field rootPage.
      */
     static function setRootPageConnection(array &$row, AbstractPromptImport $importer): ?array
     {

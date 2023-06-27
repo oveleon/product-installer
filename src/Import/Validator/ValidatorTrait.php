@@ -23,14 +23,11 @@ trait ValidatorTrait
     {
         $translator = System::getContainer()->get('translator');
 
-        if($pages = PageModel::findAll(['order' => 'id ASC, sorting ASC']))
-        {
-            /** @var PageUtil $pageUtil */
-            $values = System::getContainer()
-                ->get("Oveleon\ProductInstaller\Util\PageUtil")
-                ->setPages($pages)
-                ->getPagesSelectable(true);
-        }
+        /** @var PageUtil $pageUtil */
+        $values = System::getContainer()
+            ->get("Oveleon\ProductInstaller\Util\PageUtil")
+            ->setPages()
+            ->getPagesSelectable(true);
 
         // Fetch missing structure from the archive to give the user an overview of which page from his own structure would fit
         // Try to deserialize the field value for multiple pages (e.g. field `pages`)
