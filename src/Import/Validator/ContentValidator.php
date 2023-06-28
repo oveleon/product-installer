@@ -23,7 +23,7 @@ abstract class ContentValidator implements ValidatorInterface
      * Handles the relationship between content elements and its references except the relationship between content
      * elements among themselves.
      *
-     * @category BEFORE_IMPORT
+     * @category BEFORE_IMPORT_ROW
      */
     static function setIncludes(array &$row, AbstractPromptImport $importer): ?array
     {
@@ -149,7 +149,7 @@ abstract class ContentValidator implements ValidatorInterface
     /**
      * Handles single files (singleSRC, posterSRC) in content elements and cleans up fields which should not be set.
      *
-     * @category BEFORE_IMPORT
+     * @category BEFORE_IMPORT_ROW
      */
     static function setFileConnection(array &$row, AbstractPromptImport $importer): ?array
     {
@@ -321,7 +321,7 @@ abstract class ContentValidator implements ValidatorInterface
     /**
      * Handles the relationship between content elements among themselves.
      *
-     * @category AFTER_IMPORT
+     * @category AFTER_IMPORT_ROW
      *
      * @param array<ContentModel, array> $collection
      */

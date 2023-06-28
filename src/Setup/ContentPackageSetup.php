@@ -186,7 +186,7 @@ class ContentPackageSetup
             // Check for non-database-assisted tables
             if(\in_array($tableName, $this->getFileTables()))
             {
-                if(($prompt = $this->fileImporter->importDirectoriesByManifest('content.manifest')) !== null)
+                if(($prompt = $this->fileImporter->importDirectoriesByManifest('content.manifest', ['files'])) !== null)
                 {
                     // Extend prompt response data
                     $prompt->setCustomResponseData([
@@ -225,7 +225,7 @@ class ContentPackageSetup
                 // Extend prompt response data
                 $prompt->setCustomResponseData([
                    'progress' => [
-                       'list'    => array_combine(
+                       'list' => array_combine(
                            $tablesToImport = array_diff($tableStructure, $skipTables),
                            array_map(
                                fn($table): string => $this->translator->trans('setup.tables.' . $table, [], 'setup'),

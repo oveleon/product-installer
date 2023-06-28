@@ -42,12 +42,12 @@ class Validator
     {
         // File
         self::addValidator(FileValidator::getTrigger(), [FileValidator::class, 'createFile']);
-        // ToDo: Add file validator (AFTER_IMPORT) to detect dot-files from archive and create them
+        self::addValidator(FileValidator::getTrigger(), [FileValidator::class, 'createDotFiles'], ValidatorMode::AFTER_IMPORT);
 
         // Page
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'selectRootPage']);
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setLayoutConnection']);
-        self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setPageJumpToConnection'], ValidatorMode::AFTER_IMPORT);
+        self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setPageJumpToConnection'], ValidatorMode::AFTER_IMPORT_ROW);
 
         // Layout
         self::addValidator(LayoutValidator::getTrigger(), [LayoutValidator::class, 'setThemeConnection']);
@@ -96,7 +96,7 @@ class Validator
         ], [
             [ContentValidator::class, 'setIncludes'],
             [ContentValidator::class, 'setFileConnection'],
-            [ContentValidator::class, 'setContentIncludes', ValidatorMode::AFTER_IMPORT],
+            [ContentValidator::class, 'setContentIncludes', ValidatorMode::AFTER_IMPORT_ROW],
         ]);
 
         // Connects jumpTo pages
@@ -112,7 +112,7 @@ class Validator
     /**
      * Returns an import validator.
      */
-    public static function getValidators($trigger = null, ValidatorMode $mode = ValidatorMode::BEFORE_IMPORT): ?array
+    public static function getValidators($trigger = null, ValidatorMode $mode = ValidatorMode::BEFORE_IMPORT_ROW): ?array
     {
         if(null === $trigger)
         {
@@ -125,7 +125,7 @@ class Validator
     /**
      * Adds an import validator.
      */
-    public static function addValidator($trigger, $fn, ValidatorMode $mode = ValidatorMode::BEFORE_IMPORT): void
+    public static function addValidator($trigger, $fn, ValidatorMode $mode = ValidatorMode::BEFORE_IMPORT_ROW): void
     {
         if(!\array_key_exists($mode->value, self::$validators ?? []))
         {
@@ -153,7 +153,7 @@ class Validator
             {
                 // Set default class ($collectionFnNames could be an array or a string, if a string is passed we use the CollectionValidator as class)
                 $collectionClass = CollectionValidator::class;
-                $validatorMode = ValidatorMode::BEFORE_IMPORT;
+                $validatorMode = ValidatorMode::BEFORE_IMPORT_ROW;
 
                 if(is_array($collectionFnName))
                 {
@@ -164,7 +164,7 @@ class Validator
 
                 switch ($validatorMode)
                 {
-                    case ValidatorMode::BEFORE_IMPORT:
+                    case ValidatorMode::BEFORE_IMPORT_ROW:
 
                         self::addValidator(
                             $validator::getTrigger(),
@@ -174,6 +174,7 @@ class Validator
 
                         break;
 
+                    case ValidatorMode::AFTER_IMPORT_ROW:
                     case ValidatorMode::AFTER_IMPORT:
 
                         self::addValidator(

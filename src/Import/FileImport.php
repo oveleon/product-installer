@@ -4,6 +4,8 @@ namespace Oveleon\ProductInstaller\Import;
 
 use Contao\File;
 use Contao\FilesModel;
+use Contao\System;
+use Symfony\Component\Filesystem\Filesystem;
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 
 /**
@@ -15,34 +17,51 @@ class FileImport extends AbstractPromptImport
 {
     /**
      * Import directory files, which are also present in the manifest file.
-     *
-     * ToDo: Validators and the ability to send prompts need to be developed.
      */
-    public function importDirectoriesByManifest(string $manifestFileName, array $skipDirectories = ['files']): ?AbstractPrompt
+    public function importDirectoriesByManifest(string $manifestFileName, ?array $skipDirectories = null, ?array $allowedFileExtensions = null): ?AbstractPrompt
     {
         // Get manifest from archive
         $manifest = $this->getArchiveContentByFilename($manifestFileName);
 
         if(is_array($manifest['directories']))
         {
-            foreach ($this->archiveUtil->getFileList($this->getArchive()) ?? [] as $filePath)
+            // Strip directories to skip
+            $directories = \array_filter($manifest['directories'], function ($directory) use ($skipDirectories) {
+                return !in_array($directory, $skipDirectories);
+            });
+
+            return $this->importDirectoriesFromArchive($directories, $allowedFileExtensions);
+        }
+
+        return null;
+    }
+
+    /**
+     * Import directory files, out of the archive from given directories.
+     */
+    public function importDirectoriesFromArchive(array $directories, ?array $allowedFileExtensions = null): ?AbstractPrompt
+    {
+        $root = System::getContainer()->getParameter('kernel.project_dir');
+        $fs = new Filesystem();
+
+        foreach ($this->archiveUtil->getFileList($this->getArchive()) ?? [] as $filePath)
+        {
+            $baseDirectory  = strtok($filePath, '/');
+            $validExtension = true;
+
+            if(null !== $allowedFileExtensions)
             {
-                $baseDirectory = strtok($filePath, '/');
+                $validExtension = in_array(pathinfo($filePath, PATHINFO_EXTENSION), $allowedFileExtensions);
+            }
 
-                // Check if it is a folder and the file name starts with the base directory of my exports and the directory should not be skipped
-                if(
-                     in_array($baseDirectory, $manifest['directories']) &&
-                    !in_array($baseDirectory, $skipDirectories)
-                )
-                {
-                    // ToDo: Parse validators and set prompt if needed
-                    // Fixme: Create file with Symfony to avoid overhead, e.g. dbafs / database
+            if(
+                in_array($baseDirectory, $directories) &&
+                $validExtension
+            )
+            {
+                // ToDo: Parse validators and set prompt if needed
 
-                    // Create file
-                    $archive = new File($filePath);
-                    $archive->write($this->archiveUtil->getFileContent($this->getArchive(), $filePath));
-                    $archive->close();
-                }
+                $fs->dumpFile($root . DIRECTORY_SEPARATOR . $filePath, $this->archiveUtil->getFileContent($this->getArchive(), $filePath));
             }
         }
 

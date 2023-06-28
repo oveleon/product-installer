@@ -34,7 +34,7 @@ class PageValidator implements ValidatorInterface
     /**
      * Handles the selection of a page root.
      *
-     * @category BEFORE_IMPORT
+     * @category BEFORE_IMPORT_ROW
      */
     static public function selectRootPage(array &$row, TableImport $importer): ?array
     {
@@ -125,7 +125,7 @@ class PageValidator implements ValidatorInterface
     /**
      * Handles the relationship between a page and its layout.
      *
-     * @category BEFORE_IMPORT
+     * @category BEFORE_IMPORT_ROW
      */
     static public function setLayoutConnection(array &$row, TableImport $importer): ?array
     {
@@ -153,7 +153,7 @@ class PageValidator implements ValidatorInterface
             $importer->addConnection($row['layout'], $row['id'], '_connectLayout');
 
             // Add persist layout validator
-            $importer->addLifecycleValidator('connectLayout_' . $row['layout'], LayoutModel::getTable(), [self::class, 'connectLayout'], ValidatorMode::AFTER_IMPORT);
+            $importer->addLifecycleValidator('connectLayout_' . $row['layout'], LayoutModel::getTable(), [self::class, 'connectLayout'], ValidatorMode::AFTER_IMPORT_ROW);
 
             return null;
         }
@@ -290,7 +290,7 @@ class PageValidator implements ValidatorInterface
     /**
      * Handles the relationship between a page and its layout after layouts are imported (set by self::setLayoutConnection).
      *
-     * @category AFTER_IMPORT
+     * @category AFTER_IMPORT_ROW
      *
      * @param array<PageModel, array> $collection
      */
@@ -323,7 +323,7 @@ class PageValidator implements ValidatorInterface
     /**
      * Handles the relationship with the field jumpTo / twoFactorJumpTo and connected pages.
      *
-     * @category AFTER_IMPORT
+     * @category AFTER_IMPORT_ROW
      *
      * @param array<PageModel, array> $collection
      */

@@ -455,8 +455,6 @@ class TableImport extends AbstractPromptImport
             {
                 // Log errors
                 $catch = true;
-
-
             }
 
             // Add original row and model to collection for validators in mode AFTER_IMPORT
@@ -466,7 +464,7 @@ class TableImport extends AbstractPromptImport
             $this->addConnection($exportId, $id);
         }
 
-        if($validators = Validator::getValidators($this->table, ValidatorMode::AFTER_IMPORT))
+        if($validators = Validator::getValidators($this->table, ValidatorMode::AFTER_IMPORT_ROW))
         {
             foreach ($importCollection ?? [] as $collection)
             {
@@ -474,6 +472,14 @@ class TableImport extends AbstractPromptImport
                 {
                     call_user_func_array($validator, [$collection, $this]);
                 }
+            }
+        }
+
+        if($validators = Validator::getValidators($this->table, ValidatorMode::AFTER_IMPORT))
+        {
+            foreach($validators as $validator)
+            {
+                call_user_func_array($validator, [$importCollection ?? [], $this]);
             }
         }
 

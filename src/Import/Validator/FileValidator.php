@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Import\Validator;
 
+use Contao\ContentModel;
 use Contao\FilesModel;
 use Contao\StringUtil;
 use Contao\System;
@@ -27,6 +28,8 @@ class FileValidator implements ValidatorInterface
 
     /**
      * Creates a file from row.
+     *
+     * @category AFTER_IMPORT_ROW
      */
     static function createFile(array &$row, AbstractPromptImport $importer): ?array
     {
@@ -47,5 +50,21 @@ class FileValidator implements ValidatorInterface
         $row['_skip'] = true;
 
         return null;
+    }
+
+    /**
+     * Creates the dot-files.
+     *
+     * @category AFTER_IMPORT
+     *
+     * @param array<array<ContentModel, array>> $collection
+     */
+    static function createDotFiles(array $collection, AbstractPromptImport $importer): void
+    {
+        $fileImporter = System::getContainer()->get('Oveleon\ProductInstaller\Import\FileImport');
+        $fileImporter->setArchive($importer->getArchive());
+
+        // Import dot files from the files directory
+        $fileImporter->importDirectoriesFromArchive(['files'], ['public']);
     }
 }
