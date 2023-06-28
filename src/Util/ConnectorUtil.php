@@ -15,6 +15,9 @@ use Symfony\Component\HttpClient\HttpClient;
  */
 class ConnectorUtil
 {
+    /**
+     * Sends a POST request via the given connector.
+     */
     public function post(AbstractLicenseConnector $connector, string $route, array $body = []): ResponseInterface
     {
         return (HttpClient::create())->request(
@@ -30,6 +33,9 @@ class ConnectorUtil
         );
     }
 
+    /**
+     * Returns a Connector object by its name.
+     */
     public function getConnectorByName(string $nane, bool $includeSteps = false): ?array
     {
         if($connectors = $this->getConnectors($includeSteps))
@@ -46,6 +52,9 @@ class ConnectorUtil
         return null;
     }
 
+    /**
+     * Returns all installed connectors.
+     */
     public function getConnectors(bool $includeSteps = true): ?array
     {
         $licenseConnectors = Controller::getContainer()->getParameter('product_installer.license_connectors');

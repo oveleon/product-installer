@@ -11,6 +11,6 @@ use Contao\Model;
  */
 interface ValidatorInterface
 {
-    static public function getTrigger(): string;
-    static public function getModel(): string|Model;
+    public static function getTrigger(): string;
+    public static function getModel(): string|Model;
 }

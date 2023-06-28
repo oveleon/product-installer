@@ -12,11 +12,17 @@ use Contao\ZipReader;
  */
 class ArchiveUtil
 {
+    /**
+     * Returns a ZipReader with passed scope.
+     */
     public function getArchive($archivePath): ZipReader
     {
         return new ZipReader(str_replace(Controller::getContainer()->getParameter('kernel.project_dir'), '', $archivePath));
     }
 
+    /**
+     * Returns the file content from an archive.
+     */
     public function getFileContent($archivePath, $fileName, $parseJSON = false): null|array|string
     {
         $file = null;
@@ -38,6 +44,9 @@ class ArchiveUtil
         return $file;
     }
 
+    /**
+     * Returns the entire file structure from an archive.
+     */
     public function getFileList(string $archivePath, string $fileExtension = null): ?array
     {
         // Read zip archive

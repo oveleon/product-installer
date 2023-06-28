@@ -450,18 +450,18 @@ class TableImport extends AbstractPromptImport
             // Save model and get new id
             try{
                 $id = ($model->save())->id;
+
+                // Add original row and model to collection for validators in mode AFTER_IMPORT
+                $importCollection[$id] = [$model, $importRow];
+
+                // Add connection
+                $this->addConnection($exportId, $id);
             }
             catch (\Exception $e)
             {
                 // Log errors
                 $catch = true;
             }
-
-            // Add original row and model to collection for validators in mode AFTER_IMPORT
-            $importCollection[$id] = [$model, $importRow];
-
-            // Add connection
-            $this->addConnection($exportId, $id);
         }
 
         if($validators = Validator::getValidators($this->table, ValidatorMode::AFTER_IMPORT_ROW))

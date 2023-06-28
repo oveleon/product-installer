@@ -282,6 +282,8 @@ class ContentPackageSetup
             'tl_image_size_item',
             'tl_user_group',
             'tl_member_group',
+            'tl_user',
+            'tl_member',
             'tl_faq_category',
             'tl_faq',
             'tl_news_archive',
@@ -342,6 +344,9 @@ class ContentPackageSetup
         return array_merge($tableOrder, $archiveTablesOnTop);
     }
 
+    /**
+     * Returns tables of type file, which are handled differently during import.
+     */
     public function getFileTables(): array
     {
         return [

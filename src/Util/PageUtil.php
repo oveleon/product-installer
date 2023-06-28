@@ -122,6 +122,7 @@ class PageUtil
 
     /**
      * Initialize PageUtil with a new collection of articles.
+     * If no articles have been passed, the entire article structure is loaded or fetched from the cache.
      */
     public function setArticles(?Collection $articleModelCollection = null, bool $useCache = true): self
     {

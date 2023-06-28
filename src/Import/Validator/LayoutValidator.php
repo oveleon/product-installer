@@ -14,12 +14,12 @@ use Oveleon\ProductInstaller\Import\AbstractPromptImport;
  */
 class LayoutValidator implements ValidatorInterface
 {
-    static public function getTrigger(): string
+    public static function getTrigger(): string
     {
         return LayoutModel::getTable();
     }
 
-    static public function getModel(): string
+    public static function getModel(): string
     {
         return LayoutModel::class;
     }
@@ -27,7 +27,7 @@ class LayoutValidator implements ValidatorInterface
     /**
      * Handles the relationship with the parent element.
      */
-    static function setThemeConnection(array &$row, AbstractPromptImport $importer): ?array
+    public static function setThemeConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');
 
@@ -45,5 +45,13 @@ class LayoutValidator implements ValidatorInterface
                 'content'     => $themeStructure ?? []
             ]
         ]);
+    }
+
+    /**
+     * Handles the relationship with file-connection for the field `external` and ´externalJs`.
+     */
+    public static function setExternalFileConnection(array &$row, AbstractPromptImport $importer): ?array
+    {
+        // ToDo: Handle multiple file-connections (serialized).
     }
 }

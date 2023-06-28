@@ -51,6 +51,7 @@ class Validator
 
         // Layout
         self::addValidator(LayoutValidator::getTrigger(), [LayoutValidator::class, 'setThemeConnection']);
+        self::addValidator(LayoutValidator::getTrigger(), [LayoutValidator::class, 'setExternalFileConnection']);
 
         // Module
         self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setThemeConnection']);

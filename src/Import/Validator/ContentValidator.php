@@ -5,10 +5,8 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 use Contao\ArticleModel;
 use Contao\ContentModel;
 use Contao\Controller;
-use Contao\FilesModel;
 use Contao\FormModel;
 use Contao\ModuleModel;
-use Contao\StringUtil;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 
@@ -19,61 +17,73 @@ use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
  */
 abstract class ContentValidator implements ValidatorInterface
 {
+    use ValidatorTrait;
+
+    public static function getTrigger(): string
+    {
+        return ContentModel::getTable();
+    }
+
+    public static function getModel(): string
+    {
+        return ContentModel::class;
+    }
+
     /**
      * Handles the relationship between content elements and its references except the relationship between content
      * elements among themselves.
      *
      * @category BEFORE_IMPORT_ROW
      */
-    static function setIncludes(array &$row, AbstractPromptImport $importer): ?array
+    public static function setIncludes(array &$row, AbstractPromptImport $importer): ?array
     {
         switch($row['type'])
         {
             case 'article':
-                $connectorField = 'articleAlias';
-                $connectorModel = ArticleModel::class;
+                $connectionField = 'articleAlias';
+                $connectionModel = ArticleModel::class;
                 break;
 
             case 'form':
-                $connectorField = 'form';
-                $connectorModel = FormModel::class;
+                $connectionField = 'form';
+                $connectionModel = FormModel::class;
                 break;
 
             case 'module':
-                $connectorField = 'module';
-                $connectorModel = ModuleModel::class;
+                $connectionField = 'module';
+                $connectionModel = ModuleModel::class;
                 break;
 
             case 'teaser':
-                $connectorField = 'article';
-                $connectorModel = ArticleModel::class;
+                $connectionField = 'article';
+                $connectionModel = ArticleModel::class;
                 break;
 
             default:
                 return null;
         }
 
-        $skip = [];
-        $id = $row['id'];
-        $parentId = $row[ $connectorField ];
+        $skip     = [];
+        $id       = $row['id'];
+        $parentId = $row[ $connectionField ];
 
-        $connectorName = $connectorField . '_connection';
-        $connectorTable = $connectorModel::getTable();
-        $fieldName  = $connectorField . '_connection_' . $id;
+        $connectionName  = $connectionField . '_connection';
+        $connectionTable = $connectionModel::getTable();
+        $fieldName       = $connectionField . '_connection_' . $id;
 
         $translator = Controller::getContainer()->get('translator');
 
         // Skip if we find a connection
-        if(($connectedId = $importer->getConnection($parentId, $connectorTable)) !== null)
+        if(($connectedId = $importer->getConnection($parentId, $connectionTable)) !== null)
         {
             // Set connection
-            $row[ $connectorField ] = $connectedId;
+            $row[ $connectionField ] = $connectedId;
 
             return null;
         }
 
         // Check if we got a prompt response and should skip prompts of the same ID
-        if($importer->getFlashConnection($parentId, $connectorName))
+        if($importer->getFlashConnection($parentId, $connectionName))
         {
             $skip[] = $parentId;
         }
@@ -82,10 +92,10 @@ abstract class ContentValidator implements ValidatorInterface
         if($connectedId = (int) $importer->getPromptValue($fieldName))
         {
             // Set connection
-            $row[ $connectorField ] = $connectedId;
+            $row[ $connectionField ] = $connectedId;
 
             // Add id connection for child row
-            $importer->addConnection($parentId, $connectedId, $connectorTable);
+            $importer->addConnection($parentId, $connectedId, $connectionTable);
         }
         else
         {
@@ -95,9 +105,9 @@ abstract class ContentValidator implements ValidatorInterface
             }
 
             // Add a flash connection to display prompts for the same connections only once
-            $importer->addFlashConnection($parentId, $id, $connectorName);
+            $importer->addFlashConnection($parentId, $id, $connectionName);
 
-            if($records = $connectorModel::findAll())
+            if($records = $connectionModel::findAll())
             {
                 foreach ($records as $record)
                 {
@@ -119,7 +129,7 @@ abstract class ContentValidator implements ValidatorInterface
             }
 
             // Try to get missing record
-            $parentStructure = $importer->getArchiveContentByFilename($connectorTable, [
+            $parentStructure = $importer->getArchiveContentByFilename($connectionTable, [
                 'value' => $parentId,
                 'field' => 'id'
             ]);
@@ -130,11 +140,11 @@ abstract class ContentValidator implements ValidatorInterface
                     FormPromptType::SELECT,
                     [
                         'class'       => 'w50',
-                        'label'       => $translator->trans('setup.prompt.content.content.includes.' . $connectorField . '.title', [], 'setup'),
-                        'description' => $translator->trans('setup.prompt.content.content.includes.' . $connectorField . '.description', [], 'setup'),
+                        'label'       => $translator->trans('setup.prompt.content.content.includes.' . $connectionField . '.title', [], 'setup'),
+                        'description' => $translator->trans('setup.prompt.content.content.includes.' . $connectionField . '.description', [], 'setup'),
                         'explanation' => [
                             'type'        => 'TABLE',
-                            'description' => $translator->trans('setup.prompt.content.content.includes.' . $connectorField . '.explanation', [], 'setup'),
+                            'description' => $translator->trans('setup.prompt.content.content.includes.' . $connectionField . '.explanation', [], 'setup'),
                             'content'     => $parentStructure ?? []
                         ]
                     ]
@@ -151,7 +161,7 @@ abstract class ContentValidator implements ValidatorInterface
      *
      * @category BEFORE_IMPORT_ROW
      */
-    static function setFileConnection(array &$row, AbstractPromptImport $importer): ?array
+    public static function setFileConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $connectionField = null;
 
@@ -238,84 +248,7 @@ abstract class ContentValidator implements ValidatorInterface
             return null;
         }
 
-        $source = $row[$connectionField];
-        $connection = $connectionField. '_connection';
-        $fieldName  = $connection . '_' . $row['id'];
-
-        // Check if we got a prompt response and should skip prompts of the same ID
-        if($importer->getFlashConnection($source, $connection))
-        {
-            return null;
-        }
-
-        if(
-            ($connectedUuid = $importer->getConnection($source, FilesModel::getTable())) ||
-            ($connectedFile = $importer->getPromptValue($fieldName))
-        )
-        {
-            // get uuid by file
-            if($connectedFile ?? null)
-            {
-                if($file = FilesModel::findByPath($connectedFile))
-                {
-                    $connectedUuid = $file->uuid;
-                }
-            }
-            else
-            {
-                $connectedUuid = StringUtil::uuidToBin($connectedUuid);
-            }
-
-            // Overwrite source
-            $row[$connectionField] = $connectedUuid;
-
-            // Set connection
-            $importer->addConnection($source, StringUtil::binToUuid($connectedUuid), FilesModel::getTable());
-        }
-        else
-        {
-            // Add a flash connection to display prompts for the same connections only once
-            $importer->addFlashConnection($source, 1, $connection);
-
-            $translator = Controller::getContainer()->get('translator');
-
-            // Try to get the original image from archive
-            if($fileStructure = $importer->getArchiveContentByFilename(FilesModel::getTable()))
-            {
-                $fileRows = \array_filter($fileStructure, function ($item) use ($row, $connectionField) {
-                    return $row[$connectionField] === $item['uuid'];
-                });
-
-                $images = '';
-
-                foreach ($fileRows ?? [] as $fileRow)
-                {
-                    $imageContent  = $importer->getArchiveContentByFilename($fileRow['path'], null, false, false);
-                    $imageBase64   = 'data:image/' . $fileRow['extension'] . ';base64,' . base64_encode($imageContent);
-                    $images       .= sprintf('<img src="%s" alt="original"/>', $imageBase64);
-                }
-            }
-
-            return [
-                $fieldName => [
-                    $values ?? [],
-                    FormPromptType::FILE,
-                    [
-                        'class'       => 'w50',
-                        'popupTitle'  => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
-                        'label'       => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
-                        'description' => $translator->trans('setup.prompt.content.singleSRC.description', [], 'setup'),
-                        'explanation' => [
-                            'type'        => 'HTML',
-                            'description' => $translator->trans('setup.prompt.content.singleSRC.explanation', [], 'setup'),
-                            'content'     => $images ?? ''
-                        ]
-                    ]
-                ]
-            ];
-        }
-
-        return null;
+        return self::setSingleFileConnection(self::getModel(), $connectionField, $row, $importer);
     }
 
     /**
@@ -325,7 +258,7 @@ abstract class ContentValidator implements ValidatorInterface
      *
      * @param array<ContentModel, array> $collection
      */
-    static function setContentIncludes(array $collection, AbstractPromptImport $importer): void
+    public static function setContentIncludes(array $collection, AbstractPromptImport $importer): void
     {
         /** @var ContentModel $model*/
         [$model, $row] = $collection;

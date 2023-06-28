@@ -2,11 +2,14 @@
 
 namespace Oveleon\ProductInstaller\Import\Validator;
 
+use Contao\Controller;
+use Contao\FilesModel;
 use Contao\Model;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
+use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Util\PageUtil;
 
 /**
@@ -75,5 +78,94 @@ trait ValidatorTrait
         }
 
         return $importer->useIdentifierConnectionLogic($row, $field, $sourceModel::getTable(), PageModel::getTable(), $promptOptions, $values ?? []);
+    }
+
+    /**
+     * Connects a single file with another one.
+     */
+    public static function setSingleFileConnection(string|Model $sourceModel, string $field, array &$row, AbstractPromptImport $importer, ?array $extendPromptOptions = null): ?array
+    {
+        $source     = $row[$field];
+        $connection = $field. '_connection';
+        $fieldName  = $connection . '_' . $sourceModel::getTable() . '_' . $row['id'];
+
+        // Check if we got a prompt response and should skip prompts of the same ID
+        if($importer->getFlashConnection($source, $connection))
+        {
+            return null;
+        }
+
+        if(
+            ($connectedUuid = $importer->getConnection($source, FilesModel::getTable())) ||
+            ($connectedFile = $importer->getPromptValue($fieldName))
+        )
+        {
+            // get uuid by file
+            if($connectedFile ?? null)
+            {
+                if($file = FilesModel::findByPath($connectedFile))
+                {
+                    $connectedUuid = $file->uuid;
+                }
+            }
+            else
+            {
+                $connectedUuid = StringUtil::uuidToBin($connectedUuid);
+            }
+
+            // Overwrite source
+            $row[$field] = $connectedUuid;
+
+            // Set connection
+            $importer->addConnection($source, StringUtil::binToUuid($connectedUuid), FilesModel::getTable());
+        }
+        else
+        {
+            // Add a flash connection to display prompts for the same connections only once
+            $importer->addFlashConnection($source, 1, $connection);
+
+            $translator = Controller::getContainer()->get('translator');
+
+            // Try to get the original image from archive
+            if($fileStructure = $importer->getArchiveContentByFilename(FilesModel::getTable()))
+            {
+                $fileRows = \array_filter($fileStructure, function ($item) use ($row, $field) {
+                    return $row[$field] === $item['uuid'];
+                });
+
+                $images = '';
+
+                foreach ($fileRows ?? [] as $fileRow)
+                {
+                    // ToDo: SVGs needs a addition for the filetype ($fileRow['extension'] . '+xml'); use mime_content_type to get MIME types by filename.
+
+                    $imageContent  = $importer->getArchiveContentByFilename($fileRow['path'], null, false, false);
+                    $imageBase64   = 'data:image/' . $fileRow['extension'] . ';base64,' . base64_encode($imageContent);
+                    $images       .= sprintf('<img src="%s" alt="original"/>', $imageBase64);
+                }
+            }
+
+            // ToDo: Extend prompt options
+
+            return [
+                $fieldName => [
+                    $values ?? [],
+                    FormPromptType::FILE,
+                    [
+                        'class'       => 'w50',
+                        'popupTitle'  => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
+                        'label'       => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
+                        'description' => $translator->trans('setup.prompt.content.singleSRC.description', [], 'setup'),
+                        'explanation' => [
+                            'type'        => 'HTML',
+                            'description' => $translator->trans('setup.prompt.content.singleSRC.explanation', [], 'setup'),
+                            'content'     => $images ?? ''
+                        ]
+                    ]
+                ]
+            ];
+        }
+
+        return null;
     }
 }
