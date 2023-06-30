@@ -5,6 +5,7 @@ import SelectField from "../Form/SelectField";
 import CheckboxField from "../Form/CheckboxField";
 import {i18n} from "../Language"
 import FileField from "../Form/FileField";
+import FieldsetField from "../Form/FieldsetField";
 
 /**
  * Prompt configurations.
@@ -64,6 +65,10 @@ export default class FormPrompt extends Prompt
                     field = new CheckboxField(fieldOptions)
                     break
 
+                case FormFieldType.FIELDSET:
+                    field = new FieldsetField(fieldOptions)
+                    break
+
                 default:
                     continue
             }
@@ -78,6 +83,10 @@ export default class FormPrompt extends Prompt
 
             for(const field of this.fields)
             {
+                // Skip fieldset fields
+                if(field instanceof FieldsetField)
+                    continue
+
                 collection[field.name] = field.getValue();
             }
 

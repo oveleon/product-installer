@@ -9,10 +9,10 @@ export type SelectFieldConfig = FormFieldConfig & {
     options?: {
         required: boolean
         multiple: boolean
-        placeholder: string,
-        default: string[],
-        optgroupField: string,
-        optgroups: [],
+        placeholder: string
+        default: string[]
+        optgroupField: string
+        optgroups: []
         sortField: []
     }
 }

@@ -10,7 +10,8 @@ export enum FormFieldType {
     TEXT = 'text',
     FILE = 'file',
     SELECT = 'select',
-    CHECKBOX = 'checkbox'
+    CHECKBOX = 'checkbox',
+    FIELDSET = 'fieldset'
 }
 
 export type FormFieldConfig = {

@@ -9,7 +9,9 @@ setup:
         tl_image_size_item:             'Media-Queries'
         tl_module:                      'Modules'
         tl_layout:                      'Layouts'
+        tl_user:                        'User'
         tl_user_group:                  'User groups'
+        tl_member:                      'Member'
         tl_member_group:                'Member groups'
         tl_faq_category:                'FAQ categories'
         tl_faq:                         'FAQs'
@@ -125,6 +127,16 @@ setup:
                 label:                  'Layout → Theme'
                 description:            'One or more layouts could not be assigned to a theme. Your selection is applied to all other layouts that reference the same theme.'
                 explanation:            'When importing one or more layouts, the corresponding theme could not be found. Please select a theme from your Contao instance to create a link between these layouts and a theme.<br/><br/><b>The following theme was not imported and needs an alternative:</b>'
+            external:
+                label:                  'Layout → External style sheets'
+                description:            'One or more external style sheets could not be resolved within the layout. Your selection will be applied to all other layouts that reference the same external stylesheets.'
+                explanation:            'When importing one or more layouts, the corresponding external stylesheets could not be found. Please select the stylesheets to be included from your Contao instance to create a connection.'
+            externalJs:
+                label:                  'Layout → External JavaScripts'
+                description:            'One or more external JavaScripts could not be resolved within the layout. Your selection will be applied to all further layouts that reference the same external JavaScripts.'
+                explanation:            'When importing one or more layouts, the corresponding external JavaScripts could not be found. Please select the JavaScripts to be included from your Contao instance to create a link.'
+            modules:
+                fieldset: 'Layout → Modules'
         module:
             jumpTo:
                 label:                  'Module Forwarding → Page'

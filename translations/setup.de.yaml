@@ -9,7 +9,9 @@ setup:
         tl_image_size_item:             'Media-Queries'
         tl_module:                      'Module'
         tl_layout:                      'Layouts'
+        tl_user:                        'Benutzer'
         tl_user_group:                  'Benutzergruppen'
+        tl_member:                      'Mitglieder'
         tl_member_group:                'Mitgliedergruppen'
         tl_faq_category:                'FAQ-Kategorien'
         tl_faq:                         'FAQs'
@@ -125,6 +127,16 @@ setup:
                 label:                  'Layout → Theme'
                 description:            'Ein oder mehrere Layouts konnten keinem Theme zugeordnet werden. Ihre Auswahl wird für alle weiteren Layouts, welche auf das selbe Theme referenzieren, übernommen.'
                 explanation:            'Beim Importieren eines oder mehrerer Layouts konnte das zugehörige Theme nicht gefunden werden. Wählen Sie bitte ein Theme aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Layouts und einem Theme herzustellen.<br/><br/><b>Folgendes Theme wurde nicht importiert und benötigt eine Alternative:</b>'
+            external:
+                label:                  'Layout → Externe Stylesheets'
+                description:            'Ein oder mehrere externe Stylesheets konnten innerhalb des Layouts nicht aufgelöst werden. Ihre Auswahl wird für alle weiteren Layouts, welche auf die selben externen Stylesheets referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Layouts konnten die zugehörigen externen Stylesheets nicht gefunden werden. Wählen Sie bitte die einzubindenen Stylesheets aus Ihrer Contao-Instanz, um eine Verknüpfung herzustellen.'
+            externalJs:
+                label:                  'Layout → Externe JavaScripts'
+                description:            'Ein oder mehrere externe JavaScripts konnten innerhalb des Layouts nicht aufgelöst werden. Ihre Auswahl wird für alle weiteren Layouts, welche auf die selben externen JavaScripts referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Layouts konnten die zugehörigen externen JavaScripts nicht gefunden werden. Wählen Sie bitte die einzubindenen JavaScripts aus Ihrer Contao-Instanz, um eine Verknüpfung herzustellen.'
+            modules:
+                fieldset:               'Layout → Modules'
         module:
             jumpTo:
                 label:                  'Modul Weiterleitung → Seite'

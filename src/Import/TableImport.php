@@ -6,6 +6,7 @@ use Contao\Controller;
 use Contao\DataContainer;
 use Contao\DC_Folder;
 use Contao\DC_Table;
+use Contao\FilesModel;
 use Contao\Model;
 use Contao\StringUtil;
 
@@ -612,7 +613,10 @@ class TableImport extends AbstractPromptImport
     }
 
     /**
-     * Create new connections between two tables, overwrite the field and handle prompts, should they be necessary.
+     * Create new connections between two tables, overwrite the field value and handle prompts, should they be necessary.
+     * The logic can be used for most use cases. A special feature of this method is that the prompt exposition can be
+     * passed as a closure. This saves performance because the records that are not imported are only retrieved when
+     * they are needed.
      */
     public function useIdentifierConnectionLogic(array &$row, string $field, string $tableA, string $tableB, array $promptOptions, ?array $selectableValues = null, bool $skipSameConnection = true): ?array
     {
@@ -633,7 +637,9 @@ class TableImport extends AbstractPromptImport
             return null;
         }
 
-        $isMultiple = \array_key_exists('multiple', $promptOptions);
+        $isMultiple = $promptOptions['multiple'] ?? false;
+        $isFile     = ($promptOptions['isFile'] ?? false) || $tableB === FilesModel::getTable();
+
         $connection = $aTable . '_' . $bTable . '_' . $field;
         $fieldName  = $field . '_' . $id;
 
@@ -648,43 +654,98 @@ class TableImport extends AbstractPromptImport
         {
             $values = StringUtil::deserialize($trigger, true);
             $connections = [];
+            $index = -1;
 
             foreach ($values as $singleValue)
             {
                 if($connectedId = $this->getConnection($singleValue, $bTable))
-                    $connections[] = $connectedId;
+                {
+                    ++$index;
+
+                    if($isFile)
+                    {
+                        $index = $connectedId;
+                        $connectedId = StringUtil::uuidToBin($connectedId);
+                    }
+
+                    $connections[$index] = $connectedId;
+                }
             }
 
             // Check if connections could be found, otherwise prompt
             if(!empty($connections))
             {
-                $multipleConnections = $connections;
+                if($isFile)
+                {
+                    // Do not store binary UUIDs as a connection.
+                    $connectionValue = serialize(array_keys($connections));
+                }
+
+                $multipleConnections = serialize(array_values($connections));
             }
         }
 
         if(
-            // Check if we have a connection through an existing table-connection
+            // 1. Check if we have a collection of connections from multiple values
+            ($isMultiple && ($connectedId = ($multipleConnections ?? null))) ||
+
+            // 2. Check if we have a connection through an existing table-connection
             ($connectedId = $this->getConnection($trigger, $bTable)) !== null ||
-            // Check if we have a connection through an existing table-field-connection
+
+            // 3. Check if we have a connection through an existing table-field-connection
             ($connectedId = $this->getConnection($trigger, $connection)) !== null ||
-            // Check if we have a connection received through a prompt
-            ($connectedId = $connectedPromptId = $this->getPromptValue($fieldName)) !== null ||
-            // Check if we have a collection of connections from multiple values
-            ($isMultiple && ($connectedId = ($multipleConnections ?? null)))
+
+            // 4. Check if we have a connection received through a prompt
+            ($connectedId = $isPrompt = $this->getPromptValue($fieldName)) !== null
         ){
-            // Check for serializes / multiple values by prompt
-            if($isMultiple && ($connectedPromptId ?? false))
+            // Check for multiple values retrieved by a prompt
+            if($isMultiple && ($isPrompt ?? false))
             {
-                $connectedId = serialize(explode(",", $connectedId));
-            }
-            // Check for serializes values from a multiple value
-            elseif($isMultiple)
-            {
+                $connectedId = explode(",", $connectedId);
+
+                // Files received via a prompt must be resolved by path
+                if($isFile)
+                {
+                    $fileCollection = [];
+
+                    foreach ($connectedId as $filePath)
+                    {
+                        if($file = FilesModel::findByPath($filePath))
+                        {
+                            $fileCollection[StringUtil::binToUuid($file->uuid)] = $file->uuid;
+                        }
+                    }
+
+                    // Do not store binary UUIDs as a connection.
+                    $connectionValue = serialize(array_keys($fileCollection));
+
+                    $connectedId = array_values($fileCollection);
+                }
+
                 $connectedId = serialize($connectedId);
             }
+            // Check for single file values retrieved by a prompt
+            elseif($isFile && !$isMultiple && ($isPrompt ?? false))
+            {
+                if($file = FilesModel::findByPath($connectedId))
+                {
+                    // Do not store binary UUIDs as a connection.
+                    $connectionValue = StringUtil::binToUuid($file->uuid);
 
-            // Add field connection
-            $this->addConnection($trigger, $connectedId, $connection);
+                    $connectedId = $file->uuid;
+                }
+            }
+            // Check for single file values retrieved by a prompt
+            elseif($isFile && !$isMultiple)
+            {
+                // Do not store binary UUIDs as a connection.
+                $connectionValue = $connectedId;
+
+                $connectedId = StringUtil::uuidToBin($connectedId);
+            }
+
+            // Add field connection; If an explicit $connectionValue variable is set, it will be used for the connection
+            $this->addConnection($trigger, $connectionValue ?? $connectedId, $connection);
 
             // Overwrite field value
             $row[$field] = $connectedId;
@@ -712,10 +773,19 @@ class TableImport extends AbstractPromptImport
                 }
             }
 
+            // Check if the explanation is callable and resolve it
+            if(($promptOptions['explanation'] ?? false) && is_callable($promptOptions['explanation']))
+            {
+                if($explanation = call_user_func_array($promptOptions['explanation'], []))
+                {
+                    $promptOptions['explanation'] = $explanation;
+                }
+            }
+
             return [
                 $fieldName => [
                     $values ?? [],
-                    FormPromptType::SELECT,
+                    $promptOptions['widget'] ?? FormPromptType::SELECT,
                     $promptOptions
                 ]
             ];
@@ -723,5 +793,4 @@ class TableImport extends AbstractPromptImport
 
         return null;
     }
-
 }

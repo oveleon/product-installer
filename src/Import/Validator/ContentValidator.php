@@ -5,6 +5,7 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 use Contao\ArticleModel;
 use Contao\ContentModel;
 use Contao\Controller;
+use Contao\FilesModel;
 use Contao\FormModel;
 use Contao\ModuleModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
@@ -17,8 +18,6 @@ use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
  */
 abstract class ContentValidator implements ValidatorInterface
 {
-    use ValidatorTrait;
-
     public static function getTrigger(): string
     {
         return ContentModel::getTable();
@@ -123,7 +122,8 @@ abstract class ContentValidator implements ValidatorInterface
                     $values[] = [
                         'value' => $record->id,
                         'text'  => $record?->name ?: ($record?->title ?: $record->headline),
-                        'info'  => $record->id
+                        'info'  => $record->id,
+                        'class' => $connectionField
                     ];
                 }
             }
@@ -248,7 +248,60 @@ abstract class ContentValidator implements ValidatorInterface
             return null;
         }
 
-        return self::setSingleFileConnection(self::getModel(), $connectionField, $row, $importer);
+        // Get translator
+        $translator = Controller::getContainer()->get('translator');
+
+        // Create explanation closure to save performance and retrieve images only if they needed
+        $explanation = static function () use ($row, $connectionField, $importer, $translator): ?array
+        {
+            // Try to resolve and display the non-imported file.
+            if($fileStructure = $importer->getArchiveContentByFilename(FilesModel::getTable()))
+            {
+                $fileRows = \array_filter($fileStructure, function ($item) use ($row, $connectionField) {
+                    return $row[$connectionField] === $item['uuid'];
+                });
+
+                $images = '';
+
+                foreach ($fileRows ?? [] as $fileRow)
+                {
+                    // Detect known mime types
+                    switch (strtolower($fileRow['extension']))
+                    {
+                        case 'svg':
+                            $mime = 'image/svg+xml';
+                            break;
+
+                        case 'jpg':
+                            $mime = 'image/jpeg';
+                            break;
+
+                        default:
+                            $mime = 'image/' . $fileRow['extension'];
+                    }
+
+                    $imageContent  = $importer->getArchiveContentByFilename($fileRow['path'], null, false, false);
+                    $imageBase64   = 'data:'. $mime . ';base64,' . base64_encode($imageContent);
+                    $images       .= sprintf('<img src="%s" alt="original"/>', $imageBase64);
+                }
+            }
+
+            return [
+                'type'        => 'HTML',
+                'description' => $translator->trans('setup.prompt.content.singleSRC.explanation', [], 'setup'),
+                'content'     => $images ?? ''
+            ];
+        };
+
+        return $importer->useIdentifierConnectionLogic($row, $connectionField, ContentModel::getTable(), FilesModel::getTable(), [
+            'class'       => 'w50',
+            'isFile'      => true,
+            'widget'      => FormPromptType::FILE,
+            'popupTitle'  => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
+            'label'       => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
+            'description' => $translator->trans('setup.prompt.content.singleSRC.description', [], 'setup'),
+            'explanation' => $explanation
+        ]);
     }
 
     /**

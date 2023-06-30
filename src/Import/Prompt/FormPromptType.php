@@ -13,4 +13,5 @@ enum FormPromptType: string
     case FILE = 'file';
     case SELECT = 'select';
     case CHECKBOX = 'checkbox';
+    case FIELDSET = 'fieldset';
 }

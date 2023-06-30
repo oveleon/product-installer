@@ -70,6 +70,6 @@ abstract class InstallerFile
     public function save(): void
     {
         $this->filesystem->touch($this->path);
-        $this->filesystem->dumpFile($this->path, json_encode($this->content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->filesystem->dumpFile($this->path, json_encode($this->content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_IGNORE));
     }
 }

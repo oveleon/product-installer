@@ -108,7 +108,7 @@ class PageValidator implements ValidatorInterface
                 // Add id connection for child tables
                 $importer->addConnection($row['id'], $rootPage);
             }*/
-
+            
             if($rootPage !== '0')
             {
                 // Overriding the page root check during import

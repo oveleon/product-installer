@@ -3,7 +3,9 @@ import {i18n} from "../Language"
 
 export type FileFieldConfig = FormFieldConfig & {
     options?: {
-        required: boolean,
+        required: boolean
+        multiple: boolean
+        allowedExtensions: boolean
         popupTitle: string
     }
 }
@@ -51,10 +53,18 @@ export default class FileField extends FormField
         this.element(`#ctrl_${this.options.name}`).addEventListener('click', (e) => {
             e.preventDefault()
 
+            let type = 'radio'
+            let extensions= this.options.options?.allowedExtensions ?? 'jpg,jpeg,gif,png,tif,tiff,bmp,svg,svgz'
+
+            if(this.options.options?.multiple)
+                type = 'checkbox'
+
+            // ToDo: Build url to handle already picked files (and send them via get?)
+
             Backend.openModalSelector({
                 "id":    "tl_listing",
                 "title": this.options.options?.popupTitle ?? i18n('form.field.files.browse'),
-                "url":    '/contao/picker?context=file&amp;extras%5BfieldType%5D=radio&amp;extras%5BfilesOnly%5D=1&amp;extras%5Bextensions%5D=jpg,jpeg,gif,png,tif,tiff,bmp,svg,svgz',
+                "url":    '/contao/picker?context=file&amp;extras%5BfieldType%5D=' + type + '&amp;extras%5BfilesOnly%5D=1&amp;extras%5Bextensions%5D=' + extensions,
                 "callback": (table, value) => {
 
                     const input = <HTMLInputElement> this.element(`#ctrl_${this.options.name}`)
