@@ -2,7 +2,6 @@
 
 namespace Oveleon\ProductInstaller\Import;
 
-use Contao\Model;
 use Oveleon\ProductInstaller\Import\Validator\ArticleValidator;
 use Oveleon\ProductInstaller\Import\Validator\CollectionValidator;
 use Oveleon\ProductInstaller\Import\Validator\ContentArticleValidator;

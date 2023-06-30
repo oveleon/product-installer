@@ -12,8 +12,6 @@ use Oveleon\ProductInstaller\Import\AbstractPromptImport;
  */
 class FaqCategoryValidator implements ValidatorInterface
 {
-    use ValidatorTrait;
-
     static public function getTrigger(): string
     {
         return FaqCategoryModel::getTable();
