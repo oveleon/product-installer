@@ -137,6 +137,9 @@ setup:
                 explanation:            'Beim Importieren eines oder mehrerer Layouts konnten die zugehörigen externen JavaScripts nicht gefunden werden. Wählen Sie bitte die einzubindenen JavaScripts aus Ihrer Contao-Instanz, um eine Verknüpfung herzustellen.'
             modules:
                 fieldset:               'Layout → Modules'
+                label:                  'Modul für die Spalte "%col%"'
+                description:            'Bitte verknüpfen Sie ein neues Modul.'
+                explanation:            'Beim Importieren eines oder mehrerer Layouts konnten die zugehörigen Module nicht gefunden werden. Wählen Sie bitte die einzubindenen Module aus Ihrer Contao-Instanz, um eine Verknüpfung herzustellen.'
         module:
             jumpTo:
                 label:                  'Modul Weiterleitung → Seite'

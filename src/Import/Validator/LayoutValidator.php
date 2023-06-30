@@ -67,10 +67,11 @@ class LayoutValidator implements ValidatorInterface
         }
 
         $translator = Controller::getContainer()->get('translator');
+        $originalModules = StringUtil::deserialize($row['modules'], true);
         $modules = [];
 
         // Create array with the module id as the key and clean duplicate article rows for same column
-        foreach (StringUtil::deserialize($row['modules'], true) as $module)
+        foreach ($originalModules as $module)
         {
             if($moduleId = $module['mod'])
                 $modules[ $moduleId ] = $module;
@@ -79,7 +80,7 @@ class LayoutValidator implements ValidatorInterface
         }
 
         // Filter module ids
-        $moduleIds = array_keys(array_filter($modules, fn ($key) => is_numeric($key), ARRAY_FILTER_USE_KEY));
+        $moduleCollection = array_filter($modules, fn ($key) => is_numeric($key), ARRAY_FILTER_USE_KEY);
 
         // Generate selectable values once to save performance
         $values = null;
@@ -101,12 +102,13 @@ class LayoutValidator implements ValidatorInterface
         $fieldCollection = null;
 
         // Check for each module individually and generate a field if necessary
-        foreach ($moduleIds as $moduleId)
+        foreach ($moduleCollection as $module)
         {
-            $fieldName   = 'modules_' . $row['id'] . '_' . $moduleId;
+            $moduleId  = $module['mod'];
+            $fieldName = 'modules_' . $row['id'] . '_' . $moduleId;
 
             if(
-                //($connectedId = $importer->getConnection($moduleId, ModuleModel::getTable())) ||
+                ($connectedId = $importer->getConnection($moduleId, ModuleModel::getTable())) ||
                 ($connectedId = $importer->getPromptValue($fieldName)) !== null
             )
             {
@@ -120,17 +122,8 @@ class LayoutValidator implements ValidatorInterface
                     FormPromptType::SELECT,
                     [
                         'class'         => 'w50',
-                        'label'         => $translator->trans('setup.prompt.layout.modules.label', [], 'setup'),
+                        'label'         => $translator->trans('setup.prompt.layout.modules.label', ['%col%' => $module['col']], 'setup'),
                         'description'   => $translator->trans('setup.prompt.layout.modules.description', [], 'setup'),
-                        'explanation'   => [
-                            'type'        => 'TABLE',
-                            'description' => $translator->trans('setup.prompt.layout.modules.explanation', [], 'setup'),
-                            'content'     => $moduleStructure ?? []
-                        ],
-                        'fieldset'      => [
-                            'legend'      => 'Modules',
-                            'group'       => 'modules' . $row['id']
-                        ]
                     ]
                 ];
             }
@@ -167,7 +160,7 @@ class LayoutValidator implements ValidatorInterface
                     'explanation'   => [
                         'type'        => 'TABLE',
                         'description' => $translator->trans('setup.prompt.layout.modules.explanation', [], 'setup'),
-                        'content'     => $moduleStructure ?? []
+                        'content'     => $originalModules
                     ],
                 ]
             ]] + $fieldCollection;

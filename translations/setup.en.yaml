@@ -136,7 +136,10 @@ setup:
                 description:            'One or more external JavaScripts could not be resolved within the layout. Your selection will be applied to all further layouts that reference the same external JavaScripts.'
                 explanation:            'When importing one or more layouts, the corresponding external JavaScripts could not be found. Please select the JavaScripts to be included from your Contao instance to create a link.'
             modules:
-                fieldset: 'Layout → Modules'
+                fieldset:               'Layout → Modules'
+                label:                  'Module for the column "%col%"'
+                description:            'Please link a new module.'
+                explanation:            'When importing one or more layouts, the corresponding modules could not be found. Please select the modules to be included from your Contao instance to create a link.'
         module:
             jumpTo:
                 label:                  'Module Forwarding → Page'
