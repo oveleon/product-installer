@@ -22,6 +22,7 @@ use Oveleon\ProductInstaller\Import\Validator\NewsletterRecipientValidator;
 use Oveleon\ProductInstaller\Import\Validator\NewsletterValidator;
 use Oveleon\ProductInstaller\Import\Validator\NewsValidator;
 use Oveleon\ProductInstaller\Import\Validator\PageValidator;
+use Oveleon\ProductInstaller\Import\Validator\ThemeValidator;
 use Oveleon\ProductInstaller\Import\Validator\ValidatorInterface;
 use Oveleon\ProductInstaller\Import\Validator\ValidatorMode;
 
@@ -42,6 +43,12 @@ class Validator
         // File
         self::addValidator(FileValidator::getTrigger(), [FileValidator::class, 'createFile']);
         self::addValidator(FileValidator::getTrigger(), [FileValidator::class, 'createDotFiles'], ValidatorMode::AFTER_IMPORT);
+
+        // Theme
+        self::addValidator(ThemeValidator::getTrigger(), [ThemeValidator::class, 'setFolderConnection']);
+        self::addValidator(ThemeValidator::getTrigger(), [ThemeValidator::class, 'setSkinFolderConnection']);
+        self::addValidator(ThemeValidator::getTrigger(), [ThemeValidator::class, 'setSkinSourceFilesConnection']);
+        self::addValidator(ThemeValidator::getTrigger(), [ThemeValidator::class, 'setScreenshotConnection']);
 
         // Page
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'selectRootPage']);

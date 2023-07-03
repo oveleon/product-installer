@@ -97,6 +97,16 @@ setup:
                 label:                  'Article → Page'
                 description:            'One or more articles could not be assigned to a page. Your selection will be applied to all other articles that reference the same page.'
                 explanation:            'When importing one or more articles, the corresponding page could not be found. Please select a page from your Contao instance to create a link between these articles and a page.<br/><br/><b>The following page was not imported and needs an alternative:</b>'
+        theme:
+            folders:
+                label:                  'Theme → Directories'
+                description:            'One or more folders could not be assigned to the theme. Your selection will be used for all other themes that reference the same folders.'
+            screenshot:
+                label:                  'Theme → Screenshot'
+                description:            'The selected screenshot could not be assigned to the theme. Your selection will be used for all other themes that reference the same screenshot.'
+            skinSourceFiles:
+                label:                  'Theme → Skin source files'
+                description:            'One or more skin source files could not be assigned to the theme. Your selection will be used for all other themes that reference the same files.'
         event:
             archive:
                 label:                  'Events → Event-Archive'
@@ -176,6 +186,9 @@ setup:
             root:
                 create:                 'Create new page'
                 extend:                 'Integrate into existing pages'
+            rootPage:
+                label:                  'Website root "%pageTitle%"'
+                description:            'Please select the page under which the new pages are to be inserted or have a new page start page created.'
             layout:
                 label:                  'Page → Layout'
                 description:            'One or more referenced layouts could not be assigned. Your selection will be applied to all other pages that reference the same layout.'

@@ -44,7 +44,9 @@ class PageValidator implements ValidatorInterface
             return null;
         }
 
-        if(null === ($rootPage = $importer->getPromptValue('rootPage')))
+        $fieldName = 'rootPage_' . $row['id'];
+
+        if(null === ($rootPage = $importer->getPromptValue($fieldName)))
         {
             $translator = Controller::getContainer()->get('translator');
 
@@ -77,10 +79,12 @@ class PageValidator implements ValidatorInterface
             }
 
             return [
-                'rootPage' => [
+                $fieldName => [
                     $values,
                     FormPromptType::SELECT,
                     [
+                        'label'             => $translator->trans('setup.prompt.page.rootPage.label', ['%pageTitle%' => $row['title']], 'setup'),
+                        'description'       => $translator->trans('setup.prompt.page.rootPage.description', [], 'setup'),
                         'class'   => 'pages',
                         'default' => ['0'],
                         'optgroupField' => 'group',
@@ -101,22 +105,22 @@ class PageValidator implements ValidatorInterface
         else
         {
             // If another root page was selected, the given root page won't be imported
-            /*if($rootPage !== '0')
+            if($rootPage !== '0')
             {
                 $row['_skip'] = true;
 
                 // Add id connection for child tables
                 $importer->addConnection($row['id'], $rootPage);
-            }*/
-            
-            if($rootPage !== '0')
+            }
+
+            /*if($rootPage !== '0')
             {
                 // Overriding the page root check during import
                 $row['_keep'] = true;
 
                 // Add id connection for child tables
                 $importer->addConnection(0, $rootPage);
-            }
+            }*/
         }
 
         return null;

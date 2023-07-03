@@ -97,6 +97,16 @@ setup:
                 label:                  'Artikel → Seite'
                 description:            'Ein oder mehrere Artikel konnten keiner Seite zugeordnet werden. Ihre Auswahl wird für alle weiteren Artikel, welche auf die selbe Seite referenzieren, übernommen.'
                 explanation:            'Beim Importieren eines oder mehrerer Artikel konnte die zugehörige Seite nicht gefunden werden. Wählen Sie bitte eine Seite aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Artikeln und einer Seite herzustellen.<br/><br/><b>Folgende Seite wurde nicht importiert und benötigt eine Alternative:</b>'
+        theme:
+            folders:
+                label:                  'Theme → Ordner'
+                description:            'Ein oder mehrere Ordner konnten dem Theme nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Themes, welche auf die selben Ordner referenzieren, übernommen.'
+            screenshot:
+                label:                  'Theme → Bildschirmfoto'
+                description:            'Das ausgewählte Bildschirmfoto konnten dem Theme nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Themes, welche auf das selbe Bildschirmfoto referenzieren, übernommen.'
+            skinSourceFiles:
+                label:                  'Theme → Skin Quelldateien'
+                description:            'Ein oder mehrere Skin-Quelldateien konnten dem Theme nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Themes, welche auf die selben Dateien referenzieren, übernommen.'
         event:
             archive:
                 label:                  'Events → Event-Archiv'
@@ -176,6 +186,9 @@ setup:
             root:
                 create:                 'Neue Seite anlegen'
                 extend:                 'In bestehender Seiten integrieren'
+            rootPage:
+                label:                  'Seitenstartpunkt "%pageTitle%"'
+                description:            'Bitte wählen Sie die Seite unter der die neuen Seiten eingefügt werden sollen oder lassen Sie einen neuen Seitenstartpubkt anlegen.'
             layout:
                 label:                  'Seite → Layout'
                 description:            'Ein oder mehrere referenzierte Layouts konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Seiten, welche auf das selbe Layout referenzieren, übernommen.'
