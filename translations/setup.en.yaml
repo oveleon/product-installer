@@ -190,6 +190,10 @@ setup:
                 label:                  'Newsletter Recipients → Newsletter Channel'
                 description:            'One or more newsletter recipient lists could not be assigned to a newsletter channel. Your selection will be applied to all other recipient lists that reference the same newsletter channel.'
                 explanation:            'When importing one or more newsletter recipient lists, the corresponding newsletter channel could not be found. Please select a newsletter channel from your Contao instance to create a link between these newsletters and a newsletter channel.<br/><br/><b>The following newsletter channel was not imported and needs an alternative:</b>'
+        collection:
+            rsce_file:
+                label:                  '%title% → Image'
+                description:            'One or more images could not be assigned, please select a new image.'
         page:
             root:
                 create:                 'Create new page'

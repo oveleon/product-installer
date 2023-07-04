@@ -69,8 +69,8 @@ class ModuleValidator implements ValidatorInterface
         $translator = Controller::getContainer()->get('translator');
 
         $promptOptions = [
-            'label'              => $translator->trans('setup.prompt.module.form.label', [], 'setup'),
-            'description'        => $translator->trans('setup.prompt.module.form.description', [], 'setup'),
+            'label'       => $translator->trans('setup.prompt.module.form.label', [], 'setup'),
+            'description' => $translator->trans('setup.prompt.module.form.description', [], 'setup'),
         ];
 
         return $importer->useIdentifierConnectionLogic($row, 'form', LayoutModel::getTable(), FormModel::getTable(), $promptOptions);

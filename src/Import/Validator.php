@@ -122,6 +122,17 @@ class Validator
         ], [
             'setJumpToPageConnection'
         ]);
+
+        // Connects handle rsce insert tags
+        self::addValidatorCollection([
+            ContentEventValidator::class,
+            ContentNewsValidator::class,
+            ContentArticleValidator::class,
+            ModuleValidator::class,
+        ], [
+            'setRsceSingleFileConnections',
+            'setRsceInsertTagConnections'
+        ]);
     }
 
     /**
