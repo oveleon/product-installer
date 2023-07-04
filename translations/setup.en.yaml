@@ -159,10 +159,18 @@ setup:
                 label:                  'Module → Pages'
                 description:            'One or more pages that were selected in the module could not be determined. Your selection will be applied to all other modules that reference the same pages.'
                 explanation:            'When importing one or more modules, pages that were assigned to the module could not be determined. Please select pages from your Contao instance to create a link between these pages and the module.<br/><br/><b>The following pages were not imported and need an alternative:</b>'
+            overviewPage:
+                label:                  'Module → Overview page'
+                description:            'One or more overview pages that were selected in the module could not be determined. Your selection will be applied to all other modules that reference the same pages.'
+                explanation:            'When importing one or more modules, overview pages that were associated with the module could not be determined. Please select a page from your Contao instance to create a link.<br/><br/><b>The following page was referenced in the module and need an alternative:</b>'
             theme:
                 label:                  'Module → Theme'
                 description:            'One or more modules could not be assigned to a theme. Your selection will be applied to all other modules that reference the same theme.'
                 explanation:            'When importing one or more modules, the corresponding theme could not be found. Please select a theme from your Contao instance to create a link between these modules and a theme.<br/><br/><b>The following theme was not imported and needs an alternative:</b>'
+            form:
+                label:                  'Module → Form'
+                description:            'One or more forms could not be assigned to the module. Your selection will be applied to all other modules that reference the same form.'
+                explanation:            'When importing one or more modules, the corresponding form could not be found. Please select a form from your Contao instance to create a link.<br/><br/><b>The following form was not imported and needs an alternative:</b>'
         news:
             archive:
                 label:                  'News → News-Archive'

@@ -1025,6 +1025,8 @@
   top: 100%;
   right: 0;
   min-width: 100px;
+  max-width: 300px;
+  width: max-content;
   margin-top: 10px;
   background: #fff;
   border-radius: 5px;

@@ -159,10 +159,18 @@ setup:
                 label:                  'Modul → Seiten'
                 description:            'Ein oder mehrere Seiten, welche im Modul ausgewählt waren konnten nicht ermittelt werden. Ihre Auswahl wird für alle weiteren Module, welche auf die selben Seiten referenzieren, übernommen.'
                 explanation:            'Beim Importieren eines oder mehrerer Module konnten Seiten, welche dem Modul zugeordnet waren nicht ermittelt werden. Wählen Sie bitte Seiten aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Seiten und dem Modul herzustellen.<br/><br/><b>Folgende Seiten wurden im Modul referenziert und benötigen eine Alternative:</b>'
+            overviewPage:
+                label:                  'Modul → Übersichtsseite'
+                description:            'Ein oder mehrere Übersichtsseiten, welche im Modul ausgewählt waren konnten nicht ermittelt werden. Ihre Auswahl wird für alle weiteren Module, welche auf die selben Seiten referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Module konnten Übersichtsseiten, welche dem Modul zugeordnet waren nicht ermittelt werden. Wählen Sie bitte eine Seite aus Ihrer Contao-Instanz, um eine Verknüpfung herzustellen.<br/><br/><b>Folgende Seite wurde im Modul referenziert und benötigen eine Alternative:</b>'
             theme:
                 label:                  'Modul → Theme'
                 description:            'Ein oder mehrere Module konnten keinem Theme zugeordnet werden. Ihre Auswahl wird für alle weiteren Module, welche auf das selbe Theme referenzieren, übernommen.'
                 explanation:            'Beim Importieren eines oder mehrerer Module konnte das zugehörige Theme nicht gefunden werden. Wählen Sie bitte ein Theme aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Modulen und einem Theme herzustellen.<br/><br/><b>Folgendes Theme wurde nicht importiert und benötigt eine Alternative:</b>'
+            form:
+                label:                  'Modul → Formular'
+                description:            'Ein oder mehrere Formulare konnten dem Modul nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Module, welche auf das selbe Formular referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Module, konnte das zugehörige Formular nicht gefunden werden. Wählen Sie bitte ein Formular aus Ihrer Contao-Instanz, um eine Verknüpfung herzustellen.<br/><br/><b>Folgendes Formular wurde nicht importiert und benötigt eine Alternative:</b>'
         news:
             archive:
                 label:                  'News → News-Archiv'

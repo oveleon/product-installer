@@ -4,9 +4,9 @@ With this extension, products from Oveleon can be registered, managed and instal
 #### ToDo
 - Docs
 - Validators:
+  - settings -> logo, font? 
   - user-group connections
   - imageUrl, url (insert tags and other connection)
-  - multiSRC (e.g. downloads)
   - rsce
   - more unknown...
 - Use Download Process for Packages in Manager Process

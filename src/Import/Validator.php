@@ -66,6 +66,10 @@ class Validator
         self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setRegPageConnection']);
         self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setRootPageConnection']);
         self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setPagesConnection']);
+        self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setOverviewPageConnection']);
+        self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setFormConnection']);
+        self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setArchiveConnections']);
+        self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setRootPageDependentModuleIncludes'], ValidatorMode::AFTER_IMPORT_ROW);
 
         // FAQ
         self::addValidator(FaqValidator::getTrigger(), [FaqValidator::class, 'setFaqCategoryConnection']);
@@ -115,7 +119,9 @@ class Validator
             NewsArchiveValidator::class,
             MemberGroupValidator::class,
             ModuleValidator::class,
-        ], ['setJumpToPageConnection']);
+        ], [
+            'setJumpToPageConnection'
+        ]);
     }
 
     /**
