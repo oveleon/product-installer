@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Import\Validator;
 
+use Contao\ArticleModel;
 use Contao\Controller;
 use Contao\FilesModel;
 use Contao\MemberGroupModel;
@@ -12,12 +13,12 @@ use Contao\System;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\TableImport;
-use Oveleon\ProductInstaller\InsertTag;
 use Oveleon\ProductInstaller\Util\InsertTagUtil;
 
 /**
  * Validator class for validating the various records during and after import.
- * Unlike other validators, the Collection Validator handles several models at once and thus provides one and the same functionality for all of them.
+ * Unlike other validators, the Collection Validator handles several models at once and thus provides one and the same
+ * functionality for all of them.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
@@ -51,16 +52,48 @@ class CollectionValidator
     }
 
     /**
-     * Handles the connection of insert tags withing custom content elements and modules.
+     * Handles the connection of insert tags withing selected elements and modules including custom elements.
      *
      * @category BEFORE_IMPORT_ROW
      */
-    static function setCustomElementInsertTagConnections(array &$row, TableImport $importer): ?array
+    static function setInsertTagConnections(array &$row, TableImport $importer, string|Model $model): ?array
     {
-        if(!str_starts_with($row['type'], 'rsce_') || null === $row['rsce_data'])
+        switch ($row['type'])
         {
-            return null;
+            // Skip types where we know they will never have insert tags to same performance
+            case 'accordionStop':
+            case 'sliderStop':
+            case 'article':
+            case 'alias':
+            case 'module':
+            case 'teaser':
+            case 'copyArticle':
+            case 'copyElement':
+            case 'wrapperStopContent':
+            case 'wrapperStop':
+            case 'tabStop':
+                return null;
         }
+
+        // Variable to remember if it is a custom element
+        $isCustomElement = false;
+
+        // Check for custom elements and use data instead of row
+        if(str_starts_with($row['type'], 'rsce_'))
+        {
+            if(null === $row['rsce_data'])
+            {
+                return null;
+            }
+
+            // Convert rsce data to array
+            $content = json_decode($row['rsce_data'], true);
+
+            // Set custom element flag
+            $isCustomElement = true;
+        }
+        // Otherwise use row
+        else $content = $row;
 
         // Variable to intercept non-connectable connections
         $notConnectable = null;
@@ -68,88 +101,8 @@ class CollectionValidator
         /** @var InsertTagUtil $insertTagUtil */
         $insertTagUtil = System::getContainer()->get('Oveleon\ProductInstaller\Util\InsertTagUtil');
 
-        // Convert rsce data to array
-        $content = json_decode($row['rsce_data'], true);
-
-        // Helper method to replace insert tags
-        $fnReplaceInsertTags = static function (string $string, array $insertTags) use (&$fnReplaceInsertTags, &$notConnectable, $importer)
-        {
-            foreach ($insertTags as $insertTag)
-            {
-                /** @var InsertTag $insertTag */
-                $value = $insertTag->getValue();
-
-                // Check for nested insert tags
-                if($value instanceof InsertTag)
-                {
-                    return $fnReplaceInsertTags($string, [$insertTag->getValue()]);
-                }
-
-                $search  = $insertTag->toString();
-                $replace = null;
-                $table   = $insertTag->getRelatedTable();
-
-                switch ($table)
-                {
-                    case PageModel::getTable():
-                        // Check linked pages
-                        if($insertTag->getCommand(true) === 'link')
-                        {
-                            // Check existing connections
-                            if($connectedId = $importer->getConnection($value, $table))
-                            {
-                                // Overwrite the insert tag value with the connected id
-                                $insertTag->setValue($connectedId);
-
-                                // Set replace with the new insert tag string
-                                $replace = $insertTag->toString();
-                            }
-                            // Set non-connectable id
-                            else
-                            {
-                                $notConnectable[] = [
-                                    'table' => $table,
-                                    'value' => $value
-                                ];
-                            }
-                        }
-
-                        break;
-                    // ToDo: Add more cases
-                }
-
-                if(null !== $replace)
-                {
-                    $string = str_replace($search, $replace, $string);
-                }
-            }
-
-            return $string;
-        };
-
-        // Helper method to detect insert tags recursive
-        $fnDetectInsertTags = static function (array $subset) use (&$fnDetectInsertTags, $fnReplaceInsertTags, $insertTagUtil, $importer)
-        {
-            foreach ($subset as $key => $value)
-            {
-                if(\is_array($value))
-                {
-                    $subset[$key] = $fnDetectInsertTags($value);
-                }
-                elseif($insertTagUtil->hasInsertTags($value))
-                {
-                    if($insertTags = $insertTagUtil->extractInsertTags($value))
-                    {
-                        $subset[$key] = $fnReplaceInsertTags($value, $insertTags);
-                    }
-                }
-            }
-
-            return $subset;
-        };
-
-        // detect / replace insert tags
-        $content = $fnDetectInsertTags($content);
+        // Detect / replace insert tags
+        $content = $insertTagUtil->detectInsertTagsAndReplace($content, $notConnectable, $row, $model, $importer);
 
         // Check for non-connectable files and create prompt fields
         if(null !== $notConnectable)
@@ -178,18 +131,33 @@ class CollectionValidator
                             }
                             else
                             {
-                                // Get page structure
-                                $values = System::getContainer()
-                                    ->get("Oveleon\ProductInstaller\Util\PageUtil")
-                                    ->setPages()
-                                    ->getPagesSelectable(true);
+                                $values = [];
+
+                                // Get selectable values by table
+                                if($missingConnection['table'] === PageModel::getTable())
+                                {
+                                    // Get page structure
+                                    $values = System::getContainer()
+                                        ->get("Oveleon\ProductInstaller\Util\PageUtil")
+                                        ->setPages()
+                                        ->getPagesSelectable(true);
+                                }
+                                elseif($missingConnection['table'] === ArticleModel::getTable())
+                                {
+                                    // Get page structure
+                                    $values = System::getContainer()
+                                        ->get("Oveleon\ProductInstaller\Util\PageUtil")
+                                        ->setPages()
+                                        ->setArticles()
+                                        ->getArticleSelectable(true);
+                                }
 
                                 // Set field
                                 $fields[$fieldName] = [
                                     $values,
                                     FormPromptType::SELECT,
                                     [
-                                        'label'         => $translator->trans('setup.prompt.collection.custom_page.label', ['%pageTitle%' => $row['type']], 'setup'),
+                                        'label'         => $translator->trans('setup.prompt.collection.custom_page.label', ['%title%' => $row['type']], 'setup'),
                                         'description'   => $translator->trans('setup.prompt.collection.custom_page.description', [], 'setup'),
                                         'class'         => 'pages',
                                     ]
@@ -205,7 +173,7 @@ class CollectionValidator
             if(null === $fields)
             {
                 // Validate connections again
-                $content = $fnDetectInsertTags($content);
+                $content = $insertTagUtil->detectInsertTagsAndReplace($content, $notConnectable, $row, $model, $importer);
             }
             else
             {
@@ -214,9 +182,86 @@ class CollectionValidator
         }
 
         // Overwrite with new data
-        $row['rsce_data'] = serialize($content);
+        if($isCustomElement)
+            $row['rsce_data'] = json_encode($content);
+        else
+            $row = $content;
 
         return null;
+    }
+
+    /**
+     * Handles the relationship between an insert tag and its connected field after connected table are imported (set
+     * by self::setInsertTagConnections).
+     *
+     * @category AFTER_IMPORT
+     *
+     * @param array<array<Model, array>> $importCollection
+     */
+    public static function connectInsertTag(array $importCollection, TableImport $importer): void
+    {
+        foreach ($importCollection as $collection)
+        {
+            [$model, $row] = $collection;
+
+            // Skip all that not includes in the _connectInsertTag-connection
+            if(!$updateInfo = $importer->getConnection($row['id'], '_connectInsertTag'))
+            {
+                continue;
+            }
+
+            // Remove the connection to validate only once
+            $importer->removeConnection($row['id'], '_connectInsertTag');
+
+            // Decode the connection information
+            $updateInfo = json_decode($updateInfo, true);
+
+            // The ID to be updated
+            $idBeforeImport = $updateInfo['id'];
+
+            // The model class to be updated
+            /** @var Model|string $modelClass */
+            $modelClass = $updateInfo['modelClass'];
+
+            // Try to get the new id
+            if(!$idAfterImport = $importer->getConnection($idBeforeImport, $modelClass::getTable()))
+            {
+                continue;
+            }
+
+            // Try to get the new imported model
+            /** @var Model $updateModel */
+            if(!$updateModel = $modelClass::findById($idAfterImport))
+            {
+                continue;
+            }
+
+            // Get model row, update insert tags and save
+            $row = $updateModel->row();
+
+            // Collect not connectable fields
+            $notConnectable = null;
+
+            // Collect the modified fields
+            $modifiedFields = null;
+
+            // Detect / replace insert tags
+            /** @var InsertTagUtil $insertTagUtil */
+            $row = System::getContainer()->get('Oveleon\ProductInstaller\Util\InsertTagUtil')
+                                         ->detectInsertTagsAndReplace($row, $notConnectable, $row, $modelClass, $importer, $modifiedFields);
+
+            // Update model
+            $updateModel->setRow($row);
+
+            // Mark fields as modified
+            foreach ($modifiedFields ?? [] as $modifiedField)
+            {
+                $updateModel->markModified($modifiedField);
+            }
+
+            // Save model
+            $updateModel->save();
+        }
     }
 
     /**

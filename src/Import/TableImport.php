@@ -97,12 +97,24 @@ class TableImport extends AbstractPromptImport
         // If no config is set, we know that all tables will be imported
         if(!$config = $this->setupLock->get('config'))
         {
+            // Return false, if the table was already imported
+            if($this->getState($table) === ImportStateType::FINISH->value)
+            {
+                return false;
+            }
+
             return true;
         }
 
         // Check if the table key exists and check if our table is set
         if(($tables = ($config['tables'] ?? null)) && \in_array($table, $tables))
         {
+            // Return false, if the table was already imported
+            if($this->getState($table) === ImportStateType::FINISH->value)
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -154,7 +166,7 @@ class TableImport extends AbstractPromptImport
     }
 
     /**
-     * Returns the value of a mapped field.
+     * Returns the value of a connected field.
      */
     public function getConnection(string|int $a, ?string $table = null, string $subScope = 'connections'): null|string|int
     {
@@ -167,6 +179,22 @@ class TableImport extends AbstractPromptImport
         }
 
         return $connectedValue;
+    }
+
+    /**
+     * Removes a connected field.
+     */
+    public function removeConnection(string|int $a, ?string $table = null, string $subScope = 'connections'): void
+    {
+        $table = $table ?? $this->table;
+
+        if($connections = $this->setupLock->get($subScope))
+        {
+            unset($connections[ $table ][ $a ]);
+
+            $this->setupLock->set($subScope, $connections);
+            $this->setupLock->save();
+        }
     }
 
     public function log(): void
@@ -460,7 +488,7 @@ class TableImport extends AbstractPromptImport
             }
             catch (\Exception $e)
             {
-                // Log errors
+                // ToDo: Log errors
                 $catch = true;
             }
         }

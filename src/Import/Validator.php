@@ -123,7 +123,7 @@ class Validator
             'setJumpToPageConnection'
         ]);
 
-        // Connects handle rsce insert tags
+        // Connects custom element insert tags and file connections
         self::addValidatorCollection([
             ContentEventValidator::class,
             ContentNewsValidator::class,
@@ -131,7 +131,7 @@ class Validator
             ModuleValidator::class,
         ], [
             'setCustomElementSingleFileConnections',
-            'setCustomElementInsertTagConnections'
+            'setInsertTagConnections'
         ]);
     }
 

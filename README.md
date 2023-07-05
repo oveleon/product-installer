@@ -2,7 +2,8 @@
 With this extension, products from Oveleon can be registered, managed and installed.
 
 #### Known import limitations
-- Insert tags within custom elements currently only support page references (`{link::*}})`.
+- The database update must be performed manually
+- Insert tags currently only support page (`{link::*}}`) and article (`{include_article::*}}`) references.
 - Currently only single file connections within custom elements are supported (`singleSRC`)
 
 #### ToDo
