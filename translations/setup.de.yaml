@@ -191,9 +191,12 @@ setup:
                 description:            'Ein oder mehrere Newsletter Empfängerlisten konnten keinem Newsletter-Channel zugeordnet werden. Ihre Auswahl wird für alle weiteren Empfängerlisten, welche auf den selbe Newsletter-Channel referenzieren, übernommen.'
                 explanation:            'Beim Importieren eines oder mehrerer Newsletter Empfängerlisten konnte der zugehörige Newsletter-Channel nicht gefunden werden. Wählen Sie bitte ein Newsletter-Channel aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Newsletter und einem Newsletter-Channel herzustellen.<br/><br/><b>Folgendes Newsletter-Channel wurde nicht importiert und benötigt eine Alternative:</b>'
         collection:
-            rsce_file:
+            custom_file:
                 label:                  '%title% → Bild'
                 description:            'Ein oder mehrere Bilder konnten nicht zugewiesen werden, bitte wählen Sie ein neues Bild.'
+            custom_page:
+                label:                  '%title% → Seite'
+                description:            'Ein oder mehrere Seiten konnten nicht zugewiesen werden, bitte wählen Sie eine neuee Seite.'
         page:
             root:
                 create:                 'Neue Seite anlegen'

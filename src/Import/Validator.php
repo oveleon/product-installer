@@ -130,8 +130,8 @@ class Validator
             ContentArticleValidator::class,
             ModuleValidator::class,
         ], [
-            'setRsceSingleFileConnections',
-            'setRsceInsertTagConnections'
+            'setCustomElementSingleFileConnections',
+            'setCustomElementInsertTagConnections'
         ]);
     }
 

@@ -6,10 +6,14 @@ use Contao\Controller;
 use Contao\FilesModel;
 use Contao\MemberGroupModel;
 use Contao\Model;
+use Contao\PageModel;
 use Contao\StringUtil;
+use Contao\System;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\TableImport;
+use Oveleon\ProductInstaller\InsertTag;
+use Oveleon\ProductInstaller\Util\InsertTagUtil;
 
 /**
  * Validator class for validating the various records during and after import.
@@ -23,6 +27,8 @@ class CollectionValidator
 
     /**
      * Handles the connection to a redirect page.
+     *
+     * @category BEFORE_IMPORT_ROW
      */
     static function setJumpToPageConnection(array &$row, AbstractPromptImport $importer, string|Model $model): ?array
     {
@@ -45,23 +51,180 @@ class CollectionValidator
     }
 
     /**
-     * Handles the connection of insert tags withing rsce content elements and modules.
+     * Handles the connection of insert tags withing custom content elements and modules.
+     *
+     * @category BEFORE_IMPORT_ROW
      */
-    static function setRsceInsertTagConnections(array &$row, AbstractPromptImport $importer, string|Model $model): ?array
+    static function setCustomElementInsertTagConnections(array &$row, TableImport $importer): ?array
     {
-        // ToDo: Handle insert tags within rsce elements
+        if(!str_starts_with($row['type'], 'rsce_') || null === $row['rsce_data'])
+        {
+            return null;
+        }
 
-        $test = '';
+        // Variable to intercept non-connectable connections
+        $notConnectable = null;
 
-        // Id 3657
+        /** @var InsertTagUtil $insertTagUtil */
+        $insertTagUtil = System::getContainer()->get('Oveleon\ProductInstaller\Util\InsertTagUtil');
+
+        // Convert rsce data to array
+        $content = json_decode($row['rsce_data'], true);
+
+        // Helper method to replace insert tags
+        $fnReplaceInsertTags = static function (string $string, array $insertTags) use (&$fnReplaceInsertTags, &$notConnectable, $importer)
+        {
+            foreach ($insertTags as $insertTag)
+            {
+                /** @var InsertTag $insertTag */
+                $value = $insertTag->getValue();
+
+                // Check for nested insert tags
+                if($value instanceof InsertTag)
+                {
+                    return $fnReplaceInsertTags($string, [$insertTag->getValue()]);
+                }
+
+                $search  = $insertTag->toString();
+                $replace = null;
+                $table   = $insertTag->getRelatedTable();
+
+                switch ($table)
+                {
+                    case PageModel::getTable():
+                        // Check linked pages
+                        if($insertTag->getCommand(true) === 'link')
+                        {
+                            // Check existing connections
+                            if($connectedId = $importer->getConnection($value, $table))
+                            {
+                                // Overwrite the insert tag value with the connected id
+                                $insertTag->setValue($connectedId);
+
+                                // Set replace with the new insert tag string
+                                $replace = $insertTag->toString();
+                            }
+                            // Set non-connectable id
+                            else
+                            {
+                                $notConnectable[] = [
+                                    'table' => $table,
+                                    'value' => $value
+                                ];
+                            }
+                        }
+
+                        break;
+                    // ToDo: Add more cases
+                }
+
+                if(null !== $replace)
+                {
+                    $string = str_replace($search, $replace, $string);
+                }
+            }
+
+            return $string;
+        };
+
+        // Helper method to detect insert tags recursive
+        $fnDetectInsertTags = static function (array $subset) use (&$fnDetectInsertTags, $fnReplaceInsertTags, $insertTagUtil, $importer)
+        {
+            foreach ($subset as $key => $value)
+            {
+                if(\is_array($value))
+                {
+                    $subset[$key] = $fnDetectInsertTags($value);
+                }
+                elseif($insertTagUtil->hasInsertTags($value))
+                {
+                    if($insertTags = $insertTagUtil->extractInsertTags($value))
+                    {
+                        $subset[$key] = $fnReplaceInsertTags($value, $insertTags);
+                    }
+                }
+            }
+
+            return $subset;
+        };
+
+        // detect / replace insert tags
+        $content = $fnDetectInsertTags($content);
+
+        // Check for non-connectable files and create prompt fields
+        if(null !== $notConnectable)
+        {
+            $translator = Controller::getContainer()->get('translator');
+            $fields = null;
+
+            foreach ($notConnectable as $missingConnection)
+            {
+                // Create unique field name
+                $fieldName = 'custom_' . $missingConnection['table'] . '_' . $missingConnection['value'];
+
+                // Create prompt fields once for each connection
+                if(!\array_key_exists($fieldName, $fields ?? []))
+                {
+                    // Detect type of fields and create field array
+                    switch ($missingConnection['table'])
+                    {
+                        case PageModel::getTable():
+
+                            // Check for a prompt response and make the connections when set
+                            if($connectedId = $importer->getPromptValue($fieldName))
+                            {
+                                // Save as new connection
+                                $importer->addConnection($missingConnection['value'], $connectedId, $missingConnection['table']);
+                            }
+                            else
+                            {
+                                // Get page structure
+                                $values = System::getContainer()
+                                    ->get("Oveleon\ProductInstaller\Util\PageUtil")
+                                    ->setPages()
+                                    ->getPagesSelectable(true);
+
+                                // Set field
+                                $fields[$fieldName] = [
+                                    $values,
+                                    FormPromptType::SELECT,
+                                    [
+                                        'label'         => $translator->trans('setup.prompt.collection.custom_page.label', ['%pageTitle%' => $row['type']], 'setup'),
+                                        'description'   => $translator->trans('setup.prompt.collection.custom_page.description', [], 'setup'),
+                                        'class'         => 'pages',
+                                    ]
+                                ];
+                            }
+
+                            break;
+                        // ToDo: Add fields for other cases
+                    }
+                }
+            }
+
+            if(null === $fields)
+            {
+                // Validate connections again
+                $content = $fnDetectInsertTags($content);
+            }
+            else
+            {
+                return $fields;
+            }
+        }
+
+        // Overwrite with new data
+        $row['rsce_data'] = serialize($content);
 
         return null;
     }
 
     /**
-     * Handles the connection of files withing rsce content elements and modules.
+     * Handles the connection of files withing custom content elements and modules.
+     *
+     * @category BEFORE_IMPORT_ROW
      */
-    static function setRsceSingleFileConnections(array &$row, TableImport $importer, string|Model $model): ?array
+    static function setCustomElementSingleFileConnections(array &$row, TableImport $importer): ?array
     {
         if(!str_starts_with($row['type'], 'rsce_') || null === $row['rsce_data'])
         {
@@ -164,11 +327,11 @@ class CollectionValidator
                         [],
                         FormPromptType::FILE,
                         [
-                            'label'       => $translator->trans('setup.prompt.collection.rsce_file.label', ['%title%' => $row['type']], 'setup'),
-                            'description' => $translator->trans('setup.prompt.collection.rsce_file.description', [], 'setup'),
+                            'label'       => $translator->trans('setup.prompt.collection.custom_file.label', ['%title%' => $row['type']], 'setup'),
+                            'description' => $translator->trans('setup.prompt.collection.custom_file.description', [], 'setup'),
                             'explanation' => [
                                 'type'        => 'HTML',
-                                'description' => $translator->trans('setup.prompt.collection.rsce_file.explanation', [], 'setup'),
+                                'description' => $translator->trans('setup.prompt.collection.custom_file.explanation', [], 'setup'),
                                 'content'     => $images ?? ''
                             ]
                         ]
