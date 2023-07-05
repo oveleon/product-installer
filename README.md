@@ -1,7 +1,7 @@
-<img src="./docs/logo.svg" width="100%">
-<center>
-  <small>With this extension, products from Oveleon can be registered, managed and installed.</small>
-</center>
+<img src="./docs/logo.svg" width="100%" alt="Product Installer">
+<p align="center">
+  <i>With this extension, products from Oveleon can be registered, managed and installed.</i>
+</p>
 
 #### Known import limitations
 - The database update must be performed manually
