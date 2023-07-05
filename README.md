@@ -1,4 +1,5 @@
-# Product installer
+<img src="./docs/logo.svg" width="100%">
+
 With this extension, products from Oveleon can be registered, managed and installed.
 
 #### Known import limitations
