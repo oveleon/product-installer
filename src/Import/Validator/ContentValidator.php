@@ -8,8 +8,10 @@ use Contao\Controller;
 use Contao\FilesModel;
 use Contao\FormModel;
 use Contao\ModuleModel;
+use Contao\ThemeModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
+use Oveleon\ProductInstaller\Import\TableImport;
 
 /**
  * Validator class for validating the content records during and after import.
@@ -161,7 +163,7 @@ abstract class ContentValidator implements ValidatorInterface
      *
      * @category BEFORE_IMPORT_ROW
      */
-    public static function setFileConnection(array &$row, AbstractPromptImport $importer): ?array
+    public static function setSingleFileConnection(array &$row, AbstractPromptImport $importer): ?array
     {
         $connectionField = null;
 
@@ -297,11 +299,70 @@ abstract class ContentValidator implements ValidatorInterface
             'class'       => 'w50',
             'isFile'      => true,
             'widget'      => FormPromptType::FILE,
-            'popupTitle'  => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
-            'label'       => $translator->trans('setup.prompt.content.singleSRC.title', [], 'setup'),
-            'description' => $translator->trans('setup.prompt.content.singleSRC.description', [], 'setup'),
+            'popupTitle'  => $translator->trans('setup.prompt.content.' . $connectionField . '.title', [], 'setup'),
+            'label'       => $translator->trans('setup.prompt.content.' . $connectionField . '.title', [], 'setup'),
+            'description' => $translator->trans('setup.prompt.content.' . $connectionField . '.description', [], 'setup'),
             'explanation' => $explanation
         ]);
+    }
+
+    /**
+     * Handles single files (playerSRC) in content elements.
+     *
+     * @category BEFORE_IMPORT_ROW
+     */
+    public static function setPlayerConnection(array &$row, AbstractPromptImport $importer): ?array
+    {
+        if($row['type'] !== 'player' || !$row['playerSRC'])
+        {
+            return null;
+        }
+
+        // Get translator
+        $translator = Controller::getContainer()->get('translator');
+
+        return $importer->useIdentifierConnectionLogic($row, 'playerSRC', ContentModel::getTable(), FilesModel::getTable(), [
+            'class'       => 'w50',
+            'isFile'      => true,
+            'widget'      => FormPromptType::FILE,
+            'multiple'    => true,
+            'popupTitle'  => $translator->trans('setup.prompt.content.playerSRC.title', [], 'setup'),
+            'label'       => $translator->trans('setup.prompt.content.playerSRC.title', [], 'setup'),
+            'description' => $translator->trans('setup.prompt.content.playerSRC.description', [], 'setup'),
+            'allowedExtensions' => 'mp3,mp4,m4a,m4v,webm,ogg,ogv,wma,wmv,ram,rm,mov'
+        ]);
+    }
+
+    /**
+     * Handles multiple files (multiSRC) in content elements.
+     *
+     * @category BEFORE_IMPORT_ROW
+     */
+    public static function setMultiFileConnection(array &$row, TableImport $importer): ?array
+    {
+        switch ($row['type'])
+        {
+            case 'downloads':
+            case 'randomImage':
+            case 'gallery':
+                if($row['multiSRC'])
+                    break;
+            default:
+                return null;
+        }
+
+        $translator = Controller::getContainer()->get('translator');
+
+        $promptOptions = [
+            'label'             => $translator->trans('setup.prompt.content.multiSRC.label', [], 'setup'),
+            'description'       => $translator->trans('setup.prompt.content.multiSRC.description', [], 'setup'),
+            'multiple'          => true,
+            'isFile'            => true,
+            'widget'            => FormPromptType::FILE,
+            'allowedExtensions' => 'css,scss,less'
+        ];
+
+        return $importer->useIdentifierConnectionLogic($row, 'multiSRC', ContentModel::getTable(), FilesModel::getTable(), $promptOptions, []);
     }
 
     /**

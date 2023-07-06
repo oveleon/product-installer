@@ -53,6 +53,7 @@ class Validator
         // Page
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'selectRootPage']);
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setLayoutConnection']);
+        self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setSubpageLayoutConnection']);
         self::addValidator(PageValidator::getTrigger(), [PageValidator::class, 'setPageJumpToConnection'], ValidatorMode::AFTER_IMPORT_ROW);
 
         // Layout
@@ -108,7 +109,9 @@ class Validator
             ContentArticleValidator::class
         ], [
             [ContentValidator::class, 'setIncludes'],
-            [ContentValidator::class, 'setFileConnection'],
+            [ContentValidator::class, 'setSingleFileConnection'],
+            [ContentValidator::class, 'setMultiFileConnection'],
+            [ContentValidator::class, 'setPlayerConnection'],
             [ContentValidator::class, 'setContentIncludes', ValidatorMode::AFTER_IMPORT_ROW],
         ]);
 

@@ -58,6 +58,10 @@ setup:
                 title:                  'Inhaltselement (verweist) → Bild'
                 description:            'Ein oder mehrere Bilder aus einem Inhaltselement konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Inhaltselemente, welche auf das selben Bild referenzieren, übernommen.'
                 explanation:            'Beim Importieren eines oder mehrerer Inhaltselemente konnte das zugehörige Bild nicht gefunden werden. Wählen Sie bitte ein Bild aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Inhaltselementen und einem Bild herzustellen.<br/><br/><b>Folgendes Bild wurde nicht importiert und benötigt eine Alternative:</b>'
+            posterSRC:
+                title:                  'Inhaltselement (verweist) → Vorschaubild'
+                description:            'Ein oder mehrere Bilder aus einem Inhaltselement konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Inhaltselemente, welche auf das selben Bild referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer Inhaltselemente konnte das zugehörige Bild nicht gefunden werden. Wählen Sie bitte ein Bild aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen Inhaltselementen und einem Bild herzustellen.<br/><br/><b>Folgendes Bild wurde nicht importiert und benötigt eine Alternative:</b>'
             content:
                 includes:
                     cteAlias:

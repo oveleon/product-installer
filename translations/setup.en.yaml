@@ -58,6 +58,10 @@ setup:
                 title:                  'Content element (refers) → Image'
                 description:            'One or more images from a content element could not be assigned. Your selection will be applied to all other content elements that reference the same image.'
                 explanation:            'When importing one or more content elements, the corresponding image could not be found. Please select a content element from your Contao instance to create a link between these content elements and an image.<br/><br/><b>The following image was not imported and needs an alternative:</b>'
+            posterSRC:
+                title:                  'Content element (refers) → Preview image'
+                description:            'One or more images from a content element could not be assigned. Your selection will be applied to all other content elements that reference the same image.'
+                explanation:            'When importing one or more content elements, the corresponding image could not be found. Please select a content element from your Contao instance to create a link between these content elements and an image.<br/><br/><b>The following image was not imported and needs an alternative:</b>'
             content:
                 includes:
                     cteAlias:

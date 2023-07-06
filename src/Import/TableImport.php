@@ -166,15 +166,20 @@ class TableImport extends AbstractPromptImport
     }
 
     /**
-     * Returns the value of a connected field.
+     * Returns the value of a connected field or all connections if $a is null.
      */
-    public function getConnection(string|int $a, ?string $table = null, string $subScope = 'connections'): null|string|int
+    public function getConnection(null|string|int $a = null, ?string $table = null, string $subScope = 'connections'): null|string|int|array
     {
         $connectedValue = null;
         $table = $table ?? $this->table;
 
         if($connections = $this->setupLock->get($subScope))
         {
+            if(null === $a)
+            {
+                return $connections[ $table ] ?? null;
+            }
+
             $connectedValue = $connections[ $table ][ $a ] ?? null;
         }
 
@@ -213,6 +218,14 @@ class TableImport extends AbstractPromptImport
             $validators = [];
         }
 
+        // Check if validator already added on runtime
+        if(!\array_key_exists($identifier, $validators))
+        {
+            // Add validator
+            Validator::addValidator($trigger, $fn, $mode);
+        }
+
+        // Overwrite or save validator
         $validators[$identifier] = [$trigger, $fn, $mode->name];
 
         $this->setupLock->set('validators', $validators);

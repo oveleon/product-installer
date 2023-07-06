@@ -13,6 +13,7 @@ use Contao\System;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\TableImport;
+use Oveleon\ProductInstaller\Util\ImportUtil;
 use Oveleon\ProductInstaller\Util\InsertTagUtil;
 
 /**
@@ -60,7 +61,7 @@ class CollectionValidator
     {
         switch ($row['type'])
         {
-            // Skip types where we know they will never have insert tags to same performance
+            // Skip types where we know they will never have insert tags to save performance
             case 'accordionStop':
             case 'sliderStop':
             case 'article':
@@ -98,11 +99,8 @@ class CollectionValidator
         // Variable to intercept non-connectable connections
         $notConnectable = null;
 
-        /** @var InsertTagUtil $insertTagUtil */
-        $insertTagUtil = System::getContainer()->get('Oveleon\ProductInstaller\Util\InsertTagUtil');
-
         // Detect / replace insert tags
-        $content = $insertTagUtil->detectInsertTagsAndReplace($content, $notConnectable, $row, $model, $importer);
+        $content = self::detectInsertTagsAndReplace($content, $notConnectable, $row, $model, $importer);
 
         // Check for non-connectable files and create prompt fields
         if(null !== $notConnectable)
@@ -121,6 +119,7 @@ class CollectionValidator
                     // Detect type of fields and create field array
                     switch ($missingConnection['table'])
                     {
+                        case ArticleModel::getTable():
                         case PageModel::getTable():
 
                             // Check for a prompt response and make the connections when set
@@ -173,7 +172,7 @@ class CollectionValidator
             if(null === $fields)
             {
                 // Validate connections again
-                $content = $insertTagUtil->detectInsertTagsAndReplace($content, $notConnectable, $row, $model, $importer);
+                $content = self::detectInsertTagsAndReplace($content, $notConnectable, $row, $model, $importer);
             }
             else
             {
@@ -246,9 +245,7 @@ class CollectionValidator
             $modifiedFields = null;
 
             // Detect / replace insert tags
-            /** @var InsertTagUtil $insertTagUtil */
-            $row = System::getContainer()->get('Oveleon\ProductInstaller\Util\InsertTagUtil')
-                                         ->detectInsertTagsAndReplace($row, $notConnectable, $row, $modelClass, $importer, $modifiedFields);
+            $row = self::detectInsertTagsAndReplace($row, $notConnectable, $row, $modelClass, $importer, $modifiedFields);
 
             // Update model
             $updateModel->setRow($row);
