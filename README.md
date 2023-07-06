@@ -1,7 +1,9 @@
-<img src="./docs/logo.svg" width="100%" alt="Product Installer">
-<p align="center">
-  <i>With this extension, products from Oveleon can be registered, managed and installed.</i>
-</p>
+<div align="center">
+  <img src="./docs/logo.svg" width="700px" alt="Product Installer">
+  <p><i>With this extension, products from connectable shops can be registered, managed and installed</i></p>
+</div>
+
+<br/>
 
 ### Known import limitations
 - The database update must be performed manually
@@ -9,10 +11,15 @@
 - Insert tags with query parameter are not supported yet (e.g. `{{file::file.php?arg1=val}}`)
 - Currently only single file connections within custom elements are supported (`singleSRC`)
 
-#### ToDo
+
+### Documentation
+[View full documentation](oveleon.github.io/product-installer/)
+
+
+### ToDo's
 - Docs
 - Validators:
-  - settings -> icons 
+  - settings -> icons
   - user-group connections
   - imageUrl, url (insert tags and other connection)
   - more unknown...
