@@ -10,6 +10,8 @@
 
 With the Product Installer, you maintain full control over the effortless installation and setup of products. The Product Installer automates the entire installation process, providing all the necessary resources while executing precise steps for the seamless configuration of your products. Additionally, it effectively assists you in product licensing and management, offering you a high level of flexibility and control.
 
+📄 [View full documentation](https://oveleon.github.io/product-installer/)
+
 <br/>
 
 ### Known import limitations
@@ -18,11 +20,7 @@ With the Product Installer, you maintain full control over the effortless instal
 - Insert tags with query parameter are not supported yet (e.g. `{{file::file.php?arg1=val}}`)
 - Currently only single file connections within custom elements are supported (`singleSRC`)
 
-
-### Documentation
-[View full documentation](https://oveleon.github.io/product-installer/)
-
-
+<!--
 ### ToDo's
 - Docs
 - Validators:
@@ -39,3 +37,4 @@ With the Product Installer, you maintain full control over the effortless instal
 
 - Set bundle license
 - Set bundle to public
+-->
