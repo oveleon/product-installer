@@ -5,6 +5,11 @@ import State from "./State";
 import LicenseConnectorStep from "./Steps/LicenseConnectorStep";
 import DashboardStep from "./Steps/DashboardStep";
 
+/**
+ * Installer class.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 export default class Installer
 {
     public static locale: string

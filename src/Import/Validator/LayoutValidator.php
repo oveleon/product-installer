@@ -5,7 +5,6 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 use Contao\Controller;
 use Contao\LayoutModel;
 use Contao\ModuleModel;
-use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\ThemeModel;
 use Contao\FilesModel;

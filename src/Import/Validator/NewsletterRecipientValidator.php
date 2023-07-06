@@ -3,10 +3,8 @@
 namespace Oveleon\ProductInstaller\Import\Validator;
 
 use Contao\Controller;
-use Contao\NewsArchiveModel;
 use Contao\NewsletterChannelModel;
 use Contao\NewsletterRecipientsModel;
-use Contao\NewsModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 
 /**

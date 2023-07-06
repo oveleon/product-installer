@@ -2,11 +2,6 @@
 
 namespace Oveleon\ProductInstaller\Util;
 
-use Contao\ArticleModel;
-use Contao\PageModel;
-use Oveleon\ProductInstaller\Import\TableImport;
-use Oveleon\ProductInstaller\Import\Validator\CollectionValidator;
-use Oveleon\ProductInstaller\Import\Validator\ValidatorMode;
 use Oveleon\ProductInstaller\InsertTag;
 
 /**

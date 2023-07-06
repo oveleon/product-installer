@@ -4,7 +4,6 @@ namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
 use Contao\System;
 use Doctrine\DBAL\Exception;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Part\DataPart;

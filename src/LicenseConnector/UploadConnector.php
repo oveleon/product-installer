@@ -20,9 +20,6 @@ final class UploadConnector extends AbstractLicenseConnector
 {
     function setSteps(): void
     {
-        $router = Controller::getContainer()->get('router');
-        $translator = Controller::getContainer()->get('translator');
-
         // Create steps
         $this->addSteps(
             // Add license step

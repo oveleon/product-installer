@@ -11,6 +11,11 @@ export interface AdvertisingConfig {
     linkText: string
 }
 
+/**
+ * Abstract advertising banner class.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 export default abstract class AdvertisingBanner extends ContainerComponent
 {
     constructor(id: string, protected config: AdvertisingConfig)

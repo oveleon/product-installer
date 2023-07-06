@@ -5,7 +5,8 @@
 
 ### Known import limitations
 - The database update must be performed manually
-- Insert tags currently only support page (`{link::*}}`) and article (`{include_article::*}}`) references.
+- Insert tags currently only support page (`{link::*}}`) and article (`{include_article::*}}`) references
+- Insert tags with query parameter are not supported yet (e.g. `{{file::file.php?arg1=val}}`)
 - Currently only single file connections within custom elements are supported (`singleSRC`)
 
 #### ToDo

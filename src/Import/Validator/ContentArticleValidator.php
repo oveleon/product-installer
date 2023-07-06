@@ -5,7 +5,6 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 use Contao\ArticleModel;
 use Contao\ContentModel;
 use Contao\Controller;
-use Contao\PageModel;
 use Contao\System;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Util\PageUtil;

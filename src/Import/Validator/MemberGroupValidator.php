@@ -2,7 +2,6 @@
 
 namespace Oveleon\ProductInstaller\Import\Validator;
 
-
 use Contao\MemberGroupModel;
 
 /**

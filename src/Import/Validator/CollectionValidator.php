@@ -13,8 +13,6 @@ use Contao\System;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\TableImport;
-use Oveleon\ProductInstaller\Util\ImportUtil;
-use Oveleon\ProductInstaller\Util\InsertTagUtil;
 
 /**
  * Validator class for validating the various records during and after import.

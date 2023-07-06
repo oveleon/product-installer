@@ -8,7 +8,6 @@ use Contao\Controller;
 use Contao\FilesModel;
 use Contao\FormModel;
 use Contao\ModuleModel;
-use Contao\ThemeModel;
 use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\TableImport;

@@ -1,3 +1,8 @@
+/**
+ * State class to work with the localStorage.
+ *
+ * @author Daniele Sciannimanica <https://github.com/doishub>
+ */
 export default class State
 {
     /**

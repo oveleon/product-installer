@@ -2,12 +2,6 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\Composer;
 
-use Contao\CoreBundle\Exception\RedirectResponseException;
-use Contao\File;
-use Contao\System;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
