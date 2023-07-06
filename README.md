@@ -13,7 +13,7 @@
 
 
 ### Documentation
-[View full documentation](oveleon.github.io/product-installer/)
+[View full documentation](https://oveleon.github.io/product-installer/)
 
 
 ### ToDo's
