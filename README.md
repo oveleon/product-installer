@@ -14,7 +14,7 @@ With the Product Installer, you maintain full control over the effortless instal
 
 ### Overview
 ✔ Licence verification and product registration\
-✔ Execution of composer commands\
+✔ Automatic installation of composer dependencies\
 ✔ Downloading product content\
 ✔ Setup wizard during import
 <br><br>
