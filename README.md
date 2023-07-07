@@ -17,6 +17,7 @@ With the Product Installer, you maintain full control over the effortless instal
 ✔ Execution of composer commands\
 ✔ Downloading product content\
 ✔ Setup wizard during import
+<br><br>
 
 ### Developer documentation
 📄 [View full documentation](https://oveleon.github.io/product-installer/)
