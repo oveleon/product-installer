@@ -8,7 +8,7 @@
 
 <br/><br/>
 
-With the Product Installer, you maintain full control over the effortless installation and setup of products. The Product Installer automates the entire installation process, providing all the necessary resources while executing precise steps for the seamless configuration of your products. Additionally, it effectively assists you in product licensing and management, offering you a high level of flexibility and control.
+With the Product Installer, you maintain full control over the installation and setup of products. The Product Installer automates the entire installation process, providing all the necessary resources while executing precise steps for the seamless configuration of your products. Additionally, it effectively assists you in product licensing and management, offering you a high level of flexibility and control.
 <br><br>
 
 ### Overview
