@@ -185,7 +185,7 @@ class InsertTag
     /**
      * Parse the insert tag from a string.
      *
-     * @Todo Handle query-Parameter (e.g. for file, picture, image,...)
+     * @todo Handle query-Parameter (e.g. for file, picture, image,...)
      */
     private function parse(string $insertTag): void
     {

@@ -5,7 +5,7 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 use Contao\CalendarEventsModel;
 use Contao\ContentModel;
 use Contao\Controller;
-use Oveleon\ProductInstaller\Import\AbstractPromptImport;
+use Oveleon\ProductInstaller\Import\TableImport;
 
 /**
  * Validator class for validating the content records within events during and after import.
@@ -27,7 +27,7 @@ class ContentEventValidator extends ContentValidator implements ValidatorInterfa
     /**
      * Handles the relationship with the parent element.
      */
-    static function setEventConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function setEventConnection(array &$row, TableImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');
 

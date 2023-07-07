@@ -81,6 +81,7 @@ class TableImport extends AbstractPromptImport
 
         // Consider only data container of type DC_Table and DC_Folder
         if(
+             'Table' === $tableInfo->dataContainer ||
              DC_Table::class === $tableInfo->dataContainer ||
             (DC_Folder::class === $tableInfo->dataContainer && $tableInfo->databaseAssisted)
         )
@@ -560,6 +561,27 @@ class TableImport extends AbstractPromptImport
     }
 
     /**
+     * Checks whether a key exists and has a value. The parameter $accepts can be used to pass accepted values,
+     * such as "0" or "null", to be recognised as a valid value.
+     */
+    public static function hasValue(array $row, string $key, ?array $accepts = null): bool
+    {
+        if(!\array_key_exists($key, $row))
+        {
+            return false;
+        }
+
+        $value = $row[$key];
+
+        if(null !== $accepts)
+        {
+            return $value || \in_array($value, $accepts);
+        }
+
+        return (bool) $value;
+    }
+
+    /**
      * Returns the model based on a filename with table name verification.
      */
     public static function getClassFromFileName(string $filename): string
@@ -661,7 +683,7 @@ class TableImport extends AbstractPromptImport
      */
     public function useIdentifierConnectionLogic(array &$row, string $field, string $tableA, string $tableB, array $promptOptions, ?array $selectableValues = null, bool $skipSameConnection = true): ?array
     {
-        $trigger = $row[$field];
+        $trigger = $row[$field] ?? false;
         $id      = $row['id'];
 
         /** @var Model $aModel */

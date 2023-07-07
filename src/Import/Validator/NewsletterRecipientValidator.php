@@ -5,7 +5,7 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 use Contao\Controller;
 use Contao\NewsletterChannelModel;
 use Contao\NewsletterRecipientsModel;
-use Oveleon\ProductInstaller\Import\AbstractPromptImport;
+use Oveleon\ProductInstaller\Import\TableImport;
 
 /**
  * Validator class for validating the newsletter recipient records during and after import.
@@ -27,7 +27,7 @@ class NewsletterRecipientValidator implements ValidatorInterface
     /**
      * Handles the relationship with the parent element.
      */
-    static function setChannelConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function setChannelConnection(array &$row, TableImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');
 

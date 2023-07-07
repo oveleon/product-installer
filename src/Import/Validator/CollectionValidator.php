@@ -10,7 +10,6 @@ use Contao\Model;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
-use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\TableImport;
 
@@ -30,18 +29,20 @@ class CollectionValidator
      *
      * @category BEFORE_IMPORT_ROW
      */
-    static function setJumpToPageConnection(array &$row, AbstractPromptImport $importer, string|Model $model): ?array
+    static function setJumpToPageConnection(array &$row, TableImport $importer, string|Model $model): ?array
     {
+        // ToDo: Create Lifecycle-Validator to support vendor extensions wich use this method but was imported before pages (based on the willBeImported method - test with glossary bundle)
+
         switch(true)
         {
             case $model instanceof MemberGroupModel:
-                if(!$row['redirect'])
+                if(!$importer->hasValue($row, 'redirect'))
                 {
                     return null;
                 }
 
             default:
-                if(!$row['jumpTo'])
+                if(!$importer->hasValue($row, 'jumpTo'))
                 {
                     return null;
                 }

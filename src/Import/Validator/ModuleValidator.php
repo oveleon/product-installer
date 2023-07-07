@@ -12,7 +12,7 @@ use Contao\NewsArchiveModel;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\ThemeModel;
-use Oveleon\ProductInstaller\Import\AbstractPromptImport;
+use Oveleon\ProductInstaller\Import\TableImport;
 
 /**
  * Validator class for validating the module records during and after import.
@@ -36,7 +36,7 @@ class ModuleValidator implements ValidatorInterface
     /**
      * Handles the relationship with the parent element.
      */
-    static function setThemeConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function setThemeConnection(array &$row, TableImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');
 
@@ -59,9 +59,9 @@ class ModuleValidator implements ValidatorInterface
     /**
      * Handles the relationship with the field form for modules of type form.
      */
-    public static function setFormConnection(array &$row, AbstractPromptImport $importer): ?array
+    public static function setFormConnection(array &$row, TableImport $importer): ?array
     {
-        if($row['type'] === 'form' || !$row['form'])
+        if($row['type'] === 'form' || !$importer->hasValue($row, 'form'))
         {
             return null;
         }
@@ -79,9 +79,9 @@ class ModuleValidator implements ValidatorInterface
     /**
      * Handles the relationship with the field reg_jumpTo.
      */
-    static function setRegPageConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function setRegPageConnection(array &$row, TableImport $importer): ?array
     {
-        if(!$row['reg_activate'] || !$row['reg_jumpTo'])
+        if(!$importer->hasValue($row, 'reg_activate') || !$importer->hasValue($row, 'reg_jumpTo'))
         {
             return null;
         }
@@ -92,9 +92,9 @@ class ModuleValidator implements ValidatorInterface
     /**
      * Handles the relationship with the field pages.
      */
-    static function setPagesConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function setPagesConnection(array &$row, TableImport $importer): ?array
     {
-        if(null === $row['pages'])
+        if(!$importer->hasValue($row, 'pages'))
         {
             return null;
         }
@@ -105,9 +105,9 @@ class ModuleValidator implements ValidatorInterface
     /**
      * Handles the relationship with the field rootPage.
      */
-    static function setRootPageConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function setRootPageConnection(array &$row, TableImport $importer): ?array
     {
-        if(!$row['defineRoot'])
+        if(!$importer->hasValue($row, 'defineRoot'))
         {
             return null;
         }
@@ -118,7 +118,7 @@ class ModuleValidator implements ValidatorInterface
     /**
      * Handles the relationship with the field overviewPage.
      */
-    static function setOverviewPageConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function setOverviewPageConnection(array &$row, TableImport $importer): ?array
     {
         switch ($row['type'])
         {
@@ -141,7 +141,7 @@ class ModuleValidator implements ValidatorInterface
     /**
      * Handles the relationship with the fields faq_categories.
      */
-    static function setArchiveConnections(array &$row, AbstractPromptImport $importer): ?array
+    static function setArchiveConnections(array &$row, TableImport $importer): ?array
     {
         switch ($row['type'])
         {
@@ -197,7 +197,7 @@ class ModuleValidator implements ValidatorInterface
      *
      * @param array<ModuleModel, array> $collection
      */
-    public static function setRootPageDependentModuleIncludes(array $collection, AbstractPromptImport $importer): void
+    public static function setRootPageDependentModuleIncludes(array $collection, TableImport $importer): void
     {
         /** @var ModuleModel $model*/
         [$model, $row] = $collection;

@@ -8,8 +8,8 @@ use Contao\ModuleModel;
 use Contao\StringUtil;
 use Contao\ThemeModel;
 use Contao\FilesModel;
-use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
+use Oveleon\ProductInstaller\Import\TableImport;
 
 /**
  * Validator class for validating the layout records during and after import.
@@ -33,7 +33,7 @@ class LayoutValidator implements ValidatorInterface
      *
      * @category BEFORE_IMPORT_ROW
      */
-    public static function setThemeConnection(array &$row, AbstractPromptImport $importer): ?array
+    public static function setThemeConnection(array &$row, TableImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');
 
@@ -58,9 +58,9 @@ class LayoutValidator implements ValidatorInterface
      *
      * @category BEFORE_IMPORT_ROW
      */
-    static function setModuleConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function setModuleConnection(array &$row, TableImport $importer): ?array
     {
-        if(!$row['modules'])
+        if(!$importer->hasValue($row, 'modules'))
         {
             return null;
         }
@@ -179,9 +179,9 @@ class LayoutValidator implements ValidatorInterface
      *
      * @category BEFORE_IMPORT_ROW
      */
-    public static function setExternalFileConnection(array &$row, AbstractPromptImport $importer): ?array
+    public static function setExternalFileConnection(array &$row, TableImport $importer): ?array
     {
-        if(!$row['external'])
+        if(!$importer->hasValue($row, 'external'))
         {
             return null;
         }
@@ -205,9 +205,9 @@ class LayoutValidator implements ValidatorInterface
      *
      * @category BEFORE_IMPORT_ROW
      */
-    public static function setExternalJsFileConnection(array &$row, AbstractPromptImport $importer): ?array
+    public static function setExternalJsFileConnection(array &$row, TableImport $importer): ?array
     {
-        if(!$row['externalJs'])
+        if(!$importer->hasValue($row, 'externalJs'))
         {
             return null;
         }

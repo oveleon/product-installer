@@ -5,7 +5,7 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 use Contao\Controller;
 use Contao\NewsArchiveModel;
 use Contao\NewsModel;
-use Oveleon\ProductInstaller\Import\AbstractPromptImport;
+use Oveleon\ProductInstaller\Import\TableImport;
 
 /**
  * Validator class for validating the news records during and after import.
@@ -27,7 +27,7 @@ class NewsValidator implements ValidatorInterface
     /**
      * Handles the relationship with the parent element.
      */
-    static function setNewsArchiveConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function setNewsArchiveConnection(array &$row, TableImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');
 

@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Import;
 
+use Contao\System;
 use Oveleon\ProductInstaller\Import\Validator\ArticleValidator;
 use Oveleon\ProductInstaller\Import\Validator\CollectionValidator;
 use Oveleon\ProductInstaller\Import\Validator\ContentArticleValidator;
@@ -126,7 +127,7 @@ class Validator
             'setJumpToPageConnection'
         ]);
 
-        // Connects custom element insert tags and file connections
+        // Connects insert tags and file connections
         self::addValidatorCollection([
             ContentEventValidator::class,
             ContentNewsValidator::class,
@@ -136,6 +137,15 @@ class Validator
             'setCustomElementSingleFileConnections',
             'setInsertTagConnections'
         ]);
+
+        // Hook
+        if (isset($GLOBALS['PI_HOOKS']['addValidator']) && \is_array($GLOBALS['PI_HOOKS']['addValidator']))
+        {
+            foreach ($GLOBALS['PI_HOOKS']['addValidator'] as $callback)
+            {
+                System::importStatic($callback[0])->{$callback[1]}();
+            }
+        }
     }
 
     /**

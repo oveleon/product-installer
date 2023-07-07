@@ -8,7 +8,6 @@ use Contao\Controller;
 use Contao\FilesModel;
 use Contao\FormModel;
 use Contao\ModuleModel;
-use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\TableImport;
 
@@ -35,7 +34,7 @@ abstract class ContentValidator implements ValidatorInterface
      *
      * @category BEFORE_IMPORT_ROW
      */
-    public static function setIncludes(array &$row, AbstractPromptImport $importer): ?array
+    public static function setIncludes(array &$row, TableImport $importer): ?array
     {
         switch($row['type'])
         {
@@ -162,7 +161,7 @@ abstract class ContentValidator implements ValidatorInterface
      *
      * @category BEFORE_IMPORT_ROW
      */
-    public static function setSingleFileConnection(array &$row, AbstractPromptImport $importer): ?array
+    public static function setSingleFileConnection(array &$row, TableImport $importer): ?array
     {
         $connectionField = null;
 
@@ -310,9 +309,9 @@ abstract class ContentValidator implements ValidatorInterface
      *
      * @category BEFORE_IMPORT_ROW
      */
-    public static function setPlayerConnection(array &$row, AbstractPromptImport $importer): ?array
+    public static function setPlayerConnection(array &$row, TableImport $importer): ?array
     {
-        if($row['type'] !== 'player' || !$row['playerSRC'])
+        if($row['type'] !== 'player' || !$importer->hasValue($row, 'playerSRC'))
         {
             return null;
         }
@@ -371,7 +370,7 @@ abstract class ContentValidator implements ValidatorInterface
      *
      * @param array<ContentModel, array> $collection
      */
-    public static function setContentIncludes(array $collection, AbstractPromptImport $importer): void
+    public static function setContentIncludes(array $collection, TableImport $importer): void
     {
         /** @var ContentModel $model*/
         [$model, $row] = $collection;

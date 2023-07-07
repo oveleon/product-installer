@@ -48,8 +48,14 @@ class PageUtil
             $pageModelCollection = PageModel::findAll(['order' => 'id ASC, sorting ASC']);
         }
 
-        self::$pageCollection   = $pageModelCollection;
-        self::$pagesFlat        = [];
+        self::$pageCollection = $pageModelCollection;
+        self::$pagesFlat      = [];
+
+        // Break if collection has no entries
+        if(!$pageModelCollection)
+        {
+            return $this;
+        }
 
         $pages = array_combine(
             $pageModelCollection->fetchEach('id'),
@@ -142,6 +148,11 @@ class PageUtil
 
         $pages = self::getPagesFlat();
 
+        if(!$articleModelCollection || !count($pages))
+        {
+            return $this;
+        }
+
         $articles = array_reverse(array_combine(
             $articleModelCollection->fetchEach('id'),
             $articleModelCollection->fetchAll()
@@ -176,7 +187,7 @@ class PageUtil
     {
         if(null === self::$pageCollection)
         {
-            throw new \RuntimeException('There is no page collection available. Add pages before using this method.');
+            return [];
         }
 
         switch ($name)
@@ -239,6 +250,8 @@ class PageUtil
 
                 return $options;
         }
+
+        return [];
     }
 
     /**

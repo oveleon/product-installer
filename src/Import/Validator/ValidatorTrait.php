@@ -10,7 +10,6 @@ use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\ThemeModel;
-use Oveleon\ProductInstaller\Import\AbstractPromptImport;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\TableImport;
 use Oveleon\ProductInstaller\InsertTag;
@@ -185,7 +184,7 @@ trait ValidatorTrait
     /**
      * Connects the specified field of the passed source models to a new page.
      */
-    public static function setFieldPageConnection(string|Model $sourceModel, string $field, array &$row, AbstractPromptImport $importer, ?array $extendPromptOptions = null): ?array
+    public static function setFieldPageConnection(string|Model $sourceModel, string $field, array &$row, TableImport $importer, ?array $extendPromptOptions = null): ?array
     {
         $translator = System::getContainer()->get('translator');
 

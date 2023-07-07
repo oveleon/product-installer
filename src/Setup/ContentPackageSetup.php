@@ -2,6 +2,8 @@
 
 namespace Oveleon\ProductInstaller\Setup;
 
+use Contao\ContentModel;
+use Contao\Controller;
 use Contao\Model;
 use Oveleon\ProductInstaller\Import\FileImport;
 use Oveleon\ProductInstaller\Import\ImportStateType;
@@ -264,12 +266,11 @@ class ContentPackageSetup
     }
 
     /**
-     * Returns the table structure to import.
+     * Returns the table structure and order to import.
      */
     public function getTables(string $archiveDestination): array
     {
-        // Fixme: Get structure from config yml
-        // Get predefined table structure and order
+        // Set predefined table structure and order
         $tableOrder = [
             'tl_files',
             'tl_theme',
@@ -340,8 +341,60 @@ class ContentPackageSetup
             }
         }
 
-        // Append unknown tables and return full structure
-        return array_merge($tableOrder, $archiveTablesOnTop);
+        // Sort unknown tables by third-party dca´s and its information about parent and child tables
+        usort($archiveTablesOnTop, static function($a, $b){
+
+            // Load data container
+            Controller::loadDataContainer($a);
+
+            if($config = ($GLOBALS['TL_DCA'][$a]['config'] ?? false))
+            {
+                if(\array_key_exists('ctable', $config) && \array_key_exists('ptable', $config))
+                {
+                    return 0;
+                }
+
+                if(\array_key_exists('ctable', $config))
+                {
+                    return -1;
+                }
+
+                if(\array_key_exists('ptable', $config))
+                {
+                    return 1;
+                }
+            }
+
+            return 1;
+        });
+
+        // Extract tables of type content to import them on the end, all other will be prepended
+        $tablesOnTop = [];
+
+        foreach ($archiveTablesOnTop as $tableOnTop)
+        {
+            if(strtok($tableOnTop, '.') === ContentModel::getTable())
+            {
+                 // Append content to tables
+                 $tableOrder[] = $tableOnTop;
+            }
+            else $tablesOnTop[] = $tableOnTop;
+        }
+
+        // Prepend unknown tables and return full structure
+        array_unshift($tableOrder, ...$tablesOnTop);
+
+        // tl_files should always be imported at the very beginning
+        if(\in_array('tl_files', $tableOrder) && ($key = array_search('tl_files', $tableOrder)) !== false)
+        {
+            // Remove from tables
+            unset($tableOrder[$key]);
+
+            // Prepend to tables
+            array_unshift($tableOrder, 'tl_files');
+        }
+
+        return $tableOrder;
     }
 
     /**

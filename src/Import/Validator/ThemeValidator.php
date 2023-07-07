@@ -33,7 +33,7 @@ class ThemeValidator implements ValidatorInterface
      */
     public static function setScreenshotConnection(array &$row, TableImport $importer): ?array
     {
-        if(!$row['screenshot'])
+        if(!$importer->hasValue($row, 'screenshot'))
         {
             return null;
         }
@@ -58,7 +58,7 @@ class ThemeValidator implements ValidatorInterface
      */
     public static function setSkinSourceFilesConnection(array &$row, TableImport $importer): ?array
     {
-        if(!$row['skinSourceFiles'])
+        if(!$importer->hasValue($row, 'skinSourceFiles'))
         {
             return null;
         }
@@ -84,7 +84,7 @@ class ThemeValidator implements ValidatorInterface
      */
     public static function setFolderConnection(array &$row, TableImport $importer): ?array
     {
-        if(!$row['folders'])
+        if(!$importer->hasValue($row, 'folders'))
         {
             return null;
         }
@@ -129,7 +129,7 @@ class ThemeValidator implements ValidatorInterface
      */
     public static function setSkinFolderConnection(array &$row, TableImport $importer): ?array
     {
-        if(!$row['outputFilesTargetDir'])
+        if(!$importer->hasValue($row, 'outputFilesTargetDir'))
         {
             return null;
         }

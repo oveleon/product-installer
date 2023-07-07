@@ -6,7 +6,7 @@ use Contao\ArticleModel;
 use Contao\ContentModel;
 use Contao\Controller;
 use Contao\System;
-use Oveleon\ProductInstaller\Import\AbstractPromptImport;
+use Oveleon\ProductInstaller\Import\TableImport;
 use Oveleon\ProductInstaller\Util\PageUtil;
 
 /**
@@ -29,7 +29,7 @@ class ContentArticleValidator extends ContentValidator implements ValidatorInter
     /**
      * Handles the relationship with the parent element.
      */
-    static function setArticleConnection(array &$row, AbstractPromptImport $importer): ?array
+    static function setArticleConnection(array &$row, TableImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');
 
