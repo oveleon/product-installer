@@ -31,8 +31,6 @@ class CollectionValidator
      */
     static function setJumpToPageConnection(array &$row, TableImport $importer, string|Model $model): ?array
     {
-        // ToDo: Create Lifecycle-Validator to support vendor extensions wich use this method but was imported before pages (based on the willBeImported method - test with glossary bundle)
-
         switch(true)
         {
             case $model instanceof MemberGroupModel:

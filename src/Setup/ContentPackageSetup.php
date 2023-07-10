@@ -270,6 +270,8 @@ class ContentPackageSetup
      */
     public function getTables(string $archiveDestination): array
     {
+        // ToDo: Order of third-party dca`s should includes after tl_files, tl_theme and tl_page to avoid mapping issues
+
         // Set predefined table structure and order
         $tableOrder = [
             'tl_files',
@@ -384,14 +386,19 @@ class ContentPackageSetup
         // Prepend unknown tables and return full structure
         array_unshift($tableOrder, ...$tablesOnTop);
 
-        // tl_files should always be imported at the very beginning
-        if(\in_array('tl_files', $tableOrder) && ($key = array_search('tl_files', $tableOrder)) !== false)
-        {
-            // Remove from tables
-            unset($tableOrder[$key]);
+        // Some tables should always be imported at the very beginning
+        $tableToTop = ['tl_templates', 'tl_files', 'tl_theme', 'tl_page'];
 
-            // Prepend to tables
-            array_unshift($tableOrder, 'tl_files');
+        foreach (array_reverse($tableToTop) as $topTable)
+        {
+            if(\in_array($topTable, $tableOrder) && ($key = array_search($topTable, $tableOrder)) !== false)
+            {
+                // Remove from tables
+                unset($tableOrder[$key]);
+
+                // Prepend to tables
+                array_unshift($tableOrder, $topTable);
+            }
         }
 
         return $tableOrder;
