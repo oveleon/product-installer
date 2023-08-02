@@ -270,8 +270,6 @@ class ContentPackageSetup
      */
     public function getTables(string $archiveDestination): array
     {
-        // ToDo: Order of third-party dca`s should includes after tl_files, tl_theme and tl_page to avoid mapping issues
-
         // Set predefined table structure and order
         $tableOrder = [
             'tl_files',

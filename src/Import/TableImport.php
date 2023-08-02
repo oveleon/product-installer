@@ -404,6 +404,12 @@ class TableImport extends AbstractPromptImport
         {
             foreach(Validator::getValidators($this->table) ?? [] as $validator)
             {
+                // Validators can determine whether rows are skipped. In this case, all further validators for the current record are skipped.
+                if(\array_key_exists('_skip', $row))
+                {
+                    continue;
+                }
+
                 if($validatorFields = call_user_func_array($validator, [&$row, $this]))
                 {
                     $fields = $fields + $validatorFields;

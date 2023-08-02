@@ -64,6 +64,7 @@ class Validator
         self::addValidator(LayoutValidator::getTrigger(), [LayoutValidator::class, 'setModuleConnection']);
 
         // Module
+        self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'isImportNecessary']);
         self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setThemeConnection']);
         self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setRegPageConnection']);
         self::addValidator(ModuleValidator::getTrigger(), [ModuleValidator::class, 'setRootPageConnection']);

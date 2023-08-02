@@ -346,4 +346,30 @@ trait ValidatorTrait
 
         return $string;
     }
+
+    /**
+     * If certain connections cannot be made, a check is made to see whether the data records to be connected already exist (ctm_id).
+     */
+    public static function detectExistingRecordId(TableImport $importer, Model|string $model, int $id): ?int
+    {
+        $t = $model::getTable();
+
+        // Get information from archive file
+        $connectedStructure = $importer->getArchiveContentByFilename($t, [
+            'value' => $id,
+            'field' => 'id'
+        ]);
+
+        if(!$connectedStructure || !\array_key_exists('ctm_id', $connectedStructure))
+        {
+            return null;
+        }
+
+        if($record = $model::findOneBy(["$t.ctm_id=?"], [$connectedStructure['ctm_id']]))
+        {
+            return $record->id;
+        }
+
+        return null;
+    }
 }

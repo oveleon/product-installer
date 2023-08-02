@@ -35,6 +35,8 @@ class ModuleValidator implements ValidatorInterface
 
     /**
      * Handles the relationship with the parent element.
+     *
+     * @category BEFORE_IMPORT_ROW
      */
     static function setThemeConnection(array &$row, TableImport $importer): ?array
     {
@@ -57,7 +59,39 @@ class ModuleValidator implements ValidatorInterface
     }
 
     /**
+     * Determines from the ctm_id whether the module already exists. If this is the case, it is not imported, but only
+     * a connection to the module is established directly.
+     *
+     * @category BEFORE_IMPORT_ROW
+     */
+    public static function isImportNecessary(array &$row, TableImport $importer): ?array
+    {
+        if(
+            !\array_key_exists('ctm_id', $row) ||
+            !ModuleModel::countAll()
+        )
+        {
+            return null;
+        }
+
+        $table = ModuleModel::getTable();
+
+        if($record = ModuleModel::findOneBy(["$table.ctm_id=?"], [$row['ctm_id']]))
+        {
+            // Skip import (For validators in the BEFORE_IMPORT_ROW category, the following validators are skipped for this record)
+            $row['_skip'] = true;
+
+            // Add connection
+            $importer->addConnection($row['id'], $record->id, $table);
+        }
+
+        return null;
+    }
+
+    /**
      * Handles the relationship with the field form for modules of type form.
+     *
+     * @category BEFORE_IMPORT_ROW
      */
     public static function setFormConnection(array &$row, TableImport $importer): ?array
     {
@@ -78,6 +112,8 @@ class ModuleValidator implements ValidatorInterface
 
     /**
      * Handles the relationship with the field reg_jumpTo.
+     *
+     * @category BEFORE_IMPORT_ROW
      */
     static function setRegPageConnection(array &$row, TableImport $importer): ?array
     {
@@ -91,6 +127,8 @@ class ModuleValidator implements ValidatorInterface
 
     /**
      * Handles the relationship with the field pages.
+     *
+     * @category BEFORE_IMPORT_ROW
      */
     static function setPagesConnection(array &$row, TableImport $importer): ?array
     {
@@ -104,6 +142,8 @@ class ModuleValidator implements ValidatorInterface
 
     /**
      * Handles the relationship with the field rootPage.
+     *
+     * @category BEFORE_IMPORT_ROW
      */
     static function setRootPageConnection(array &$row, TableImport $importer): ?array
     {
@@ -117,6 +157,8 @@ class ModuleValidator implements ValidatorInterface
 
     /**
      * Handles the relationship with the field overviewPage.
+     *
+     * @category BEFORE_IMPORT_ROW
      */
     static function setOverviewPageConnection(array &$row, TableImport $importer): ?array
     {
@@ -140,6 +182,8 @@ class ModuleValidator implements ValidatorInterface
 
     /**
      * Handles the relationship with the fields faq_categories.
+     *
+     * @category BEFORE_IMPORT_ROW
      */
     static function setArchiveConnections(array &$row, TableImport $importer): ?array
     {

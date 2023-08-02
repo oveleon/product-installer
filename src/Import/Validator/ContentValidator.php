@@ -96,6 +96,7 @@ abstract class ContentValidator implements ValidatorInterface
             // Add id connection for child row
             $importer->addConnection($parentId, $connectedId, $connectionTable);
         }
+        // Create prompt fields
         else
         {
             if(\in_array($parentId, $skip))
@@ -128,7 +129,7 @@ abstract class ContentValidator implements ValidatorInterface
                 }
             }
 
-            // Try to get missing record
+            // Try to get missing record information
             $parentStructure = $importer->getArchiveContentByFilename($connectionTable, [
                 'value' => $parentId,
                 'field' => 'id'
