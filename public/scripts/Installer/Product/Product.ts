@@ -2,9 +2,10 @@
  * Providers.
  */
 export enum Provider {
-    GITHUB = 'github',
+    GITHUB  = 'github',
     GITLAB  = 'gitlab',
     SERVER  = 'server',
+    SHOP    = 'shop',
 }
 
 /**

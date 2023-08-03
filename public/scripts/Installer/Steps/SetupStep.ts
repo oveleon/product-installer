@@ -116,15 +116,14 @@ export default class SetupStep extends StepComponent
                   `
 
             // Create menu
-            // ToDo: Translations
             new DropMenuComponent([
                 {
-                    label: 'Schnelle Einrichtung starten',
+                    label: i18n('actions.setup'),
                     highlight: !product.get('setup'),
                     value: () => this.runSetup(task, product)
                 },
                 {
-                    label: 'Im Expertenmodus starten <small><sup style="color: #006494; font-weight: 600;">ALPHA</sup></small>',
+                    label: i18n('actions.setup.expert'),
                     highlight: !product.get('setup'),
                     value: () => this.runSetup(task, product, true)
                 },

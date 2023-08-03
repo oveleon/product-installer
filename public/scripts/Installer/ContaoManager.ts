@@ -17,8 +17,7 @@ export interface ComposerConfig extends TaskConfig {
  */
 export interface PackageConfig extends TaskConfig {
     provider?: Provider,
-    source?: string,
-    token?: string
+    source?: string
 }
 
 /**

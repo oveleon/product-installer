@@ -50,7 +50,10 @@ export default class DownloadProcess extends Process
             this.resolve({})
         }
 
-        call('/contao/api/content/download', downloadTasks).then((response) => {
+        call('/contao/api/content/download', {
+            tasks: downloadTasks,
+            license: State.get('license'),
+        }).then((response) => {
             // Check errors
             if(response.error)
             {

@@ -9,6 +9,8 @@ module.exports = {
     "actions.next":                                 "Weiter",
     "actions.start":                                "Starten",
     "actions.products":                             "Produktübersicht",
+    "actions.setup":                                "Schnelle Einrichtung starten",
+    "actions.setup.expert":                         'Im Expertenmodus starten <small><sup style="color: #006494; font-weight: 600;">ALPHA</sup></small>',
 
     "type.product":                                 "Produkt",
     "type.package":                                 "Produktpaket",
