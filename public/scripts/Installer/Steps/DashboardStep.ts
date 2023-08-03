@@ -43,6 +43,9 @@ export default class DashboardStep extends StepComponent
      */
     protected events(): void
     {
+        // Reset / remove steps from modal
+        this.modal.removeSteps()
+
         // Skip dashboard when we have active redirects
         if(State.get('isRedirect'))
         {
@@ -120,7 +123,7 @@ export default class DashboardStep extends StepComponent
                             this.modal.addSteps(setupStep)
 
                             // Goto setup
-                            this.modal.open(this.modal.getStepIndex('SetupStep'))
+                            this.modal.open(this.modal.getStepIndex(setupStep))
                         },
                         highlight: !product.get('setup')
                     })

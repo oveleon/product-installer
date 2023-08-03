@@ -31,6 +31,7 @@ With the Product Installer, you maintain full control over the installation and 
 <!--
 ### ToDo's
 - Docs
+- Check and show requirement in SetupStep / Check also for necessary records in the system defined in export  
 - Validators:
   - settings -> icons
   - user-group connections
