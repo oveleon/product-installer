@@ -64,6 +64,7 @@ class DownloadController
         {
             switch ($package['provider'])
             {
+                // Download files from GitHub
                 case 'github':
                     [$organization, $repository] = explode("/", $package['source']);
                     $destination = $basePath . $organization .'-'. $repository .'.zip';
@@ -79,6 +80,7 @@ class DownloadController
 
                     break;
 
+                // Download files from shop server with authentication
                 case 'shop':
 
                     // Get current connector
@@ -90,7 +92,7 @@ class DownloadController
                         ]);
                     }
 
-                    // Verify request and get download url
+                    // Verify request
                     $shopResponse = $this->connectorUtil->post(
                         $connector['connector'],
                         '/package/verify',
@@ -104,19 +106,27 @@ class DownloadController
                     );
 
                     try{
-                        $data = $shopResponse->toArray();
-
-                        // ToDo Download url
-                    }catch (\Exception $e)
-                    {}
-
-                    $destination = $basePath . basename($package['source']);
+                        $secret = ((object) $shopResponse->toArray())->secret;
+                        $destination = $basePath . 'package-test-111.content';
+                    }catch (\Exception $e) {
+                        return new JsonResponse([
+                            'error'   => true,
+                            'message' => 'Authentication failed, you are not authorised to download the product..'
+                        ], Response::HTTP_NOT_ACCEPTABLE);
+                    }
 
                     $package['destination'] = $destination;
+
+                    $this->fileDownloader
+                         ->method('POST')
+                         ->header('ProductInstaller: '.$secret)
+                         ->download($connector['config']['entry'].'/package/download', $destination);
+
                     $response[] = $package;
 
                     break;
 
+                // Download files from a extern server (e.g https://website.com/download/file.zip)
                 case 'server':
                     $destination = $basePath . basename($package['source']);
 
