@@ -106,8 +106,9 @@ class DownloadController
                     );
 
                     try{
-                        $secret = ((object) $shopResponse->toArray())->secret;
-                        $destination = $basePath . 'package-test-111.content';
+                        $parameter = ((object) $shopResponse->toArray());
+                        $secret = $parameter->secret;
+                        $destination = $basePath . $parameter->fileName;
                     }catch (\Exception $e) {
                         return new JsonResponse([
                             'error'   => true,
