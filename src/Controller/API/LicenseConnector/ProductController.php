@@ -101,7 +101,6 @@ class ProductController
                             $p['remove'] = false;
                             $p['setup'] = $product['setup']; // ToDo: We need to check if the product needs setup by e.g. TaskTypes... (Otherwise, the possibility of setting up each product will be given)
                             $p['latestVersion'] = $p['version'];
-                            $p['updated'] = $product['updated'];
                             $p['version'] = $product['version'];
 
                             // Add product to collection
