@@ -33,7 +33,7 @@ class ContaoManager
      */
     public function getToken(): ?string
     {
-        // ToDo: Use .env.installer instead of database
+        // ToDo: Use .env.installer / .env.local instead of database
 
         if($this->token)
         {

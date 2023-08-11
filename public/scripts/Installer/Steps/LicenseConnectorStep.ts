@@ -160,7 +160,7 @@ export default class LicenseConnectorStep extends StepComponent
     }
 
     /**
-     * Set license connector to use
+     * Set license connector to use.
      *
      * @param config
      * @param startAt
@@ -203,7 +203,7 @@ export default class LicenseConnectorStep extends StepComponent
     }
 
     /**
-     * Create a single license connector element
+     * Create a single license connector element.
      *
      * @param config
      *

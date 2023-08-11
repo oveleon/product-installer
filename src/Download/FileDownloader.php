@@ -12,8 +12,16 @@ use Contao\File;
 class FileDownloader
 {
     private string $method = 'GET';
+    private ?array $parameter = null;
     private ?string $header = null;
 
+    /**
+     * Set the method to be used.
+     *
+     * @param string $method
+     *
+     * @return $this
+     */
     public function method(string $method): self
     {
         $this->method = $method;
@@ -21,9 +29,30 @@ class FileDownloader
         return $this;
     }
 
+    /**
+     * Set the header string which are passed on during the request.
+     *
+     * @param string $header
+     *
+     * @return $this
+     */
     public function header(string $header): self
     {
         $this->header = $header;
+
+        return $this;
+    }
+
+    /**
+     * Set parameters which are passed on during the request.
+     *
+     * @param array<string, string> $parameter
+     *
+     * @return $this
+     */
+    public function parameter(array $parameter): self
+    {
+        $this->parameter = $parameter;
 
         return $this;
     }
@@ -37,10 +66,18 @@ class FileDownloader
 
         if($this->header)
         {
-            $context = stream_context_create(['http' => [
-                'method'  => $this->method,
-                'header'  => $this->header
-            ]]);
+            $context['http']['method'] = $this->method;
+            $context['http']['header'] = $this->header;
+        }
+
+        if($this->parameter)
+        {
+            $context['http']['content'] = http_build_query($this->parameter);
+        }
+
+        if($context)
+        {
+            $context = stream_context_create($context);
         }
 
         $archive = new File($destination);

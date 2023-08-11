@@ -3,6 +3,14 @@ import ContainerComponent from "./ContainerComponent"
 import LoaderComponent, {LoaderMode} from "./LoaderComponent";
 
 /**
+ * The direction from which the user is coming.
+ */
+enum StepDirection {
+    PREV,
+    NEXT
+}
+
+/**
  * Modal class - A modal to go through different steps.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
@@ -24,44 +32,44 @@ export default class ModalComponent extends ContainerComponent
     public currentIndex: number
 
     /**
-     * Indicates from which direction the user is coming (Next = 1, Prev = 0)
+     * Indicates from which direction the user is coming
      */
-    public lastDirection: number = 1
+    public lastDirection: StepDirection = StepDirection.NEXT
 
     /**
      * The inside container of the modal.
      *
      * @private
      */
-    public readonly insideContainer: HTMLDivElement
+    public readonly insideContainer: HTMLDivElement = <HTMLDivElement> document.createElement('div')
 
     /**
      * The scroll container of the modal.
      *
      * @private
      */
-    private readonly scrollContainer: HTMLDivElement
+    private readonly scrollContainer: HTMLDivElement = <HTMLDivElement> document.createElement('div')
 
     /**
      * The container in which the steps are placed.
      *
      * @private
      */
-    private readonly stepContainer: HTMLDivElement
+    private readonly stepContainer: HTMLDivElement = <HTMLDivElement> document.createElement('div')
 
     /**
      * The container in which the notification are placed.
      *
      * @private
      */
-    public readonly notificationContainer: HTMLDivElement
+    public readonly notificationContainer: HTMLDivElement = <HTMLDivElement> document.createElement('div')
 
     /**
      * The Loader Instance for the modal.
      *
      * @private
      */
-    private readonly loaderElement: LoaderComponent
+    private readonly loaderElement: LoaderComponent = new LoaderComponent()
 
     /**
      * Collection of the steps to be displayed.
@@ -79,32 +87,17 @@ export default class ModalComponent extends ContainerComponent
         // Hide modal by default
         this.hide()
 
-        // Create inside container
-        this.insideContainer = <HTMLDivElement> document.createElement('div')
         this.insideContainer.classList.add('inside')
-
-        this.template.append(this.insideContainer)
-
-        // Create scroll container
-        this.scrollContainer = <HTMLDivElement> document.createElement('div')
         this.scrollContainer.classList.add('scrollable')
-
-        this.insideContainer.append(this.scrollContainer)
-
-        // Create step container
-        this.stepContainer = <HTMLDivElement> document.createElement('div')
+        this.notificationContainer.classList.add('notifications')
         this.stepContainer.id = 'steps'
 
+        this.template.append(this.insideContainer)
+        this.insideContainer.append(this.scrollContainer)
         this.scrollContainer.append(this.stepContainer)
-
-        // Create notification container
-        this.notificationContainer = <HTMLDivElement> document.createElement('div')
-        this.notificationContainer.classList.add('notifications')
-
         this.insideContainer.append(this.notificationContainer)
 
-        // Create loader
-        this.loaderElement = new LoaderComponent()
+        // Set loader options
         this.loaderElement.setMode(LoaderMode.COVER)
         this.loaderElement.appendTo(this.insideContainer)
     }
@@ -223,7 +216,7 @@ export default class ModalComponent extends ContainerComponent
      */
     public next(): void
     {
-        this.lastDirection = 1
+        this.lastDirection = StepDirection.NEXT
 
         this.open(++this.currentIndex)
     }
@@ -233,7 +226,7 @@ export default class ModalComponent extends ContainerComponent
      */
     public prev(): void
     {
-        this.lastDirection = 0
+        this.lastDirection = StepDirection.PREV
 
         // Close when it is already the first step
         if(this.currentIndex === 0)

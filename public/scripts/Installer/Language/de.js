@@ -25,6 +25,7 @@ module.exports = {
     "product.update":                               "Produkt aktualisieren",
     "product.info":                                 "Produktinformation",
     "product.remove":                               "Aus der Liste entfernen",
+    "product.no_version":                           "Das Produkt steht leider nicht für Ihre Contao-Version zur Verfügung. Bitte aktualisieren Sie Contao.",
 
     "product.loading.remove":                       "Das Produkt wird entfernt",
 

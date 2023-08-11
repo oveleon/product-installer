@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\LicenseConnector;
 
+use Contao\CoreBundle\ContaoCoreBundle;
 use Oveleon\ProductInstaller\Util\ConnectorUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -64,8 +65,9 @@ class LicenseController
             array_merge(
                 $parameter,
                 [
-                    'locale' => $request->getLocale(),
-                    'host'   => $request->getHost()
+                    'locale'         => $request->getLocale(),
+                    'host'           => $request->getHost(),
+                    'contao_version' => ContaoCoreBundle::getVersion()
                 ]
             )
         );
@@ -94,7 +96,8 @@ class LicenseController
         }
 
         return new JsonResponse([
-            'products' => $licenseInformation['products'] ?? []
+            'products' => $licenseInformation['products'] ?? [],
+            'installable' => $licenseInformation['installable'] ?? false
         ]);
     }
 }

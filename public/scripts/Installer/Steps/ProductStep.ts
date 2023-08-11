@@ -2,6 +2,7 @@ import StepComponent from "../Components/StepComponent";
 import State from "../State";
 import {i18n} from "../Language"
 import ProductComponent, {ProductOptions} from "../Components/ProductComponent";
+import NotificationComponent, {NotificationTypes} from "../Components/NotificationComponent";
 
 /**
  * An overview of the products of the associated license keys.
@@ -33,12 +34,22 @@ export default class ProductStep extends StepComponent
         const container = this.element('.products')
         const props = State.get('config')
 
+        const nextBtn =  <HTMLButtonElement> this.element('[data-next]');
+        nextBtn.disabled = !props.installable
+
+        // Add notification
+        if(!props.installable)
+        {
+            (new NotificationComponent(i18n('product.no_version'), NotificationTypes.WARN))
+                .appendTo(this.element('.products'))
+        }
+
         for (const productConfig of props.products)
         {
             const product = new ProductComponent(productConfig)
 
-            // Show selection only if there are more than one product
-            if(props.products.length > 1)
+            // Show selection only if there are more than one product and the product is installable
+            if(props.products.length > 1 && props.installable)
             {
                 product.onSelect(this.selectProduct, true)
             }

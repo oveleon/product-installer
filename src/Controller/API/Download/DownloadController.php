@@ -121,6 +121,9 @@ class DownloadController
                     $this->fileDownloader
                          ->method('POST')
                          ->header('ProductInstaller: '.$secret)
+                         ->parameter([
+                             'contao_version' => ContaoCoreBundle::getVersion()
+                         ])
                          ->download($connector['config']['entry'].'/package/download', $destination);
 
                     $response[] = $package;

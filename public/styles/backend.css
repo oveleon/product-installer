@@ -1396,7 +1396,7 @@
   padding: 25px;
   pointer-events: none;
 }
-#installer .notifications .notification {
+#installer .notification {
   display: flex;
   align-items: center;
   position: relative;
@@ -1406,11 +1406,11 @@
   margin-bottom: 5px;
   background: #e4f0f7;
 }
-#installer .notifications .notification p {
+#installer .notification p {
   padding: 0;
   margin: 0;
 }
-#installer .notifications .notification button.close {
+#installer .notification button.close {
   width: auto;
   height: auto;
   border: 0 none;
@@ -1418,14 +1418,14 @@
   line-height: 1;
   margin: 0 0 0 auto;
 }
-#installer .notifications .notification button.close:after {
+#installer .notification button.close:after {
   display: block;
   content: "✕";
 }
-#installer .notifications .notification.error {
+#installer .notification.error {
   background: #f7e4e4;
 }
-#installer .notifications .notification.warn {
+#installer .notification.warn {
   background: #f4eec9;
 }
 #installer .actions {

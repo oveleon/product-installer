@@ -113,43 +113,43 @@ $background-color: #688191;
     z-index: 100;
     padding: 25px;
     pointer-events: none;
+  }
 
-    .notification{
-      display: flex;
-      align-items: center;
-      position: relative;
-      padding: 5px 9px;
-      border-radius: 5px;
-      pointer-events: auto;
-      margin-bottom: 5px;
+  .notification{
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 5px 9px;
+    border-radius: 5px;
+    pointer-events: auto;
+    margin-bottom: 5px;
 
-      background: #e4f0f7;
+    background: #e4f0f7;
 
-      p{
-        padding: 0;
-        margin: 0;
+    p{
+      padding: 0;
+      margin: 0;
+    }
+
+    button.close{
+      width: auto;
+      height: auto;
+      border: 0 none;
+      padding: 3px;
+      line-height: 1;
+      margin: 0 0 0 auto;
+
+      &:after{
+        display: block;
+        content: '✕';
       }
+    }
 
-      button.close{
-        width: auto;
-        height: auto;
-        border: 0 none;
-        padding: 3px;
-        line-height: 1;
-        margin: 0 0 0 auto;
-
-        &:after{
-          display: block;
-          content: '✕';
-        }
-      }
-
-      &.error{
-        background: #f7e4e4;
-      }
-      &.warn{
-        background: #f4eec9;
-      }
+    &.error{
+      background: #f7e4e4;
+    }
+    &.warn{
+      background: #f4eec9;
     }
   }
 
