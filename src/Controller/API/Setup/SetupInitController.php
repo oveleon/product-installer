@@ -2,6 +2,8 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\Setup;
 
+use Composer\InstalledVersions;
+use Composer\Semver\VersionParser;
 use Contao\System;
 use Oveleon\ProductInstaller\InstallerLock;
 use Oveleon\ProductInstaller\ProductTaskType;
@@ -49,6 +51,7 @@ class SetupInitController
             ]);
         }
 
+        $requirements = [];
         $collection = [
             'product' => $product,
             'tasks'   => null
@@ -111,9 +114,28 @@ class SetupInitController
                     $collection['tasks'][] = $task;
 
                     break;
+
+                case ProductTaskType::COMPOSER_UPDATE->value:
+
+                    if($task['require'] ?? null)
+                    {
+                        foreach ($task['require'] as $bundle => $version)
+                        {
+                            $requirements[] = [
+                                'bundle' => $bundle,
+                                'version' => $version,
+                                'valid' => InstalledVersions::satisfies(new VersionParser(), $bundle, $version)
+                            ];
+                        }
+                    }
+
+                    break;
             }
         }
 
-        return new JsonResponse($collection);
+        return new JsonResponse([
+            'collection' => $collection,
+            'requirements' => $requirements
+        ]);
     }
 }

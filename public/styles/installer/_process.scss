@@ -59,7 +59,6 @@
 
         .notification{
           &.error p{ color: $text-color-error; }
-          &.warn p{ color: $text-color-warn; }
         }
 
         &:not(:empty){

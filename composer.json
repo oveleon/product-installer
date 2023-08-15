@@ -22,6 +22,7 @@
         "symfony/dependency-injection": "^5.4 || ^6.0",
         "symfony/http-kernel": "^5.4 || ^6.0",
         "symfony/mime": "^5.4 || ^6.0",
+        "composer/semver": "^3.3",
         "knplabs/github-api": "^3.9"
     },
     "require-dev": {

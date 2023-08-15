@@ -27,6 +27,15 @@ export interface TaskConfig {
 }
 
 /**
+ * Global requirement configuration.
+ */
+export interface RequirementConfig {
+    bundle: string,
+    version: string,
+    valid: boolean
+}
+
+/**
  * Product configuration.
  */
 export interface ProductConfig {

@@ -801,9 +801,6 @@
 #installer .process-step .errors .notification.error p {
   color: #b54c4c;
 }
-#installer .process-step .errors .notification.warn p {
-  color: #b5a65e;
-}
 #installer .process-step .errors:not(:empty) {
   margin-top: 5px;
 }
@@ -1144,14 +1141,13 @@
     transform: scale(1, 1);
   }
 }
-#installer .setup-headline {
+#installer .divider {
   position: relative;
   border-top: 1px dashed #d5d5d5;
-  margin-top: 33px;
-  margin-bottom: 20px;
-  padding-top: 40px;
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
-#installer .setup-headline:before {
+#installer .divider:before {
   position: absolute;
   display: flex;
   content: "";
@@ -1161,6 +1157,59 @@
   height: 18px;
   transform: translateX(-50%) translateY(50%);
   background: url("/bundles/productinstaller/icons/arrow_down.svg") center center no-repeat #fff;
+}
+#installer .requirements-overview + .tasks-overview {
+  margin-top: 25px;
+}
+#installer .requirements-overview {
+  counter-set: requirement-counter;
+}
+#installer .requirement-item {
+  counter-increment: requirement-counter;
+}
+#installer .requirement-item > .inside {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+}
+#installer .requirement-item .bundle:before {
+  display: inline-block;
+  content: counter(requirement-counter);
+  color: #b6b6b6;
+  margin-right: 6px;
+}
+#installer .requirement-item .version {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: center;
+}
+#installer .requirement-item .version:after {
+  display: inline-block;
+  content: "";
+  width: 15px;
+  height: 17px;
+  margin-left: 9px;
+  background-size: contain;
+  background-position: center center;
+}
+#installer .requirement-item .version.__true {
+  color: #048904;
+}
+#installer .requirement-item .version.__true:after {
+  background-image: url("/bundles/productinstaller/icons/check_rounded.svg");
+}
+#installer .requirement-item .version.__false {
+  color: #892404;
+}
+#installer .requirement-item .version.__false:after {
+  background-image: url("/bundles/productinstaller/icons/cross_rounded.svg");
+}
+#installer .requirement-item + .requirement-item {
+  margin-top: 7px;
 }
 #installer .task-item .inside {
   display: flex;
@@ -1208,6 +1257,10 @@
 }
 #installer .task-item + .task-item {
   margin-top: 20px;
+}
+#installer .task-item.not-valid {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 #installer .prompt {

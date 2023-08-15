@@ -2,7 +2,7 @@ import StepComponent from "../Components/StepComponent";
 import {i18n} from "../Language"
 import {call} from "../../Utils/network"
 import State from "../State";
-import {TaskConfig} from "../Product/Product";
+import {RequirementConfig, TaskConfig} from "../Product/Product";
 import ProductComponent from "../Components/ProductComponent";
 import SetupPromptStep from "./SetupPromptStep";
 import DropMenuComponent from "../Components/DropMenuComponent";
@@ -14,6 +14,8 @@ import DropMenuComponent from "../Components/DropMenuComponent";
  */
 export default class SetupStep extends StepComponent
 {
+    private requirementsValid: boolean = true
+
     /**
      * Initialize with product hash.
      *
@@ -32,7 +34,9 @@ export default class SetupStep extends StepComponent
         return `
             <h2>${i18n('setup.headline')}</h2>
             <div class="product-overview"></div>
-            <h4 class="setup-headline">${i18n('setup.available_imports.headline')} (<span></span>)</h4>
+            <div class="divider"></div>
+            <div class="requirements-overview"></div>
+            <div class="divider"></div>
             <div class="tasks-overview"></div>
             <div class="actions">
                 <button class="prev">${i18n('actions.back')}</button>
@@ -60,6 +64,9 @@ export default class SetupStep extends StepComponent
         // Add back button event
         this.element('button.prev').addEventListener('click', () => this.gotToDashboard())
 
+        // Reset requirement check
+        this.requirementsValid = true
+
         // Check license
         call('/contao/api/setup/init', {
             hash: this.productHash
@@ -78,33 +85,68 @@ export default class SetupStep extends StepComponent
                 return
             }
 
-            State.set('setup', response)
+            State.set('setup', response.collection)
 
             // Show product
-            const product: ProductComponent = new ProductComponent(response.product)
+            const product: ProductComponent = new ProductComponent(response.collection.product)
                   product.appendTo(this.element('.product-overview'))
 
+            // Create requirement list
+            this.createRequirements(response.requirements);
+
             // Create tasks
-            this.createTasks(response.tasks, product)
+            this.createTasks(response.collection.tasks, product)
 
         }).catch((e: Error) => super.error(e))
     }
 
+    /**
+     * Creates a list of requirements.
+     *
+     * @param requirements
+     *
+     * @protected
+     */
+    protected createRequirements(requirements: RequirementConfig[])
+    {
+        const requirementContainer: HTMLDivElement = <HTMLDivElement> this.element('.requirements-overview')
+
+        for(const requirement of requirements)
+        {
+            const reqElement: HTMLDivElement = document.createElement('div')
+            reqElement.classList.add('requirement-item')
+            reqElement.innerHTML = `
+                      <div class="inside"> 
+                          <div class="bundle">${requirement.bundle}</div>
+                          <div class="version __${requirement.valid.toString()}">${requirement.version}</div>
+                      </div>
+                  `
+
+            requirementContainer.appendChild(reqElement)
+
+            // Overwrite requirement
+            if(!requirement.valid)
+                this.requirementsValid = false
+        }
+    }
+
+    /**
+     * Creates a list of setup able tasks.
+     *
+     * @param tasks
+     * @param product
+     *
+     * @protected
+     */
     protected createTasks(tasks: TaskConfig[], product: ProductComponent): void
     {
         const taskContainer: HTMLDivElement = <HTMLDivElement> this.element('.tasks-overview')
-        const setupHeadline: HTMLHeadingElement = <HTMLHeadingElement> this.element('.setup-headline')
-
-        // ToDo: Check whether the setup can be run (check requirements 'composer_update' with version compare)
-
-        // Set task number
-        setupHeadline.querySelector('span').innerHTML = tasks.length.toString()
 
         for(const task of tasks)
         {
             // Create task
             const taskElement: HTMLDivElement = document.createElement('div')
-                  taskElement.classList.add('task-item')
+                  taskElement.classList.add('task-item', this.requirementsValid ? 'valid' : 'not-valid')
                   taskElement.innerHTML = `
                       <div class="inside">
                           <div class="content">
@@ -116,20 +158,23 @@ export default class SetupStep extends StepComponent
                   `
 
             // Create menu
-            new DropMenuComponent([
-                {
-                    label: i18n('actions.setup'),
-                    highlight: !product.get('setup'),
-                    value: () => this.runSetup(task, product)
-                },
-                {
-                    label: i18n('actions.setup.expert'),
-                    highlight: !product.get('setup'),
-                    value: () => this.runSetup(task, product, true)
-                },
-            ]).appendTo(
-                <HTMLDivElement> taskElement.querySelector('.actions')
-            )
+            if(this.requirementsValid)
+            {
+                new DropMenuComponent([
+                    {
+                        label: i18n('actions.setup'),
+                        highlight: !product.get('setup'),
+                        value: () => this.runSetup(task, product)
+                    },
+                    {
+                        label: i18n('actions.setup.expert'),
+                        highlight: !product.get('setup'),
+                        value: () => this.runSetup(task, product, true)
+                    },
+                ]).appendTo(
+                    <HTMLDivElement> taskElement.querySelector('.actions')
+                )
+            }
 
             taskContainer.appendChild(taskElement)
         }

@@ -1,11 +1,10 @@
 #installer{
 
-  .setup-headline{
+  .divider{
     position: relative;
     border-top: 1px dashed #d5d5d5;
-    margin-top: 33px;
-    margin-bottom: 20px;
-    padding-top: 40px;
+    margin-top: 25px;
+    margin-bottom: 25px;
 
     &:before{
       position: absolute;
@@ -17,6 +16,74 @@
       height: 18px;
       transform: translateX(-50%) translateY(50%);
       background: url('/bundles/productinstaller/icons/arrow_down.svg') center center no-repeat #fff;
+    }
+  }
+
+  .requirements-overview + .tasks-overview{
+    margin-top: 25px;
+  }
+
+  .requirements-overview{
+    counter-set: requirement-counter;
+  }
+
+  .requirement-item{
+    counter-increment: requirement-counter;
+
+    > .inside{
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+    }
+
+    .bundle{
+
+      &:before{
+        display: inline-block;
+        content: counter(requirement-counter);
+        color: #b6b6b6;
+        margin-right: 6px;
+      }
+    }
+
+    .version{
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      align-items: center;
+
+      &:after{
+        display: inline-block;
+        content: "";
+        width: 15px;
+        height: 17px;
+        margin-left: 9px;
+        background-size: contain;
+        background-position: center center;
+      }
+
+      &.__true{
+        color: #048904;
+
+        &:after{
+          background-image: url('/bundles/productinstaller/icons/check_rounded.svg');
+        }
+      }
+
+      &.__false{
+        color: #892404;
+
+        &:after{
+          background-image: url('/bundles/productinstaller/icons/cross_rounded.svg');
+        }
+      }
+    }
+
+    + .requirement-item{
+      margin-top: 7px;
     }
   }
 
@@ -82,6 +149,11 @@
 
     + .task-item{
       margin-top: 20px;
+    }
+
+    &.not-valid{
+      opacity: .5;
+      cursor: not-allowed;
     }
   }
 }
