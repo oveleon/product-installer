@@ -1164,6 +1164,9 @@
 #installer .requirements-overview {
   counter-set: requirement-counter;
 }
+#installer .requirements-overview:empty + .divider {
+  display: none;
+}
 #installer .requirement-item {
   counter-increment: requirement-counter;
 }

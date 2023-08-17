@@ -25,6 +25,10 @@
 
   .requirements-overview{
     counter-set: requirement-counter;
+
+    &:empty + .divider{
+      display: none;
+    }
   }
 
   .requirement-item{

@@ -10,6 +10,8 @@ use Contao\FilesModel;
 use Contao\Model;
 use Contao\StringUtil;
 
+use Contao\System;
+use Doctrine\DBAL\Connection;
 use Oveleon\ProductInstaller\Import\Prompt\AbstractPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPrompt;
 use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
@@ -77,7 +79,7 @@ class TableImport extends AbstractPromptImport
      */
     protected function start(): void
     {
-        $tableInfo = $this->getTableInformation();
+        $tableInfo = $this->getDataContainerInformation();
 
         // Consider only data container of type DC_Table and DC_Folder
         if(
@@ -206,6 +208,7 @@ class TableImport extends AbstractPromptImport
     public function log(): void
     {
         // ToDo: Log errors in the setup-lock-file and make them available in expert mode at the end.
+
     }
 
     /**
@@ -329,9 +332,9 @@ class TableImport extends AbstractPromptImport
     }
 
     /**
-     * Returns information about the specified table or null if no information can be determined.
+     * Returns information about the specified data container or null if no information can be determined.
      */
-    public function getTableInformation(): ?\stdClass
+    public function getDataContainerInformation(): ?\stdClass
     {
         $table = $this->getTableFromFileName($this->table);
 
@@ -459,8 +462,12 @@ class TableImport extends AbstractPromptImport
 
         $importCollection = [];
         $modelClass = $this->getClassFromFileName($this->table);
-        $tableInfo = $this->getTableInformation();
+        $tableInfo = $this->getDataContainerInformation();
         $hasParent = $tableInfo->hasParent;
+
+        /** @var Connection $connection */
+        $connection = System::getContainer()->get('doctrine.dbal.default_connection');
+        $validColumns = \array_keys($connection->createSchemaManager()->listTableColumns($this->getTableFromFileName($this->table)));
 
         foreach ($validatedRows as $row)
         {
@@ -475,7 +482,7 @@ class TableImport extends AbstractPromptImport
             $isRoot = $this->isRootRecord($row);
 
             // Clean up row
-            $this->removeUnnecessaryFields($row);
+            $this->removeNotImportableFields($row, $validColumns);
 
             // Create model and set data
             $model = new $modelClass();
@@ -556,7 +563,7 @@ class TableImport extends AbstractPromptImport
     /**
      * Removed unnecessary fields from row.
      */
-    protected function removeUnnecessaryFields(array &$row): void
+    protected function removeNotImportableFields(array &$row, array $validKeys): void
     {
         unset(
             $row['id'],
@@ -564,6 +571,17 @@ class TableImport extends AbstractPromptImport
             $row['_root'],
             $row['_keep']
         );
+
+        $validKeys = array_map('strtolower', $validKeys);
+
+        foreach ($row as $key => $value)
+        {
+            if(!\in_array(strtolower($key), $validKeys))
+            {
+                // ToDo Log
+                unset($row[$key]);
+            }
+        }
     }
 
     /**

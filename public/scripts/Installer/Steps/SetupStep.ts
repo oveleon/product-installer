@@ -116,11 +116,11 @@ export default class SetupStep extends StepComponent
             const reqElement: HTMLDivElement = document.createElement('div')
             reqElement.classList.add('requirement-item')
             reqElement.innerHTML = `
-                      <div class="inside"> 
-                          <div class="bundle">${requirement.bundle}</div>
-                          <div class="version __${requirement.valid.toString()}">${requirement.version}</div>
-                      </div>
-                  `
+                  <div class="inside"> 
+                      <div class="bundle">${requirement.bundle}</div>
+                      <div class="version __${requirement.valid.toString()}">${requirement.version}</div>
+                  </div>
+              `
 
             requirementContainer.appendChild(reqElement)
 
