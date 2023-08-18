@@ -3,8 +3,8 @@
   .divider{
     position: relative;
     border-top: 1px dashed #d5d5d5;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-top: 35px;
+    margin-bottom: 30px;
 
     &:before{
       position: absolute;
@@ -24,15 +24,27 @@
   }
 
   .requirements-overview{
-    counter-set: requirement-counter;
+    position: relative;
+    padding: 15px 35px 0 85px;
 
-    &:empty + .divider{
+    &:empty{
       display: none;
+    }
+
+    &:before{
+      content: "";
+      display: block;
+      position: absolute;
+      left: 30px;
+      top: -5px;
+      width: 1px;
+      height: 100%;
+      background-color: $divider-color;
     }
   }
 
   .requirement-item{
-    counter-increment: requirement-counter;
+    position: relative;
 
     > .inside{
       display: flex;
@@ -40,17 +52,10 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      font-weight: 500;
     }
 
     .bundle{
-
-      &:before{
-        display: inline-block;
-        content: counter(requirement-counter);
-        color: #b6b6b6;
-        margin-right: 6px;
-      }
+      font-weight: 500;
     }
 
     .version{
@@ -58,36 +63,48 @@
       flex-wrap: nowrap;
       flex-direction: row;
       align-items: center;
+      color: $text-color-info;
 
-      &:after{
+      &:before{
         display: inline-block;
         content: "";
-        width: 15px;
-        height: 17px;
-        margin-left: 9px;
+        width: 13px;
+        height: 13px;
+        margin-right: 5px;
         background-size: contain;
         background-position: center center;
-      }
-
-      &.__true{
-        color: #048904;
-
-        &:after{
-          background-image: url('/bundles/productinstaller/icons/check_rounded.svg');
-        }
-      }
-
-      &.__false{
-        color: #892404;
-
-        &:after{
-          background-image: url('/bundles/productinstaller/icons/cross_rounded.svg');
-        }
       }
     }
 
     + .requirement-item{
-      margin-top: 7px;
+      margin-top: 10px;
+    }
+
+    &.__true{
+
+      .version:before{
+        background-image: url('/bundles/productinstaller/icons/version_check.svg');
+      }
+    }
+
+    &.__false{
+      color: #892404;
+
+      .version:before{
+        background-image: url('/bundles/productinstaller/icons/version_error.svg');
+      }
+    }
+
+    &:before{
+      content: "";
+      display: block;
+      position: absolute;
+      right: 100%;
+      top: 8px;
+      width: 41px;
+      height: 1px;
+      margin-right: 13px;
+      background-color: $divider-color;
     }
   }
 

@@ -34,7 +34,6 @@ export default class SetupStep extends StepComponent
         return `
             <h2>${i18n('setup.headline')}</h2>
             <div class="product-overview"></div>
-            <div class="divider"></div>
             <div class="requirements-overview"></div>
             <div class="divider"></div>
             <div class="tasks-overview"></div>
@@ -114,11 +113,11 @@ export default class SetupStep extends StepComponent
         for(const requirement of requirements)
         {
             const reqElement: HTMLDivElement = document.createElement('div')
-            reqElement.classList.add('requirement-item')
+            reqElement.classList.add('requirement-item', `__${requirement.valid.toString()}`)
             reqElement.innerHTML = `
                   <div class="inside"> 
                       <div class="bundle">${requirement.bundle}</div>
-                      <div class="version __${requirement.valid.toString()}">${requirement.version}</div>
+                      <div class="version">${requirement.version}</div>
                   </div>
               `
 

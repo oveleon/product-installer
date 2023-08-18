@@ -31,8 +31,6 @@ With the Product Installer, you maintain full control over the installation and 
 <!--
 ### ToDo's
 - Docs
-- Die zu importierende Datenlage muss gegen die Schema / Columns gelegt werden, es dürfen nur Felder gespeichert werden, welche in der DB vorhanden sind um Fehler zu preventen
-- Check and show requirement in SetupStep / Check also for necessary records in the system defined in export  
 - Validators:
   - settings -> icons
   - user-group connections

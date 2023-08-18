@@ -10,7 +10,7 @@ module.exports = {
     "actions.start":                                "Start",
     "actions.products":                             "Product overview",
     "actions.setup":                                "Start quick setup",
-    "actions.setup.expert":                         'Start in expert mode <small><sup style="color: #006494; font-weight: 600;">ALPHA</sup></small>',
+    "actions.setup.expert":                         'Start in expert mode <small><sup style="display: inline-block; color: #006494; font-weight: 600; margin-right: 9px;">ALPHA</sup></small>',
 
     "type.product":                                 "Product",
     "type.package":                                 "Product package",
@@ -88,7 +88,7 @@ module.exports = {
     "license.loading":                              "Products are retrieved",
 
     // Product step
-    "product.headline":                             "Your products",
+    "product.headline":                             "Products to be registered",
 
     // Install step
     "install.headline":                             "Installation",

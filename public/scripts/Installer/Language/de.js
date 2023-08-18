@@ -10,7 +10,7 @@ module.exports = {
     "actions.start":                                "Starten",
     "actions.products":                             "Produktübersicht",
     "actions.setup":                                "Schnelle Einrichtung starten",
-    "actions.setup.expert":                         'Im Expertenmodus starten <small><sup style="color: #006494; font-weight: 600;">ALPHA</sup></small>',
+    "actions.setup.expert":                         'Im Expertenmodus starten <small><sup style="display: inline-block; color: #006494; font-weight: 600; margin-right: 9px;">ALPHA</sup></small>',
 
     "type.product":                                 "Produkt",
     "type.package":                                 "Produktpaket",
@@ -88,7 +88,7 @@ module.exports = {
     "license.loading":                              "Produkte werden abgerufen",
 
     // Product step
-    "product.headline":                             "Ihre Produkte",
+    "product.headline":                             "Zu registrierende Produkte",
 
     // Install step
     "install.headline":                             "Installation",

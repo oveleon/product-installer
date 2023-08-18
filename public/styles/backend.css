@@ -227,7 +227,7 @@
   outline-style: solid;
 }
 #installer .widget.text input::placeholder, #installer .widget.file input::placeholder {
-  color: #a6a6a6;
+  color: #989898;
 }
 #installer .widget.text input#license, #installer .widget.file input#license {
   letter-spacing: 0.8px;
@@ -272,7 +272,7 @@
 #installer .widget.checkbox label span {
   display: inline-block;
   margin-left: 10px;
-  color: #a6a6a6;
+  color: #989898;
 }
 #installer .widget.checkbox label[for^=check_all_] {
   filter: grayscale(1) brightness(1.2);
@@ -371,7 +371,7 @@
   position: absolute;
   right: 10px;
   top: 4px;
-  color: #a6a6a6;
+  color: #989898;
   background: rgba(255, 255, 255, 0.8);
   border-radius: 4px;
   padding: 0 4px;
@@ -564,7 +564,7 @@
 }
 #installer .license-connector .content .version {
   margin-top: 7px;
-  color: #a6a6a6;
+  color: #989898;
 }
 #installer .license-connector + .license-connector {
   margin-top: 15px;
@@ -654,7 +654,7 @@
   margin-bottom: 7px;
 }
 #installer .product .info .version {
-  color: #a6a6a6;
+  color: #989898;
 }
 #installer .product .info .version:before {
   position: relative;
@@ -1045,7 +1045,7 @@
   margin-bottom: 10px;
 }
 #installer .drop-menu .drop-list > div.disabled {
-  color: #a6a6a6;
+  color: #989898;
   cursor: default;
   pointer-events: none;
 }
@@ -1144,8 +1144,8 @@
 #installer .divider {
   position: relative;
   border-top: 1px dashed #d5d5d5;
-  margin-top: 25px;
-  margin-bottom: 25px;
+  margin-top: 35px;
+  margin-bottom: 30px;
 }
 #installer .divider:before {
   position: absolute;
@@ -1162,13 +1162,24 @@
   margin-top: 25px;
 }
 #installer .requirements-overview {
-  counter-set: requirement-counter;
+  position: relative;
+  padding: 15px 35px 0 85px;
 }
-#installer .requirements-overview:empty + .divider {
+#installer .requirements-overview:empty {
   display: none;
 }
+#installer .requirements-overview:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 30px;
+  top: -5px;
+  width: 1px;
+  height: 100%;
+  background-color: #cfcfcf;
+}
 #installer .requirement-item {
-  counter-increment: requirement-counter;
+  position: relative;
 }
 #installer .requirement-item > .inside {
   display: flex;
@@ -1176,43 +1187,48 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  font-weight: 500;
 }
-#installer .requirement-item .bundle:before {
-  display: inline-block;
-  content: counter(requirement-counter);
-  color: #b6b6b6;
-  margin-right: 6px;
+#installer .requirement-item .bundle {
+  font-weight: 500;
 }
 #installer .requirement-item .version {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
   align-items: center;
+  color: #989898;
 }
-#installer .requirement-item .version:after {
+#installer .requirement-item .version:before {
   display: inline-block;
   content: "";
-  width: 15px;
-  height: 17px;
-  margin-left: 9px;
+  width: 13px;
+  height: 13px;
+  margin-right: 5px;
   background-size: contain;
   background-position: center center;
 }
-#installer .requirement-item .version.__true {
-  color: #048904;
+#installer .requirement-item + .requirement-item {
+  margin-top: 10px;
 }
-#installer .requirement-item .version.__true:after {
-  background-image: url("/bundles/productinstaller/icons/check_rounded.svg");
+#installer .requirement-item.__true .version:before {
+  background-image: url("/bundles/productinstaller/icons/version_check.svg");
 }
-#installer .requirement-item .version.__false {
+#installer .requirement-item.__false {
   color: #892404;
 }
-#installer .requirement-item .version.__false:after {
-  background-image: url("/bundles/productinstaller/icons/cross_rounded.svg");
+#installer .requirement-item.__false .version:before {
+  background-image: url("/bundles/productinstaller/icons/version_error.svg");
 }
-#installer .requirement-item + .requirement-item {
-  margin-top: 7px;
+#installer .requirement-item:before {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 100%;
+  top: 8px;
+  width: 41px;
+  height: 1px;
+  margin-right: 13px;
+  background-color: #cfcfcf;
 }
 #installer .task-item .inside {
   display: flex;

@@ -1,7 +1,6 @@
 import Installer from "../Installer/Installer";
 import State from "../Installer/State";
 import {i18n} from "../Installer/Language";
-import {NotificationTypes} from "../Installer/Components/NotificationComponent";
 
 export async function call(url, parameter = {}, cache = false)
 {

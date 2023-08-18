@@ -37,7 +37,7 @@ export default class ContaoManagerStep extends StepComponent
     {
         return `
             <h2>${i18n('contao_manager.headline')}</h2>
-            <div class="authentication inherit">
+            <div class="authentication inherit" hidden>
                 <p>${i18n('contao_manager.description')}</p>
                 <div class="con-inactive" data-connection-state>${i18n('contao_manager.connection.inactive')}</div>
             </div>
@@ -121,9 +121,6 @@ export default class ContaoManagerStep extends StepComponent
 
         // Check if installer is authorized to communicate with contao manager
         call('/contao/api/contao_manager/session').then((response) => {
-            // Hide loader
-            this.modal.loader(false)
-
             // Set button events
             this.manuallyBtn.addEventListener('click', () => this.sectionManuallyInstall(true))
             this.closeBtn.addEventListener('click', () => this.sectionManuallyInstall(false))
@@ -152,6 +149,8 @@ export default class ContaoManagerStep extends StepComponent
             }
             else
             {
+                this.authContainer.hidden = false
+
                 // Check if contao manager exits
                 if(response?.error && response?.exists === false)
                 {
@@ -186,6 +185,10 @@ export default class ContaoManagerStep extends StepComponent
                 // Set connection
                 this.connectInactiveContainer.dataset.connectionState = 'inactive'
             }
+
+            // Hide loader
+            this.modal.loader(false)
+
         }).catch((e: Error) => super.error(e))
     }
 
