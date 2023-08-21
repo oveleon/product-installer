@@ -30,6 +30,8 @@ With the Product Installer, you maintain full control over the installation and 
 
 <!--
 ### ToDo's
+- Support local development with Contao Manager 1.7
+- Create database and migration process + Kill Task (DELETE Request) on success
 - Docs
 - Validators:
   - settings -> icons
@@ -40,7 +42,6 @@ With the Product Installer, you maintain full control over the installation and 
 - Create product update process (need server-side product management)
 - Optimize styles in Firefox and mobile (Firefox does not support the `:has()` selector)
 - Provide all dependencies for manual installation
-- Create database and migration process + Kill Task (DELETE Request) on success
 - Use translations everywhere
 
 - Set bundle license
