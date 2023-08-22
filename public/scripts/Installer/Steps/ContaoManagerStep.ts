@@ -132,6 +132,8 @@ export default class ContaoManagerStep extends StepComponent
                 State.set('installManually', this.manualCheckbox.checked)
             })
 
+            // ToDo: Handle manager auth via js (OAuth Implicit Grant)
+
             // Check the status to display the corresponding mask
             if(response?.status === 'OK')
             {
@@ -174,9 +176,10 @@ export default class ContaoManagerStep extends StepComponent
                     })
 
                     const parameter = new URLSearchParams({
-                        scope:      'admin',
-                        client_id:  'product_installer',
-                        return_url:  response.manager.return_url + '?' + returnUrl.toString()
+                        scope:         'admin',
+                        client_id:     'product_installer',
+                        response_type: 'token',
+                        redirect_uri:  response.manager.return_url + '?' + returnUrl.toString()
                     })
 
                     document.location.href = response.manager.path + '/#oauth?' + parameter.toString()

@@ -56,7 +56,7 @@ module.exports = {
 
     // Contao Manager
     "contao_manager.headline":                      "Contao Manager",
-    "contao_manager.description":                   "In order to install the necessary dependencies, we need access to Contao Manager. If you agree, please click on 'Authorize' and follow the further steps in Contao Manager. Afterwards, you will be led back to the installation process.",
+    "contao_manager.description":                   "In order to install the necessary dependencies, the Product Installer need access to Contao Manager. If you agree, please click on 'Authorize' and follow the further steps in Contao Manager. Afterwards, you will be led back to the installation process.",
     "contao_manager.description.notInstalled":      "Damit wir die erforderlichen Abhängigkeiten installieren können, benötigen wir Zugriff auf den Contao Manager. Um fortzufahren installieren Sie bitte den Contao Manager und starten Sie den Installationsprozess erneut.",
     "contao_manager.description.success":           "The access to Contao Manager has been authorized. If you still wish to perform a manual installation, please click on 'Manual Installation'.",
     "contao_manager.authorize":                     "Authorize",

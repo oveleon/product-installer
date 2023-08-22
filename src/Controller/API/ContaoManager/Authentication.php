@@ -40,23 +40,27 @@ class Authentication
         if (empty($config))
         {
             // Check whether the authorization has really been approved
-            if($request->get('token'))
+            if($request->get('access_token'))
             {
                 $this->connection->insert(
                     "tl_product_installer",
                     [
-                        'contao_manager_token' => $request->get('token')
+                        'contao_manager_token' => $request->get('access_token')
                     ]
                 );
             }
         }
         else
         {
-            $this->connection->update("tl_product_installer", [
-                'contao_manager_token' => $request->get('token')
-            ], [
-                'id' => $config[0]['id']
-            ]);
+            // Check whether the authorization has really been approved
+            if($request->get('access_token'))
+            {
+                $this->connection->update("tl_product_installer", [
+                    'contao_manager_token' => $request->get('access_token')
+                ], [
+                    'id' => $config[0]['id']
+                ]);
+            }
         }
 
         $parameter = http_build_query([

@@ -86,6 +86,10 @@ class ContaoManager
             $parameter['body'] = $body;
         }
 
+        // ToDo: Remove in production
+        $parameter['verify_peer'] = false;
+        $parameter['verify_host'] = false;
+
         return (HttpClient::create())->request(
             $method,
             $this->getRoute($route),
