@@ -1,5 +1,7 @@
 import {ProductConfig, Provider, TaskConfig, TaskType} from "./Product/Product";
 import ProductManager from "./Product/ProductManager";
+import {call} from "../Utils/network"
+import State from "./State";
 
 /**
  * Composer configuration.
@@ -138,5 +140,13 @@ export default class ContaoManager
         require[name] = version
 
         return require
+    }
+
+    /**
+     * Authenticates the app with the Contao Manager
+     */
+    public async setAuth(accessToken: string): Promise<void>
+    {
+        call("/contao/api/contao_manager/auth", {token: accessToken}, true).catch((e: Error) => new Error(e.message))
     }
 }

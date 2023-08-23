@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
+use Contao\System;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\RouterInterface;
@@ -57,7 +58,7 @@ class Session
         $response = [
             'manager' => [
                 'path'       => $managerPath,
-                'return_url' => $request->getSchemeAndHttpHost() . $this->router->generate(Authentication::class)
+                'return_url' => $request->getSchemeAndHttpHost() . $this->router->generate('contao_backend')
             ]
         ];
 

@@ -2,11 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
-use Contao\CoreBundle\Exception\RedirectResponseException;
-use Contao\System;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Oveleon\ProductInstaller\ContaoManagerFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,56 +14,25 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('%contao.backend.route_prefix%/api/contao_manager/auth',
     name:       Authentication::class,
     defaults:   ['_scope' => 'backend', '_token_check' => false],
-    methods:    ['GET']
+    methods:    ['POST']
 )]
 class Authentication
 {
     public function __construct(
-        private readonly Connection $connection,
+        private readonly ContaoManagerFile $managerFile,
         private readonly RequestStack $requestStack
     ){}
 
-    /**
-     * @throws Exception
-     */
-    public function __invoke(): JsonResponse
+    public function __invoke(): void
     {
-        $request   = $this->requestStack->getCurrentRequest();
-        $container = System::getContainer();
+        $request = (object) $this->requestStack->getCurrentRequest()->toArray();
 
-        $config = $this->connection->fetchAllAssociative("SELECT id, contao_manager_token FROM tl_product_installer");
-
-        if (empty($config))
+        if(!$request->token)
         {
-            // Check whether the authorization has really been approved
-            if($request->get('access_token'))
-            {
-                $this->connection->insert(
-                    "tl_product_installer",
-                    [
-                        'contao_manager_token' => $request->get('access_token')
-                    ]
-                );
-            }
-        }
-        else
-        {
-            // Check whether the authorization has really been approved
-            if($request->get('access_token'))
-            {
-                $this->connection->update("tl_product_installer", [
-                    'contao_manager_token' => $request->get('access_token')
-                ], [
-                    'id' => $config[0]['id']
-                ]);
-            }
+            return;
         }
 
-        $parameter = http_build_query([
-            'installer' => $request->get('installer'),
-            'start'     => $request->get('start')
-        ]);
-
-        throw new RedirectResponseException($request->getSchemeAndHttpHost() . $container->getParameter('contao.backend.route_prefix') . '?' . $parameter);
+        $this->managerFile->setToken($request->token);
+        $this->managerFile->save();
     }
 }

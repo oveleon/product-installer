@@ -170,7 +170,7 @@ export default class ContaoManagerStep extends StepComponent
 
                 // Set the event for authorization
                 this.authenticateBtn.addEventListener('click', () => {
-                    const returnUrl = new URLSearchParams({
+                    const returnUrlParams = new URLSearchParams({
                         installer:  State.get('connector'),
                         start:      this.modal.currentIndex.toString()
                     })
@@ -179,7 +179,7 @@ export default class ContaoManagerStep extends StepComponent
                         scope:         'admin',
                         client_id:     'product_installer',
                         response_type: 'token',
-                        redirect_uri:  response.manager.return_url + '?' + returnUrl.toString()
+                        redirect_uri:  response.manager.return_url + '?' + returnUrlParams.toString()
                     })
 
                     document.location.href = response.manager.path + '/#oauth?' + parameter.toString()

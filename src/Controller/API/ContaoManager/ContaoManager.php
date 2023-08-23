@@ -6,6 +6,7 @@ use Contao\Environment;
 use Contao\System;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use Oveleon\ProductInstaller\ContaoManagerFile;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -23,7 +24,7 @@ class ContaoManager
     private ?string $token = null;
 
     public function __construct(
-        private readonly Connection $connection
+        private readonly ContaoManagerFile $managerFile
     ){}
 
     /**
@@ -33,14 +34,12 @@ class ContaoManager
      */
     public function getToken(): ?string
     {
-        // ToDo: Use .env.installer / .env.local instead of database
-
         if($this->token)
         {
             return $this->token;
         }
 
-        return $this->token = ($this->connection->fetchOne("SELECT contao_manager_token FROM tl_product_installer") ?: null);
+        return $this->token = $this->managerFile->getToken();
     }
 
     /**

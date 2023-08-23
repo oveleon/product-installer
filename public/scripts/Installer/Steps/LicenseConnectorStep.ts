@@ -3,6 +3,7 @@ import {call} from "../../Utils/network"
 import StepComponent, {StepConfig} from "../Components/StepComponent";
 import {createInstance} from "../Utils/InstanceUtils";
 import State from "../State";
+import ContaoManager from "../ContaoManager";
 
 /**
  * License connector configuration.
@@ -62,11 +63,30 @@ export default class LicenseConnectorStep extends StepComponent
         // Lock step and protect for deletion
         this.locked = true
 
-        // Handle url trigger
+        // Handle url get parameter
         const params = new URLSearchParams(window.location.search)
 
         const installer = params.get('installer')
         const startAt = params.get('start')
+
+        // Handle uri fragments for authorization with contao manager
+        const hash = window.location.hash.slice(1);
+        const fragmentParameter = hash.split("&");
+
+        let fragment, fragments: any = {};
+
+        for (let i = 0; i < fragmentParameter.length; i += 1)
+        {
+            fragment = fragmentParameter[i].split("=");
+            fragments[fragment[0]] = fragment[1];
+        }
+
+        if(fragments.hasOwnProperty('access_token'))
+        {
+            const manager = new ContaoManager()
+            manager.setAuth(fragments.access_token)
+                   .catch((e: Error) => super.error(e))
+        }
 
         if(!installer)
         {
