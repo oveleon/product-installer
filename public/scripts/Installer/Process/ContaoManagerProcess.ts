@@ -6,6 +6,7 @@ import {TaskType} from "../Product/Product";
 import ProcessManager from "./ProcessManager";
 import ApiProcess from "./ApiProcess";
 import ComposerProcess from "./ComposerProcess";
+import DatabaseProcess from "./DatabaseProcess";
 
 /**
  * Manager processes.
@@ -13,7 +14,8 @@ import ComposerProcess from "./ComposerProcess";
 enum ManagerProcess {
     DOWNLOAD_PROCESS = 'downloadProcess',
     PACKAGE_PROCESS = 'packageProcess',
-    COMPOSER_PROCESS = 'composerProcess'
+    COMPOSER_PROCESS = 'composerProcess',
+    DATABASE_PROCESS = 'databaseProcess'
 }
 
 /**
@@ -176,6 +178,16 @@ export default class ContaoManagerProcess extends Process
             },
             parameter: () => this.contaoManager.getComposerTasks()
         }))
+
+        // Add database update process
+        /*this.processManager.addProcess(new DatabaseProcess(this.element('.manager-tasks'), {
+            name: ManagerProcess.DATABASE_PROCESS,
+            attributes: {
+                title: i18n('process.contao_manager.database.title'),
+                description: i18n('process.contao_manager.database.description')
+            },
+            parameter: {}
+        }))*/
 
         // Todo: Check database and migrate
     }
