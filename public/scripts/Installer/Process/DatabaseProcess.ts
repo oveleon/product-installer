@@ -1,6 +1,7 @@
 import Process from "./Process"
 import {call, get} from "../../Utils/network"
 import {TaskStatus} from "../ContaoManager";
+import {i18n} from "../Language"
 import ConsoleComponent from "../Components/ConsoleComponent";
 
 /**
@@ -79,21 +80,88 @@ export default class DatabaseProcess extends Process
             this.token = response.token
             this.updateRoute = response.updateRoute
 
-            // Enable start button
-            const startBtn = this.element('.start')
-            const skipBtn = this.element('.skip')
-
-            startBtn.hidden = false
-            skipBtn.hidden = false
-
-            startBtn.addEventListener('click', () => this.startMigration())
-            skipBtn.addEventListener('click', () => this.resolve(response))
+            if(parseInt(response.status?.total) > 0)
+                this.checkMigration();
+            else
+                this.resolve(response)
 
         }).catch((e: Error) => this.reject(e))
     }
 
-    startMigration(): void
+    /**
+     * Check if a migration still exists or need to be created.
+     */
+    checkMigration(): void
     {
+        call('/contao/api/contao_manager/database/migrate-status', {}).then((response) => {
+
+            // Check errors
+            if(response.error)
+            {
+                this.reject(response)
+                return
+            }
+
+            debugger
+
+            // If no content passed, we need to create the migration
+            if(response.originalStatus === 204)
+            {
+                call('/contao/api/contao_manager/database/create-migrate', {}).then((response) => {
+
+                    // Check errors
+                    if(response.error)
+                    {
+                        this.reject(response)
+                        return
+                    }
+
+                    this.showMigrationActions(response);
+                }).catch((e: Error) => this.reject(e))
+            }
+            else
+            {
+                this.showMigrationActions(response);
+            }
+
+        }).catch((e: Error) => this.reject(e))
+    }
+
+    showMigrationActions(response): void
+    {
+        this.loader.pause()
+
+        // Set initial console operations
+        this.console = new ConsoleComponent();
+        this.console.hide()
+        this.console.appendTo(this.template)
+        this.console.set(response.operations)
+
+        // Enable button
+        const detailsBtn = this.element('.details')
+        const startBtn = this.element('.start')
+        const skipBtn = this.element('.skip')
+
+        startBtn.hidden = false
+        skipBtn.hidden = false
+        detailsBtn.hidden = false
+
+        detailsBtn.addEventListener('click', () => this.console.toggle())
+        startBtn.addEventListener('click', () => this.startMigration(response))
+        skipBtn.addEventListener('click', () => {
+            startBtn.hidden = true
+            skipBtn.hidden = true
+            detailsBtn.hidden = true
+
+            this.console.hide()
+            this.resolve(response)
+        })
+    }
+
+    startMigration(response): void
+    {
+        this.loader.play()
+
         // Disable button
         const startBtn = this.element('.start')
         startBtn.hidden = true
@@ -101,7 +169,10 @@ export default class DatabaseProcess extends Process
         const skipBtn = this.element('.skip')
         skipBtn.hidden = true
 
-        call('/contao/api/contao_manager/database/set-migrate', this.getParameter()).then((response) => {
+        call('/contao/api/contao_manager/database/start-migrate', {
+            hash: response.hash,
+            type: response.type
+        }).then((response) => {
 
             debugger
 
@@ -112,18 +183,6 @@ export default class DatabaseProcess extends Process
                 return
             }
 
-            // Set initial console operations
-            this.console = new ConsoleComponent();
-            this.console.hide()
-            this.console.appendTo(this.template)
-            this.console.set(response.operations)
-
-            // Enable button
-            const detailsBtn = this.element('.details')
-
-            detailsBtn.hidden = false
-            detailsBtn.addEventListener('click', () => this.console.toggle())
-
             // Update console
             this.updateConsole()
         }).catch((e: Error) => this.reject(e))
@@ -131,13 +190,11 @@ export default class DatabaseProcess extends Process
 
     updateConsole(): void
     {
-        this.resolve({})
-
-        /**
-         * ! Because of the maintenance-mode, we are not allowed to query the tasks via our own controller and have to access the API of the Contao manager directly.
-         */
         // Check task status and update console
-        /*get(this.updateRoute, {'Contao-Manager-Auth': this.token}).then((response) => {
+        call('/contao/api/contao_manager/database/migrate-status', {}).then((response) => {
+
+            debugger
+
             // Check errors
             if(response.error)
             {
@@ -162,6 +219,6 @@ export default class DatabaseProcess extends Process
                     setTimeout(() => this.updateConsole(), 5000)
             }
 
-        }).catch((e: Error) => this.reject(e))*/
+        }).catch((e: Error) => this.reject(e))
     }
 }

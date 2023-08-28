@@ -107,7 +107,7 @@ module.exports = {
     "process.contao_manager.composer.title":        "Install dependencies",
     "process.contao_manager.composer.description":  "The dependencies are installed via composer.",
 
-    "process.contao_manager.database.title":        "Checking the database",
+    "process.contao_manager.database.title":        "Database & Migrations",
     "process.contao_manager.database.description":  "Check the database for changes.",
 
     // Download process

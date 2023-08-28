@@ -5,9 +5,10 @@ import {TaskStatus} from "../ContaoManager";
  * Operation config.
  */
 export interface OperationConfig {
-    console: string,
-    summary: string,
     status: string,
+    summary?: string,
+    name?: string
+    console?: string,
     details?: string
 }
 
@@ -56,7 +57,7 @@ export default class ConsoleOperationComponent extends ContainerComponent
         // Create summary container
         this.summaryContainer = <HTMLDivElement> document.createElement('div')
         this.summaryContainer.classList.add('summary')
-        this.summaryContainer.innerHTML = operation.summary
+        this.summaryContainer.innerHTML = operation?.summary ?? operation.name
         this.summaryContainer.addEventListener('click', () => {
             switch(this.template.dataset.status)
             {
@@ -82,15 +83,24 @@ export default class ConsoleOperationComponent extends ContainerComponent
         // Update status
         this.template.dataset.status = operation.status
 
-        if(!operation.console.trim())
+        // Single line operation
+        if(operation?.name)
+        {
+            // Update console
+            this.consoleContainer.innerHTML = operation.name.trim()
+            return
+        }
+
+        if(!operation.console?.trim())
         {
             return
         }
 
         // Update console
-        this.consoleContainer.innerHTML = operation.console
-            .split("\n")
-            .map((line) => `<div class="line">${line}</div>`)
-            .join("")
+        this.consoleContainer.innerHTML =
+            operation.console
+                .split("\n")
+                .map((line) => `<div class="line">${line}</div>`)
+                .join("")
     }
 }

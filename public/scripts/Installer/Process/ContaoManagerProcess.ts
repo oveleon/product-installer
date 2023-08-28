@@ -169,25 +169,26 @@ export default class ContaoManagerProcess extends Process
             this.contaoManager.addComposerTasks(composerTasks)
         }
 
+        // ToDo: Enable after finishing DatabaseProcess
         // Add a Composer update process that runs only when tasks exist
-        this.processManager.addProcess(new ComposerProcess(this.element('.manager-tasks'), {
+        /*this.processManager.addProcess(new ComposerProcess(this.element('.manager-tasks'), {
             name: ManagerProcess.COMPOSER_PROCESS,
             attributes: {
                 title: i18n('process.contao_manager.composer.title'),
                 description: i18n('process.contao_manager.composer.description')
             },
             parameter: () => this.contaoManager.getComposerTasks()
-        }))
+        }))*/
 
         // Add database update process
-        /*this.processManager.addProcess(new DatabaseProcess(this.element('.manager-tasks'), {
+        this.processManager.addProcess(new DatabaseProcess(this.element('.manager-tasks'), {
             name: ManagerProcess.DATABASE_PROCESS,
             attributes: {
                 title: i18n('process.contao_manager.database.title'),
                 description: i18n('process.contao_manager.database.description')
             },
             parameter: {}
-        }))*/
+        }))
 
         // Todo: Check database and migrate
     }

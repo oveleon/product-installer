@@ -107,7 +107,7 @@ module.exports = {
     "process.contao_manager.composer.title":        "Abhängigkeiten installieren",
     "process.contao_manager.composer.description":  "Die Abhängigkeiten werden über composer installiert.",
 
-    "process.contao_manager.database.title":        "Überprüfen der Datenbank",
+    "process.contao_manager.database.title":        "Datenbank & Migrationen",
     "process.contao_manager.database.description":  "Überprüfe die Datenbank auf Änderungen.",
 
     // Download process

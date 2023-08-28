@@ -108,21 +108,28 @@ class Database
             ], $status);
         }
 
-        $output = $response->toArray();
+        $output = ['create' => true];
 
-        return new JsonResponse($output, $status);
+        if($status !== Response::HTTP_NO_CONTENT)
+        {
+            $output = $response->toArray();
+        }
+
+        $output['originalStatus'] = $status;
+
+        return new JsonResponse($output, Response::HTTP_OK);
     }
 
-    #[Route('/set-migrate',
+    #[Route('/create-migrate',
         name: 'contao_manager_migrate_database',
         methods: ['POST']
     )]
-    public function setMigrate(): JsonResponse
+    public function createMigrate(): JsonResponse
     {
         try {
             $response = $this->contaoManager->call(
                 'contao/database-migration',
-                'POST',
+                'PUT',
                 json_encode([
                     'skipWarnings' => false,
                     'type' => ''
@@ -147,9 +154,19 @@ class Database
             ], $status);
         }
 
-        $output = $response->toArray();
+        if($status === Response::HTTP_CREATED)
+        {
+            // Get status after creating
+            $response = $this->contaoManager->call(
+                'contao/database-migration'
+            );
 
-        return new JsonResponse($output, $status);
+            $output = $response->toArray();
+        }
+
+        $output['originalStatus'] = $status;
+
+        return new JsonResponse($output, Response::HTTP_OK);
     }
 
     #[Route('/start-migrate',
@@ -164,11 +181,11 @@ class Database
         try {
             $response = $this->contaoManager->call(
                 'contao/database-migration',
-                'POST',
+                'PUT',
                 json_encode([
                     'hash' => $parameter['hash'],
-                    'type' => $parameter['type'],
-                    'withDeletes' => $parameter['delete']
+                    'type' => $parameter['type'] ?? '',
+                    'withDeletes' => $parameter['delete'] ?? false
                 ])
             );
 
@@ -182,20 +199,20 @@ class Database
             ], Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
-        if($status === Response::HTTP_BAD_REQUEST)
-        {
-            return new JsonResponse([
-                'error' => true,
-                'message' => 'A database migration task already exists.'
-            ], $status);
-        }
-
         if($status === Response::HTTP_NOT_IMPLEMENTED)
         {
             return new JsonResponse([
                 'error' => true,
                 'message' => 'The current Contao version does not support the database migration API.'
             ], $status);
+        }
+
+        if($status === Response::HTTP_BAD_REQUEST)
+        {
+            // Get status after creating
+            /*$response = $this->contaoManager->call(
+                'contao/database-migration'
+            );*/
         }
 
         $output = $response->toArray();
