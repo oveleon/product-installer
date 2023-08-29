@@ -55,18 +55,26 @@
       cursor: pointer;
       box-sizing: border-box;
 
-      &:first-child{
-        margin-top: 10px;
-      }
-
-      &:last-child{
-        margin-bottom: 10px;
-      }
-
       &.disabled{
         color: $text-color-info;
         cursor: default;
         pointer-events: none;
+      }
+
+      &.separator{
+        margin: 14px 10px 2px;
+
+        &:before{
+          display: block;
+          content: "";
+
+          position: absolute;
+          bottom: calc(100% + 7px);
+          left: -10px;
+          right: -10px;
+
+          border-top: 1px solid #efefef;
+        }
       }
 
       &.highlight {
@@ -85,6 +93,14 @@
 
           border-radius: 50%;
         }
+      }
+
+      &:first-child{
+        margin-top: 10px;
+      }
+
+      &:last-child{
+        margin-bottom: 10px;
       }
 
       &:hover:not(.disabled){

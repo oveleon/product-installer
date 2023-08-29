@@ -49,6 +49,23 @@ export default class ConsoleComponent extends ContainerComponent
         }
     }
 
+    public setDescription(desc: string, cssClass?: string): void
+    {
+        if(!this.template?.querySelector('.description'))
+        {
+            const descContainer = document.createElement('div')
+                  descContainer.classList.add('description')
+
+            this.template.append(descContainer)
+        }
+
+        const descElement = this.element('.description')
+              descElement.innerHTML = desc
+
+        if(cssClass)
+            descElement.classList.add(cssClass)
+    }
+
     /**
      * Update operations configurations.
      *

@@ -12,6 +12,10 @@ module.exports = {
     "actions.setup":                                "Start quick setup",
     "actions.setup.expert":                         'Start in expert mode <small><sup style="display: inline-block; color: #006494; font-weight: 600; margin-right: 9px;">ALPHA</sup></small>',
 
+    "actions.console.toggle":                       'Open/Close Console',
+    "actions.database.skip":                        'Skip and continue',
+    "actions.database.migrate":                     'Datenbank migrieren',
+
     "type.product":                                 "Product",
     "type.package":                                 "Product package",
 
@@ -57,7 +61,7 @@ module.exports = {
     // Contao Manager
     "contao_manager.headline":                      "Contao Manager",
     "contao_manager.description":                   "In order to install the necessary dependencies, the Product Installer need access to Contao Manager. If you agree, please click on 'Authorize' and follow the further steps in Contao Manager. Afterwards, you will be led back to the installation process.",
-    "contao_manager.description.notInstalled":      "Damit wir die erforderlichen Abhängigkeiten installieren können, benötigen wir Zugriff auf den Contao Manager. Um fortzufahren installieren Sie bitte den Contao Manager und starten Sie den Installationsprozess erneut.",
+    "contao_manager.description.notInstalled":      "In order to install the required dependencies, we need access to the Contao Manager. To continue, please install the Contao Manager and start the installation process again.",
     "contao_manager.description.success":           "The access to Contao Manager has been authorized. If you still wish to perform a manual installation, please click on 'Manual Installation'.",
     "contao_manager.authorize":                     "Authorize",
     "contao_manager.open_manager":                  "Open Contao Manager",
@@ -70,8 +74,8 @@ module.exports = {
     "contao_manager.connection.inactive":           "Authorization pending",
     "contao_manager.loading":                       "Connection to the Contao Manager is established",
     "contao_manager.loading.composer":              "The composer.json file is prepared for manual installation",
-    "contao_manager.process.title":                 "Install dependencies",
-    "contao_manager.process.description":           "The Contao Manager installs all necessary dependencies in the background to be able to setup the product.",
+    "contao_manager.process.title":                 "System preparation",
+    "contao_manager.process.description":           "The dependencies necessary for the product are checked and installed if necessary.",
 
     // Setup step
     "setup.headline":                               "Product setup",
@@ -117,6 +121,9 @@ module.exports = {
     // Register product process
     "process.register.title":                       "Product registration",
     "process.register.description":                 "The installed products are registered.",
+
+    // Database process
+    "process.database.deletionHint":                "Deletions are not taken into account and have to be done manually via the Contao Manager.",
 
     // Tasks
     "task.label.setup":                             "Setup",

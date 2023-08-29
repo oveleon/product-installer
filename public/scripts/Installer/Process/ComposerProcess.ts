@@ -3,6 +3,8 @@ import {call, get} from "../../Utils/network"
 import {TaskStatus} from "../ContaoManager";
 import NotificationComponent, {NotificationTypes} from "../Components/NotificationComponent";
 import ConsoleComponent from "../Components/ConsoleComponent";
+import DropMenuComponent from "../Components/DropMenuComponent";
+import {i18n} from "../Language"
 
 /**
  * Composer process class.
@@ -43,7 +45,7 @@ export default class ComposerProcess extends Process
                 <p>${this.config.attributes.description}</p>
             </div>
             <div class="actions">
-                <button class="details" hidden>Details</button>
+                <!--<button class="details" hidden>Details</button>-->
             </div>
         `;
     }
@@ -113,11 +115,16 @@ export default class ComposerProcess extends Process
             this.token = response.token
             this.updateRoute = response.updateRoute
 
-            // Disable button
-            const detailsBtn = this.element('.details')
+            // Create menu
+            const menu = new DropMenuComponent([
+                {
+                    label: i18n('actions.console.toggle'),
+                    value: () => { this.console.toggle() },
+                    highlight: true
+                }
+            ])
 
-            detailsBtn.hidden = false
-            detailsBtn.addEventListener('click', () => this.console.toggle())
+            menu.appendTo(this.element('.actions'))
 
             // Update console
             this.updateConsole()
@@ -150,7 +157,11 @@ export default class ComposerProcess extends Process
                     this.reject(response)
                     break
                 case TaskStatus.COMPLETE:
-                    this.resolve(response)
+
+                    call('/contao/api/contao_manager/task/delete', {}).then(() => {
+                        this.resolve(response)
+                    })
+
                     break
                 default:
                     setTimeout(() => this.updateConsole(), 5000)

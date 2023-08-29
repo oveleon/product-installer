@@ -3,6 +3,7 @@ import {call, get} from "../../Utils/network"
 import {TaskStatus} from "../ContaoManager";
 import {i18n} from "../Language"
 import ConsoleComponent from "../Components/ConsoleComponent";
+import DropMenuComponent from "../Components/DropMenuComponent";
 
 /**
  * Composer process class.
@@ -42,11 +43,7 @@ export default class DatabaseProcess extends Process
                 <div class="title">${this.config.attributes.title}</div>
                 <p>${this.config.attributes.description}</p>
             </div>
-            <div class="actions">
-                <button class="start" hidden>Datenbank aktualisieren</button>
-                <button class="skip" hidden>Überspringen</button>
-                <button class="details" hidden>Details</button>
-            </div>
+            <div class="actions"></div>
         `;
     }
 
@@ -102,8 +99,6 @@ export default class DatabaseProcess extends Process
                 return
             }
 
-            debugger
-
             // If no content passed, we need to create the migration
             if(response.originalStatus === 204)
             {
@@ -136,46 +131,50 @@ export default class DatabaseProcess extends Process
         this.console.hide()
         this.console.appendTo(this.template)
         this.console.set(response.operations)
+        this.console.setDescription(i18n('process.database.deletionHint'), 'warn')
 
-        // Enable button
-        const detailsBtn = this.element('.details')
-        const startBtn = this.element('.start')
-        const skipBtn = this.element('.skip')
+        // Create menu
+        const menu = new DropMenuComponent([
+            {
+                label: i18n('actions.console.toggle'),
+                value: () => { this.console.toggle() },
+                highlight: true
+            },
+            {
+                label: i18n('actions.database.skip'),
+                highlight: true,
+                value: () => {
+                    menu.disableOptions(i18n('actions.database.skip'))
+                    menu.disableOptions(i18n('actions.database.migrate'))
 
-        startBtn.hidden = false
-        skipBtn.hidden = false
-        detailsBtn.hidden = false
+                    this.console.hide()
+                    this.resolve(response)
+                },
+            },
+            {
+                label: i18n('actions.database.migrate'),
+                separator: true,
+                highlight: true,
+                value: () => {
+                    menu.disableOptions(i18n('actions.database.skip'))
+                    menu.disableOptions(i18n('actions.database.migrate'))
 
-        detailsBtn.addEventListener('click', () => this.console.toggle())
-        startBtn.addEventListener('click', () => this.startMigration(response))
-        skipBtn.addEventListener('click', () => {
-            startBtn.hidden = true
-            skipBtn.hidden = true
-            detailsBtn.hidden = true
+                    this.startMigration(response)
+                },
+            }
+        ])
 
-            this.console.hide()
-            this.resolve(response)
-        })
+        menu.appendTo(this.element('.actions'))
     }
 
     startMigration(response): void
     {
         this.loader.play()
 
-        // Disable button
-        const startBtn = this.element('.start')
-        startBtn.hidden = true
-
-        const skipBtn = this.element('.skip')
-        skipBtn.hidden = true
-
         call('/contao/api/contao_manager/database/start-migrate', {
             hash: response.hash,
             type: response.type
         }).then((response) => {
-
-            debugger
-
             // Check errors
             if(response.error)
             {
@@ -192,9 +191,6 @@ export default class DatabaseProcess extends Process
     {
         // Check task status and update console
         call('/contao/api/contao_manager/database/migrate-status', {}).then((response) => {
-
-            debugger
-
             // Check errors
             if(response.error)
             {
@@ -213,7 +209,12 @@ export default class DatabaseProcess extends Process
                     this.reject(response)
                     break
                 case TaskStatus.COMPLETE:
-                    this.resolve(response)
+                    // Check task status and update console
+                    call('/contao/api/contao_manager/database/delete-migrate', {})
+                    .then((response) => {
+                        this.resolve(response)
+                    })
+
                     break
                 default:
                     setTimeout(() => this.updateConsole(), 5000)

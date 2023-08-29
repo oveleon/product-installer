@@ -6,7 +6,7 @@ import ContainerComponent from "./ContainerComponent"
 export interface DropMenuOptionConfig {
     label: string
     value: Function
-
+    separator?: boolean
     disabled?: boolean
     highlight?: boolean
 }
@@ -29,6 +29,13 @@ export default class DropMenuComponent extends ContainerComponent
      * @private
      */
     private open: boolean = false
+
+    /**
+     * DropMenu Container.
+     *
+     * @private
+     */
+    private container: HTMLDivElement = null
 
     /**
      * Creates a drop menu instance.
@@ -58,6 +65,24 @@ export default class DropMenuComponent extends ContainerComponent
         this.template.classList.toggle('open', this.open)
     }
 
+    enableOptions(label: string)
+    {
+        (<HTMLDivElement> this.container.querySelector(`[data-option-name="${label}"]`))?.classList.remove('disabled')
+    }
+
+    disableOptions(label: string)
+    {
+        const option = <HTMLDivElement> this.container.querySelector(`[data-option-name="${label}"]`)
+
+        option?.classList.add('disabled')
+        option?.classList.remove('highlight')
+
+        if(!this.container.querySelector('.highlight'))
+        {
+            this.template.classList.remove('highlight')
+        }
+    }
+
     /**
      * Generates the drop menu template.
      *
@@ -72,19 +97,25 @@ export default class DropMenuComponent extends ContainerComponent
             <div class="drop-list"></div>
         `)
 
-        const dropList = this.element('.drop-list')
+        this.container = <HTMLDivElement> this.element('.drop-list')
 
         // Create options
         for (const opt of this.options)
         {
             const option = <HTMLDivElement> document.createElement('div')
 
+            option.dataset.optionName = opt.label
             option.innerHTML = opt.label
 
             if(opt.highlight)
             {
                 option.classList.add('highlight')
                 this.template.classList.add('highlight')
+            }
+
+            if(opt.separator)
+            {
+                option.classList.add('separator')
             }
 
             if(opt.disabled)
@@ -97,7 +128,7 @@ export default class DropMenuComponent extends ContainerComponent
                 {
                     option.classList.remove('highlight')
 
-                    if(!dropList.querySelector('.highlight'))
+                    if(!this.container.querySelector('.highlight'))
                     {
                         this.template.classList.remove('highlight')
                     }
@@ -107,7 +138,7 @@ export default class DropMenuComponent extends ContainerComponent
                 opt.value.call(this)
             })
 
-            dropList.append(option)
+            this.container.append(option)
         }
 
         // Add toggle and close event

@@ -207,16 +207,36 @@ class Database
             ], $status);
         }
 
+        // Is a migration is running, delete it and start again
         if($status === Response::HTTP_BAD_REQUEST)
         {
             // Get status after creating
-            /*$response = $this->contaoManager->call(
-                'contao/database-migration'
-            );*/
+            $this->deleteMigrate();
+
+            return $this->startMigrate();
         }
+
+        $response = $this->contaoManager->call(
+            'contao/database-migration'
+        );
 
         $output = $response->toArray();
 
         return new JsonResponse($output, $status);
+    }
+
+    #[Route('/delete-migrate',
+        name: 'contao_manager_migrate_delete',
+        methods: ['DELETE']
+    )]
+    public function deleteMigrate(): JsonResponse
+    {
+        // Get status after creating
+        $this->contaoManager->call(
+            'contao/database-migration',
+            'DELETE'
+        );
+
+        return new JsonResponse(['OK']);
     }
 }

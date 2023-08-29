@@ -171,6 +171,10 @@ export default class LicenseConnectorStep extends StepComponent
                 return
             }
 
+            // Clean container
+            this.element('.license-connector-container').innerHTML = '';
+
+            // Add connectors
             for (const connector of response.license_connectors)
             {
                 this.createLicenseConnectorElement(connector)

@@ -35,15 +35,15 @@
       }
 
       .actions{
+        display: flex;
+        justify-content: flex-end;
+
         width: 100%;
         margin: 5px 0 0;
         padding: 0;
-        text-align: right;
-        align-self: center;
 
-        button{
-          margin: 0;
-        }
+        align-self: center;
+        text-align: left;
       }
 
       .errors{
@@ -81,7 +81,7 @@
       }
 
       &:not(:empty) {
-        margin-top: 20px;
+        margin-top: 25px;
       }
     }
   }

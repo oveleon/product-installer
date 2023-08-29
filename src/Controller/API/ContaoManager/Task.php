@@ -186,7 +186,7 @@ class Task
             ], $status);
         }
 
-        return new JsonResponse($response->toArray(), $status);
+        return new JsonResponse(['OK'], $status);
     }
 
     /**

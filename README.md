@@ -30,8 +30,6 @@ With the Product Installer, you maintain full control over the installation and 
 
 <!--
 ### ToDo's
-- Support local development with Contao Manager 1.7
-- Create database and migration process + Kill Task (DELETE Request) on success
 - Docs
 - Validators:
   - settings -> icons

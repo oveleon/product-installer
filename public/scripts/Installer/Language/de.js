@@ -12,6 +12,10 @@ module.exports = {
     "actions.setup":                                "Schnelle Einrichtung starten",
     "actions.setup.expert":                         'Im Expertenmodus starten <small><sup style="display: inline-block; color: #006494; font-weight: 600; margin-right: 9px;">ALPHA</sup></small>',
 
+    "actions.console.toggle":                       'Konsole öffnen/schließen',
+    "actions.database.skip":                        'Überspringen und fortfahren',
+    "actions.database.migrate":                     'Datenbank migrieren',
+
     "type.product":                                 "Produkt",
     "type.package":                                 "Produktpaket",
 
@@ -70,8 +74,8 @@ module.exports = {
     "contao_manager.connection.inactive":           "Verbindung nicht hergestellt",
     "contao_manager.loading":                       "Verbindung zum Contao Manager wird hergestellt",
     "contao_manager.loading.composer":              "Die composer.json Datei wird für die manuelle Installation vorbereitet",
-    "contao_manager.process.title":                 "Abhängigkeiten installieren",
-    "contao_manager.process.description":           "Der Contao Manager installiert im Hintergrund alle nötigen Abhängigkeiten um das Produkt anschließend Einrichten zu können.",
+    "contao_manager.process.title":                 "Systemvorbereitung",
+    "contao_manager.process.description":           "Die für das Produkt notwendigen Abhängigkeiten werden geprüft und wenn nötig installiert.",
 
     // Setup step
     "setup.headline":                               "Produkteinrichtung",
@@ -117,6 +121,9 @@ module.exports = {
     // Register product process
     "process.register.title":                       "Produktregistrierung",
     "process.register.description":                 "Die installierten Produkte werden registriert.",
+
+    // Database process
+    "process.database.deletionHint":                "Löschungen werden nicht berücksichtigt und müssen manuell über den Contao Manager durchgeführt werden.",
 
     // Tasks
     "task.label.setup":                             "Einrichten",
