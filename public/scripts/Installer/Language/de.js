@@ -42,7 +42,7 @@ module.exports = {
     "product.label.shop":                           "Erworben bei",
 
     // Dashboard step
-    "dashboard.headline":                           "Meine Produkte",
+    "dashboard.headline":                           "Produktübersicht",
     "dashboard.noProducts":                         "Sie haben noch keine Produkte für dieses Projekt registriert.",
     "dashboard.actions.register":                   "Produkt registrieren",
     "dashboard.loading":                            "Produkte werden abgerufen",
@@ -53,8 +53,8 @@ module.exports = {
     "upload.loading":                               "Produkt wird hochgeladen",
 
     // License Connector step
-    "license_connector.headline":                   "Produkt registrieren",
-    "license_connector.load.connector":             "Informationen werden abgerufen",
+    "license_connector.headline":                   "Schittstelle wählen",
+    "license_connector.load.connector":             "Schnittstellen werden abgerufen",
     "license_connector.load.steps":                 "Masken werden geladen",
     "license_connector.load.redirect":              "Einen kleinen Moment noch, Sie werden gleich weitergeleitet",
 
@@ -83,11 +83,13 @@ module.exports = {
     "setup.available_imports.headline":             "Verfügbare Datenpakete in diesem Produkt",
     "setup.loading":                                "Produkteinrichtung wird vorbereitet",
     "setup.loading.step":                           "Produkteinrichtung wird durchgeführt",
+    "setup.complete":                               "Produkteinrichtung erfolgreich abgeschlossen",
 
     // License step
     "license.headline":                             "Lizenzüberprüfung",
     "license.description":                          "Geben Sie hier Ihren Lizenzschlüssel für das zu installierende Produkt an. Im nächsten Schritt können Sie die zugehörigen Produkte sichten sowie installieren oder updaten.",
     "license.form.label.license":                   "Produktlizenz",
+    "license.form.desc.license":                    "Bitte geben Sie hier Ihre Produktlizenz ein.",
     "license.actions.next":                         "Produktlizenz überprüfen",
     "license.loading":                              "Produkte werden abgerufen",
 

@@ -8,8 +8,8 @@ installer:
             license_empty:              Please enter a valid license.
     connector:
         upload:
-            title:                      Upload
-            description:                If you have products as a file, you can upload them here and then set them up.
+            title:                      Upload products
+            description:                Through this interface you can upload your product files (.content) and make them available.
         errors:
             connection_failed:          No connection to %connectorTitle% could be established.
             connection_failed_global:   No connection can be established at the moment, please try again later.

@@ -28,7 +28,7 @@ $divider-color: #cfcfcf;
 }
 
 #installer{
-  position: fixed;
+  /*position: fixed;
   inset: 0 0 0 0;
   z-index: 9999;
 
@@ -152,7 +152,7 @@ $divider-color: #cfcfcf;
     &.warn{
       background: #f4eec9;
     }
-  }
+  }*/
 
   .actions{
     margin-top: auto;
@@ -211,15 +211,15 @@ $divider-color: #cfcfcf;
     }
   }
 
-  &:before {
+ /* &:before {
     content: '';
     display: inline-block;
     height: 100%;
     vertical-align: middle;
-  }
+  }*/
 }
 
-div.file-upload{
+/*div.file-upload{
   flex-grow: 1;
 
   border-radius: 30px;
@@ -232,7 +232,7 @@ div.file-upload{
   &.dz-drag-hover{
     border-color: $primary-color;
   }
-}
+}*/
 
 div.setup-complete{
   flex-grow: 1;
@@ -240,6 +240,7 @@ div.setup-complete{
   background-size: auto 100%;
 }
 
+/*
 @media (min-width: 600px) {
   #installer{
 
@@ -271,4 +272,5 @@ div.setup-complete{
     }
   }
 }
+*/
 

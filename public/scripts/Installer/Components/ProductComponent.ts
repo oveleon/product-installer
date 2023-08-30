@@ -52,7 +52,7 @@ export default class ProductComponent extends ContainerComponent
         super('product' + ProductComponent.productId)
 
         // Add class
-        this.addClass('product')
+        this.addClass('product', 'box')
 
         // Generate template
         this.generate()
@@ -219,9 +219,6 @@ export default class ProductComponent extends ContainerComponent
                 <div class="content">
                   <div class="title">${this.product.title}</div>
                   <div class="description">${this.product.description}</div>
-                  <div class="badges">
-                    <span class="type badge ${this.product.type}">${i18n('type.' + this.product.type)}</span>
-                  </div>
                 </div>
                 <div class="info">
                     <div class="state badge"></div>
@@ -229,6 +226,12 @@ export default class ProductComponent extends ContainerComponent
                 </div>
             </div>
         `)
+
+        /**
+         <div class="badges">
+            <span class="type badge ${this.product.type}">${i18n('type.' + this.product.type)}</span>
+         </div>
+         */
 
         this.generateState()
         this.createVersionCompare()

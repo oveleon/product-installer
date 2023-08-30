@@ -18,7 +18,6 @@ export default class SetupPromptStep extends StepComponent
     /**
      * @inheritDoc
      */
-    // ToDo: Close button need to reset everything (?)
     protected getTemplate(): string
     {
         return `
@@ -30,7 +29,7 @@ export default class SetupPromptStep extends StepComponent
                 </div>
             </div>
             <div class="complete inherit" hidden>
-                <div class="setup-complete"></div>
+                <div class="graphic setup-complete">${i18n('setup.complete')}</div>
                 <div class="actions">
                     <button class="goto-products">${i18n('actions.products')}</button>
                     <button data-close class="primary">${i18n('actions.close')}</button>

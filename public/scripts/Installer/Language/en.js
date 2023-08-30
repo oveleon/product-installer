@@ -42,7 +42,7 @@ module.exports = {
     "product.label.shop":                           "Purchased at",
 
     // Dashboard step
-    "dashboard.headline":                           "My products",
+    "dashboard.headline":                           "Produktübersicht",
     "dashboard.noProducts":                         "You have not registered any products in this project yet.",
     "dashboard.actions.register":                   "Register product",
     "dashboard.loading":                            "Products are retrieved",
@@ -53,7 +53,7 @@ module.exports = {
     "upload.loading":                               "Product is uploading",
 
     // License Connector step
-    "license_connector.headline":                   "Register product",
+    "license_connector.headline":                   "Select interface",
     "license_connector.load.connector":             "Information is retrieved",
     "license_connector.load.steps":                 "Masks are loaded",
     "license_connector.load.redirect":              "Just a moment, you will be redirected soon",
@@ -83,11 +83,13 @@ module.exports = {
     "setup.available_imports.headline":             "Available data packages in this product",
     "setup.loading":                                "Product setup is prepared",
     "setup.loading.step":                           "Setup is carried out",
+    "setup.complete":                               "Product setup successfully completed",
 
     // License step
     "license.headline":                             "License verification",
     "license.description":                          "Enter your license key for the product to be installed here. In the next step you can view the associated products and install or update them.",
     "license.form.label.license":                   "Product license",
+    "license.form.desc.license":                    "Please enter your product license here.",
     "license.actions.next":                         "Check license",
     "license.loading":                              "Products are retrieved",
 

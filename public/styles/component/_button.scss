@@ -1,0 +1,69 @@
+#installer{
+
+  button{
+    display: inline-block;
+
+    width: 100%;
+    height: 38px;
+    padding: 0 14px;
+    margin: 0 5px;
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 20px;
+
+    color: var(--pi-button-color);
+    background-color: var(--pi-button-bg-color);
+    transition: all .15s;
+
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+
+    border: 1px solid var(--pi-button-border-color);
+    border-radius: var(--pi-border-radius-1);
+
+    &:hover{
+      color: var(--pi-button-hover-color);
+      background-color: var(--pi-button-bg-hover-color);
+      border-color: var(--pi-button-border-hover-color);
+    }
+
+    &.primary{
+      color: #fff;
+      border-color: var(--pi-primary-color);
+      background: var(--pi-primary-color);
+
+      &:hover{
+        border-color: var(--pi-primary-hover-color);
+        background: var(--pi-primary-hover-color);
+      }
+    }
+
+    &[disabled]{
+      color: #bfbfbf !important;
+      background-color: #f9f9f9 !important;
+      border-color: #dfdfdf !important;
+      pointer-events: none !important;
+      cursor: not-allowed !important;
+    }
+
+    + button{
+      margin-bottom: var(--pi-spacing-1);
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  #installer {
+
+    button {
+      width: auto;
+
+      + button{
+        margin-bottom: 0;
+      }
+    }
+  }
+}

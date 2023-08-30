@@ -39,15 +39,15 @@ export default class ContaoManagerStep extends StepComponent
             <h2>${i18n('contao_manager.headline')}</h2>
             <div class="authentication inherit" hidden>
                 <p>${i18n('contao_manager.description')}</p>
-                <div class="con-inactive" data-connection-state>${i18n('contao_manager.connection.inactive')}</div>
+                <div class="graphic con-inactive" data-connection-state>${i18n('contao_manager.connection.inactive')}</div>
             </div>
             <div class="not-installed inherit" hidden>
                 <p>${i18n('contao_manager.description.notInstalled')}</p>
-                <div class="con-not-found"></div>
+                <div class="graphic not-installed"></div>
             </div>
             <div class="install inherit" hidden>
                 <p>${i18n('contao_manager.description.success')}</p>
-                <div class="con-active" data-connection-state class="connection">${i18n('contao_manager.connection.active')}</div>
+                <div class="graphic con-active" data-connection-state>${i18n('contao_manager.connection.active')}</div>
             </div>
             <div class="manually inherit" hidden>
                 <p>${i18n('contao_manager.install.description')}</p>
@@ -131,8 +131,6 @@ export default class ContaoManagerStep extends StepComponent
                 // Save state to skip processes
                 State.set('installManually', this.manualCheckbox.checked)
             })
-
-            // ToDo: Handle manager auth via js (OAuth Implicit Grant)
 
             // Check the status to display the corresponding mask
             if(response?.status === 'OK')

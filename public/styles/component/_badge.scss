@@ -1,0 +1,46 @@
+#installer{
+
+  .badge{
+    display: inline-block;
+    font-size: var(--pi-font-size-small);
+    font-weight: var(--pi-font-weight-regular);
+    line-height:  var(--pi-font-size-info);
+
+    white-space: nowrap;
+    word-break: keep-all;
+
+    padding: 4px 8px;
+
+    background: rgb(249, 250, 251);
+    border: 1px solid rgb(229, 231, 235);
+    border-radius: 6px;
+
+    &.type{
+      border-color: rgb(229, 231, 235);
+      background: rgb(239, 246, 255);
+      color: rgb(29, 78, 216);
+    }
+
+    &.registered{
+      border-color: rgb(22 163 74 / 0.2);
+      background: rgb(240, 253, 244);
+      color: rgb(21, 128, 61);
+    }
+
+    &.removed{
+      border-color: rgb(229, 231, 235);
+      background: rgb(254, 242, 242);
+      color: rgb(185, 28, 28);
+    }
+
+    &.package{
+      border-color: rgb(229, 231, 235);
+      background: rgb(250, 245, 255);
+      color: rgb(126, 34, 206);
+    }
+
+    &:empty{
+      display: none;
+    }
+  }
+}

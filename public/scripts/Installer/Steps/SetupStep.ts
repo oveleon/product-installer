@@ -173,6 +173,8 @@ export default class SetupStep extends StepComponent
                 ]).appendTo(
                     <HTMLDivElement> taskElement.querySelector('.actions')
                 )
+            }else{
+                // ToDo: Show notification
             }
 
             taskContainer.appendChild(taskElement)

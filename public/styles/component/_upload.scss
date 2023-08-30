@@ -1,0 +1,17 @@
+#installer{
+
+  div.file-upload{
+    flex-grow: 1;
+
+    border-radius: var(--pi-border-radius-3);
+    border: 1px dashed var(--pi-border-color-2);
+    background: url('/bundles/productinstaller/images/graphics/upload.gif') center center no-repeat;
+    background-size: auto 100%;
+
+    cursor: pointer;
+
+    &.dz-drag-hover{
+      border-color: var(--pi-primary-color);
+    }
+  }
+}

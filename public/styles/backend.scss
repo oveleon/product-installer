@@ -1,1 +1,24 @@
-@import "installer/installer";
+//@import "installer/installer";
+
+@import "../fonts/inter.css";
+
+@import "vars";
+@import "util/mixins";
+@import "util/animation";
+
+@import "layout/layout";
+@import "layout/step";
+@import "layout/form";
+@import "layout/loader";
+@import "layout/typography";
+@import "layout/graphics";
+
+@import "component/popup";
+@import "component/menu";
+@import "component/button";
+@import "component/badge";
+@import "component/box";
+@import "component/process";
+@import "component/upload";
+@import "component/notification";
+@import "component/setup";

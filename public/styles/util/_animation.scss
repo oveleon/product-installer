@@ -1,0 +1,73 @@
+@keyframes pi-loader-pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: .6;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes pi-overlay-fade-in {
+  0% {
+    background: rgba(0,0,0,0);
+  }
+
+  100% {
+    background: var(--pi-overlay-bg-color);
+  }
+}
+
+@keyframes pi-loader-spinner {
+  0% {
+    transform: rotate(45deg) rotateX(-25deg) rotateY(25deg);
+  }
+
+  50% {
+    transform: rotate(45deg) rotateX(-385deg) rotateY(25deg);
+  }
+
+  100% {
+    transform: rotate(45deg) rotateX(-385deg) rotateY(385deg);
+  }
+}
+
+
+@keyframes pi-loader-color {
+  0% {
+    background-color: rgba(#e57c11,0.2);
+    border-color: #e57c11;
+  }
+
+  25% {
+    background-color: rgba(#91C042,0.2);
+    border-color: #91C042;
+  }
+
+  50% {
+    background-color: rgba(#6FBEB3,0.2);
+    border-color: #6FBEB3;
+  }
+
+  75% {
+    background-color: rgba(#F7CC29,0.2);
+    border-color: #F7CC29;
+  }
+  100% {
+    background-color: rgba(#e57c11,0.2);
+    border-color: #e57c11;
+  }
+}
+
+@keyframes pi-slide-in {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

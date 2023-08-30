@@ -1,0 +1,110 @@
+#installer{
+
+  .process{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: var(--pi-spacing-1);
+
+    &-step{
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: var(--pi-spacing-3);
+      width: 100%;
+
+      [data-loader]{
+        width: 50px;
+      }
+
+      .content{
+        width: calc(100% - 50px);
+
+        .title{
+          color: var(--pi-title-color);
+          font-size: var(--pi-font-size-title);
+          font-weight: var(--pi-font-weight-semibold);
+          margin-bottom: 6px;
+        }
+
+        p{
+          font-size: var(--pi-font-size-info);
+          line-height: var(--pi-line-height-base);
+          margin: 0;
+        }
+      }
+
+      .actions{
+        display: flex;
+        justify-content: flex-end;
+
+        width: 100%;
+        margin: 5px 0 0;
+        padding: 0;
+
+        align-self: center;
+        text-align: left;
+      }
+
+      .errors{
+        width: 100%;
+        padding-left: 50px;
+        margin: 0;
+
+        > p{
+          margin: 2px 0 0;
+          font-size: .8rem;
+          color: var(--pi-error-color);
+        }
+
+        .notification{
+          &.error p{ color: var(--pi-error-color); }
+        }
+
+        &:not(:empty){
+          margin-top: 5px;
+        }
+      }
+
+      &.not-active{
+        opacity: .5;
+      }
+    }
+
+    .subtasks{
+
+      .process-step{
+
+        &:last-child{
+          margin-bottom: 0;
+        }
+      }
+
+      &:not(:empty) {
+        margin-top: 25px;
+      }
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  #installer{
+
+    .process{
+
+      &-step{
+
+        .content{
+
+          &:has(+ .actions) {
+            width: calc(100% - 200px);
+          }
+        }
+
+        .actions{
+          margin: 0;
+          width: 150px;
+        }
+      }
+    }
+  }
+}

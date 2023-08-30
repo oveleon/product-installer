@@ -1,0 +1,69 @@
+#installer {
+
+  .notifications {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    z-index: 100;
+
+    padding: var(--pi-spacing-2);
+    pointer-events: none;
+  }
+
+  .notification {
+    display: flex;
+    align-items: center;
+
+    position: relative;
+
+    padding: var(--pi-box-spacing-1);
+    margin-bottom: 5px;
+
+    border-radius: var(--pi-border-radius-1);
+    background: #e4f0f7;
+
+    pointer-events: auto;
+
+    p {
+      padding: 0;
+      margin: 0;
+    }
+
+    button.close {
+      width: auto;
+      height: auto;
+      border: 0 none;
+      padding: 3px;
+      line-height: 1;
+      margin: 0 0 0 auto;
+
+      &:after {
+        display: block;
+        content: '✕';
+      }
+    }
+
+    &.error {
+      background: #f7e4e4;
+    }
+
+    &.warn {
+      background: #f4eec9;
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  #installer{
+
+    .notifications{
+      padding: var(--pi-spacing-4);
+    }
+  }
+}
