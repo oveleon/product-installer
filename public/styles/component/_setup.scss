@@ -1,0 +1,183 @@
+#installer{
+
+  .divider{
+    position: relative;
+    border-top: 1px dashed var(--pi-divider-color-2);
+    margin-top: 25px;
+    margin-bottom: 30px;
+
+    &:before{
+      position: absolute;
+      display: flex;
+      content: "";
+      bottom: 100%;
+      width: 35px;
+      left: 50%;
+      height: 18px;
+      transform: translateX(-50%) translateY(50%);
+      background: url('/bundles/productinstaller/images/icons/arrow_down_circle.svg') center center no-repeat #fff;
+    }
+  }
+
+  .requirements-overview{
+    position: relative;
+    font-size: var(--pi-font-size-info);
+    padding: 1px 0;
+    overflow-y: hidden;
+    overflow-x: auto;
+  }
+
+  .requirement-item{
+    white-space: nowrap;
+
+    > .inside{
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .bundle{
+      font-weight: 500;
+
+      &:before{
+        display: inline-block;
+        content: "";
+        width: 7px;
+        height: 7px;
+        margin-right: 7px;
+
+        border-radius: 50%;
+        border: 1px solid rgb(22 163 74 / 0.45);
+        background: #e4f7ea;
+      }
+    }
+
+    .version{
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      align-items: center;
+
+      font-size: var(--pi-font-size-small);
+      color: var(--pi-info-color);
+
+      padding-left: var(--pi-spacing-1);
+
+      &:before{
+        position: relative;
+        top: -1px;
+
+        display: inline-block;
+        content: "";
+        width: 13px;
+        min-width: 13px;
+        height: 13px;
+        margin-right: 5px;
+        background-size: contain;
+        background-position: center center;
+      }
+    }
+
+    + .requirement-item{
+      margin-top: 10px;
+    }
+
+    &.__true{
+
+      .version:before{
+        background-image: url('/bundles/productinstaller/images/icons/version_check.svg');
+      }
+    }
+
+    &.__false{
+      color: rgb(185, 28, 28);
+
+      .bundle:before{
+        border-color: #cf9b9b;
+        background: #f7e9e9;
+      }
+
+      .version{
+        color: rgb(185, 28, 28);
+
+        &:before{
+          background-image: url('/bundles/productinstaller/images/icons/version_error.svg');
+        }
+      }
+    }
+  }
+
+  .task-item{
+
+    .inside{
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+
+      padding: 18px;
+      border-radius: 3px;
+
+      border: 1px solid rgb(218 218 218);
+      border-bottom: 0;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15),
+                  0 8px 0 -5px #fdfdfd,
+                  0 8px 1px -4px rgba(0, 0, 0, 0.15),
+                  0 16px 0 -10px #f8f8f8,
+                  0 16px 1px -9px rgba(0, 0, 0, 0.15);
+    }
+
+    .content{
+      flex-grow: 1;
+      margin-right: 15px;
+
+      .title {
+        display: flex;
+        align-items: center;
+
+        font-size: var(--pi-font-size-title);
+        font-weight: var(--pi-font-weight-semibold);
+        color: var(--pi-text-color);
+
+        margin-bottom: 10px;
+
+        .badge{
+          display: inline-block;
+          margin-left: 9px;
+        }
+      }
+
+      .description{
+        font-size: var(--pi-font-size-info);
+        line-height: var(--pi-line-height-paragraph);
+      }
+    }
+
+    .actions{
+      margin: 0;
+      padding: 0;
+      text-align: left;
+    }
+
+    + .task-item{
+      margin-top: 20px;
+    }
+
+    &.not-valid{
+      cursor: not-allowed;
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  #installer{
+
+    .task-item{
+
+      .inside {
+        align-items: center;
+      }
+    }
+  }
+}

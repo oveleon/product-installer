@@ -57,7 +57,7 @@ class UploadController
             $manifest['hash'] = hash('sha256', json_encode($manifest));
             $manifest['type'] = 'product';
             $manifest['updated'] = time();
-            $manifest['tasks'] = array_merge($manifest['tasks'], [
+            $manifest['tasks'] = array_merge($manifest['tasks'] ?? [], [
                 [
                     'hash'        => hash('sha256', $filename),
                     'type'        => ProductTaskType::CONTENT_PACKAGE->value,

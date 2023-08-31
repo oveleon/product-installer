@@ -1,0 +1,64 @@
+#installer{
+  position: fixed;
+  inset: 0 0 0 0;
+  z-index: 9999;
+
+  font-size: 0;
+  letter-spacing: 0;
+  text-align: center;
+
+  padding: 10px;
+  background: var(--pi-overlay-bg-color);
+
+  -webkit-font-smoothing: antialiased;
+
+  [hidden]{
+    display: none !important;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  > .inside{
+    display: inline-flex;
+    position: relative;
+
+    width: 100%;
+    max-width: 760px;
+    min-height: 530px;
+    max-height: 100%;
+
+    background: var(--pi-bg-color);
+    box-shadow: var(--pi-box-shadow-1);
+    border-radius: var(--pi-border-radius-1);
+
+    font-family: var(--pi-font-family);
+    font-size: var(--pi-font-size-base);
+    text-align: left;
+
+    vertical-align: middle;
+    overflow: hidden;
+
+    > .loader{
+      z-index: 100;
+    }
+  }
+
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  .scrollable{
+    display: flex;
+    flex-grow: 1;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    @include scrollable;
+  }
+}

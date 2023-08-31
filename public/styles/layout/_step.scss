@@ -1,0 +1,66 @@
+#installer{
+
+  #steps{
+    width: 100%;
+    flex-grow: 1;
+
+    > div{
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      padding: var(--pi-spacing-3);
+
+      .inherit {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+    }
+  }
+
+  .actions{
+    display: flex;
+    flex-direction: column-reverse;
+    margin-top: auto;
+    padding-top: var(--pi-spacing-3);
+
+    form {
+      width: 100%;
+      margin-bottom:var(--pi-spacing-3);
+    }
+  }
+}
+
+@media (min-width: 480px) {
+  #installer{
+
+    #steps {
+
+      > div{
+        padding: var(--pi-spacing-4);
+      }
+    }
+  }
+}
+
+
+@media (min-width: 600px) {
+  #installer{
+
+    #steps {
+
+      > div{
+        padding: var(--pi-spacing-5);
+      }
+    }
+
+    .actions{
+      flex-direction: row;
+      justify-content: space-between;
+
+      > button:last-child:not(:first-child), > button#resolve{
+        margin-left: auto;
+      }
+    }
+  }
+}

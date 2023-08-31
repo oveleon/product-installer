@@ -8,8 +8,8 @@ installer:
             license_empty:              Bitte geben Sie eine gültige Lizenz an.
     connector:
         upload:
-            title:                      Upload
-            description:                Sollten Sie Produkte als Datei vorliegen haben, können Sie diese hier hochladen und anschließend Einrichten.
+            title:                      Produkte hochladen
+            description:                Über diese Schnittstelle können Sie Ihre lokalen Produkt-Dateien hochladen und zur Verfügung stellen.
         errors:
             connection_failed:          Es konnte keine Verbindung zum %connectorTitle% hergestellt werden.
             connection_failed_global:   Im Moment kann keine Verbindung hergestellt werden, bitte versuchen Sie es später noch einmal.

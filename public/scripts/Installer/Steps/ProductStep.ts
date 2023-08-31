@@ -40,7 +40,7 @@ export default class ProductStep extends StepComponent
         // Add notification
         if(!props.installable)
         {
-            (new NotificationComponent(i18n('product.no_version'), NotificationTypes.WARN))
+            (new NotificationComponent('System veraltet', i18n('product.no_version'), NotificationTypes.WARN))
                 .appendTo(this.element('.products'))
         }
 

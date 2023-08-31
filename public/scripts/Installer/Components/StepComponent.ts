@@ -218,7 +218,7 @@ export default abstract class StepComponent extends ContainerComponent
         // Check if there are a message to show
         if(response.message)
         {
-            (new NotificationComponent(response.message, NotificationTypes.ERROR, true))
+            (new NotificationComponent('Ein Fehler ist aufgetreten', response.message, NotificationTypes.ERROR, true))
                 .appendTo(this.modal.notificationContainer)
         }
     }

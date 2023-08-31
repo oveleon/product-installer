@@ -1,0 +1,138 @@
+#installer{
+
+  .step-progress{
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    pointer-events: none;
+
+    margin: 0 auto -20px;
+    padding-top: 30px;
+
+    .progress-scroll{
+      display: flex;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      padding: 0 2px;
+    }
+
+    .progress-item{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+
+      word-break: keep-all;
+      white-space: nowrap;
+
+      max-width: 164px;
+      min-width: 164px;
+      padding: 5px 0;
+
+      .label{
+        font-size: var(--pi-font-size-info);
+        color: var(--pi-info-color);
+      }
+
+      .indicator{
+        position: relative;
+        z-index: 10;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 9px;
+        height: 9px;
+        margin: 0 auto 13px;
+
+        border-radius: 50%;
+
+        border: 1px solid var(--pi-progress-bullet-border-active);
+        background-color: var(--pi-progress-bullet-bg-active);
+
+        outline: 10px solid var(--pi-bg-color);
+
+        &:before, &:after{
+          position: absolute;
+          z-index: -1;
+          content: "";
+          top: 3px;
+
+          width: 100px;
+          border-bottom: 2px solid var(--pi-progress-bullet-from-color);
+        }
+
+        &:before{
+          right: 100%;
+        }
+
+        &:after{
+          left: 100%;
+        }
+      }
+
+      &.finish{
+
+        .indicator{
+          border-color: var(--pi-progress-bullet-border-finish);
+          background-color: var(--pi-progress-bullet-bg-finish);
+        }
+      }
+
+      &.pending{
+
+        .indicator{
+          border-color: var(--pi-progress-bullet-border-pending);
+          background-color: var(--pi-progress-bullet-bg-pending);
+
+          &:before, &:after{
+            border-bottom-style: dashed;
+            border-bottom-color: var(--pi-divider-color-2);
+          }
+        }
+      }
+
+      &.active{
+        font-weight: 500;
+
+        .indicator{
+          border-color: var(--pi-progress-bullet-border-active);
+          background-color: var(--pi-progress-bullet-bg-active);
+
+          &:before{
+            border-image-slice: 1;
+            border-image-source: linear-gradient(to right, var(--pi-progress-bullet-from-color) 50%, var(--pi-progress-bullet-to-color) 100%);
+          }
+
+          &:after{
+            border-bottom-style: dashed;
+            border-bottom-color: var(--pi-divider-color-2);
+          }
+        }
+      }
+    }
+
+    &:before, &:after{
+      display: block;
+      position: absolute;
+      content: "";
+      z-index: 30;
+
+      top: 0;
+      bottom: 0;
+      width: 50px;
+
+      pointer-events: none;
+    }
+
+    &:before{
+      left: 0;
+      background: linear-gradient(to right, var(--pi-bg-color) 0%,rgba(255,255,255,0) 100%);
+    }
+
+    &:after{
+      right: 0;
+      background: linear-gradient(to left, var(--pi-bg-color) 0%,rgba(255,255,255,0) 100%);
+    }
+  }
+}

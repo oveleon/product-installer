@@ -2,9 +2,11 @@ import Process from "./Process"
 import {call, get} from "../../Utils/network"
 import {TaskStatus} from "../ContaoManager";
 import NotificationComponent, {NotificationTypes} from "../Components/NotificationComponent";
-import ConsoleComponent from "../Components/ConsoleComponent";
 import DropMenuComponent from "../Components/DropMenuComponent";
 import {i18n} from "../Language"
+import PopupComponent, {PopupType} from "../Components/PopupComponent";
+import {OperationConfig} from "../Components/ConsoleOperationComponent";
+import Installer from "../Installer";
 
 /**
  * Composer process class.
@@ -18,7 +20,7 @@ export default class ComposerProcess extends Process
      *
      * @protected
      */
-    protected console: ConsoleComponent
+    protected consolePopup: PopupComponent
 
     /**
      * CM Token.
@@ -35,6 +37,13 @@ export default class ComposerProcess extends Process
     protected updateRoute: string
 
     /**
+     * The current console response.
+     *
+     * @protected
+     */
+    protected currentConsoleOperations: OperationConfig[]
+
+    /**
      * @inheritDoc
      */
     protected getTemplate(): string {
@@ -44,9 +53,7 @@ export default class ComposerProcess extends Process
                 <div class="title">${this.config.attributes.title}</div>
                 <p>${this.config.attributes.description}</p>
             </div>
-            <div class="actions">
-                <!--<button class="details" hidden>Details</button>-->
-            </div>
+            <div class="actions"></div>
         `;
     }
 
@@ -76,13 +83,13 @@ export default class ComposerProcess extends Process
                 // Delete task if status is error
                 if(response.task.status === 'error')
                 {
-                    const notification = new NotificationComponent('Nicht beendete Aufgaben werden beendet.', NotificationTypes.WARN, {
+                    const notification = new NotificationComponent('Contao Manager','Nicht beendete Aufgaben werden beendet.', NotificationTypes.WARN, {
                         timer: {
                             ms: 5000
                         }
                     })
 
-                    notification.appendTo(this.errorContainer)
+                    notification.appendTo(Installer.modal.notificationContainer)
 
                     call('/contao/api/contao_manager/task/delete', response.task).then(() => {
                         notification.remove()
@@ -92,24 +99,29 @@ export default class ComposerProcess extends Process
                 // Try again
                 else
                 {
-                    (new NotificationComponent('Der Contao Manager führt derzeit eine andere Aufgabe durch.', NotificationTypes.WARN, {
+                    (new NotificationComponent('Contao Manager', 'Der Contao Manager führt derzeit eine andere Aufgabe durch.', NotificationTypes.WARN, {
                         timer: {
                             ms: 5000,
-                            text: `Versuche erneut in #seconds# Sekunden.`,
+                            text: `Versuche erneut in <b>#seconds# Sekunden</b>.`,
                             autoClose: true,
                             onComplete: () => this.process()
                         }
-                    })).appendTo(this.errorContainer)
+                    })).appendTo(Installer.modal.notificationContainer)
                 }
 
                 return
             }
 
-            // Set initial console operations
-            this.console = new ConsoleComponent();
-            this.console.hide()
-            this.console.appendTo(this.template)
-            this.console.set(response.operations)
+            // Set initial console operations and create popup
+            this.currentConsoleOperations = response.operations
+
+            this.consolePopup = new PopupComponent({
+                type: PopupType.CONSOLE,
+                title: 'Abhängigkeiten werden installiert',
+                content: this.currentConsoleOperations,
+                appendTo: this.template,
+                closeable: true
+            });
 
             // Get update route info
             this.token = response.token
@@ -119,7 +131,10 @@ export default class ComposerProcess extends Process
             const menu = new DropMenuComponent([
                 {
                     label: i18n('actions.console.toggle'),
-                    value: () => { this.console.toggle() },
+                    value: () => {
+                        this.consolePopup.show()
+                        this.consolePopup.updateConsole(this.currentConsoleOperations)
+                    },
                     highlight: true
                 }
             ])
@@ -147,7 +162,8 @@ export default class ComposerProcess extends Process
             }
 
             // Update console
-            this.console.update(response.operations)
+            this.currentConsoleOperations = response.operations
+            this.consolePopup.updateConsole(this.currentConsoleOperations)
 
             switch (response.status)
             {

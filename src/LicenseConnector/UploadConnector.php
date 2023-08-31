@@ -52,7 +52,7 @@ final class UploadConnector extends AbstractLicenseConnector
             'name'          => 'Upload',
             'title'         => $translator->trans('installer.connector.upload.title', [], 'installer'),
             'description'   => $translator->trans('installer.connector.upload.description', [], 'installer'),
-            'image'         => '/bundles/productinstaller/icons/upload.svg',
+            'image'         => '/bundles/productinstaller/images/icons/upload.svg',
             'entry'         => $request->getSchemeAndHttpHost() . '/api/upload'
         ];
     }

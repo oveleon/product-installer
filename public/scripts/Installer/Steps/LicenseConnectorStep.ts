@@ -237,15 +237,15 @@ export default class LicenseConnectorStep extends StepComponent
     {
         const image = config.config.image ? `<img src="${config.config.image}" alt="${config.config.title}"/>` : ''
         const template = <HTMLDivElement> document.createElement('div')
-              template.classList.add('license-connector')
+              template.classList.add('license-connector', 'box')
 
         // Add click event
         template.addEventListener('click', (e: MouseEvent) => this.useLicenseConnector(config))
 
         // Create content
         template.innerHTML = `
-            <div class="inside">
-                <div class="image">${image}</div>
+            <div class="inside" role="button">
+                <div class="image inset">${image}</div>
                 <div class="content">
                     <div class="title">${config.config.title}</div>
                     <div class="description">${config.config.description}</div>

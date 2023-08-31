@@ -34,7 +34,11 @@ export default class SetupStep extends StepComponent
         return `
             <h2>${i18n('setup.headline')}</h2>
             <div class="product-overview"></div>
-            <div class="requirements-overview"></div>
+            <div class="dependency-container">
+                <div class="divider"></div>
+                <h4>Abhängigkeiten</h4>
+                <div class="requirements-overview"></div>
+            </div>
             <div class="divider"></div>
             <div class="tasks-overview"></div>
             <div class="actions">
@@ -108,6 +112,13 @@ export default class SetupStep extends StepComponent
      */
     protected createRequirements(requirements: RequirementConfig[])
     {
+        // Hide container when no requirements exists
+        if(!requirements.length)
+        {
+            this.element('.dependency-container').hidden = true
+            return
+        }
+
         const requirementContainer: HTMLDivElement = <HTMLDivElement> this.element('.requirements-overview')
 
         for(const requirement of requirements)
@@ -149,7 +160,10 @@ export default class SetupStep extends StepComponent
                   taskElement.innerHTML = `
                       <div class="inside">
                           <div class="content">
-                              <div class="title ${task.type}">${i18n('task.' + task.type + '.title')}</div>
+                              <div class="title ${task.type}">
+                                <span>${i18n('task.' + task.type + '.title')}</span>
+                                <span class="badge ${this.requirementsValid ? 'registered' : 'removed'}">${i18n('task.package_valid.' + this.requirementsValid)}</span>
+                              </div>
                               <div class="description">${i18n('task.' + task.type + '.description')}</div>
                           </div>
                           <div class="actions"></div>
@@ -173,6 +187,8 @@ export default class SetupStep extends StepComponent
                 ]).appendTo(
                     <HTMLDivElement> taskElement.querySelector('.actions')
                 )
+            }else{
+                // ToDo: Show notification
             }
 
             taskContainer.appendChild(taskElement)

@@ -1,0 +1,141 @@
+#installer .popup{
+  position: absolute;
+  inset: 0;
+  z-index: 500;
+
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  display: flex;
+  justify-content: flex-end;
+
+  font-size: var(--pi-font-size-info);
+  line-height: var(--pi-line-height-paragraph);
+
+  animation: pi-overlay-fade-in .25s forwards;
+
+  p{
+    font-size: var(--pi-font-size-info) !important;
+    line-height: var(--pi-line-height-paragraph) !important;
+
+    &.desc{
+      margin-bottom: var(--pi-spacing-1) !important;
+    }
+  }
+
+  img{
+    border-radius: 3px;
+  }
+
+  table{
+    border: 0 none;
+    border-spacing: 0;
+    word-break: break-word;
+    border-radius: 3px;
+
+    + table{
+      margin-top: 20px;
+    }
+
+    p{
+      padding: 0;
+      margin: 0;
+    }
+
+    tr{
+
+      td:last-child{
+        font-weight: 500;
+      }
+
+      + tr td{
+        border-top: 1px solid var(--pi-divider-color-1);
+      }
+    }
+
+    td{
+      padding: 9px 0;
+
+      &:first-child{
+        vertical-align: top;
+        word-break: keep-all;
+      }
+
+      &:not(:first-child){
+        padding-left: 5px;
+      }
+    }
+  }
+
+  .inside{
+    position: relative;
+    min-width: 100%;
+
+    > div{
+      display: flex;
+      flex-direction: column;
+
+      height: 100%;
+      width: 100%;
+      padding: 45px;
+
+      background: #fff;
+      box-shadow: var(--pi-box-shadow-1);
+      animation: pi-slide-in .25s forwards ease-in-out;
+    }
+  }
+
+  .handle{
+    display: none;
+  }
+
+  .actions{
+    display: block !important;
+    width: 100% !important;
+    margin-top: var(--pi-spacing-2) !important;
+    padding-top: 0 !important;
+
+    button:first-child{
+      margin-left: 0;
+    }
+  }
+}
+
+@media (min-width: 600px) {
+
+  #installer .popup{
+
+    .inside{
+      min-width: 460px;
+    }
+
+    .handle{
+      position: absolute;
+      top: 50%;
+      right: 100%;
+
+      display: block;
+      transform: translateY(-50%) translateX(100%);
+
+      cursor: pointer;
+      opacity: .25;
+      transition: opacity .2s;
+
+      &:before{
+        display: block;
+        content: url("/bundles/productinstaller/images/icons/menu.svg");
+        transform: scale(0.8);
+        transition: transform .2s;
+      }
+
+      &:hover{
+        opacity: 1;
+
+        &:before{
+          transform: scale(1);
+        }
+      }
+    }
+  }
+}
