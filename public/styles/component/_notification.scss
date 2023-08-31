@@ -3,11 +3,11 @@
   .notifications {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: flex-end;
 
     position: absolute;
-    bottom: 0;
-    left: 0;
+    inset: 0;
 
     width: 100%;
     z-index: 100;
@@ -17,44 +17,109 @@
   }
 
   .notification {
-    display: flex;
-    align-items: center;
-
+    display: block;
     position: relative;
 
-    padding: var(--pi-box-spacing-1);
+    width: 100%;
+    max-width: 300px;
+
+    padding: var(--pi-spacing-2);
     margin-bottom: 5px;
 
+    border: 1px solid var(--pi-border-color-1);
     border-radius: var(--pi-border-radius-1);
-    background: #e4f0f7;
+    background: var(--pi-notification-bg-color);
+    box-shadow: var(--pi-box-shadow-2);
 
     pointer-events: auto;
+
+    .title{
+      color: var(--pi-title-color);
+      font-size: var(--pi-font-size-title);
+      font-weight: var(--pi-font-weight-bold);
+      padding-right: 15px;
+      margin-bottom: 5px;
+    }
+
+    &.error, &.warn, &.info, &.success{
+
+      .title{
+        display: flex;
+        align-items: center;
+
+        &:before{
+          content: "";
+          display: block;
+
+          position: relative;
+          top: -1px;
+
+          width: 18px;
+          min-width: 18px;
+          height: 18px;
+          padding-right: 8px;
+
+          background-size: contain;
+          background-repeat: no-repeat;
+        }
+      }
+
+      .text{
+        padding-left: 23px;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 8;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+
+    &.error .title:before{
+      background-image: url("/bundles/productinstaller/images/icons/error_circle.svg");
+    }
+
+    &.warn .title:before{
+      background-image: url("/bundles/productinstaller/images/icons/warn_circle.svg");
+    }
+
+    &.success .title:before{
+      background-image: url("/bundles/productinstaller/images/icons/check_circle.svg");
+    }
+
+    &.info .title:before{
+      background-image: url("/bundles/productinstaller/images/icons/info_circle.svg");
+    }
 
     p {
       padding: 0;
       margin: 0;
+
+      font-size: var(--pi-font-size-info);
+      color: var(--pi-info-color);
     }
 
     button.close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+
       width: auto;
       height: auto;
       border: 0 none;
       padding: 3px;
       line-height: 1;
       margin: 0 0 0 auto;
+      color: var(--pi-info-color);
+      background: transparent;
 
       &:after {
         display: block;
         content: '✕';
       }
-    }
 
-    &.error {
-      background: #f7e4e4;
-    }
-
-    &.warn {
-      background: #f4eec9;
+      &:hover{
+        color: var(--pi-text-color)
+      }
     }
   }
 }

@@ -92,7 +92,7 @@ export default class DropMenuComponent extends ContainerComponent
     {
         this.content(`
             <button id="${this.id}">
-                <img src="/bundles/productinstaller/icons/menu.svg" alt="⋮"/>
+                <img src="/bundles/productinstaller/images/icons/menu.svg" alt="⋮"/>
             </button>
             <div class="drop-list"></div>
         `)

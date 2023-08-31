@@ -6,6 +6,7 @@ import {i18n} from "../Language"
 import {call} from "../../Utils/network"
 import State from "../State";
 import SetupStep from "./SetupStep";
+import NotificationComponent, {NotificationTypes} from "../Components/NotificationComponent";
 
 /**
  * An overview of registered products.

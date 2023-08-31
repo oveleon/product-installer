@@ -51,7 +51,7 @@
       position: absolute;
       inset: 7px;
 
-      background: url('/bundles/productinstaller/icons/logo.svg') center center no-repeat;
+      background: url('/bundles/productinstaller/images/logo.svg') center center no-repeat;
       background-size: contain;
     }
   }
@@ -75,11 +75,13 @@
       overflow: hidden;
 
       font-size: var(--pi-font-size-info);
-      line-height: 1.25em;
+      line-height: var(--pi-line-height-paragraph);
       color: var(--pi-info-color);
 
       p{
-        font-size: var(--pi-font-size-info);
+        font-size: inherit;
+        line-height: inherit;
+        color: currentColor;
         margin: 0;
       }
     }
@@ -102,14 +104,14 @@
       &:before{
         position: relative;
         top: 2px;
-        content: url("/bundles/productinstaller/icons/version_current.svg") " ";
+        content: url("/bundles/productinstaller/images/icons/version_current.svg") " ";
       }
 
       &.new{
         color: #0e9a0e;
 
         &:before{
-          content: url("/bundles/productinstaller/icons/version_update.svg") " ";
+          content: url("/bundles/productinstaller/images/icons/version_update.svg") " ";
         }
       }
     }

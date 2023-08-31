@@ -131,6 +131,8 @@ module.exports = {
     "task.label.setup":                             "Setup",
     "task.content_package.title":                   "Content-Package",
     "task.content_package.description":             "Content packages fill your instance with life. These can be pages, articles, modules, content elements, and so on. Use the expert mode to exclude individual contents.",
+    "task.package_valid.true":                      "Ready",
+    "task.package_valid.false":                     "Lack of dependencies",
 
     // Form
     "form.field.tables.label":                      "Tables to import",

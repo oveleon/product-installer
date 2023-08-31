@@ -13,7 +13,7 @@ import DashboardStep from "./Steps/DashboardStep";
 export default class Installer
 {
     public static locale: string
-    private readonly modal: ModalComponent
+    public static modal: ModalComponent
 
     constructor(locale: string)
     {
@@ -24,13 +24,13 @@ export default class Installer
         this.setLocale(locale)
 
         // Create modal and steps
-        this.modal = new ModalComponent('installer')
-        this.modal.addSteps(
+        Installer.modal = new ModalComponent('installer')
+        Installer.modal.addSteps(
             new DashboardStep(),
             new LicenseConnectorStep()
         )
 
-        this.modal.appendTo('body')
+        Installer.modal.appendTo('body')
     }
 
     /**
@@ -49,6 +49,6 @@ export default class Installer
      */
     open(): void
     {
-        this.modal.open()
+        Installer.modal.open()
     }
 }

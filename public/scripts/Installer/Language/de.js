@@ -131,6 +131,8 @@ module.exports = {
     "task.label.setup":                             "Einrichten",
     "task.content_package.title":                   "Inhaltspaket",
     "task.content_package.description":             "Inhaltspakete befüllen Ihre Contao-Instanz mit Leben. Dabei kann es sich um Seiten, Artikel, Module, Content-Elemente usw. handeln. Nutzen Sie den Expertenmodus, um einzelne Inhalte vom Import auszuschließen.",
+    "task.package_valid.true":                      "Bereit",
+    "task.package_valid.false":                     "Fehlende Abhängigkeiten",
 
     // Form
     "form.field.tables.label":                      "Zu importierenden Inhalte",

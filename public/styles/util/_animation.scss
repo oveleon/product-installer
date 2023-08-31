@@ -12,6 +12,16 @@
   }
 }
 
+@keyframes pi-fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes pi-overlay-fade-in {
   0% {
     background: rgba(0,0,0,0);
@@ -69,5 +79,14 @@
   }
   100% {
     transform: translateX(0);
+  }
+}
+
+@keyframes pi-spin {
+  from {
+    transform:rotate(0deg);
+  }
+  to {
+    transform:rotate(360deg);
   }
 }

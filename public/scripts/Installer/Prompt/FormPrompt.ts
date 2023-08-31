@@ -38,7 +38,7 @@ export default class FormPrompt extends Prompt
         this.content(`
             <form class="fields"></form>
             <div class="actions">
-                <button type="button" id="resolve">${i18n('actions.next')}</button>            
+                <button type="button" class="primary" id="resolve">${i18n('actions.next')}</button>
             </div>
         `)
 

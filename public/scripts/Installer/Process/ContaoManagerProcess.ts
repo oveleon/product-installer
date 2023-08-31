@@ -188,7 +188,5 @@ export default class ContaoManagerProcess extends Process
             },
             parameter: {}
         }))
-
-        // Todo: Check database and migrate
     }
 }

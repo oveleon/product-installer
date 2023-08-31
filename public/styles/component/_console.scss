@@ -1,28 +1,15 @@
-$console-background: #2e3031;
-
-.console{
+#installer .console{
   font-family: -apple-system, system-ui, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
-  font-size: 13px;
-  color: #fff;
+  font-size: var(--pi-font-size-console);
+  color: var(--pi-console-color);
 
-  background: #2e3031;
-  border-radius: 3px;
+  background: var(--pi-console-bg-color);
+  border-radius: var(--pi-border-radius-1);
 
-  margin-top: 15px;
-  padding: 30px;
+  padding: var(--pi-spacing-3);
   width: 100%;
 
   overflow: auto;
-
-  .description{
-    display: block;
-    padding: 10px 13px;
-    background: #ffc687;
-    border-radius: 2px;
-    color: #090908;
-    font-weight: 500;
-    line-height: 1.3;
-  }
 
   .summary{
     position: relative;
@@ -118,8 +105,8 @@ $console-background: #2e3031;
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        border: 2px dotted #ffeb94;
-        animation: spin .7s linear infinite;
+        border: 2px dotted var(--pi-loading-color);
+        animation: pi-spin .7s linear infinite;
       }
     }
 
@@ -130,7 +117,7 @@ $console-background: #2e3031;
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        border: 2px solid #4b4b4b;
+        border: 2px solid #4b4b4b; // ToDo.
       }
     }
 
@@ -138,7 +125,7 @@ $console-background: #2e3031;
 
       .summary:after{
         top: 1px;
-        color: #1cb636;
+        color: var(--pi-success-color);
         content: "🗸";
       }
     }
@@ -148,7 +135,7 @@ $console-background: #2e3031;
 
       .summary:after{
         top: 1px;
-        color: #fb5555;
+        color: var(--pi-error-color);
         content: "✕";
       }
     }
@@ -170,11 +157,4 @@ $console-background: #2e3031;
   @include scrollable;
 }
 
-@keyframes spin {
-  from {
-    transform:rotate(0deg);
-  }
-  to {
-    transform:rotate(360deg);
-  }
-}
+

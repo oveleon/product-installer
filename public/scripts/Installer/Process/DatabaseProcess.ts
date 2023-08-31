@@ -2,8 +2,9 @@ import Process from "./Process"
 import {call, get} from "../../Utils/network"
 import {TaskStatus} from "../ContaoManager";
 import {i18n} from "../Language"
-import ConsoleComponent from "../Components/ConsoleComponent";
 import DropMenuComponent from "../Components/DropMenuComponent";
+import {OperationConfig} from "../Components/ConsoleOperationComponent";
+import PopupComponent, {PopupType} from "../Components/PopupComponent";
 
 /**
  * Composer process class.
@@ -17,7 +18,7 @@ export default class DatabaseProcess extends Process
      *
      * @protected
      */
-    protected console: ConsoleComponent
+    protected consolePopup: PopupComponent
 
     /**
      * CM Token.
@@ -32,6 +33,13 @@ export default class DatabaseProcess extends Process
      * @protected
      */
     protected updateRoute: string
+
+    /**
+     * The current console response.
+     *
+     * @protected
+     */
+    protected currentConsoleOperations: OperationConfig[]
 
     /**
      * @inheritDoc
@@ -126,18 +134,26 @@ export default class DatabaseProcess extends Process
     {
         this.loader.pause()
 
-        // Set initial console operations
-        this.console = new ConsoleComponent();
-        this.console.hide()
-        this.console.appendTo(this.template)
-        this.console.set(response.operations)
-        this.console.setDescription(i18n('process.database.deletionHint'), 'warn')
+        // Set initial console operations and create popup
+        this.currentConsoleOperations = response.operations
+
+        this.consolePopup = new PopupComponent({
+            type: PopupType.CONSOLE,
+            title: 'Abhängigkeiten werden installiert',
+            description: 'Bitte beachten Sie, dass der Produkt-Installer keine Löschungen durchführt. Öffnen Sie bitte den Contao Manager um Löschungen durchzuführen.',
+            content: this.currentConsoleOperations,
+            appendTo: this.template,
+            closeable: true
+        });
 
         // Create menu
         const menu = new DropMenuComponent([
             {
                 label: i18n('actions.console.toggle'),
-                value: () => { this.console.toggle() },
+                value: () => {
+                    this.consolePopup.show()
+                    this.consolePopup.updateConsole(this.currentConsoleOperations)
+                },
                 highlight: true
             },
             {
@@ -147,7 +163,6 @@ export default class DatabaseProcess extends Process
                     menu.disableOptions(i18n('actions.database.skip'))
                     menu.disableOptions(i18n('actions.database.migrate'))
 
-                    this.console.hide()
                     this.resolve(response)
                 },
             },
@@ -199,7 +214,8 @@ export default class DatabaseProcess extends Process
             }
 
             // Update console
-            this.console.update(response.operations)
+            this.currentConsoleOperations = response.operations
+            this.consolePopup.updateConsole(this.currentConsoleOperations)
 
             switch (response.status)
             {

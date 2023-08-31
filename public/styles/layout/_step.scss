@@ -58,7 +58,7 @@
       flex-direction: row;
       justify-content: space-between;
 
-      > button:last-child:not(:first-child){
+      > button:last-child:not(:first-child), > button#resolve{
         margin-left: auto;
       }
     }

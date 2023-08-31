@@ -2,7 +2,7 @@
 
   .divider{
     position: relative;
-    border-top: 1px dashed var(--pi-divider-color-1);
+    border-top: 1px dashed var(--pi-divider-color-2);
     margin-top: 25px;
     margin-bottom: 30px;
 
@@ -19,33 +19,16 @@
     }
   }
 
-  .requirements-overview + .tasks-overview{
-    margin-top: var(--pi-spacing-3);
-  }
-
   .requirements-overview{
     position: relative;
-    padding: 15px 65px 0 76px;
     font-size: var(--pi-font-size-info);
-
-    &:empty{
-      display: none;
-    }
-
-    &:before{
-      content: "";
-      display: block;
-      position: absolute;
-      left: 30px;
-      top: -5px;
-      width: 1px;
-      height: 100%;
-      background-color: var(--pi-divider-color-1);
-    }
+    padding: 1px 0;
+    overflow-y: hidden;
+    overflow-x: auto;
   }
 
   .requirement-item{
-    position: relative;
+    white-space: nowrap;
 
     > .inside{
       display: flex;
@@ -57,6 +40,18 @@
 
     .bundle{
       font-weight: 500;
+
+      &:before{
+        display: inline-block;
+        content: "";
+        width: 7px;
+        height: 7px;
+        margin-right: 7px;
+
+        border-radius: 50%;
+        border: 1px solid rgb(22 163 74 / 0.45);
+        background: #e4f7ea;
+      }
     }
 
     .version{
@@ -68,10 +63,16 @@
       font-size: var(--pi-font-size-small);
       color: var(--pi-info-color);
 
+      padding-left: var(--pi-spacing-1);
+
       &:before{
+        position: relative;
+        top: -1px;
+
         display: inline-block;
         content: "";
         width: 13px;
+        min-width: 13px;
         height: 13px;
         margin-right: 5px;
         background-size: contain;
@@ -91,23 +92,20 @@
     }
 
     &.__false{
-      color: #892404;
+      color: rgb(185, 28, 28);
 
-      .version:before{
-        background-image: url('/bundles/productinstaller/images/icons/version_error.svg');
+      .bundle:before{
+        border-color: #cf9b9b;
+        background: #f7e9e9;
       }
-    }
 
-    &:before{
-      content: "";
-      display: block;
-      position: absolute;
-      right: 100%;
-      top: 8px;
-      width: 33px;
-      height: 1px;
-      margin-right: 13px;
-      background-color: var(--pi-divider-color-1);
+      .version{
+        color: rgb(185, 28, 28);
+
+        &:before{
+          background-image: url('/bundles/productinstaller/images/icons/version_error.svg');
+        }
+      }
     }
   }
 
@@ -116,7 +114,7 @@
     .inside{
       display: flex;
       flex-direction: row;
-      align-items: center;
+      align-items: flex-start;
 
       padding: 18px;
       border-radius: 3px;
@@ -140,23 +138,13 @@
 
         font-size: var(--pi-font-size-title);
         font-weight: var(--pi-font-weight-semibold);
-        color: #222;
+        color: var(--pi-text-color);
 
         margin-bottom: 10px;
 
-        &:before{
-          content: "";
-          display: block;
-          width: 23px;
-          height: 23px;
-          margin-right: 10px;
-          background-image: url('/bundles/productinstaller/icons/task_default.svg');
-          background-repeat: no-repeat;
-          background-size: contain;
-        }
-
-        &.content_package:before{
-          background-image: url('/bundles/productinstaller/icons/task_content_package.svg');
+        .badge{
+          display: inline-block;
+          margin-left: 9px;
         }
       }
 
@@ -177,8 +165,19 @@
     }
 
     &.not-valid{
-      opacity: .5;
       cursor: not-allowed;
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  #installer{
+
+    .task-item{
+
+      .inside {
+        align-items: center;
+      }
     }
   }
 }

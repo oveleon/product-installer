@@ -1,15 +1,18 @@
 import ContainerComponent from "./ContainerComponent"
 import {i18n} from "../Language"
 import {unserialize} from 'serialize-like-php'
+import ConsoleComponent from "./ConsoleComponent";
+import {OperationConfig} from "./ConsoleOperationComponent";
 
 /**
  * Popup Types.
  */
 export enum PopupType {
-    HTML   = 'HTML',
-    TABLE  = 'TABLE',
-    AJAX   = 'AJAX',
-    IFRAME = 'IFRAME'
+    HTML    = 'HTML',
+    TABLE   = 'TABLE',
+    AJAX    = 'AJAX',
+    IFRAME  = 'IFRAME',
+    CONSOLE = 'CONSOLE'
 }
 
 /**
@@ -22,6 +25,7 @@ export type PopupConfig = {
     content: string|any,
     appendTo: HTMLElement|Function
     closeable?: boolean
+    resizeable?: boolean
 }
 
 /**
@@ -35,6 +39,21 @@ export default class PopupComponent extends ContainerComponent
      * Dynamic auto-increment id.
      */
     static popupId: number = 0
+
+    /**
+     * Console.
+     *
+     * @private
+     */
+    private console: ConsoleComponent
+
+    /**
+     * Resize control vars.
+     *
+     * @private
+     */
+    private isResizing: boolean = false
+    private lastDownX: number = 0
 
     /**
      * Creates a popup instance.
@@ -70,13 +89,21 @@ export default class PopupComponent extends ContainerComponent
     }
 
     /**
+     * Updates the console for Console-Popups
+     */
+    updateConsole(content: OperationConfig[])
+    {
+        this.console?.update(content)
+    }
+
+    /**
      * Generates the popup template.
      *
      * @private
      */
     private setContent(): void
     {
-        let content: string;
+        let content: string | null;
         let actions: string = '';
         let description: string = '';
 
@@ -98,11 +125,13 @@ export default class PopupComponent extends ContainerComponent
         {
             case PopupType.IFRAME:
                 content = `
-                    <div class="iframe">
-                        <h2>${this.options.title}</h2>
-                        ${description}
-                        <iframe src="${this.options.content}" width="100%" height="100%"></iframe>
-                        ${actions}
+                    <div class="inside">
+                        <div class="iframe">
+                            <h2>${this.options.title}</h2>
+                            ${description}
+                            <iframe src="${this.options.content}" width="100%" height="100%"></iframe>
+                            ${actions}
+                        </div>
                     </div>
                 `
                 break
@@ -134,33 +163,99 @@ export default class PopupComponent extends ContainerComponent
                 }
 
                 content = `
-                    <div class="table scrollable">
-                        <h2>${this.options.title}</h2>
-                        ${description}
-                        ${table}
-                        ${actions}
+                    <div class="inside">
+                        <div class="table scrollable">
+                            <h2>${this.options.title}</h2>
+                            ${description}
+                            ${table}
+                            ${actions}
+                        </div>
                     </div>
                 `
                 break
 
+            case PopupType.CONSOLE:
+
+                content = null
+
+                this.content(`
+                    <div class="inside">
+                        <div class="console-popup scrollable">
+                            <h2>${this.options.title}</h2>
+                            ${description}
+                            <div class="console-container"></div>                            
+                            ${actions}
+                        </div>
+                    </div>
+                `)
+
+                this.console = new ConsoleComponent();
+                this.console.appendTo(this.element('.console-container'))
+                this.console.set(this.options.content)
+
+                break
+
             default:
                 content = `
-                    <div class="html scrollable">
-                        <h2>${this.options.title}</h2>
-                        ${description}
-                        ${this.options.content ?? ''}
-                        ${actions}
+                    <div class="inside">
+                        <div class="html scrollable">
+                            <h2>${this.options.title}</h2>
+                            ${description}
+                            ${this.options.content ?? ''}
+                            ${actions}
+                        </div>
                     </div>
                 `
         }
 
         // Set content
-        this.content(content)
+        if(content)
+            this.content(content)
 
         // Bind events
-        this.element('.close-popup').addEventListener('click', () => {
-            this.hide()
-        })
+        if(this.options?.closeable)
+        {
+            this.element('.close-popup')?.addEventListener('click', () => {
+                this.hide()
+            })
+        }
+
+        if(this.options?.resizeable || true)
+        {
+
+            const inside: HTMLElement = this.element('.inside')
+            const handle: HTMLSpanElement = document.createElement('span')
+
+            handle.classList.add('handle')
+            inside.append(handle)
+
+            // Set initial width
+            if(window.innerWidth >= 600)
+                inside.style.width = '460px'
+
+            handle?.addEventListener('mousedown', (e: MouseEvent) => {
+                this.isResizing = true
+                this.lastDownX = e.clientX
+            })
+
+            document?.addEventListener('mouseup', (e: MouseEvent) => {
+                this.isResizing = false
+            })
+
+            this.template?.addEventListener('mousemove', (e: MouseEvent) => {
+                if(!this.isResizing)
+                    return
+
+                const bounds = this.template.getBoundingClientRect();
+                const x = e.clientX - bounds.left;
+                const width = this.template.offsetWidth - x;
+
+                if(width < 460 || width >= this.template.offsetWidth)
+                    return
+
+                inside.style.width = width + 'px'
+            })
+        }
 
         let target = this.options.appendTo
 

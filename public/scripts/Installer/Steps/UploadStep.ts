@@ -73,7 +73,7 @@ export default class UploadStep extends StepComponent
                 this.modal.next()
             },
             error: (file, message) => {
-                (new NotificationComponent(message, NotificationTypes.ERROR, true))
+                (new NotificationComponent('Ein Fehler ist aufgetreten!', message, NotificationTypes.ERROR, true))
                     .appendTo(this.modal.notificationContainer)
 
                 backButton.disabled = false

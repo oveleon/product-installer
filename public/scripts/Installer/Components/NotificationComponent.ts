@@ -6,7 +6,8 @@ import ContainerComponent from "./ContainerComponent"
 export enum NotificationTypes {
     ERROR = 'error',
     WARN = 'warn',
-    INFO = 'info'
+    INFO = 'info',
+    SUCCESS = 'success'
 }
 
 /**
@@ -40,6 +41,13 @@ export default class NotificationComponent extends ContainerComponent
     private options: NotifyOptions | null = null
 
     /**
+     * The container for the title.
+     *
+     * @private
+     */
+    private readonly titleContainer: HTMLDivElement
+
+    /**
      * The container for the text.
      *
      * @private
@@ -49,11 +57,12 @@ export default class NotificationComponent extends ContainerComponent
     /**
      * Creates a new notification instance.
      *
+     * @param title
      * @param text
      * @param type
      * @param options Use shorthand `true` for a closeable notification
      */
-    constructor(protected text: string, type: NotificationTypes = NotificationTypes.ERROR, options?: NotifyOptions | boolean) {
+    constructor(protected title: string, protected text: string, type: NotificationTypes = NotificationTypes.ERROR, options?: NotifyOptions | boolean) {
         // Auto-increment id
         NotificationComponent.notificationId++
 
@@ -62,6 +71,11 @@ export default class NotificationComponent extends ContainerComponent
 
         // Add template class and type
         this.addClass('notification', type)
+
+        // Create text container
+        this.titleContainer = <HTMLDivElement> document.createElement('div')
+        this.titleContainer.classList.add('title')
+        this.template.append(this.titleContainer)
 
         // Create text container
         this.textContainer = <HTMLParagraphElement> document.createElement('p')
@@ -79,6 +93,7 @@ export default class NotificationComponent extends ContainerComponent
         }
 
         // Create
+        this.setTitle(title)
         this.setText(text)
 
         // Apply options
@@ -135,6 +150,16 @@ export default class NotificationComponent extends ContainerComponent
                 }
             }, 1000)
         }
+    }
+
+    /**
+     * Sets a notification text.
+     *
+     * @param title
+     */
+    public setTitle(title: string): void
+    {
+        this.titleContainer.innerHTML = title
     }
 
     /**

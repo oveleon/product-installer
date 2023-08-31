@@ -166,6 +166,8 @@
         span{
           display: inline-block;
           margin-left: 10px;
+
+          font-size: var(--pi-font-size-info);
           color: var(--pi-info-color);
         }
 
@@ -321,7 +323,7 @@
           height: 18px;
           margin-right: 5px;
 
-          background-image: url("/bundles/productinstaller/icons/connect.svg");
+          background-image: url("/bundles/productinstaller/images/icons/connect.svg");
           background-size: contain;
           background-repeat: no-repeat;
         }

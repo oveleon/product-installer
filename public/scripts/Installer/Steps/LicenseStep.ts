@@ -44,7 +44,6 @@ export default class LicenseStep extends StepComponent
         this.modal.loader(true, i18n('license.loading'))
 
         // Check license
-        // ToDo: Create and use routes.json to manage all routes in one file
         call('/contao/api/license_connector/license', {
             license: data.get('license'),
         }).then((response) => {
