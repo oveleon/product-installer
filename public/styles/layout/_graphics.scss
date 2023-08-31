@@ -34,4 +34,15 @@
     background: url('/bundles/productinstaller/images/graphics/setup-complete.gif') center center no-repeat;
     background-size: auto 100%;
   }
+
+  > span{
+    display: inline-block;
+
+    margin: 0 auto var(--pi-spacing-2);
+    padding: var(--pi-spacing-1);
+
+    font-weight: var(--pi-font-weight-bold);
+    color: var(--pi-primary-color);
+    background: rgba(255,255,255,.85);
+  }
 }

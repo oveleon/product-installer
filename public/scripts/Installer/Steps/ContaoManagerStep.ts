@@ -39,7 +39,7 @@ export default class ContaoManagerStep extends StepComponent
             <h2>${i18n('contao_manager.headline')}</h2>
             <div class="authentication inherit" hidden>
                 <p>${i18n('contao_manager.description')}</p>
-                <div class="graphic con-inactive" data-connection-state>${i18n('contao_manager.connection.inactive')}</div>
+                <div class="graphic con-inactive" data-connection-state><span>${i18n('contao_manager.connection.inactive')}</span></div>
             </div>
             <div class="not-installed inherit" hidden>
                 <p>${i18n('contao_manager.description.notInstalled')}</p>
@@ -47,7 +47,7 @@ export default class ContaoManagerStep extends StepComponent
             </div>
             <div class="install inherit" hidden>
                 <p>${i18n('contao_manager.description.success')}</p>
-                <div class="graphic con-active" data-connection-state>${i18n('contao_manager.connection.active')}</div>
+                <div class="graphic con-active" data-connection-state><span>${i18n('contao_manager.connection.active')}</span></div>
             </div>
             <div class="manually inherit" hidden>
                 <p>${i18n('contao_manager.install.description')}</p>

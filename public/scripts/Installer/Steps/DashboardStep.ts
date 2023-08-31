@@ -6,7 +6,6 @@ import {i18n} from "../Language"
 import {call} from "../../Utils/network"
 import State from "../State";
 import SetupStep from "./SetupStep";
-import NotificationComponent, {NotificationTypes} from "../Components/NotificationComponent";
 
 /**
  * An overview of registered products.
@@ -210,7 +209,7 @@ export default class DashboardStep extends StepComponent
 
         if(!hasProducts)
         {
-            container.innerHTML = `<div class="graphic no-products">${i18n('dashboard.noProducts')}</div>`
+            container.innerHTML = `<div class="graphic no-products"><span>${i18n('dashboard.noProducts')}</span></div>`
             return
         }
     }

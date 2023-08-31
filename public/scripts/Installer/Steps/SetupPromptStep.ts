@@ -29,7 +29,7 @@ export default class SetupPromptStep extends StepComponent
                 </div>
             </div>
             <div class="complete inherit" hidden>
-                <div class="graphic setup-complete">${i18n('setup.complete')}</div>
+                <div class="graphic setup-complete"><span>${i18n('setup.complete')}</span></div>
                 <div class="actions">
                     <button class="goto-products">${i18n('actions.products')}</button>
                     <button data-close class="primary">${i18n('actions.close')}</button>
