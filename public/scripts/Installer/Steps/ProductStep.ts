@@ -34,14 +34,15 @@ export default class ProductStep extends StepComponent
         const container = this.element('.products')
         const props = State.get('config')
 
-        const nextBtn =  <HTMLButtonElement> this.element('[data-next]');
-        nextBtn.disabled = !props.installable
+        //const nextBtn =  <HTMLButtonElement> this.element('[data-next]');
+        //nextBtn.disabled = !props.installable
 
         // Add notification
         if(!props.installable)
         {
-            (new NotificationComponent('System veraltet', i18n('product.no_version'), NotificationTypes.WARN))
-                .appendTo(this.element('.products'))
+            (new NotificationComponent('System veraltet', i18n('product.no_version'), NotificationTypes.WARN, {
+                closeable: true
+            })).appendTo(this.modal.notificationContainer)
         }
 
         for (const productConfig of props.products)
