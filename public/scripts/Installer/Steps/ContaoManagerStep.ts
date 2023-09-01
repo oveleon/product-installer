@@ -61,13 +61,15 @@ export default class ContaoManagerStep extends StepComponent
                 </form>
             </div>
             <div class="actions">
-                <button class="cm-manually">${i18n('contao_manager.install.button')}</button>
-                <button class="cm-manually-close" hidden>${i18n('actions.back')}</button>
+                <button data-prev>${i18n('actions.back')}</button>
                 <button id="cm-authenticate" class="primary">${i18n('contao_manager.authorize')}</button>
                 <button class="primary" data-next hidden>${i18n('actions.next')}</button>
                 <button data-close hidden>${i18n('actions.close')}</button>
             </div>
         `
+
+        // <button class="cm-manually">${i18n('contao_manager.install.button')}</button>
+        // <button class="cm-manually-close" hidden>${i18n('actions.back')}</button>
     }
 
     /**
@@ -112,8 +114,8 @@ export default class ContaoManagerStep extends StepComponent
         this.manuallyContainer  = <HTMLDivElement> this.element('.manually')
 
         this.authenticateBtn    = <HTMLButtonElement> this.element('#cm-authenticate')
-        this.manuallyBtn        = <HTMLButtonElement> this.element('.cm-manually')
-        this.closeBtn           = <HTMLButtonElement> this.element('.cm-manually-close')
+        //this.manuallyBtn        = <HTMLButtonElement> this.element('.cm-manually')
+        //this.closeBtn           = <HTMLButtonElement> this.element('.cm-manually-close')
         this.nextBtn            = <HTMLButtonElement> this.element('[data-next]')
         this.closeModalBtn      = <HTMLButtonElement> this.element('[data-close]')
 
@@ -122,7 +124,7 @@ export default class ContaoManagerStep extends StepComponent
         // Check if installer is authorized to communicate with contao manager
         call('/contao/api/contao_manager/session').then((response) => {
             // Set button events
-            this.manuallyBtn.addEventListener('click', () => this.sectionManuallyInstall(true))
+            /*this.manuallyBtn.addEventListener('click', () => this.sectionManuallyInstall(true))
             this.closeBtn.addEventListener('click', () => this.sectionManuallyInstall(false))
             this.manualCheckbox.addEventListener('change', () => {
                 // Disable/enable next button
@@ -130,7 +132,7 @@ export default class ContaoManagerStep extends StepComponent
 
                 // Save state to skip processes
                 State.set('installManually', this.manualCheckbox.checked)
-            })
+            })*/
 
             // Check the status to display the corresponding mask
             if(response?.status === 'OK')

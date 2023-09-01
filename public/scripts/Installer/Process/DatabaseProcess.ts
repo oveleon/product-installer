@@ -139,8 +139,8 @@ export default class DatabaseProcess extends Process
 
         this.consolePopup = new PopupComponent({
             type: PopupType.CONSOLE,
-            title: 'Abhängigkeiten werden installiert',
-            description: 'Bitte beachten Sie, dass der Produkt-Installer keine Löschungen durchführt. Öffnen Sie bitte den Contao Manager um Löschungen durchzuführen.',
+            title: i18n('process.database.console.title'),
+            description: i18n('process.database.deletionHint'),
             content: this.currentConsoleOperations,
             appendTo: this.template,
             closeable: true

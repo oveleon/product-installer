@@ -114,8 +114,6 @@ export default class SetupPromptStep extends StepComponent
                 }
             }))
 
-            console.log(response);
-
         }).catch((e: Error) => super.error(e))
     }
 

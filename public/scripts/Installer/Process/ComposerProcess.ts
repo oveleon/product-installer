@@ -83,11 +83,16 @@ export default class ComposerProcess extends Process
                 // Delete task if status is error
                 if(response.task.status === 'error')
                 {
-                    const notification = new NotificationComponent('Contao Manager','Nicht beendete Aufgaben werden beendet.', NotificationTypes.WARN, {
-                        timer: {
-                            ms: 5000
+                    const notification = new NotificationComponent(
+                        i18n('process.contao_manager.title'),
+                        i18n('process.composer.running.stop.title'),
+                        NotificationTypes.WARN,
+                        {
+                            timer: {
+                                ms: 5000
+                            }
                         }
-                    })
+                    )
 
                     notification.appendTo(Installer.modal.notificationContainer)
 
@@ -99,14 +104,19 @@ export default class ComposerProcess extends Process
                 // Try again
                 else
                 {
-                    (new NotificationComponent('Contao Manager', 'Der Contao Manager führt derzeit eine andere Aufgabe durch.', NotificationTypes.WARN, {
-                        timer: {
-                            ms: 5000,
-                            text: `Versuche erneut in <b>#seconds# Sekunden</b>.`,
-                            autoClose: true,
-                            onComplete: () => this.process()
+                    (new NotificationComponent(
+                        i18n('process.contao_manager.title'),
+                        i18n('process.composer.running.try.title'),
+                        NotificationTypes.WARN,
+                        {
+                            timer: {
+                                ms: 5000,
+                                text: i18n('process.composer.running.try.timer'),
+                                autoClose: true,
+                                onComplete: () => this.process()
+                            }
                         }
-                    })).appendTo(Installer.modal.notificationContainer)
+                    )).appendTo(Installer.modal.notificationContainer)
                 }
 
                 return
@@ -117,7 +127,7 @@ export default class ComposerProcess extends Process
 
             this.consolePopup = new PopupComponent({
                 type: PopupType.CONSOLE,
-                title: 'Abhängigkeiten werden installiert',
+                title: i18n('process.composer.console.title'),
                 content: this.currentConsoleOperations,
                 appendTo: this.template,
                 closeable: true

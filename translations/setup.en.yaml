@@ -180,6 +180,10 @@ setup:
                 label:                  'News → News-Archive'
                 description:            'One or more news could not be assigned to a news archive. Your selection will be applied to all other news that reference the same news archive.'
                 explanation:            'When importing one or more news items, the corresponding news archive could not be found. Please select a news archive from your Contao instance to create a link between these news and a news archive.<br/><br/><b>The following news archive was not imported and needs an alternative:</b>'
+            singleSRC:
+                title:                  'News → Image'
+                description:            'One or more images from a news item could not be assigned. Your selection will be applied to all other news that reference the same image.'
+                explanation:            'When importing one or more news items, the corresponding image could not be found. Please select an image from your Contao instance to create a link between these news and an image.<br/><br/><b>The following image was not imported and needs an alternative:</b>'
         news_archive:
             jumpTo:
                 label:                  'News Archive Redirect → Page'

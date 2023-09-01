@@ -180,6 +180,10 @@ setup:
                 label:                  'News → News-Archiv'
                 description:            'Ein oder mehrere News konnten keinem News-Archive zugeordnet werden. Ihre Auswahl wird für alle weiteren News, welche auf das selbe News-Archiv referenzieren, übernommen.'
                 explanation:            'Beim Importieren eines oder mehrerer News konnte das zugehörige News-Archiv nicht gefunden werden. Wählen Sie bitte ein News-Archiv aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen News und einem News-Archiv herzustellen.<br/><br/><b>Folgendes News-Archiv wurde nicht importiert und benötigt eine Alternative:</b>'
+            singleSRC:
+                title:                  'News → Bild'
+                description:            'Ein oder mehrere Bilder aus einer News konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren News, welche auf das selben Bild referenzieren, übernommen.'
+                explanation:            'Beim Importieren eines oder mehrerer News konnte das zugehörige Bild nicht gefunden werden. Wählen Sie bitte ein Bild aus Ihrer Contao-Instanz, um eine Verknüpfung zwischen diesen News und einem Bild herzustellen.<br/><br/><b>Folgendes Bild wurde nicht importiert und benötigt eine Alternative:</b>'
         news_archive:
             jumpTo:
                 label:                  'News Archiv Weiterleitung → Seite'

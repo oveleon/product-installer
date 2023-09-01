@@ -3,8 +3,10 @@
 namespace Oveleon\ProductInstaller\Import\Validator;
 
 use Contao\Controller;
+use Contao\FilesModel;
 use Contao\NewsArchiveModel;
 use Contao\NewsModel;
+use Oveleon\ProductInstaller\Import\Prompt\FormPromptType;
 use Oveleon\ProductInstaller\Import\TableImport;
 
 /**
@@ -14,6 +16,8 @@ use Oveleon\ProductInstaller\Import\TableImport;
  */
 class NewsValidator implements ValidatorInterface
 {
+    use ValidatorTrait;
+
     static public function getTrigger(): string
     {
         return NewsModel::getTable();
@@ -44,6 +48,37 @@ class NewsValidator implements ValidatorInterface
                 'description' => $translator->trans('setup.prompt.news.archive.explanation', [], 'setup'),
                 'content'     => $newsArchiveStructure ?? []
             ]
+        ]);
+    }
+
+    /**
+     * Handles news image (singleSRC) in news elements.
+     *
+     * @category BEFORE_IMPORT_ROW
+     */
+    public static function setNewsImageConnection(array &$row, TableImport $importer): ?array
+    {
+        if(!$importer->hasValue($row, 'singleSRC'))
+        {
+            return null;
+        }
+
+        // Get translator
+        $translator = Controller::getContainer()->get('translator');
+
+        return $importer->useIdentifierConnectionLogic($row, 'singleSRC', NewsModel::getTable(), FilesModel::getTable(), [
+            'class'       => 'w50',
+            'isFile'      => true,
+            'widget'      => FormPromptType::FILE,
+            'popupTitle'  => $translator->trans('setup.prompt.news.singleSRC.title', [], 'setup'),
+            'label'       => $translator->trans('setup.prompt.news.singleSRC.title', [], 'setup'),
+            'description' => $translator->trans('setup.prompt.news.singleSRC.description', [], 'setup'),
+            'explanation' => self::getFileExplanationClosure(
+                $row,
+                'singleSRC',
+                $importer,
+                $translator->trans('setup.prompt.news.singleSRC.explanation', [], 'setup')
+            )
         ]);
     }
 }

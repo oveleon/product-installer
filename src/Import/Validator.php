@@ -28,7 +28,7 @@ use Oveleon\ProductInstaller\Import\Validator\ValidatorInterface;
 use Oveleon\ProductInstaller\Import\Validator\ValidatorMode;
 
 /**
- * Validator helper class for import validators.
+ * Validator class for import validators.
  *
  * @author Daniele Sciannimanica <https://github.com/doishub>
  */
@@ -79,6 +79,7 @@ class Validator
 
         // News
         self::addValidator(NewsValidator::getTrigger(), [NewsValidator::class, 'setNewsArchiveConnection']);
+        self::addValidator(NewsValidator::getTrigger(), [NewsValidator::class, 'setNewsImageConnection']);
 
         // Newsletter
         self::addValidator(NewsletterValidator::getTrigger(), [NewsletterValidator::class, 'setChannelConnection']);

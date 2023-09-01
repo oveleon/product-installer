@@ -238,11 +238,11 @@ export default class PopupComponent extends ContainerComponent
                 this.lastDownX = e.clientX
             })
 
-            document?.addEventListener('mouseup', (e: MouseEvent) => {
+            document.addEventListener('mouseup', (e: MouseEvent) => {
                 this.isResizing = false
             })
 
-            this.template?.addEventListener('mousemove', (e: MouseEvent) => {
+            document.addEventListener('mousemove', (e: MouseEvent) => {
                 if(!this.isResizing)
                     return
 

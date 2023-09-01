@@ -1,6 +1,7 @@
 module.exports = {
     // Error
     "error.unknown":                                "Oops, the query could not be performed. Please try again!",
+    "error.default":                                "An error has occurred!",
     "error.session.lost":                           "The session has expired. Please log in again!",
 
     // Global
@@ -124,8 +125,15 @@ module.exports = {
     "process.register.title":                       "Product registration",
     "process.register.description":                 "The installed products are registered.",
 
+    // Composer process
+    "process.composer.console.title":               "Install dependencies",
+    "process.composer.running.try.title":           "The Contao Manager is currently performing another task.",
+    "process.composer.running.try.timer":           "Try again in <b>#seconds# seconds</b>.",
+    "process.composer.running.stop.title":          "Tasks that have not been completed will be terminated.",
+
     // Database process
-    "process.database.deletionHint":                "Deletions are not taken into account and have to be done manually via the Contao Manager.",
+    "process.database.console.title":               "Update database",
+    "process.database.deletionHint":                "Please note that the product installer does not perform deletions. Please open the Contao Manager to perform deletions manually.",
 
     // Tasks
     "task.label.setup":                             "Setup",

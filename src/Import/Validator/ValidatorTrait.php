@@ -4,6 +4,7 @@ namespace Oveleon\ProductInstaller\Import\Validator;
 
 use Contao\ArticleModel;
 use Contao\Controller;
+use Contao\FilesModel;
 use Contao\LayoutModel;
 use Contao\Model;
 use Contao\PageModel;
@@ -241,6 +242,49 @@ trait ValidatorTrait
         }
 
         return $importer->useIdentifierConnectionLogic($row, $field, $sourceModel::getTable(), PageModel::getTable(), $promptOptions, $values ?? []);
+    }
+
+    /**
+     * Returns a file explanation closure that attempts to preview a non-imported image.
+     */
+    public static function getFileExplanationClosure(array $row, string $connectionField, TableImport $importer, string $description): \closure
+    {
+        return static function () use ($row, $connectionField, $importer, $description): ?array {
+            // Try to resolve and display the non-imported file.
+            if ($fileStructure = $importer->getArchiveContentByFilename(FilesModel::getTable())) {
+                $fileRows = \array_filter($fileStructure, function ($item) use ($row, $connectionField) {
+                    return $row[$connectionField] === $item['uuid'];
+                });
+
+                $images = '';
+
+                foreach ($fileRows ?? [] as $fileRow) {
+                    // Detect known mime types
+                    switch (strtolower($fileRow['extension'])) {
+                        case 'svg':
+                            $mime = 'image/svg+xml';
+                            break;
+
+                        case 'jpg':
+                            $mime = 'image/jpeg';
+                            break;
+
+                        default:
+                            $mime = 'image/' . $fileRow['extension'];
+                    }
+
+                    $imageContent = $importer->getArchiveContentByFilename($fileRow['path'], null, false, false);
+                    $imageBase64  = 'data:' . $mime . ';base64,' . base64_encode($imageContent);
+                    $images       .= sprintf('<img src="%s" alt="original"/>', $imageBase64);
+                }
+            }
+
+            return [
+                'type'        => 'HTML',
+                'description' => $description,
+                'content'     => $images ?? ''
+            ];
+        };
     }
 
     /**

@@ -126,7 +126,9 @@
       .summary:after{
         top: 1px;
         color: var(--pi-success-color);
-        content: "🗸";
+        content: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNDggNDgiPgogICAgPHBvbHlnb24gZmlsbD0iIzQzQTA0NyIgcG9pbnRzPSI0MC42LDEyLjEgMTcsMzUuNyA3LjQsMjYuMSA0LjYsMjkgMTcsNDEuMyA0My40LDE0LjkiLz4KPC9zdmc+Cg==);
+        width: 14px;
+        height: 14px;
       }
     }
 

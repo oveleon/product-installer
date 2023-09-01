@@ -79,8 +79,6 @@ export default class FileField extends FormField
 
                     const input = <HTMLInputElement> this.element(`#ctrl_${this.options.name}`)
                           input.value = value
-
-                    console.log(table, value)
                 }
             });
         })

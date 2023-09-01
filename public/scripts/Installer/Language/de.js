@@ -1,6 +1,7 @@
 module.exports = {
     // Error
     "error.unknown":                                "Oops, die Abfrage konnte nicht durchgeführt werden. Bitte versuchen Sie es erneut!",
+    "error.default":                                "Ein Fehler ist aufgetreten!",
     "error.session.lost":                           "Ihre Sitzung ist abgelaufen, bitte loggen Sie sich erneut ein!",
 
     // Global
@@ -104,6 +105,7 @@ module.exports = {
     "advertising.doNotShowAgain":                   "Nicht erneut anzeigen",
 
     // Manager process
+    "process.contao_manager.title":                 "Contao Manager",
     "process.contao_manager.download.title":        "Pakete herunterladen",
     "process.contao_manager.download.description":  "Abhängige Pakete werden heruntergeladen und zur Verfügung gestellt.",
 
@@ -124,8 +126,15 @@ module.exports = {
     "process.register.title":                       "Produktregistrierung",
     "process.register.description":                 "Die installierten Produkte werden registriert.",
 
+    // Composer process
+    "process.composer.console.title":               "Abhängigkeiten installieren",
+    "process.composer.running.try.title":           "Der Contao Manager führt derzeit eine andere Aufgabe durch.",
+    "process.composer.running.try.timer":           "Versuche erneut in <b>#seconds# Sekunden</b>.",
+    "process.composer.running.stop.title":          "Nicht beendete Aufgaben werden beendet.",
+
     // Database process
-    "process.database.deletionHint":                "Löschungen werden nicht berücksichtigt und müssen manuell über den Contao Manager durchgeführt werden.",
+    "process.database.console.title":               "Datenbank aktualisieren",
+    "process.database.deletionHint":                "Bitte beachten Sie, dass der Produkt-Installer keine Löschungen durchführt. Öffnen Sie bitte den Contao Manager um Löschungen manuell durchzuführen.",
 
     // Tasks
     "task.label.setup":                             "Einrichten",
