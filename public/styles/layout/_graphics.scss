@@ -1,48 +1,72 @@
 #installer .graphic{
+  position: relative;
+
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  flex-grow: 1;
+  align-items: center;
 
   font-size: var(--pi-font-size-info);
   font-weight: var(--pi-font-weight-semibold);
   color: var(--pi-text-color);
 
+  animation: pi-fade-in .5s;
+
   width: 100%;
-  height: 330px;
+  height: 100%;
 
-  &.no-products{
-    background: url('/bundles/productinstaller/images/graphics/no-products.gif') center center no-repeat;
-    background-size: auto 100%;
-  }
+  &:before{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  &.not-installed{
-    background: url('/bundles/productinstaller/images/graphics/not-installed.gif') center center no-repeat;
-    background-size: auto 100%;
-  }
+    content: "";
+    width: 100%;
+    height: 200px;
 
-  &.con-inactive{
-    background: url('/bundles/productinstaller/images/graphics/con-inactive.gif') center center no-repeat;
     background-size: auto 100%;
-  }
-
-  &.con-active{
-    background: url('/bundles/productinstaller/images/graphics/con-active.gif') center center no-repeat;
-    background-size: auto 100%;
-  }
-
-  &.setup-complete{
-    background: url('/bundles/productinstaller/images/graphics/setup-complete.gif') center center no-repeat;
-    background-size: auto 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
   }
 
   > span{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
     display: inline-block;
+    width: max-content;
+    max-width: 100%;
 
     margin: 0 auto var(--pi-spacing-2);
     padding: var(--pi-spacing-1);
 
     font-weight: var(--pi-font-weight-bold);
-    color: var(--pi-primary-color);
-    background: rgba(255,255,255,.85);
+    color: var(--pi-graphic-text-color);
+    background: var(--pi-graphic-text-bg-color);
+    border-radius: var(--pi-border-radius-1);
   }
+
+  &.no-products:before{
+    background-image: url('/bundles/productinstaller/images/graphics/no-products.svg');
+  }
+
+  &.not-installed:before{
+    background-image: url('/bundles/productinstaller/images/graphics/not-installed.svg');
+  }
+
+  &.con-inactive:before{
+    background-image: url('/bundles/productinstaller/images/graphics/con-inactive.svg');
+  }
+
+  &.con-active:before{
+    background-image: url('/bundles/productinstaller/images/graphics/con-active.svg');
+  }
+
+  &.setup-complete:before{
+    height: 200px;
+    background-image: url('/bundles/productinstaller/images/graphics/setup-complete.svg');
+  }
+
+
 }

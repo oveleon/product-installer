@@ -73,6 +73,7 @@ module.exports = {
     "contao_manager.dependencies.installed":        "Yes, I have installed all dependencies",
     "contao_manager.connection.active":             "Connection was established",
     "contao_manager.connection.inactive":           "Authorization pending",
+    "contao_manager.connection.notInstalled":       "Contao Manager must be installed",
     "contao_manager.loading":                       "Connection to the Contao Manager is established",
     "contao_manager.loading.composer":              "The composer.json file is prepared for manual installation",
     "contao_manager.process.title":                 "System preparation",

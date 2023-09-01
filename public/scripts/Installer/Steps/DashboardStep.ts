@@ -21,7 +21,7 @@ export default class DashboardStep extends StepComponent
     {
         return `
             <h2>${i18n('dashboard.headline')}</h2>
-            <div class="products"></div>
+            <div class="products inherit"></div>
             <div class="actions">
                 <button data-close>${i18n('actions.close')}</button>
                 <button class="primary" data-next>${i18n('dashboard.actions.register')}</button>

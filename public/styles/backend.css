@@ -35,6 +35,8 @@
   --pi-console-color: #fff;
   --pi-console-bg-color: #2e3031;
   --pi-notification-bg-color: #fff;
+  --pi-graphic-text-color: var(--pi-primary-color);
+  --pi-graphic-text-bg-color: rgb(240 243 244 / 35%);
   --pi-progress-bullet-from-color: rgba(164,201,168,1);
   --pi-progress-bullet-to-color: rgba(231,219,66,1);
   --pi-progress-bullet-bg-finish: #ade78c;
@@ -659,42 +661,58 @@
 }
 
 #installer .graphic {
+  position: relative;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  flex-grow: 1;
+  align-items: center;
   font-size: var(--pi-font-size-info);
   font-weight: var(--pi-font-weight-semibold);
   color: var(--pi-text-color);
+  animation: pi-fade-in 0.5s;
   width: 100%;
-  height: 330px;
+  height: 100%;
 }
-#installer .graphic.no-products {
-  background: url("/bundles/productinstaller/images/graphics/no-products.gif") center center no-repeat;
+#installer .graphic:before {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  content: "";
+  width: 100%;
+  height: 200px;
   background-size: auto 100%;
-}
-#installer .graphic.not-installed {
-  background: url("/bundles/productinstaller/images/graphics/not-installed.gif") center center no-repeat;
-  background-size: auto 100%;
-}
-#installer .graphic.con-inactive {
-  background: url("/bundles/productinstaller/images/graphics/con-inactive.gif") center center no-repeat;
-  background-size: auto 100%;
-}
-#installer .graphic.con-active {
-  background: url("/bundles/productinstaller/images/graphics/con-active.gif") center center no-repeat;
-  background-size: auto 100%;
-}
-#installer .graphic.setup-complete {
-  background: url("/bundles/productinstaller/images/graphics/setup-complete.gif") center center no-repeat;
-  background-size: auto 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 #installer .graphic > span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: inline-block;
+  width: max-content;
+  max-width: 100%;
   margin: 0 auto var(--pi-spacing-2);
   padding: var(--pi-spacing-1);
   font-weight: var(--pi-font-weight-bold);
-  color: var(--pi-primary-color);
-  background: rgba(255, 255, 255, 0.85);
+  color: var(--pi-graphic-text-color);
+  background: var(--pi-graphic-text-bg-color);
+  border-radius: var(--pi-border-radius-1);
+}
+#installer .graphic.no-products:before {
+  background-image: url("/bundles/productinstaller/images/graphics/no-products.svg");
+}
+#installer .graphic.not-installed:before {
+  background-image: url("/bundles/productinstaller/images/graphics/not-installed.svg");
+}
+#installer .graphic.con-inactive:before {
+  background-image: url("/bundles/productinstaller/images/graphics/con-inactive.svg");
+}
+#installer .graphic.con-active:before {
+  background-image: url("/bundles/productinstaller/images/graphics/con-active.svg");
+}
+#installer .graphic.setup-complete:before {
+  height: 200px;
+  background-image: url("/bundles/productinstaller/images/graphics/setup-complete.svg");
 }
 
 #installer .popup {
@@ -1193,8 +1211,8 @@
   flex-grow: 1;
   border-radius: var(--pi-border-radius-3);
   border: 1px dashed var(--pi-border-color-2);
-  background: url("/bundles/productinstaller/images/graphics/upload.gif") center center no-repeat;
-  background-size: auto 100%;
+  background: url("/bundles/productinstaller/images/graphics/upload.svg") center center no-repeat;
+  background-size: auto 200px;
   cursor: pointer;
 }
 #installer div.file-upload.dz-drag-hover {
@@ -1250,7 +1268,7 @@
   background-repeat: no-repeat;
 }
 #installer .notification.error .text, #installer .notification.warn .text, #installer .notification.info .text, #installer .notification.success .text {
-  padding-left: 23px;
+  padding-left: 25px;
   display: -webkit-box;
   -webkit-line-clamp: 8;
   -webkit-box-orient: vertical;
@@ -1529,7 +1547,9 @@
 #installer .console > div[data-status=complete] .summary:after {
   top: 1px;
   color: var(--pi-success-color);
-  content: "🗸";
+  content: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgNDggNDgiPgogICAgPHBvbHlnb24gZmlsbD0iIzQzQTA0NyIgcG9pbnRzPSI0MC42LDEyLjEgMTcsMzUuNyA3LjQsMjYuMSA0LjYsMjkgMTcsNDEuMyA0My40LDE0LjkiLz4KPC9zdmc+Cg==);
+  width: 14px;
+  height: 14px;
 }
 #installer .console > div[data-status=error] .summary:after, #installer .console > div[data-status=stopped] .summary:after {
   top: 1px;
