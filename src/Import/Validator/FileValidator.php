@@ -43,6 +43,15 @@ class FileValidator implements ValidatorInterface
             if($fileModel = $fileImporter->importFileByPath($row['path']))
             {
                 $importer->addConnection($row['uuid'], StringUtil::binToUuid($fileModel->uuid));
+
+                // Hook onFileCreatedValidator
+                if (isset($GLOBALS['PI_HOOKS']['onFileCreatedValidator']) && \is_array($GLOBALS['PI_HOOKS']['onFileCreatedValidator']))
+                {
+                    foreach ($GLOBALS['PI_HOOKS']['onFileCreatedValidator'] as $callback)
+                    {
+                        System::importStatic($callback[0])->{$callback[1]}($row, $fileModel);
+                    }
+                }
             }
         }
 

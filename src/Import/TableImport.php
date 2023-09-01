@@ -467,7 +467,17 @@ class TableImport extends AbstractPromptImport
 
         /** @var Connection $connection */
         $connection = System::getContainer()->get('doctrine.dbal.default_connection');
-        $validColumns = \array_keys($connection->createSchemaManager()->listTableColumns($this->getTableFromFileName($this->table)));
+
+        $validColumns = \array_keys(
+            $connection
+                ->createSchemaManager()
+                ->listTableColumns(
+                    $this->getTableFromFileName($this->table)
+                )
+        );
+
+        // Unquote valid columns
+        \array_walk($validColumns, fn(&$item) => $item = str_replace(['`', '"', '[', ']'], '', $item));
 
         foreach ($validatedRows as $row)
         {

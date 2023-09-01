@@ -41,6 +41,8 @@ With the Product Installer, you maintain full control over the installation and 
 - Optimize styles in Firefox and mobile (Firefox does not support the `:has()` selector)
 - Provide all dependencies for manual installation
 - Use translations everywhere
+- Multi-Themes: 
+  - cmt_id and module assignments must be revised and act based on the selected theme
 
 - Set bundle license
 - Set bundle to public
