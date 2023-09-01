@@ -12,7 +12,7 @@ module.exports = {
     "actions.setup":                                "Start quick setup",
     "actions.setup.expert":                         'Start in expert mode <small><sup style="display: inline-block; color: #006494; font-weight: 600; margin-right: 9px;">ALPHA</sup></small>',
 
-    "actions.console.toggle":                       'Open/Close Console',
+    "actions.console.toggle":                       'Open Console',
     "actions.database.skip":                        'Skip and continue',
     "actions.database.migrate":                     'Datenbank migrieren',
 

@@ -62,8 +62,8 @@ export default class UploadStep extends StepComponent
                 let config = State.get('config') ?? {}
 
                 // Overwrite products
-                config['products'] = []
-                config['products'].push(response)
+                config['products'] = response.products
+                config['installable'] = response.installable
 
                 // Save config
                 State.set('config', config)

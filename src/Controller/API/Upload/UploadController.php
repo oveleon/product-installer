@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\Upload;
 
+use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\System;
 use Oveleon\ProductInstaller\ProductTaskType;
@@ -46,6 +47,7 @@ class UploadController
         $root = System::getContainer()->getParameter('kernel.project_dir');
         $destination = 'product-installer' . DIRECTORY_SEPARATOR . 'downloads';
         $filename = $file->getClientOriginalName();
+        $installable = false;
 
         $file->move(
             $root . DIRECTORY_SEPARATOR . $destination,
@@ -64,6 +66,8 @@ class UploadController
                     'destination' => $destination . DIRECTORY_SEPARATOR . $filename
                 ]
             ]);
+
+            $installable = version_compare(ContaoCoreBundle::getVersion(), $manifest['max_contao_version']) <= 0;
         }
         else
         {
@@ -73,6 +77,9 @@ class UploadController
             ];
         }
 
-        return new JsonResponse($manifest);
+        return new JsonResponse([
+            'products'    => [$manifest],
+            'installable' => $installable,
+        ]);
     }
 }
