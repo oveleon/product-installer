@@ -121,6 +121,8 @@ class SetupInitController
                     {
                         foreach ($task['require'] as $bundle => $version)
                         {
+                            $version = $version ?: '0.0.0';
+
                             $requirements[] = [
                                 'bundle' => $bundle,
                                 'version' => $version,
