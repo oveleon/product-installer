@@ -30,6 +30,7 @@ export default class Installer
             new LicenseConnectorStep()
         )
 
+        //Installer.modal.template.dataset.theme = 'dark'
         Installer.modal.appendTo('body')
     }
 

@@ -147,7 +147,7 @@
 
           &:before {
             border-color: var(--pi-input-border-color);
-            background-color: var(--pi-light-color);
+            background-color: var(--pi-color-grey-1);
           }
 
           &:after {
@@ -185,7 +185,7 @@
 
           border-radius: 5px;
           border: 1px solid var(--pi-input-border-color);
-          background-color: var(--pi-light-color);
+          background-color: var(--pi-color-grey-1);
 
           transition: color 0.2s linear, background-color 0.2s ease-in-out;
           position: absolute;

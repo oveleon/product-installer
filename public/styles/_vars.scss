@@ -1,31 +1,45 @@
 :root {
   /** Colors */
+  --pi-bg-color: #fff;
+  --pi-overlay-bg-color: rgb(0 0 0 / 20%);
+
   --pi-primary-color: #566974;
   --pi-primary-hover-color: #5d7986;
 
   --pi-secondary-color: #536390;
   --pi-secondary-hover-color: #455480;
 
-  --pi-light-color:  rgb(224 232 237 / 55%);
+  --pi-color-grey-1:  rgb(224 232 237 / 55%);
 
-  --pi-text-color: #424242;
   --pi-title-color: rgb(17, 24, 39);
+  --pi-text-color: #424242;
   --pi-info-color: rgb(107, 114, 128);
+
   --pi-error-color: #b54c4c;
   --pi-success-color: #1cb636;
-  --pi-warn-color: #b5a65e;
   --pi-loading-color: #ffeb94;
 
-  --pi-bg-color: #fff;
-  --pi-overlay-bg-color: rgb(0 0 0 / 20%);
+  --pi-badge-type-color: rgb(29, 78, 216);
+  --pi-badge-type-bg-color: rgb(239, 246, 255);
+  --pi-badge-type-border-color: rgb(229, 231, 235);
+
+  --pi-badge-registered-color: rgb(21, 128, 61);
+  --pi-badge-registered-bg-color: rgb(240, 253, 244);
+  --pi-badge-registered-border-color: rgb(22 163 74 / 0.2);
+
+  --pi-badge-removed-color: rgb(185, 28, 28);
+  --pi-badge-removed-bg-color: rgb(254, 242, 242);
+  --pi-badge-removed-border-color: rgb(229, 231, 235);
+
+  --pi-badge-package-color: rgb(126, 34, 206);
+  --pi-badge-package-bg-color: rgb(250, 245, 255);
+  --pi-badge-package-border-color: rgb(229, 231, 235);
 
   --pi-box-bg-color: #fff;
   --pi-box-bg-hover-color: rgb(249, 250, 251);
 
-  --pi-border-color-1: #e1e1e1;
-  --pi-border-hover-color-1: #cecece;
-  --pi-border-color-2: rgb(229, 231, 235);
-  --pi-border-hover-color-2: rgb(229, 231, 235);
+  --pi-border-color: rgb(229, 231, 235);
+  --pi-border-hover-color: rgb(229, 231, 235);
 
   --pi-button-color: rgb(17, 24, 39);
   --pi-button-hover-color: rgb(17, 24, 39);
@@ -43,6 +57,7 @@
   --pi-console-color: #fff;
   --pi-console-bg-color: #2e3031;
 
+  --pi-menu-highlight-color: #d57777;
   --pi-notification-bg-color: #fff;
 
   --pi-graphic-text-color: var(--pi-primary-color);
@@ -99,5 +114,5 @@
 }
 
 [data-theme="dark"] {
-  // ToDo
+
 }

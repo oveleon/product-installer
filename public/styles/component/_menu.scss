@@ -16,6 +16,8 @@
     width: 34px;
     height: 34px;
 
+    color: var(--pi-primary-color);
+
     border: 0 none;
     background: transparent;
     border-radius: 50%;
@@ -90,7 +92,7 @@
 
           content: "";
           display: block;
-          background: #d57777;
+          background: var(--pi-menu-highlight-color);
 
           width: 5px;
           height: 5px;
@@ -131,7 +133,7 @@
 
       content: "";
       display: block;
-      background: #d57777;
+      background: var(--pi-menu-highlight-color);
 
       width: 6px;
       height: 6px;

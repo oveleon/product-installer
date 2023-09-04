@@ -2,26 +2,35 @@
 @import "../fonts/inter.css";
 :root {
   /** Colors */
+  --pi-bg-color: #fff;
+  --pi-overlay-bg-color: rgb(0 0 0 / 20%);
   --pi-primary-color: #566974;
   --pi-primary-hover-color: #5d7986;
   --pi-secondary-color: #536390;
   --pi-secondary-hover-color: #455480;
-  --pi-light-color: rgb(224 232 237 / 55%);
-  --pi-text-color: #424242;
+  --pi-color-grey-1: rgb(224 232 237 / 55%);
   --pi-title-color: rgb(17, 24, 39);
+  --pi-text-color: #424242;
   --pi-info-color: rgb(107, 114, 128);
   --pi-error-color: #b54c4c;
   --pi-success-color: #1cb636;
-  --pi-warn-color: #b5a65e;
   --pi-loading-color: #ffeb94;
-  --pi-bg-color: #fff;
-  --pi-overlay-bg-color: rgb(0 0 0 / 20%);
+  --pi-badge-type-color: rgb(29, 78, 216);
+  --pi-badge-type-bg-color: rgb(239, 246, 255);
+  --pi-badge-type-border-color: rgb(229, 231, 235);
+  --pi-badge-registered-color: rgb(21, 128, 61);
+  --pi-badge-registered-bg-color: rgb(240, 253, 244);
+  --pi-badge-registered-border-color: rgb(22 163 74 / 0.2);
+  --pi-badge-removed-color: rgb(185, 28, 28);
+  --pi-badge-removed-bg-color: rgb(254, 242, 242);
+  --pi-badge-removed-border-color: rgb(229, 231, 235);
+  --pi-badge-package-color: rgb(126, 34, 206);
+  --pi-badge-package-bg-color: rgb(250, 245, 255);
+  --pi-badge-package-border-color: rgb(229, 231, 235);
   --pi-box-bg-color: #fff;
   --pi-box-bg-hover-color: rgb(249, 250, 251);
-  --pi-border-color-1: #e1e1e1;
-  --pi-border-hover-color-1: #cecece;
-  --pi-border-color-2: rgb(229, 231, 235);
-  --pi-border-hover-color-2: rgb(229, 231, 235);
+  --pi-border-color: rgb(229, 231, 235);
+  --pi-border-hover-color: rgb(229, 231, 235);
   --pi-button-color: rgb(17, 24, 39);
   --pi-button-hover-color: rgb(17, 24, 39);
   --pi-button-bg-color: transparent;
@@ -34,6 +43,7 @@
   --pi-box-shadow-2: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
   --pi-console-color: #fff;
   --pi-console-bg-color: #2e3031;
+  --pi-menu-highlight-color: #d57777;
   --pi-notification-bg-color: #fff;
   --pi-graphic-text-color: var(--pi-primary-color);
   --pi-graphic-text-bg-color: rgb(240 243 244 / 35%);
@@ -375,7 +385,7 @@
 }
 #installer .widget.checkbox input:checked + label:before {
   border-color: var(--pi-input-border-color);
-  background-color: var(--pi-light-color);
+  background-color: var(--pi-color-grey-1);
 }
 #installer .widget.checkbox input:checked + label:after {
   opacity: 1;
@@ -404,7 +414,7 @@
   height: 20px;
   border-radius: 5px;
   border: 1px solid var(--pi-input-border-color);
-  background-color: var(--pi-light-color);
+  background-color: var(--pi-color-grey-1);
   transition: color 0.2s linear, background-color 0.2s ease-in-out;
   position: absolute;
   left: 0;
@@ -834,6 +844,7 @@
   line-height: 0;
   width: 34px;
   height: 34px;
+  color: var(--pi-primary-color);
   border: 0 none;
   background: transparent;
   border-radius: 50%;
@@ -892,7 +903,7 @@
   top: 6px;
   content: "";
   display: block;
-  background: #d57777;
+  background: var(--pi-menu-highlight-color);
   width: 5px;
   height: 5px;
   border-radius: 50%;
@@ -919,7 +930,7 @@
   top: 2px;
   content: "";
   display: block;
-  background: #d57777;
+  background: var(--pi-menu-highlight-color);
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -994,24 +1005,24 @@
   border-radius: 6px;
 }
 #installer .badge.type {
-  border-color: #e5e7eb;
-  background: #eff6ff;
-  color: #1d4ed8;
+  border-color: var(--pi-badge-type-border-color);
+  background: var(--pi-badge-type-bg-color);
+  color: var(--pi-badge-type-color);
 }
 #installer .badge.registered {
-  border-color: rgba(22, 163, 74, 0.2);
-  background: #f0fdf4;
-  color: #15803d;
+  border-color: var(--pi-badge-registered-border-color);
+  background: var(--pi-badge-registered-bg-color);
+  color: var(--pi-badge-registered-color);
 }
 #installer .badge.removed {
-  border-color: #e5e7eb;
-  background: #fef2f2;
-  color: #b91c1c;
+  border-color: var(--pi-badge-removed-border-color);
+  background: var(--pi-badge-removed-bg-color);
+  color: var(--pi-badge-removed-color);
 }
 #installer .badge.package {
-  border-color: #e5e7eb;
-  background: #faf5ff;
-  color: #7e22ce;
+  border-color: var(--pi-badge-package-border-color);
+  background: var(--pi-badge-package-bg-color);
+  color: var(--pi-badge-package-color);
 }
 #installer .badge:empty {
   display: none;
@@ -1038,7 +1049,7 @@
   width: 50px;
   min-width: 50px;
   height: 50px;
-  border: 1px solid var(--pi-border-color-2);
+  border: 1px solid var(--pi-border-color);
   border-radius: var(--pi-border-radius-1);
   background: var(--pi-box-bg-color);
   overflow: hidden;
@@ -1210,7 +1221,7 @@
 #installer div.file-upload {
   flex-grow: 1;
   border-radius: var(--pi-border-radius-3);
-  border: 1px dashed var(--pi-border-color-2);
+  border: 1px dashed var(--pi-border-color);
   background: url("/bundles/productinstaller/images/graphics/upload.svg") center center no-repeat;
   background-size: auto 200px;
   cursor: pointer;
@@ -1238,7 +1249,7 @@
   max-width: 300px;
   padding: var(--pi-spacing-2);
   margin-bottom: 5px;
-  border: 1px solid var(--pi-border-color-1);
+  border: 1px solid var(--pi-border-color);
   border-radius: var(--pi-border-radius-1);
   background: var(--pi-notification-bg-color);
   box-shadow: var(--pi-box-shadow-2);
