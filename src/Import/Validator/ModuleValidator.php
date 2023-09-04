@@ -95,7 +95,7 @@ class ModuleValidator implements ValidatorInterface
      */
     public static function setFormConnection(array &$row, TableImport $importer): ?array
     {
-        if($row['type'] === 'form' || !$importer->hasValue($row, 'form'))
+        if($row['type'] !== 'form' || !$importer->hasValue($row, 'form'))
         {
             return null;
         }
@@ -107,7 +107,7 @@ class ModuleValidator implements ValidatorInterface
             'description' => $translator->trans('setup.prompt.module.form.description', [], 'setup'),
         ];
 
-        return $importer->useIdentifierConnectionLogic($row, 'form', LayoutModel::getTable(), FormModel::getTable(), $promptOptions);
+        return $importer->useIdentifierConnectionLogic($row, 'form', ModuleModel::getTable(), FormModel::getTable(), $promptOptions);
     }
 
     /**
