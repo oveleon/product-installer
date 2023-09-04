@@ -8,7 +8,7 @@
 
 <br/><br/>
 
-With the Product Installer, you maintain full control over the installation and setup of products. The Product Installer automates the entire installation process, providing all the necessary resources while executing precise steps for the seamless configuration of your products. Additionally, it effectively assists you in product licensing and management, offering you a high level of flexibility and control.
+With the Product Installer you keep full control over the installation and setup of products in your Contao project. The Product Installer automates the entire installation process by providing all necessary resources and performing precise steps for the seamless configuration of your products. Furthermore, it effectively supports you in product licensing and management and offers you a high degree of flexibility and control.
 <br><br>
 
 ### Overview
@@ -23,7 +23,6 @@ With the Product Installer, you maintain full control over the installation and 
 <br><br>
 
 ### Known import limitations
-- The database update must be performed manually
 - Insert tags currently only support page (`{link::*}}`) and article (`{include_article::*}}`) references
 - Insert tags with query parameter are not supported yet (e.g. `{{file::file.php?arg1=val}}`)
 - Currently only single file connections within custom elements are supported (`singleSRC`)
