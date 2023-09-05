@@ -5,8 +5,6 @@
 
 Willkommen zur Dokumentation des "Produkt Installers", einer leistungsstarken Contao-Erweiterung, herausgegeben von Oveleon. Diese Software bietet eine innovative Lösung für das Registrieren und Installieren von Produkten aus verschiedenen Shop-Systemen oder lokalen Produktpaketen. Mit Hilfe von sogenannten "[Bridges](bridges/README.md)" ermöglicht der Produkt-Installer die nahtlose Anbindung und Konfiguration von verschiedenen Shop-Systemen.
 
-In der heutigen digitalen Welt, in der Online-Shopping und E-Commerce stetig an Bedeutung gewinnen, ist es von entscheidender Bedeutung, den Kunden eine einfache und effiziente Möglichkeit zu bieten, Produkte zu registrieren und zu installieren. Der Produkt Installer geht darüber hinaus und ermöglicht es Unternehmen, ihre eigenen Produktpakete für Contao anzubieten.
-
 Der Fokus des Produkt Installers liegt darauf, Nutzungslizenzen für jegliche Software-Produkte (Themes, Erweiterungen, etc.) entgegennehmen und mit dem Shop abgleichen zu können sowie den Installationsprozess so benutzerfreundlich wie möglich zu gestalten. Egal, ob Sie ein Shop-Betreiber sind, oder ein Entwickler, der ein eigenes Produktpaket anbieten möchte, der Produkt-Installer vereinfacht den Lizensierung und den Installationsvorgang erheblich für Ihre Kunden.
 
 Diese Nutzungslizenzen werden im jeweiligen Shop beim Kauf generiert und müssen im Produkt Installer eingetragen werden. Dadurch wird sichergestellt, dass die Produkte ordnungsgemäß lizenziert und verwendet werden. Für die Contao Erweiterung "Isotope eCommerce" bietet Oveleon bereits eine enstprechende Schnittstelle, den sog. [License-Connector](connector/README.md).
