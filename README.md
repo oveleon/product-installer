@@ -8,7 +8,13 @@
 
 <br/><br/>
 
-With the Product Installer you keep full control over the installation and setup of products in your Contao project. The Product Installer automates the entire installation process by providing all necessary resources and performing precise steps for the seamless configuration of your products. Furthermore, it effectively supports you in product licensing and management and offers you a high degree of flexibility and control.
+The _Product Installer_ enables the retrieval and installation of licensed and / or proprietary software products from various shop systems prepared for this purpose.
+
+It provides a full setup service for software products and an overview of the available products directly in the Contao backend.
+
+The licences are purchased via the shop and its products can be easily installed into the existing ecosystem using the _Product Installer_, so that the shop operator does not need any additional services for distributing licences.
+
+If you are interested in distributing your own products via the _Product Installer_, please contact us via our [contact form](https://www.oveleon.de/kontakt.html).
 <br><br>
 
 ### Overview

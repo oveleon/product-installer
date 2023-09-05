@@ -93,8 +93,8 @@
   .actions{
     display: block !important;
     width: 100% !important;
-    margin-top: var(--pi-spacing-2) !important;
-    padding-top: 0 !important;
+    margin-top: auto !important;
+    padding-top: var(--pi-spacing-2) !important;
 
     button:first-child{
       margin-left: 0;
