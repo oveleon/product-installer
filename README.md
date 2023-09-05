@@ -18,10 +18,10 @@ If you are interested in distributing your own products via the _Product Install
 <br><br>
 
 ### Overview
-✔ Licence verification and product registration\
-✔ Automatic installation of composer dependencies\
-✔ Downloading product content\
-✔ Setup wizard during import
+<img src="docs/assets/circle-2.svg" width="10">  Licence verification and product registration<br/>
+<img src="docs/assets/circle-2.svg" width="10">  Automatic installation of composer dependencies<br/>
+<img src="docs/assets/circle-2.svg" width="10">  Downloading product content<br/>
+<img src="docs/assets/circle-2.svg" width="10">  Setup wizard during import
 <br><br>
 
 ### Developer documentation
@@ -29,9 +29,9 @@ If you are interested in distributing your own products via the _Product Install
 <br><br>
 
 ### Known import limitations
-- Insert tags currently only support page (`{link::*}}`) and article (`{include_article::*}}`) references
-- Insert tags with query parameter are not supported yet (e.g. `{{file::file.php?arg1=val}}`)
-- Currently only single file connections within custom elements are supported (`singleSRC`)
+<img src="docs/assets/circle-1.svg" width="10">  Insert tags currently only support page (`{link::*}}`) and article (`{include_article::*}}`) references <br/>
+<img src="docs/assets/circle-1.svg" width="10">  Insert tags with query parameter are not supported yet (e.g. `{{file::file.php?arg1=val}}`)<br/>
+<img src="docs/assets/circle-1.svg" width="10">  Currently only single file connections within custom elements are supported (`singleSRC`)<br/>
 
 <!--
 ### ToDo's
