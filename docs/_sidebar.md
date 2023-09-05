@@ -10,4 +10,7 @@
 
 * Für Agenturen
   * [Einleitung](agency/README.md)
-  * [Kosten](agency/prices.md)
+
+* Ressourcen
+  * [Glossar](GLOSSARY.md)
+  * [GitHub](https://github.com/oveleon/product-installer)

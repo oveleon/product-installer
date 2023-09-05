@@ -30,4 +30,12 @@ class ApiProcess extends AbstractProcess
 
         parent::__construct(self::PROCESS_API);
     }
+
+    /**
+     * Overrides the parent addRoute method to specify the route name for this process.
+     */
+    public function route(string $route): AbstractProcess
+    {
+        return parent::addRoute(self::ROUTE, $route);
+    }
 }
