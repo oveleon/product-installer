@@ -3,11 +3,8 @@
   --pi-bg-color: #fff;
   --pi-overlay-bg-color: rgb(0 0 0 / 20%);
 
-  --pi-primary-color: #566974;
-  --pi-primary-hover-color: #5d7986;
-
-  --pi-secondary-color: #536390;
-  --pi-secondary-hover-color: #455480;
+  --pi-primary-color: #374953;
+  --pi-primary-hover-color: #455b67;
 
   --pi-color-grey-1:  rgb(224 232 237 / 55%);
 
@@ -25,18 +22,18 @@
 
   --pi-badge-registered-color: rgb(21, 128, 61);
   --pi-badge-registered-bg-color: rgb(240, 253, 244);
-  --pi-badge-registered-border-color: rgb(22 163 74 / 0.2);
+  --pi-badge-registered-border-color: rgb(22 163 74 / 56%);
 
   --pi-badge-removed-color: rgb(185, 28, 28);
   --pi-badge-removed-bg-color: rgb(254, 242, 242);
-  --pi-badge-removed-border-color: rgb(229, 231, 235);
+  --pi-badge-removed-border-color: rgb(209 184 184);
 
   --pi-badge-package-color: rgb(126, 34, 206);
   --pi-badge-package-bg-color: rgb(250, 245, 255);
   --pi-badge-package-border-color: rgb(229, 231, 235);
 
   --pi-box-bg-color: #fff;
-  --pi-box-bg-hover-color: rgb(249, 250, 251);
+  --pi-box-bg-hover-color: #F9F9F9;
 
   --pi-border-color: rgb(229, 231, 235);
   --pi-border-hover-color: rgb(229, 231, 235);
@@ -47,6 +44,8 @@
   --pi-button-bg-hover-color: rgba(0, 0, 0, 0.035);
   --pi-button-border-color: #dedede;
   --pi-button-border-hover-color: rgba(0, 0, 0, 0.06);
+  --pi-button-disabled-bg-color: #f9f9f9;
+  --pi-button-disabled-border-color: #dfdfdf;
 
   --pi-divider-color-1: #efefef;
   --pi-divider-color-2: #d3d0d0;
@@ -57,8 +56,15 @@
   --pi-console-color: #fff;
   --pi-console-bg-color: #2e3031;
 
+  --pi-menu-color: #424242;
+  --pi-menu-color-hover: rgb(17, 24, 39);
+  --pi-menu-bg-color: #fff;
+  --pi-menu-button-bg-hover-color: rgb(240 243 244 / 35%);
   --pi-menu-highlight-color: #d57777;
+
   --pi-notification-bg-color: #fff;
+
+  --pi-loader-bg: #fff;
 
   --pi-graphic-text-color: var(--pi-primary-color);
   --pi-graphic-text-bg-color: rgb(240 243 244 / 35%);
@@ -74,6 +80,8 @@
   --pi-progress-bullet-border-pending: #d0d0d0;
 
   --pi-input-placeholder-color: #c3c3c3;
+  --pi-input-color: #424242;
+  --pi-input-bg-color: #fff;
   --pi-input-border-color: #c9c9c9;
   --pi-input-border-focus-color: #959595;
 
@@ -113,6 +121,89 @@
   --pi-border-radius-3: 25px;
 }
 
-[data-theme="dark"] {
+#installer[data-color-scheme="dark"] {
+  --pi-bg-color: #222629;
+  --pi-overlay-bg-color: rgb(0 0 0 / 35%);
 
+  --pi-primary-color: #ea7777;
+  --pi-primary-hover-color: #e37272;
+
+  --pi-color-grey-1:  rgb(224 232 237 / 55%);
+
+  --pi-title-color: #f2f2f2;
+  --pi-text-color: #dadada;
+  --pi-info-color: #BFBFBF;
+
+  --pi-error-color: #dd8080;
+  --pi-success-color: #1cb636;
+  --pi-loading-color: #ffeb94;
+
+  --pi-badge-type-color: rgb(29, 78, 216);
+  --pi-badge-type-bg-color: rgb(239, 246, 255);
+  --pi-badge-type-border-color: rgb(229, 231, 235);
+
+  --pi-badge-registered-color: rgb(64 214 120);
+  --pi-badge-registered-bg-color: transparent;
+  --pi-badge-registered-border-color: rgb(116 227 157 / 56%);
+
+  --pi-badge-removed-color: rgb(208 81 81);
+  --pi-badge-removed-bg-color: transparent;
+  --pi-badge-removed-border-color: rgb(228 95 95);
+
+  --pi-badge-package-color: rgb(126, 34, 206);
+  --pi-badge-package-bg-color: rgb(250, 245, 255);
+  --pi-badge-package-border-color: rgb(229, 231, 235);
+
+  --pi-box-bg-color: #222629;
+  --pi-box-bg-hover-color: rgb(249 250 251 / 5%);
+
+  --pi-border-color: rgb(91 91 91);
+  --pi-border-hover-color: rgb(229, 231, 235);
+
+  --pi-button-color: #fff;
+  --pi-button-hover-color: #fff;
+  --pi-button-bg-color: transparent;
+  --pi-button-bg-hover-color: rgb(255 255 255 / 9%);
+  --pi-button-border-color: #575656;
+  --pi-button-border-hover-color: #737171;
+  --pi-button-disabled-bg-color: rgb(249 249 249 / 18%);
+  --pi-button-disabled-border-color: rgb(223 223 223 / 19%);
+
+  --pi-divider-color-1: #454545;
+  --pi-divider-color-2: #7a7a7a;
+
+  --pi-box-shadow-1: rgba(0, 0, 0, 0.15) 0 3px 10px 0;
+  --pi-box-shadow-2: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+
+  --pi-console-color: #fff;
+  --pi-console-bg-color: #131313;
+
+  --pi-menu-color: #e3e3e3;
+  --pi-menu-color-hover: #fff;
+  --pi-menu-bg-color: #2e3336;
+  --pi-menu-button-bg-hover-color: rgb(249 250 251 / 5%);
+  --pi-menu-highlight-color: #d57777;
+
+  --pi-notification-bg-color: #fff;
+
+  --pi-loader-bg: #2F2F2F;
+
+  --pi-graphic-text-color: #b4b4b4;
+  --pi-graphic-text-bg-color: transparent;
+
+  --pi-progress-bullet-from-color: rgba(164,201,168,1);
+  --pi-progress-bullet-to-color: rgba(231,219,66,1);
+
+  --pi-progress-bullet-bg-finish: #ade78c;
+  --pi-progress-bullet-border-finish: #478c20;
+  --pi-progress-bullet-bg-active: #f3ee5b;
+  --pi-progress-bullet-border-active: #8f8a2a;
+  --pi-progress-bullet-bg-pending: #e7e7e7;
+  --pi-progress-bullet-border-pending: #d0d0d0;
+
+  --pi-input-placeholder-color: #808080;
+  --pi-input-color: #dadada;
+  --pi-input-bg-color: #2f2f2f;
+  --pi-input-border-color: #7a7a7a;
+  --pi-input-border-focus-color: #959595;
 }

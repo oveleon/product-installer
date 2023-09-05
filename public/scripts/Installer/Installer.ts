@@ -30,8 +30,8 @@ export default class Installer
             new LicenseConnectorStep()
         )
 
-        //Installer.modal.template.dataset.theme = 'dark'
         Installer.modal.appendTo('body')
+        Installer.setColorScheme()
     }
 
     /**
@@ -43,6 +43,22 @@ export default class Installer
     {
         Installer.locale = locale
         setLanguage(locale)
+    }
+
+    /**
+     * Set color scheme.
+     *
+     * @param scheme
+     */
+    static setColorScheme(scheme?: string)
+    {
+        if(!scheme)
+        {
+            // Detect contao scheme
+            scheme = document.documentElement.dataset.colorScheme ?? 'light'
+        }
+
+        Installer.modal.template.dataset.colorScheme = scheme
     }
 
     /**

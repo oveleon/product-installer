@@ -16,17 +16,32 @@
     width: 34px;
     height: 34px;
 
-    color: var(--pi-primary-color);
-
+    outline: 0 none;
     border: 0 none;
     background: transparent;
     border-radius: 50%;
 
-    img{
-      width: 19px;
-      height: auto;
+    &:before{
+      background-color: var(--pi-info-color);
+      content: "";
+
+      -webkit-mask: url("/bundles/productinstaller/images/icons/menu.svg") no-repeat 50% 50%;
+      mask: url("/bundles/productinstaller/images/icons/menu.svg") no-repeat 50% 50%;
+      -webkit-mask-size: cover;
+      mask-size: cover;
+
+      width: 20px;
+      height: 20px;
       opacity: .5;
     }
+  }
+
+  &.gear > button:before{
+    -webkit-mask: url("/bundles/productinstaller/images/icons/settings.svg") no-repeat 50% 50%;
+    mask: url("/bundles/productinstaller/images/icons/settings.svg") no-repeat 50% 50%;
+
+    width: 18px;
+    height: 18px;
   }
 
   .drop-list{
@@ -45,9 +60,14 @@
 
     font-size: var(--pi-font-size-info);
 
-    background: #fff;
+    color: var(--pi-menu-color);
+    background: var(--pi-menu-bg-color);
+
     border-radius: var(--pi-border-radius-1);
     box-shadow: var(--pi-box-shadow-1);
+
+    transform-origin: top right;
+    animation: pi-scale-in .15s ease-out;
 
     > div {
       position: relative;
@@ -110,16 +130,17 @@
       }
 
       &:hover:not(.disabled){
-        background: var(--pi-button-bg-hover-color);
+        color: var(--pi-menu-color-hover);
+        background: var(--pi-menu-button-bg-hover-color);
       }
     }
   }
 
   button:hover, &.open > button{
     color: var(--pi-button-hover-color);
-    background: var(--pi-button-bg-hover-color);
+    background: var(--pi-box-bg-hover-color);
 
-    img{
+    &:before{
       opacity: 1;
     }
   }

@@ -25,8 +25,8 @@
     position: relative;
 
     width: 100%;
-    max-width: 760px;
-    min-height: 530px;
+    max-width: 810px;
+    min-height: 600px;
     max-height: 100%;
 
     background: var(--pi-bg-color);
@@ -42,6 +42,14 @@
 
     > .loader{
       z-index: 100;
+    }
+  }
+
+  &.pi--fs{
+
+    > .inside{
+      max-width: 100%;
+      min-height: 100%;
     }
   }
 

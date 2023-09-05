@@ -43,8 +43,8 @@
 
     &[disabled]{
       color: #bfbfbf !important;
-      background-color: #f9f9f9 !important;
-      border-color: #dfdfdf !important;
+      background-color: var(--pi-button-disabled-bg-color) !important;
+      border-color: var(--pi-button-disabled-border-color) !important;
       pointer-events: none !important;
       cursor: not-allowed !important;
     }

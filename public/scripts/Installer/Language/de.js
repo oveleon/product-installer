@@ -11,7 +11,7 @@ module.exports = {
     "actions.start":                                "Starten",
     "actions.products":                             "Produktübersicht",
     "actions.setup":                                "Schnelle Einrichtung starten",
-    "actions.setup.expert":                         'Im Expertenmodus starten <small><sup style="display: inline-block; color: #006494; font-weight: 600; margin-right: 9px;">ALPHA</sup></small>',
+    "actions.setup.expert":                         'Im Expertenmodus starten <small><sup style="display: inline-block; color: #ea7777; font-weight: 600; margin-right: 9px;">BETA</sup></small>',
 
     "actions.console.toggle":                       'Konsole öffnen',
     "actions.database.skip":                        'Überspringen und fortfahren',
@@ -47,6 +47,8 @@ module.exports = {
     "dashboard.noProducts":                         "Sie haben noch keine Produkte für dieses Projekt registriert.",
     "dashboard.actions.register":                   "Produkt registrieren",
     "dashboard.loading":                            "Produkte werden abgerufen",
+    "dashboard.toggle.darkLight":                   "Hell / Dunkel Modus",
+    "dashboard.toggle.fullscreen":                  "Vollbild",
 
     // Upload step
     "upload.headline":                              "Produkt hochladen",

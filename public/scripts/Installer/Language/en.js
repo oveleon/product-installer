@@ -11,7 +11,7 @@ module.exports = {
     "actions.start":                                "Start",
     "actions.products":                             "Product overview",
     "actions.setup":                                "Start quick setup",
-    "actions.setup.expert":                         'Start in expert mode <small><sup style="display: inline-block; color: #006494; font-weight: 600; margin-right: 9px;">ALPHA</sup></small>',
+    "actions.setup.expert":                         'Start in expert mode <small><sup style="display: inline-block; color: #ea7777; font-weight: 600; margin-right: 9px;">BETA</sup></small>',
 
     "actions.console.toggle":                       'Open Console',
     "actions.database.skip":                        'Skip and continue',
@@ -47,6 +47,8 @@ module.exports = {
     "dashboard.noProducts":                         "You have not registered any products in this project yet.",
     "dashboard.actions.register":                   "Register product",
     "dashboard.loading":                            "Products are retrieved",
+    "dashboard.toggle.darkLight":                   "Dark / Light Mode",
+    "dashboard.toggle.fullscreen":                  "Fullscreen",
 
     // Upload step
     "upload.headline":                              "Upload product",

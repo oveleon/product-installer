@@ -6,6 +6,7 @@ import {i18n} from "../Language"
 import {call} from "../../Utils/network"
 import State from "../State";
 import SetupStep from "./SetupStep";
+import Installer from "../Installer";
 
 /**
  * An overview of registered products.
@@ -20,7 +21,9 @@ export default class DashboardStep extends StepComponent
     protected getTemplate(): string
     {
         return `
-            <h2>${i18n('dashboard.headline')}</h2>
+            <div class="head-actions">
+                <h2>${i18n('dashboard.headline')}</h2>
+            </div>
             <div class="products inherit"></div>
             <div class="actions">
                 <button data-close>${i18n('actions.close')}</button>
@@ -55,6 +58,27 @@ export default class DashboardStep extends StepComponent
 
         // Show loader
         this.modal.loader(true, i18n('dashboard.loading'))
+
+        // Create settings menu
+        const settings = new DropMenuComponent([
+            {
+                label: i18n('dashboard.toggle.fullscreen'),
+                value: () => {
+                    Installer.modal.template.classList.toggle('pi--fs')
+                }
+            },
+            {
+                separator: true,
+                label: i18n('dashboard.toggle.darkLight'),
+                value: () => {
+                    Installer.setColorScheme(Installer.modal.template.dataset.colorScheme === 'dark' ? 'light' : 'dark')
+                }
+            },
+        ])
+
+        settings.appendTo(<HTMLDivElement> this.element('.head-actions'))
+        settings.addClass('gear')
+
 
         // Check license
         call('/contao/api/license_connector/products').then((response) => {

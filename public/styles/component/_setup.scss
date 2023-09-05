@@ -15,7 +15,7 @@
       left: 50%;
       height: 18px;
       transform: translateX(-50%) translateY(50%);
-      background: url('/bundles/productinstaller/images/icons/arrow_down_circle.svg') center center no-repeat #fff;
+      background: url('/bundles/productinstaller/images/icons/arrow_down_circle.svg') center center no-repeat var(--pi-bg-color);
     }
   }
 
@@ -49,8 +49,8 @@
         margin-right: 7px;
 
         border-radius: 50%;
-        border: 1px solid rgb(22 163 74 / 0.45);
-        background: #e4f7ea;
+        border: 1px solid var(--pi-badge-registered-border-color);
+        background: var(--pi-badge-registered-bg-color);
       }
     }
 
@@ -92,15 +92,15 @@
     }
 
     &.__false{
-      color: rgb(185, 28, 28);
+      color: var(--pi-badge-removed-color);
 
       .bundle:before{
-        border-color: #cf9b9b;
-        background: #f7e9e9;
+        border-color: var(--pi-badge-removed-border-color);
+        background: var(--pi-badge-removed-bg-color);
       }
 
       .version{
-        color: rgb(185, 28, 28);
+        color: var(--pi-badge-removed-color);
 
         &:before{
           background-image: url('/bundles/productinstaller/images/icons/version_error.svg');
@@ -119,13 +119,13 @@
       padding: 18px;
       border-radius: 3px;
 
-      border: 1px solid rgb(218 218 218);
+      border: 1px solid var(--pi-border-color);
       border-bottom: 0;
-      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15),
-                  0 8px 0 -5px #fdfdfd,
-                  0 8px 1px -4px rgba(0, 0, 0, 0.15),
-                  0 16px 0 -10px #f8f8f8,
-                  0 16px 1px -9px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 1px 1px var(--pi-border-color),
+                  0 8px 0 -5px var(--pi-box-bg-color),
+                  0 8px 1px -4px var(--pi-border-color),
+                  0 16px 0 -10px var(--pi-box-bg-color),
+                  0 16px 1px -9px var(--pi-border-color);
     }
 
     .content{
@@ -138,7 +138,7 @@
 
         font-size: var(--pi-font-size-title);
         font-weight: var(--pi-font-weight-semibold);
-        color: var(--pi-text-color);
+        color: var(--pi-title-color);
 
         margin-bottom: 10px;
 

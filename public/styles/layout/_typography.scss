@@ -1,27 +1,29 @@
 #installer{
+  font-family: var(--pi-font-family);
+  font-size: var(--pi-font-size-text);
+  line-height: var(--pi-line-height-paragraph);
+  color: var(--pi-text-color);
 
   h2, h3, h4{
     color: var(--pi-title-color);
     font-family: var(--pi-font-family);
     line-height: var(--pi-line-height-base);
+    margin-bottom: var(--pi-spacing-2);
   }
 
   h2{
     font-size: var(--pi-font-size-h2);
     color: var(--pi-primary-color);
-    margin-bottom: var(--pi-spacing-2);
   }
 
   h3{
     font-size: var(--pi-font-size-h3);
     color: var(--pi-primary-color);
-    margin-bottom: var(--pi-spacing-2);
   }
 
   h4{
     font-size: var(--pi-font-size-h4);
     color: var(--pi-primary-color);
-    margin-bottom: var(--pi-spacing-2);
   }
 
   p{

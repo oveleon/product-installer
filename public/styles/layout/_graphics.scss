@@ -21,7 +21,7 @@
 
     content: "";
     width: 100%;
-    height: 200px;
+    height: 250px;
 
     background-size: auto 100%;
     background-position: center center;
@@ -64,7 +64,7 @@
   }
 
   &.setup-complete:before{
-    height: 200px;
+    height: 410px;
     background-image: url('/bundles/productinstaller/images/graphics/setup-complete.svg');
   }
 

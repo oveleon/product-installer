@@ -80,7 +80,7 @@
       width: 100%;
       padding: 45px;
 
-      background: #fff;
+      background: var(--pi-bg-color);
       box-shadow: var(--pi-box-shadow-1);
       animation: pi-slide-in .25s forwards ease-in-out;
     }
@@ -124,9 +124,19 @@
 
       &:before{
         display: block;
-        content: url("/bundles/productinstaller/images/icons/menu.svg");
+        width: 20px;
+        height: 20px;
+
         transform: scale(0.8);
         transition: transform .2s;
+
+        background-color: var(--pi-info-color);
+        content: "";
+
+        -webkit-mask: url("/bundles/productinstaller/images/icons/menu.svg") no-repeat 50% 50%;
+        mask: url("/bundles/productinstaller/images/icons/menu.svg") no-repeat 50% 50%;
+        -webkit-mask-size: cover;
+        mask-size: cover;
       }
 
       &:hover{

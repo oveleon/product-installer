@@ -2,6 +2,20 @@
 
   form{
 
+    input, select{
+      color: var(--pi-input-color);
+      background-color: var(--pi-input-bg-color);
+      border-color: var(--pi-input-border-color);
+
+      &:focus{
+        border-color: var(--pi-input-border-focus-color);
+      }
+
+      &::placeholder {
+        color: var(--pi-input-placeholder-color);
+      }
+    }
+
     &.fields{
       display: flex;
       flex-wrap: wrap;
@@ -29,12 +43,14 @@
       font-weight: 400;
 
       color: #fff;
-      background: var(--pi-secondary-color);
+      background: var(--pi-color-grey-1);
       border-radius: 50%;
+
+      opacity: .8;
       cursor: pointer;
 
       &:hover{
-        background: var(--pi-secondary-hover-color);
+        opacity: 1;
       }
     }
   }
@@ -90,18 +106,11 @@
       input{
         font-size: .9rem;
         line-height: 0;
-        border: 1px solid var(--pi-input-border-color);
+        border-width: 1px;
+        border-style: solid;
         border-radius: 3px;
         padding: 9px 12px;
         outline: 0 none;
-
-        &:focus{
-          border-color: var(--pi-input-border-focus-color);
-        }
-
-        &::placeholder {
-          color: var(--pi-input-placeholder-color);
-        }
 
         &#license{
           letter-spacing: .8px;
@@ -280,7 +289,7 @@
    * Tom-Select overwrites
    */
   .ts-wrapper.multi .ts-control > div.active {
-    background: #688191;
+    background: var(--pi-input-bg-color);
   }
 
   .focus .ts-control{
@@ -290,20 +299,34 @@
 
   .ts-control{
     border-radius: 3px;
+    color: var(--pi-input-color);
+    background-color: var(--pi-input-bg-color);
     border-color: var(--pi-input-border-color);
   }
 
   .ts-dropdown{
+    color: var(--pi-menu-color);
+    background-color: var(--pi-menu-bg-color);
+    border-color: var(--pi-input-border-color);
+
+    .optgroup-header, .option{
+      background-color: var(--pi-menu-bg-color);
+    }
 
     .option{
       position: relative;
+
+      &:hover, &.active{
+        color: var(--pi-menu-color-hover);
+        background-color: var(--pi-menu-button-bg-hover-color);
+      }
 
       span.info{
         position: absolute;
         right: 10px;
         top: 4px;
         color: var(--pi-info-color);
-        background: rgba(255,255,255,.8);
+        background: rgb(255 255 255 / 6%);
         border-radius: 4px;
         padding: 0 4px;
       }

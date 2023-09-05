@@ -7,7 +7,7 @@
 
     margin: 0 calc(-1 * var(--pi-box-spacing-1));
     padding: var(--pi-box-spacing-1);
-    border-radius: var(--pi-border-radius-2);
+    border-radius: var(--pi-border-radius-1);
 
     transition: background-color .25s;
     cursor: default;
@@ -119,6 +119,10 @@
     .version + .version{
       margin-top: 4px;
     }
+  }
+
+  + .box{
+    margin-top: 4px;
   }
 }
 

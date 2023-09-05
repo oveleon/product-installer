@@ -18,6 +18,17 @@
     }
   }
 
+  .head-actions{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .drop-menu{
+      top: -2px;
+      left: 1px;
+    }
+  }
+
   .actions{
     display: flex;
     flex-direction: column-reverse;
