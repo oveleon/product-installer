@@ -4,6 +4,9 @@ module.exports = {
     "error.default":                                "An error has occurred!",
     "error.session.lost":                           "The session has expired. Please log in again!",
 
+    // Warnings
+    "warning.cancel.setup":                         "You are about to cancel the setup, do you really want to leave the site?",
+
     // Global
     "actions.close":                                "Close",
     "actions.back":                                 "Back",
@@ -152,5 +155,6 @@ module.exports = {
     "form.field.rootPage.label":                    "Root page",
     "form.field.rootPage.desc":                     "Please define where the new page structure should be embedded.",
 
-    "form.field.files.browse":                     "Browse files",
+    "form.field.files.browse":                      "Browse files",
+    "form.field.popup.title":                       "Field information",
 }

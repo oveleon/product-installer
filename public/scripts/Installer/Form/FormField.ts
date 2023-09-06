@@ -101,7 +101,7 @@ export default abstract class FormField extends ContainerComponent
                 const popup = new PopupComponent({
                     type: explanation?.type ?? PopupType.HTML,
                     appendTo: () => this.template.closest('.inside'),
-                    title: explanation?.title ?? 'Feldinformationen',
+                    title: explanation?.title ?? i18n('form.field.popup.title'),
                     description: explanation?.description,
                     content: explanation.content,
                     closeable: true

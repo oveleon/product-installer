@@ -1,5 +1,5 @@
 import Process from "./Process"
-import {call, get} from "../../Utils/network"
+import {call} from "../../Utils/network"
 import {TaskStatus} from "../ContaoManager";
 import {i18n} from "../Language"
 import DropMenuComponent from "../Components/DropMenuComponent";

@@ -91,9 +91,7 @@ export default class DropMenuComponent extends ContainerComponent
     private setContent(): void
     {
         this.content(`
-            <button id="${this.id}">
-                <!--<img src="/bundles/productinstaller/images/icons/menu.svg" alt="⋮"/>-->
-            </button>
+            <button id="${this.id}"></button>
             <div class="drop-list"></div>
         `)
 

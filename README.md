@@ -8,7 +8,7 @@
 
 <br/><br/>
 
-The _Product Installer_ enables the retrieval and installation of licensed and / or proprietary software products from various shop systems prepared for this purpose.
+The _Product Installer_ enables the retrieval and installation of licensed and / or proprietary software products like Themes or Extensions from various shop systems prepared for this purpose.
 
 It provides a full setup service for software products and an overview of the available products directly in the Contao backend.
 
@@ -18,10 +18,10 @@ If you are interested in distributing your own products via the _Product Install
 <br><br>
 
 ### Overview
-<img src="docs/assets/circle-2.svg" width="11">  &nbsp; Licence verification and product registration<br/>
-<img src="docs/assets/circle-2.svg" width="11">  &nbsp; Automatic installation of composer dependencies<br/>
-<img src="docs/assets/circle-2.svg" width="11">  &nbsp; Downloading product content<br/>
-<img src="docs/assets/circle-2.svg" width="11">  &nbsp; Setup wizard during import
+<img src="docs/assets/circle-2.svg" width="11" alt="·">  &nbsp; Licence verification and product registration<br/>
+<img src="docs/assets/circle-2.svg" width="11" alt="·">  &nbsp; Automatic installation of composer dependencies<br/>
+<img src="docs/assets/circle-2.svg" width="11" alt="·">  &nbsp; Downloading product content<br/>
+<img src="docs/assets/circle-2.svg" width="11" alt="·">  &nbsp; Setup wizard during import
 <br><br>
 
 ### Developer documentation
@@ -29,9 +29,9 @@ If you are interested in distributing your own products via the _Product Install
 <br><br>
 
 ### Known import limitations
-<img src="docs/assets/circle-1.svg" width="11">  &nbsp; Insert tags currently only support page (`{link::*}}`) and article (`{include_article::*}}`) references <br/>
-<img src="docs/assets/circle-1.svg" width="11">  &nbsp; Insert tags with query parameter are not supported yet (e.g. `{{file::file.php?arg1=val}}`)<br/>
-<img src="docs/assets/circle-1.svg" width="11">  &nbsp; Currently only single file connections within custom elements are supported (`singleSRC`)<br/>
+<img src="docs/assets/circle-1.svg" width="11" alt="·">  &nbsp; Insert tags currently only support page (`{link::*}}`) and article (`{include_article::*}}`) references <br/>
+<img src="docs/assets/circle-1.svg" width="11" alt="·">  &nbsp; Insert tags with query parameter are not supported yet (e.g. `{{file::file.php?arg1=val}}`)<br/>
+<img src="docs/assets/circle-1.svg" width="11" alt="·">  &nbsp; Currently only single file connections within custom elements are supported (`singleSRC`)<br/>
 
 <!--
 ### ToDo's
@@ -43,7 +43,6 @@ If you are interested in distributing your own products via the _Product Install
   - more unknown...
 - Use Download Process for Packages in Manager Process
 - Create product update process (need server-side product management)
-- Optimize styles in Firefox and mobile (Firefox does not support the `:has()` selector)
 - Provide all dependencies for manual installation
 - Use translations everywhere
 - Multi-Themes: 

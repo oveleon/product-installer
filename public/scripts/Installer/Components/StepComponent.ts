@@ -1,5 +1,6 @@
 import ContainerComponent from "./ContainerComponent"
 import ModalComponent from "./ModalComponent";
+import {i18n} from "../Language"
 import NotificationComponent, {NotificationTypes} from "./NotificationComponent";
 
 /**
@@ -218,7 +219,7 @@ export default abstract class StepComponent extends ContainerComponent
         // Check if there are a message to show
         if(response.message)
         {
-            (new NotificationComponent('Ein Fehler ist aufgetreten', response.message, NotificationTypes.ERROR, true))
+            (new NotificationComponent(i18n('error.default'), response.message, NotificationTypes.ERROR, true))
                 .appendTo(this.modal.notificationContainer)
         }
     }

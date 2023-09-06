@@ -119,7 +119,7 @@ export default class SetupPromptStep extends StepComponent
 
     private preventUnload(e): void
     {
-        e.returnValue = `You are about to cancel the setup, do you really want to leave the site?`
+        e.returnValue = i18n('warning.cancel.setup')
     }
 
     private updateProgress(progress): void

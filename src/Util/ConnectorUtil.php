@@ -24,8 +24,8 @@ class ConnectorUtil
             'POST',
             $connector->getConfig()['entry'] . $route,
             [
-                'verify_peer' => false, // ToDO: Remove in production
-                'verify_host' => false, // ToDO: Remove in production
+                //'verify_peer' => false, // ToDO: Remove in production
+                //'verify_host' => false, // ToDO: Remove in production
                 'headers' => [
                     'Content-Type'  => 'application/json',
                     'Cache-Control' => 'no-cache'

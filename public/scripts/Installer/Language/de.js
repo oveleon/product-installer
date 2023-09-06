@@ -4,6 +4,9 @@ module.exports = {
     "error.default":                                "Ein Fehler ist aufgetreten!",
     "error.session.lost":                           "Ihre Sitzung ist abgelaufen, bitte loggen Sie sich erneut ein!",
 
+    // Warnings
+    "warning.cancel.setup":                         "Sie sind dabei, die Einrichtung abzubrechen, wollen Sie die Seite wirklich verlassen?",
+
     // Global
     "actions.close":                                "Schließen",
     "actions.back":                                 "Zurück",
@@ -153,5 +156,6 @@ module.exports = {
     "form.field.rootPage.label":                    "Seitenstartpunkt",
     "form.field.rootPage.desc":                     "Bitte definieren Sie, wo die neue Seitenstruktur eingebettet werden soll.",
 
-    "form.field.files.browse":                     "Dateien durchsuchen",
+    "form.field.files.browse":                      "Dateien durchsuchen",
+    "form.field.popup.title":                       "Feldinformationen",
 }

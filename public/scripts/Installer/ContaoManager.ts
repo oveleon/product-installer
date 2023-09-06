@@ -1,7 +1,6 @@
 import {ProductConfig, Provider, TaskConfig, TaskType} from "./Product/Product";
 import ProductManager from "./Product/ProductManager";
 import {call} from "../Utils/network"
-import State from "./State";
 
 /**
  * Composer configuration.
