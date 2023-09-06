@@ -46,7 +46,7 @@ export default class ContaoManagerProcess extends Process
     {
         return `
             <div data-loader></div>
-            <div class="content">
+            <div class="content has-subtasks">
                 <div class="title">${this.getAttribute('title', i18n('contao_manager.process.title'))}</div>
                 <p>${this.getAttribute('description', i18n('contao_manager.process.description'))}</p>
                 <div class="manager-tasks subtasks"></div>

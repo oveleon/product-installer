@@ -19,7 +19,8 @@
 
     padding-left: 35px;
 
-    &:has(+ .operation:not(:empty)){
+    //&:has(+ .operation:not(:empty)){
+    &.has-operation{
       cursor: pointer;
 
       &:before{

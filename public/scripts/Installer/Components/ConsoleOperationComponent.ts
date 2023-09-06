@@ -96,6 +96,8 @@ export default class ConsoleOperationComponent extends ContainerComponent
             return
         }
 
+        this.summaryContainer.classList.add('has-operation')
+
         // Update console
         this.consoleContainer.innerHTML =
             operation.console

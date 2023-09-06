@@ -44,12 +44,12 @@
       padding: 13px;
     }
 
-    &:not(:has(img)):after {
+    &:empty:after{
       content: "";
 
       display: block;
       position: absolute;
-      inset: 7px;
+      inset: 10px;
 
       background: url('/bundles/productinstaller/images/logo.svg') center center no-repeat;
       background-size: contain;

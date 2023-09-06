@@ -211,11 +211,9 @@ export default class ProductComponent extends ContainerComponent
      */
     private generate(): void
     {
-        const image = this.product.image ? `<img src="${this.product.image}" alt/>` : ''
-
         this.content(`
             <div class="inside">
-                <div class="image">${image}</div>
+                <div class="image"></div>
                 <div class="content">
                   <div class="title">${this.product.title}</div>
                   <div class="description">${this.product.description}</div>
@@ -226,6 +224,15 @@ export default class ProductComponent extends ContainerComponent
                 </div>
             </div>
         `)
+
+        if(this.product.image)
+        {
+            const img: HTMLImageElement = document.createElement('img')
+                  img.src = this.product.image
+                  img.addEventListener('load', () => {
+                      this.element('.image').append(img)
+                  })
+        }
 
         /**
          <div class="badges">

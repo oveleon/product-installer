@@ -1207,11 +1207,11 @@
 #installer .box .image.inset {
   padding: 13px;
 }
-#installer .box .image:not(:has(img)):after {
+#installer .box .image:empty:after {
   content: "";
   display: block;
   position: absolute;
-  inset: 7px;
+  inset: 10px;
   background: url("/bundles/productinstaller/images/logo.svg") center center no-repeat;
   background-size: contain;
 }
@@ -1308,6 +1308,9 @@
   width: 50px;
 }
 #installer .process-step .content {
+  width: calc(100% - 200px);
+}
+#installer .process-step .content.has-subtasks {
   width: calc(100% - 50px);
 }
 #installer .process-step .content .title {
@@ -1628,10 +1631,10 @@
   line-height: 1.2;
   padding-left: 35px;
 }
-#installer .console .summary:has(+ .operation:not(:empty)) {
+#installer .console .summary.has-operation {
   cursor: pointer;
 }
-#installer .console .summary:has(+ .operation:not(:empty)):before {
+#installer .console .summary.has-operation:before {
   display: block;
   content: "⯈";
   position: absolute;
