@@ -1205,7 +1205,10 @@
   height: 100%;
 }
 #installer .box .image.inset {
-  padding: 13px;
+  padding: 11px;
+}
+#installer .box .image.inset img {
+  object-fit: contain;
 }
 #installer .box .image:empty:after {
   content: "";

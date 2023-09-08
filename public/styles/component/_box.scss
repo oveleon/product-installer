@@ -41,7 +41,11 @@
     }
 
     &.inset{
-      padding: 13px;
+      padding: 11px;
+
+      img{
+        object-fit: contain;
+      }
     }
 
     &:empty:after{
