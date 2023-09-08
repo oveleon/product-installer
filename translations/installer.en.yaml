@@ -1,18 +1,28 @@
 installer:
     menu:
-        label:                          Product management
-        title:                          Install and manage your Product
+        label:                                  Product management
+        title:                                  Install and manage your Product
     license:
         errors:
-            license_not_found:          The specified license could not be found, please check your input and pay attention to upper and lower case.
-            license_empty:              Please enter a valid license.
+            license_not_found:                  The specified license could not be found, please check your input and pay attention to upper and lower case.
+            license_empty:                      Please enter a valid license.
     connector:
         upload:
-            title:                      Upload products
-            description:                Through this interface you can upload your product files (.content) and make them available.
+            title:                              Upload products
+            description:                        Through this interface you can upload your product files (.content) and make them available.
         errors:
-            connection_failed:          No connection to %connectorTitle% could be established.
-            connection_failed_global:   No connection can be established at the moment, please try again later.
-            package_incomplete:         The uploaded package is incomplete and cannot be recognized.
-            connector_not_available:    No license connector found.
-            registration_failed:        The product could not be registered, please try again later.
+            global_error:                       An error has occurred.
+            connection_failed:                  No connection to %connectorTitle% could be established.
+            connection_failed_global:           No connection can be established at the moment, please try again later.
+            connector_not_available:            No license connector found.
+            registration_failed:                The product could not be registered, please try again later.
+            package_incomplete:                 The uploaded package is incomplete and cannot be recognized.
+            package_setup_fail:                 The package could not be set up.
+            database_commands_not_supported:    Contao console does not support the necessary contao:migrate commands or CLI API features.
+            database_binary_not_fond:           The PHP command line binary cannot be found.
+            manager_not_found:                  Contao Manager is not installed.
+            manager_task_active:                The Contao Manager is currently performing another action. Next version in 5 seconds.
+            manager_task_unstoppable:           Contao Manager task could not be stopped. Please call the Contao Manager manually to stop the running task.
+            manager_task_not_deletable:         Contao Manager task could not be deleted. Please call the Contao Manager manually to end the running task.
+            install_failed:                     Installation failed.
+            product_auth_failed:                Authentication failed, you are not authorised to download the product...

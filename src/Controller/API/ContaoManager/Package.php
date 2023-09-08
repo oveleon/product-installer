@@ -11,6 +11,7 @@ use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class for installing manager artifacts via the Contao Manager.
@@ -26,6 +27,7 @@ class Package
 {
     public function __construct(
         private readonly ContaoManager $contaoManager,
+        private readonly TranslatorInterface $translator,
         private readonly RequestStack $requestStack
     ){}
 
@@ -78,7 +80,7 @@ class Package
             {
                 return new JsonResponse([
                     'error' => true,
-                    'message' => 'Das Paket konnte nicht hinterlegt werden.'
+                    'message' => $this->translator->trans('installer.connector.errors.package_setup_fail', [], 'installer')
                 ], $response->getStatusCode());
             }
 

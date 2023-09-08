@@ -12,6 +12,7 @@ use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class for set and get contao manager tasks.
@@ -27,6 +28,7 @@ class Task
 {
     public function __construct(
         private readonly ContaoManager $contaoManager,
+        private readonly TranslatorInterface $translator,
         private readonly RequestStack $requestStack
     ){}
 
@@ -74,7 +76,7 @@ class Task
 
             return new JsonResponse([
                 'status'  => TaskStatus::ALREADY_RUNNING->value,
-                'message' => 'Der Contao Manager führt derzeit eine andere Aktion durch. Nächster Version in 5 Sekunden.',
+                'message' => $this->translator->trans('installer.connector.errors.manager_task_active', [], 'installer'),
                 'task'    => $taskData ?? []
             ], $status);
         }
@@ -83,7 +85,7 @@ class Task
         {
             return new JsonResponse([
                 'error' => true,
-                'message' => 'Oops, hier ist etwas schief gelaufen.'
+                'message' => $this->translator->trans('installer.connector.errors.global_error', [], 'installer')
             ], $status);
         }
 
@@ -124,7 +126,7 @@ class Task
         {
             return new JsonResponse([
                 'error' => true,
-                'message' => 'Installation ist fehlgeschlagen.'
+                'message' => $this->translator->trans('installer.connector.errors.install_failed', [], 'installer')
             ], $status);
         }
 
@@ -153,7 +155,7 @@ class Task
         {
             return new JsonResponse([
                 'error' => true,
-                'message' => 'Task konnte nicht gestoppt werden.'
+                'message' => $this->translator->trans('installer.connector.errors.manager_task_unstoppable', [], 'installer')
             ], $status);
         }
 
@@ -182,7 +184,7 @@ class Task
         {
             return new JsonResponse([
                 'error' => true,
-                'message' => 'Task konnte nicht gelöscht werden.'
+                'message' => $this->translator->trans('installer.connector.errors.manager_task_not_deletable', [], 'installer')
             ], $status);
         }
 

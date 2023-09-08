@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class for handle database tasks.
@@ -23,6 +24,7 @@ class Database
 {
     public function __construct(
         private readonly ContaoManager $contaoManager,
+        private readonly TranslatorInterface $translator,
         private readonly RequestStack $requestStack
     ){}
 
@@ -51,7 +53,7 @@ class Database
         {
             return new JsonResponse([
                 'error' => true,
-                'message' => 'Contao console does not support the necessary contao:migrate commands or CLI API features.'
+                'message' => $this->translator->trans('installer.connector.errors.database_commands_not_supported', [], 'installer')
             ], $status);
         }
 
@@ -59,7 +61,7 @@ class Database
         {
             return new JsonResponse([
                 'error' => true,
-                'message' => 'The PHP command line binary cannot be found.'
+                'message' => $this->translator->trans('installer.connector.errors.database_binary_not_fond', [], 'installer')
             ], $status);
         }
 
@@ -67,7 +69,7 @@ class Database
         {
             return new JsonResponse([
                 'error' => true,
-                'message' => 'Oops, hier ist etwas schief gelaufen.'
+                'message' => $this->translator->trans('installer.connector.errors.global_error', [], 'installer')
             ], $status);
         }
 
@@ -104,7 +106,7 @@ class Database
         {
             return new JsonResponse([
                 'error' => true,
-                'message' => 'Your Contao version does not support the database migration API.'
+                'message' => $this->translator->trans('installer.connector.errors.database_commands_not_supported', [], 'installer')
             ], $status);
         }
 
@@ -150,7 +152,7 @@ class Database
         {
             return new JsonResponse([
                 'error' => true,
-                'message' => 'Your Contao version does not support the database migration API.'
+                'message' => $this->translator->trans('installer.connector.errors.database_commands_not_supported', [], 'installer')
             ], $status);
         }
 
@@ -203,7 +205,7 @@ class Database
         {
             return new JsonResponse([
                 'error' => true,
-                'message' => 'The current Contao version does not support the database migration API.'
+                'message' => $this->translator->trans('installer.connector.errors.database_commands_not_supported', [], 'installer')
             ], $status);
         }
 

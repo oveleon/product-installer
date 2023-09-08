@@ -2,13 +2,13 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
-use Contao\System;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class to handle the session of the Contao Manager.
@@ -33,6 +33,7 @@ class Session
     public function __construct(
         private readonly ContaoManager $contaoManager,
         private readonly RouterInterface $router,
+        private readonly TranslatorInterface $translator,
         private readonly RequestStack $requestStack
     ){}
 
@@ -50,7 +51,7 @@ class Session
             return new JsonResponse([
                 'error' => true,
                 'exists' => false,
-                'message' => 'Contao Manager is not installed.'
+                'message' => $this->translator->trans('installer.connector.errors.manager_not_found', [], 'installer')
             ]);
         }
 

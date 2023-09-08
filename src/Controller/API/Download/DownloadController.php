@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class to download data from various sources.
@@ -29,6 +30,7 @@ class DownloadController
         private readonly RequestStack $requestStack,
         private readonly FileDownloader $fileDownloader,
         private readonly RepositoryDownloader $githubDownloader,
+        private readonly TranslatorInterface $translator,
         private readonly ConnectorUtil $connectorUtil
     ){}
 
@@ -88,7 +90,7 @@ class DownloadController
                     {
                         return new JsonResponse([
                             'error'  => true,
-                            'message'=> 'Connection failed'
+                            'message'=> $this->translator->trans('installer.connector.errors.connection_failed_global', [], 'installer')
                         ]);
                     }
 
@@ -112,7 +114,7 @@ class DownloadController
                     }catch (\Exception $e) {
                         return new JsonResponse([
                             'error'   => true,
-                            'message' => 'Authentication failed, you are not authorised to download the product..'
+                            'message' => $this->translator->trans('installer.connector.errors.product_auth_failed', [], 'installer')
                         ], Response::HTTP_NOT_ACCEPTABLE);
                     }
 
