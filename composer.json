@@ -1,6 +1,6 @@
 {
     "name": "oveleon/product-installer",
-    "description": "With this extension, products from Oveleon can be registered, managed and installed.",
+    "description": "Provides the possibility to install products in the Contao backend.",
     "license": "AGPL-3.0-or-later",
     "type": "library",
     "authors": [
