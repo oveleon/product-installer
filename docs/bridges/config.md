@@ -1,7 +1,7 @@
 # Konfiguration
-!> Wenn du noch nicht weißt, wie Bridges funktionieren oder wofür diese nötig sind, lese vorher [diesen Artikel](bridges/README.md)!
+!> Wenn du noch nicht weißt, wie Bridges funktionieren oder wofür diese nötig sind, lese vorher bitte [diesen Artikel](bridges/README.md)!
 
-Die Konfiguration einer Bridge ist entscheidend, um die gewünschten Schritte und Prozesse im Produkt Installer zu definieren. Hier ist ein Beispielcode, der zeigt, wie die Konfiguration einer Bridge aussehen kann:
+Wie in den vorherigen Artikeln beschrieben wissen wir nun, dass die Konfiguration einer Bridge entscheidend ist, um die gewünschten Schritte und Prozesse im Produkt Installer zu definieren. Hier ist ein Beispielcode, der zeigt, wie die Konfiguration einer Bridge aussehen kann:
 
 ```php
 use Oveleon\ProductInstaller\LicenseConnector\AbstractLicenseConnector;
@@ -90,16 +90,16 @@ class ThemeManagerLicenseConnector extends AbstractLicenseConnector
 }
 ```
 
-Im obigen Codebeispiel wird eine Bridge für den [ThemeManager Shop](https://www.contao-thememanager.com) erstellt. In der Methode `setSteps()` werden die Schritte definiert, die im Produkt Installer ausgeführt werden sollen wenn ein neues Produkt registriert wird. Hier werden verschiedene Schritte wie der Lizenzschritt, der Produktschritt, der Werbeschritt, der Contao Manager-Schritt und der Installationsprozess-Schritt hinzugefügt. Jeder Schritt kann verschiedene Prozesse enthalten, die im Installationsablauf ausgeführt werden.
+Im obigen Codebeispiel wird eine Bridge für den [ThemeManager Shop](https://www.contao-thememanager.com) erstellt. In der Methode `setSteps()` werden die Schritte definiert, die im Produkt Installer ausgeführt werden sollen wenn ein neues Produkt registriert wird. Hier werden verschiedene Schritte wie ein Lizenzschritt, ein Produktschritt, ein Werbeschritt, ein Contao Manager-Schritt und ein Installationsprozess-Schritt hinzugefügt. Jeder Schritt kann verschiedene Prozesse enthalten, die im Installationsablauf berücksichtigt und in dieser Reihenfolge ausgeführt werden.
 
-!> Die Reihenfolge der oben aufgeführten Schritte und Prozesse muss dabei eingehalten werden. Es steht jedoch frei, weitere eigene Prozesse dazwischen zu definieren. 
+!> Die Reihenfolge der oben aufgeführten Schritte und Prozesse muss eingehalten werden. Es steht jedoch frei, weitere, eigene Prozesse dazwischen zu definieren. 
 
-In der Methode `getConfig()` wird die Konfiguration der Bridge festgelegt. Hier werden Informationen wie der Name des ThemeManagers, der Titel, die Beschreibung, das Bild und der Einstiegspunkt für die API des Shops angegeben.
+In der Methode `getConfig()` wird die Konfiguration der Bridge festgelegt. Hier werden Informationen wie der Name des anzubindenden Shops, der Titel, die Beschreibung, ein Bildpfad und der Einstiegspunkt für die API des Shops angegeben.
 
-Dieser Code ist ein Beispiel und kann je nach den spezifischen Anforderungen und Strukturen der Bridge angepasst werden. Er dient als Ausgangspunkt für die Konfiguration und Integration der Bridge in den Produkt Installer.
+Dieser Code ist ein Beispiel und kann je nach Anforderung angepasst werden. Dieser kann als Ausgangspunkt für die Konfiguration und Integration einer neuen Bridge in den Produkt Installer dienen.
 
 ## Eigene Prozesse
-Im Produkt Installer haben Sie die Möglichkeit, Prozesse wiederzuverwenden und eigene Logik auszuführen. Ein Beispiel dafür ist der `ApiProcess`, mit dem Sie eine API-Route aufrufen können, um spezifische Aktionen wie bspw. eine Systemprüfung (Prüfung auf benötigte Abhängigkeiten für mein Produkt) durchzuführen. Hier ist ein Beispiel für die Verwendung des `ApiProcess`:
+Im Produkt Installer haben Sie die Möglichkeit, Prozesse wiederzuverwenden und eigene Logiken auszuführen. Ein Beispiel dafür ist der `ApiProcess`, mit dem Sie eine API-Route aufrufen können, um spezifische Aktionen wie bspw. eine Systemprüfung (bspw. eine Prüfung auf benötigte Abhängigkeiten für mein Produkt) durchzuführen. Hier ist ein Beispiel für die Verwendung des `ApiProcess`-Prozess:
 ```php
 use Oveleon\ContaoProductInstaller\ApiProcess;
 
@@ -108,10 +108,10 @@ use Oveleon\ContaoProductInstaller\ApiProcess;
 // Erstellen Sie einen ApiProcess
 $apiProcess = new ApiProcess(
     'API Prozess',
-    'Dieser Prozess ruft eine API-Route auf und führt spezifische Logik aus.'
+    'Dieser Prozess ruft eine beliebige API-Route auf'
 );
 
-// Fügen Sie eine API-Route hinzu
+// Fügen Sie die API-Route hinzu
 $apiProcess->route('/api/custom-route');
 
 // ...
@@ -119,15 +119,15 @@ $apiProcess->route('/api/custom-route');
 // Fügen Sie den ApiProcess zum Installationsablauf hinzu
 $processStep->addProcess($apiProcess);
 ```
-Mit dem `ApiProcess` können Sie eine API-Route definieren und spezifische Logik für den Prozess implementieren. Sie können den ApiProcess direkt zum Installationsablauf hinzufügen, um bestimmte Aktionen auszuführen.
+Mit dem `ApiProcess` können Sie eine API-Route definieren und spezifische Logik für den Prozess implementieren. Dieser kann direkt zum Installationsablauf hinzugefügt werden.
 
-Erstellen Sie einen `ApiProcess`, indem Sie den Titel und die Beschreibung angeben. Verwenden Sie dann die Methode `route()`, um eine API-Route hinzuzufügen, indem Sie den entsprechenden Pfad zu Ihrem Controller angeben.
+Erstellen Sie einen `ApiProcess`, indem Sie den Titel und die Beschreibung angeben. Verwenden Sie dann die Methode `route()`, um eine API-Route hinzuzufügen, indem Sie die entsprechende Route zu Ihrem Controller angeben.
 
-Schließlich fügen Sie den ApiProcess Ihrem Installationsablauf hinzu, indem Sie die Methode `addProcess()` verwenden.
+Schließlich fügen Sie den soeben erstellen ApiProcess Ihrem Installationsablauf hinzu, indem Sie die Methode `addProcess()` verwenden.
 
-Der `ApiProcess` ist ein Beispiel für einen wiederverwendbaren Prozess, der Ihnen ermöglicht, spezifische API-Aufrufe und Logik im Produkt Installer durchzuführen. Sie können ähnliche Ansätze verwenden, um weitere wiederverwendbare Prozesse zu erstellen und Ihre eigene Logik nahtlos in den Installationsablauf einzubinden.
+Sie können ähnliche Ansätze verwenden, um weitere wiederverwendbare Prozesse zu erstellen und Ihre eigene Logik nahtlos in den Installationsablauf einzubinden.
 
-Werfen wir also noch einemal einen Blick auf den vollständigen Code ohne Kommentare:
+Werfen wir also noch einemal einen Blick auf den vollständigen Code:
 
 ```php
 function setSteps(): void
@@ -156,13 +156,13 @@ function setSteps(): void
 ```
 
 Nun, wo wir einen neuen Prozess definiert haben, benötigen wir noch unseren Controller, welcher durch diesen Prozess aufgerufen wird.
-Die in dieser Route definierte API leitet zur Bridge weiter. Das bedeutet, dass wir einen Controller erstellen müssen, der auf diese Route hört und die entsprechende Logik enthält.
+Die definierte Route existiert derzeit noch nicht und sollte direkt mit der Bridge selbst ausgeliefert werden. Das bedeutet, dass wir einen Controller erstellen müssen, der auf diese Route hört und die entsprechende Logik enthält.
 Wenn wir das obige Beispiel fortsetzen, möchten wir in unserer Logik überprüfen, ob eine Erweiterung, die mein Produkt erfordert, installiert ist.
 
 !> Damit wir ein sauberes Beispiel erhalten, ändern wir vorher noch die Route von `/api/custom-route` in `/api/bridge/systemcheck`.
 
 ```php
-namespace Oveleon\ContaoThemeManagerBridge\Controller\API;
+namespace ContaoThemeManagerBridge\Controller\API;
 
 use Composer\InstalledVersions;
 use Symfony\Component\HttpFoundation\JsonResponse;

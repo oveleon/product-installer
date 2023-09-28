@@ -1,5 +1,5 @@
 # Installation
-Der Produkt Installer kann über Composer oder dem Contao Manager installiert werden.
+Der Produkt Installer kann über Composer installiert werden.
 
 ### Installation via composer
 ```bash
