@@ -3,6 +3,7 @@
 namespace Oveleon\ProductInstaller\Util;
 
 use Contao\Controller;
+use Contao\System;
 use Oveleon\ProductInstaller\LicenseConnector\AbstractLicenseConnector;
 use Oveleon\ProductInstaller\LicenseConnector\Step\AbstractStep;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -20,12 +21,14 @@ class ConnectorUtil
      */
     public function post(AbstractLicenseConnector $connector, string $route, array $body = []): ResponseInterface
     {
+        $blnDebug = System::getContainer()->getParameter('kernel.debug');
+
         return (HttpClient::create())->request(
             'POST',
             $connector->getConfig()['entry'] . $route,
             [
-                //'verify_peer' => false, // ToDO: Remove in production
-                //'verify_host' => false, // ToDO: Remove in production
+                'verify_peer' => !$blnDebug,
+                'verify_host' => !$blnDebug,
                 'headers' => [
                     'Content-Type'  => 'application/json',
                     'Cache-Control' => 'no-cache'
