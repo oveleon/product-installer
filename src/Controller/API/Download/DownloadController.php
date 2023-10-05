@@ -45,7 +45,8 @@ class DownloadController
      *      [
      *          'provider': 'shop',
      *          'product':  '18nd238923r83hrrn23r239720eh2e' // (Product hash)
-     *      ],[
+     *      ],
+     *      [
      *          'provider': 'github',
      *          'source':   'namespace/package',
      *          'token':    'x-y-z'
