@@ -30,7 +30,7 @@ export default class ProcessStep extends StepComponent
                 <button class="back" data-prev>${i18n('actions.back')}</button>
                 <button class="start primary">${i18n('actions.start')}</button>
                 <button data-close disabled hidden>${i18n('actions.close')}</button>
-                <button class="add primary" disabled hidden>${i18n('install.actions.add')}</button>
+                <button class="dashboard primary" disabled hidden>${i18n('actions.products')}</button>
             </div>
         `
     }
@@ -45,7 +45,7 @@ export default class ProcessStep extends StepComponent
 
         const backButton = <HTMLButtonElement> this.element('button.back')
         const startButton = <HTMLButtonElement> this.element('button.start')
-        const addButton = <HTMLButtonElement> this.element('button.add')
+        const dashboardButton = <HTMLButtonElement> this.element('button.dashboard')
         const closeButton = <HTMLButtonElement> this.element('[data-close]')
 
         // Method for reset the step
@@ -55,8 +55,8 @@ export default class ProcessStep extends StepComponent
             startButton.hidden = false
             startButton.disabled = false
 
-            addButton.disabled = true
-            addButton.hidden = false
+            dashboardButton.disabled = true
+            dashboardButton.hidden = false
             closeButton.disabled = true
             closeButton.hidden = false
 
@@ -67,7 +67,7 @@ export default class ProcessStep extends StepComponent
         }
 
         const finishProcess = () => {
-            addButton.disabled = false
+            dashboardButton.disabled = false
             closeButton.disabled = false
 
             closeButton.addEventListener('click', () => {
@@ -77,11 +77,11 @@ export default class ProcessStep extends StepComponent
                 this.modal.hide()
             })
 
-            addButton.addEventListener('click', () => {
+            dashboardButton.addEventListener('click', () => {
                 // Reset all
                 resetProcess()
 
-                this.modal.open(1)
+                this.modal.open(this.modal.getStepIndex('DashboardStep'))
             })
         }
 
@@ -108,8 +108,8 @@ export default class ProcessStep extends StepComponent
             startButton.hidden = true
             startButton.disabled = true
 
-            addButton.disabled = true
-            addButton.hidden = false
+            dashboardButton.disabled = true
+            dashboardButton.hidden = false
             closeButton.disabled = true
             closeButton.hidden = false
 

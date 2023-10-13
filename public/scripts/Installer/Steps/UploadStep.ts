@@ -86,6 +86,6 @@ export default class UploadStep extends StepComponent
      * @inheritDoc
      */
     protected unmount() {
-        this.dropzone.destroy()
+        this.dropzone?.destroy()
     }
 }

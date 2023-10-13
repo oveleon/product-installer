@@ -158,7 +158,7 @@ export default class DashboardStep extends StepComponent
                 {
                     menuOptions.push({
                         label: i18n('product.update'),
-                        value: () => console.log('TEST 1'),
+                        value: () => console.log('Product updates are currently not supported, for an update you can do the product registration again.'),
                         highlight: true
                     })
                 }
