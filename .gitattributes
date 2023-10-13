@@ -3,3 +3,4 @@
 /docs export-ignore
 /tests export-ignore
 /bin export-ignore
+/public/scripts export-ignore
