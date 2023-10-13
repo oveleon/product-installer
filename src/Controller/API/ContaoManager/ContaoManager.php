@@ -4,7 +4,6 @@ namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
 use Contao\Environment;
 use Contao\System;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Oveleon\ProductInstaller\ContaoManagerFile;
 use Symfony\Component\HttpClient\HttpClient;
@@ -85,9 +84,10 @@ class ContaoManager
             $parameter['body'] = $body;
         }
 
-        // ToDo: Remove in production
-        #$parameter['verify_peer'] = false;
-        #$parameter['verify_host'] = false;
+        $blnDebug = System::getContainer()->getParameter('kernel.debug');
+
+        $parameter['verify_peer'] = !$blnDebug;
+        $parameter['verify_host'] = !$blnDebug;
 
         return (HttpClient::create())->request(
             $method,

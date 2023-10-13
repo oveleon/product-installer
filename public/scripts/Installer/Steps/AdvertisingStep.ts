@@ -58,6 +58,7 @@ export default class AdvertisingStep extends StepComponent
         if(State.get('skipAdvertising'))
         {
             this.modal.next();
+            return
         }
 
         // Show loader

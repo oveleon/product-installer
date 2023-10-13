@@ -74,7 +74,7 @@ export default class ConsoleComponent extends ContainerComponent
     public update(operations: OperationConfig[]): void
     {
         operations.forEach((operation, key) => {
-            this.operations[key].update(operation)
+            this.operations[key]?.update(operation)
         })
     }
 }

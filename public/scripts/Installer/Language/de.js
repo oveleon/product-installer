@@ -66,9 +66,9 @@ module.exports = {
 
     // Contao Manager
     "contao_manager.headline":                      "Contao Manager",
-    "contao_manager.description":                   "Damit der Product Installer die erforderlichen Abhängigkeiten installieren können, benötigen er Zugriff auf den Contao Manager. Wenn Sie damit einverstanden sind, klicken Sie bitte auf \"Autorisieren\" und folgen Sie den weiteren Schritten im Contao Manager. Sobald Sie dies abgeschlossen haben, werden Sie zum Installationsprozess zurückgeleitet.",
-    "contao_manager.description.notInstalled":      "Damit wir die erforderlichen Abhängigkeiten installieren können, benötigen wir Zugriff auf den Contao Manager. Um fortzufahren installieren Sie bitte den Contao Manager und starten Sie den Installationsprozess erneut.",
-    "contao_manager.description.success":           "Der Zugriff auf den Contao Manager wurde erfolgreich autorisiert. Falls Sie jedoch lieber eine manuelle Installation durchführen möchten, können Sie auf die Schaltfläche \"Manuelle Installation\" klicken.",
+    "contao_manager.description":                   "Damit der Product Installer die erforderlichen Abhängigkeiten installieren kann, wird der Zugriff auf den Contao Manager benötigt. Bitte klicken Sie auf \"Autorisieren\" und folgen Sie den weiteren Schritten im Contao Manager. Sobald die Autorisierung abgeschlossen ist, werden Sie zum Installationsprozess zurückgeleitet.",
+    "contao_manager.description.notInstalled":      "Damit der Product Installer die erforderlichen Abhängigkeiten installieren kann, benötigt dieser Zugriff auf den Contao Manager. Um fortzufahren installieren Sie bitte den Contao Manager und starten Sie den Installationsprozess erneut.",
+    "contao_manager.description.success":           "Der Zugriff auf den Contao Manager wurde erfolgreich autorisiert. Sie können nun mit dem Registrierungsprozess fortfahren.",
     "contao_manager.authorize":                     "Autorisieren",
     "contao_manager.open_manager":                  "Contao Manager öffnen",
     "contao_manager.install.label":                 "Abhängigkeiten manuell installieren",
