@@ -66,7 +66,7 @@ module.exports = {
 
     // Contao Manager
     "contao_manager.headline":                      "Contao Manager",
-    "contao_manager.description":                   "Damit der Produkt-Installer die erforderlichen Abhängigkeiten installieren können, benötigen er Zugriff auf den Contao Manager. Wenn Sie damit einverstanden sind, klicken Sie bitte auf \"Autorisieren\" und folgen Sie den weiteren Schritten im Contao Manager. Sobald Sie dies abgeschlossen haben, werden Sie zum Installationsprozess zurückgeleitet.",
+    "contao_manager.description":                   "Damit der Product Installer die erforderlichen Abhängigkeiten installieren können, benötigen er Zugriff auf den Contao Manager. Wenn Sie damit einverstanden sind, klicken Sie bitte auf \"Autorisieren\" und folgen Sie den weiteren Schritten im Contao Manager. Sobald Sie dies abgeschlossen haben, werden Sie zum Installationsprozess zurückgeleitet.",
     "contao_manager.description.notInstalled":      "Damit wir die erforderlichen Abhängigkeiten installieren können, benötigen wir Zugriff auf den Contao Manager. Um fortzufahren installieren Sie bitte den Contao Manager und starten Sie den Installationsprozess erneut.",
     "contao_manager.description.success":           "Der Zugriff auf den Contao Manager wurde erfolgreich autorisiert. Falls Sie jedoch lieber eine manuelle Installation durchführen möchten, können Sie auf die Schaltfläche \"Manuelle Installation\" klicken.",
     "contao_manager.authorize":                     "Autorisieren",
@@ -140,7 +140,7 @@ module.exports = {
 
     // Database process
     "process.database.console.title":               "Datenbank aktualisieren",
-    "process.database.deletionHint":                "Bitte beachten Sie, dass der Produkt-Installer keine Löschungen durchführt. Öffnen Sie bitte den Contao Manager um Löschungen manuell durchzuführen.",
+    "process.database.deletionHint":                "Bitte beachten Sie, dass der Product Installer keine Löschungen durchführt. Öffnen Sie bitte den Contao Manager um Löschungen manuell durchzuführen.",
 
     // Tasks
     "task.label.setup":                             "Einrichten",

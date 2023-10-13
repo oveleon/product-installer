@@ -158,7 +158,7 @@ export default class ContaoManagerStep extends StepComponent
                 {
                     this.closeModalBtn.hidden = false
                     this.authenticateBtn.hidden = true
-                    this.manuallyBtn.hidden = true
+                    //this.manuallyBtn.hidden = true
 
                     // Set the visibility of the action button
                     this.authContainer.hidden = true
