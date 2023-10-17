@@ -106,6 +106,8 @@ export default class DashboardStep extends StepComponent
     protected createProductList(response): void
     {
         const container = this.element('.products')
+        container.innerHTML = '';
+
         let hasProducts = false
 
         for (const connector of response)
