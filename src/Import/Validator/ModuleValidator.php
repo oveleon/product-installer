@@ -11,7 +11,9 @@ use Contao\ModuleModel;
 use Contao\NewsArchiveModel;
 use Contao\PageModel;
 use Contao\StringUtil;
+use Contao\System;
 use Contao\ThemeModel;
+use Doctrine\DBAL\Connection;
 use Oveleon\ProductInstaller\Import\TableImport;
 
 /**
@@ -59,15 +61,28 @@ class ModuleValidator implements ValidatorInterface
     }
 
     /**
-     * Determines from the ctm_id whether the module already exists. If this is the case, it is not imported, but only
+     * Determines from the ctm_id whether the module already exists. If this is the case, it is not imported, but
      * a connection to the module is established directly.
      *
      * @category BEFORE_IMPORT_ROW
      */
     public static function isImportNecessary(array &$row, TableImport $importer): ?array
     {
+        /** @var Connection $connection */
+        $connection = System::getContainer()->get('doctrine.dbal.default_connection');
+
+        // Check if a ctm_id field exists in our database table tl_module
+        $hasCtmId = \in_array('ctm_id', \array_keys(
+            $connection
+                ->createSchemaManager()
+                ->listTableColumns(
+                    'tl_module'
+                )
+        ));
+
         if(
             !\array_key_exists('ctm_id', $row) ||
+            !$hasCtmId ||
             !ModuleModel::countAll()
         )
         {
