@@ -122,11 +122,16 @@ class SetupInitController
                         foreach ($task['require'] as $bundle => $version)
                         {
                             $version = $version ?: '0.0.0';
+                            $valid = false;
+
+                            try{
+                                $valid = InstalledVersions::satisfies(new VersionParser, $bundle, $version);
+                            }catch (\Exception $e){}
 
                             $requirements[] = [
                                 'bundle' => $bundle,
                                 'version' => $version,
-                                'valid' => InstalledVersions::satisfies(new VersionParser(), $bundle, $version)
+                                'valid' => $valid
                             ];
                         }
                     }

@@ -110,23 +110,27 @@ export default class DatabaseProcess extends Process
             // If no content passed, we need to create the migration
             if(response.originalStatus === 204)
             {
-                call('/contao/api/contao_manager/database/create-migrate', {}).then((response) => {
-
-                    // Check errors
-                    if(response.error)
-                    {
-                        this.reject(response)
-                        return
-                    }
-
-                    this.showMigrationActions(response);
-                }).catch((e: Error) => this.reject(e))
+                this.createMigration()
             }
             else
             {
                 this.showMigrationActions(response);
             }
+        }).catch((e: Error) => this.reject(e))
+    }
 
+    createMigration(): void
+    {
+        call('/contao/api/contao_manager/database/create-migrate', {}).then((response) => {
+
+            // Check errors
+            if(response.error)
+            {
+                this.reject(response)
+                return
+            }
+
+            this.checkMigration()
         }).catch((e: Error) => this.reject(e))
     }
 
@@ -153,12 +157,11 @@ export default class DatabaseProcess extends Process
                 value: () => {
                     this.consolePopup.show()
                     this.consolePopup.updateConsole(this.currentConsoleOperations)
-                },
-                highlight: true
+                }
             },
             {
                 label: i18n('actions.database.skip'),
-                highlight: true,
+                separator: true,
                 value: () => {
                     menu.disableOptions(i18n('actions.database.skip'))
                     menu.disableOptions(i18n('actions.database.migrate'))
@@ -168,7 +171,6 @@ export default class DatabaseProcess extends Process
             },
             {
                 label: i18n('actions.database.migrate'),
-                separator: true,
                 highlight: true,
                 value: () => {
                     menu.disableOptions(i18n('actions.database.skip'))
@@ -190,6 +192,7 @@ export default class DatabaseProcess extends Process
             hash: response.hash,
             type: response.type
         }).then((response) => {
+
             // Check errors
             if(response.error)
             {
@@ -206,6 +209,7 @@ export default class DatabaseProcess extends Process
     {
         // Check task status and update console
         call('/contao/api/contao_manager/database/migrate-status', {}).then((response) => {
+
             // Check errors
             if(response.error)
             {
