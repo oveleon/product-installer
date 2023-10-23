@@ -31,7 +31,6 @@ export default class Installer
         )
 
         Installer.modal.appendTo('body')
-        Installer.setColorScheme()
     }
 
     /**
@@ -66,6 +65,7 @@ export default class Installer
      */
     open(): void
     {
+        Installer.setColorScheme()
         Installer.modal.open()
     }
 }
