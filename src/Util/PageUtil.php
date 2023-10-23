@@ -4,7 +4,7 @@ namespace Oveleon\ProductInstaller\Util;
 
 use Contao\ArticleModel;
 use Contao\PageModel;
-use Model\Collection;
+use Contao\Model\Collection;
 
 /**
  * Class with helper functions for working with pages and articles.
