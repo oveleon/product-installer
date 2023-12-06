@@ -133,7 +133,8 @@ class InsertTag
      */
     public function getValue(): string|InsertTag
     {
-        return $this->value;
+        // Always return a string because false insert tags could have been written down
+        return $this->value ?? '';
     }
 
     /**

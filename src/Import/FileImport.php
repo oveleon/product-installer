@@ -23,7 +23,7 @@ class FileImport extends AbstractPromptImport
         // Get manifest from archive
         $manifest = $this->getArchiveContentByFilename($manifestFileName);
 
-        if(is_array($manifest['directories']))
+        if(isset($manifest['directories']) && is_array($manifest['directories']))
         {
             // Strip directories to skip
             $directories = \array_filter($manifest['directories'], function ($directory) use ($skipDirectories) {
