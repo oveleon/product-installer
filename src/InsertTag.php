@@ -190,9 +190,10 @@ class InsertTag
      */
     private function parse(string $insertTag): void
     {
-        [$command, $valueFlags] = explode("::", $insertTag, 2);
+        $token = explode("::", $insertTag, 2);
 
-        $this->command = $command;
+        $this->command = $token[0] ?? '';
+        $valueFlags = $token[1] ?? '';
 
         if($valueFlags)
         {
