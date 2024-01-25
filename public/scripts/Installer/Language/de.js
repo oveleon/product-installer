@@ -40,7 +40,7 @@ module.exports = {
     "product.label.title":                          "Titel",
     "product.label.description":                    "Beschreibung",
     "product.label.version":                        "Aktuelle Version",
-    "product.label.latestVersion":                  "Neuste Version",
+    "product.label.latestVersion":                  "Neueste Version",
     "product.label.registered":                     "Produkt ist registriert",
     "product.label.registeredDate":                 "Registriert am",
     "product.label.shop":                           "Erworben bei",
