@@ -69,7 +69,7 @@ export default class FileField extends FormField
             files.searchParams.append('extras[fieldType]', type)
             files.searchParams.append('extras[extensions]', extensions)
 
-            //files.searchParams.append('value', this.getValue())
+            files.searchParams.append('value', this.getValue())
 
             Backend.openModalSelector({
                 "id":    "tl_listing",
