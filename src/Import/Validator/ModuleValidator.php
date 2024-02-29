@@ -200,38 +200,63 @@ class ModuleValidator implements ValidatorInterface
      *
      * @category BEFORE_IMPORT_ROW
      */
-    static function setArchiveConnections(array &$row, TableImport $importer): ?array
+    static function setArchiveConnections(array &$row, TableImport $importer, array $options = []): ?array
     {
-        switch ($row['type'])
+        if (empty($options))
         {
-            case 'faqlist':
-            case 'faqreader':
-            case 'faqpage':
-                $connectionField = 'faq_categories';
-                $connectionTable = FaqCategoryModel::getTable();
-                break;
+            switch ($row['type'])
+            {
+                case 'faqlist':
+                case 'faqreader':
+                case 'faqpage':
+                    $connectionField = 'faq_categories';
+                    $connectionTable = FaqCategoryModel::getTable();
+                    break;
 
-            case 'newslist':
-            case 'newsreader':
-            case 'newsarchive':
-            case 'newsmenu':
-                $connectionField = 'news_archives';
-                $connectionTable = NewsArchiveModel::getTable();
-                break;
+                case 'newslist':
+                case 'newsreader':
+                case 'newsarchive':
+                case 'newsmenu':
+                    $connectionField = 'news_archives';
+                    $connectionTable = NewsArchiveModel::getTable();
+                    break;
 
-            case 'calendar':
-            case 'eventreader':
-            case 'eventlist':
-            case 'eventmenu':
-                $connectionField = 'cal_calendar';
-                $connectionTable = CalendarModel::getTable();
-                break;
+                case 'calendar':
+                case 'eventreader':
+                case 'eventlist':
+                case 'eventmenu':
+                    $connectionField = 'cal_calendar';
+                    $connectionTable = CalendarModel::getTable();
+                    break;
 
-            default:
-                return null;
+                default:
+                    if (isset($GLOBALS['PI_HOOKS']['setModuleValidatorArchiveConnections']) && \is_array($GLOBALS['PI_HOOKS']['setModuleValidatorArchiveConnections']))
+                    {
+                        foreach ($GLOBALS['PI_HOOKS']['setModuleValidatorArchiveConnections'] as $callback)
+                        {
+                            $options = System::importStatic($callback[0])->{$callback[1]}($row, $importer);
+
+                            if (is_array($options) && isset($options['field']) || !isset($options['table']))
+                            {
+                                return self::setArchiveConnections($row, $importer, $options);
+                            }
+                        }
+                    }
+
+                    return null;
+            }
+        }
+        elseif (isset($options['field']) && isset($options['table']))
+        {
+            $connectionField = $options['field'];
+            $connectionTable = $options['table'];
+        }
+        else
+        {
+            return null;
         }
 
-        if(!$row[$connectionField])
+        if (!$row[$connectionField])
         {
             return null;
         }
