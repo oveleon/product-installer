@@ -24,6 +24,7 @@ use Oveleon\ProductInstaller\Import\Validator\NewsletterValidator;
 use Oveleon\ProductInstaller\Import\Validator\NewsValidator;
 use Oveleon\ProductInstaller\Import\Validator\PageValidator;
 use Oveleon\ProductInstaller\Import\Validator\ThemeValidator;
+use Oveleon\ProductInstaller\Import\Validator\UserGroupValidator;
 use Oveleon\ProductInstaller\Import\Validator\ValidatorInterface;
 use Oveleon\ProductInstaller\Import\Validator\ValidatorMode;
 
@@ -104,6 +105,9 @@ class Validator
 
         // Content-Event
         self::addValidator(ContentEventValidator::getTrigger(), [ContentEventValidator::class, 'setEventConnection']);
+
+        // User groups
+        self::addValidator(UserGroupValidator::getTrigger(), [UserGroupValidator::class, 'setArchiveConnections']);
 
         // Connects content includes
         self::addValidatorCollection([
