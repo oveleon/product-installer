@@ -204,7 +204,7 @@ setup:
                 description:            'One or more images could not be assigned, please select a new image.'
             custom_page:
                 label:                  '%title% → Page'
-                description:            'Ein oder mehrere Seiten konnten nicht zugewiesen werden, bitte wählen Sie eine neuee Seite.'
+                description:            'One or more pages could not be assigned, please assign a new page manually.'
         page:
             root:
                 create:                 'Create new page'
@@ -216,5 +216,22 @@ setup:
                 label:                  'Page → Layout'
                 description:            'One or more referenced layouts could not be assigned. Your selection will be applied to all other pages that reference the same layout.'
                 explanation:            'When importing one or more pages, an assigned layout could not be resolved. Please select a layout from your Contao instance to create a link between these pages and a layout.<br/><br/><b>The following layout was not imported and needs an alternative:</b>'
-
-
+        user_group:
+            forms:
+                label:                  'User group "%userGroupName%" → Forms'
+                description:            'One or more forms could not be assigned, please assign them manually.'
+            faqs:
+                label:                  'User group "%userGroupName%" → FAQ categories'
+                description:            'One or more categories could not be assigned, please assign the categories manually.'
+            news:
+                label:                  'User group "%userGroupName%" → News archives'
+                description:            'One or more news archives could not be assigned, please assign the archives manually.'
+            calendars:
+                label:                  'User group "%userGroupName%" → Event archives'
+                description:            'One or more event archives could not be assigned, please assign the archives manually.'
+            calendarfeeds:
+                label:                  'User group "%userGroupName%" → Event feeds'
+                description:            'One or more feeds could not be assigned, please assign the feeds manually.'
+            newsletters:
+                label:                  'User group "%userGroupName%" → Newsletter channels'
+                description:            'One or more channels could not be assigned, please assign the channels manually.'
