@@ -236,7 +236,7 @@ class ModuleValidator implements ValidatorInterface
                         {
                             $options = System::importStatic($callback[0])->{$callback[1]}($row, $importer);
 
-                            if (is_array($options) && isset($options['field']) || !isset($options['table']))
+                            if (is_array($options) && isset($options['field']) && isset($options['table']))
                             {
                                 return self::setArchiveConnections($row, $importer, $options);
                             }
