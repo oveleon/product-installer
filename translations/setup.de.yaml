@@ -216,4 +216,22 @@ setup:
                 label:                  'Seite → Layout'
                 description:            'Ein oder mehrere referenzierte Layouts konnten nicht zugeordnet werden. Ihre Auswahl wird für alle weiteren Seiten, welche auf das selbe Layout referenzieren, übernommen.'
                 explanation:            'Beim Importieren einer oder mehrerer Seiten konnte ein zugewiesenes Layout nicht aufgelöst werden. Wählen Sie bitte ein Layout aus Ihrer Contao-Instanz um eine Verknüpfung zwischen diesen Seiten und einem Layout herzustellen.<br/><br/><b>Folgendes Layout wurde nicht importiert und benötigt eine Alternative:</b>'
-
+        user_group:
+            forms:
+                label:                  'Benutzergruppe "%userGroupName%" → Formulare'
+                description:            'Ein oder mehrere Formulare konnten nicht zugewiesen werden, bitte weisen Sie diese manuell zu.'
+            faqs:
+                label:                  'Benutzergruppe "%userGroupName%" → FAQ-Kategorien'
+                description:            'Ein oder mehrere Kategorien konnten nicht zugewiesen werden, bitte weisen Sie die Kategorien manuell zu.'
+            news:
+                label:                  'Benutzergruppe "%userGroupName%" → News-Archive'
+                description:            'Ein oder mehrere News-Archive konnten nicht zugewiesen werden, bitte weisen Sie die Archive manuell zu.'
+            calendars:
+                label:                  'Benutzergruppe "%userGroupName%" → Event-Archive'
+                description:            'Ein oder mehrere Event-Archive konnten nicht zugewiesen werden, bitte weisen Sie die Archive manuell zu.'
+            calendarfeeds:
+                label:                  'Benutzergruppe "%userGroupName%" → Event-Feeds'
+                description:            'Ein oder mehrere Feeds konnten nicht zugewiesen werden, bitte weisen Sie die Feeds manuell zu.'
+            newsletters:
+                label:                  'Benutzergruppe "%userGroupName%" → Newsletter-Channels'
+                description:            'Ein oder mehrere Kanäle konnten nicht zugewiesen werden, bitte weisen Sie die Kanäle manuell zu.'

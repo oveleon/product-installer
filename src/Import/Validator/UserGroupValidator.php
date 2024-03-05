@@ -36,8 +36,8 @@ class UserGroupValidator implements ValidatorInterface
     static function setArchiveConnections(array &$row, TableImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');
-
-        $connections = [
+        $fieldCollection = [];
+        $validTables = [
             'forms' => FormModel::getTable(),
             'faqs' => FaqCategoryModel::getTable(),
             'news' => NewsArchiveModel::getTable(),
@@ -46,34 +46,40 @@ class UserGroupValidator implements ValidatorInterface
             'newsletters' => NewsletterModel::getTable()
         ];
 
+        // Hook for expanding valid tables
         if (
             isset($GLOBALS['PI_HOOKS']['setUserGroupValidatorArchiveConnections']) &&
             \is_array($GLOBALS['PI_HOOKS']['setUserGroupValidatorArchiveConnections'])
         ) {
             foreach ($GLOBALS['PI_HOOKS']['setUserGroupValidatorArchiveConnections'] as $callback)
             {
-                System::importStatic($callback[0])->{$callback[1]}($connections, $row, $importer);
+                System::importStatic($callback[0])->{$callback[1]}($validTables, $row, $importer);
             }
         }
 
-        foreach ($row as $key => $value)
+        $validKeys = array_intersect(array_keys($row), array_keys($validTables));
+
+        foreach ($validKeys as $key)
         {
-            if (!array_key_exists($key, $connections))
+            $table = $validTables[$key];
+
+            if (!$importer->hasValue($row, $key))
             {
                 continue;
             }
 
-            $connectionTable = $connections[$key];
-
             $promptOptions = [
-                'label'       => $translator->trans('setup.prompt.module.'.$key.'.label', [], 'setup'),
-                'description' => $translator->trans('setup.prompt.module.'.$key.'.description', [], 'setup'),
+                'label'       => $translator->trans('setup.prompt.user_group.'.$key.'.label', ['%userGroupName%' => $row['name']], 'setup'),
+                'description' => $translator->trans('setup.prompt.user_group.'.$key.'.description', [], 'setup'),
                 'multiple'    => true
             ];
 
-            $importer->useIdentifierConnectionLogic($row, $key, UserGroupModel::getTable(), $connectionTable, $promptOptions);
+            if($promptFields = $importer->useIdentifierConnectionLogic($row, $key, UserGroupModel::getTable(), $table, $promptOptions))
+            {
+                $fieldCollection = $fieldCollection + $promptFields;
+            }
         }
 
-        return [];
+        return $fieldCollection;
     }
 }
