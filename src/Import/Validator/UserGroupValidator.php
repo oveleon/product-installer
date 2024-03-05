@@ -36,8 +36,8 @@ class UserGroupValidator implements ValidatorInterface
     static function setArchiveConnections(array &$row, TableImport $importer): ?array
     {
         $translator = Controller::getContainer()->get('translator');
-
-        $connections = [
+        $fieldCollection = [];
+        $validTables = [
             'forms' => FormModel::getTable(),
             'faqs' => FaqCategoryModel::getTable(),
             'news' => NewsArchiveModel::getTable(),
@@ -46,24 +46,25 @@ class UserGroupValidator implements ValidatorInterface
             'newsletters' => NewsletterModel::getTable()
         ];
 
+        // Hook for expanding valid tables
         if (
             isset($GLOBALS['PI_HOOKS']['setUserGroupValidatorArchiveConnections']) &&
             \is_array($GLOBALS['PI_HOOKS']['setUserGroupValidatorArchiveConnections'])
         ) {
             foreach ($GLOBALS['PI_HOOKS']['setUserGroupValidatorArchiveConnections'] as $callback)
             {
-                System::importStatic($callback[0])->{$callback[1]}($connections, $row, $importer);
+                System::importStatic($callback[0])->{$callback[1]}($validTables, $row, $importer);
             }
         }
 
         foreach ($row as $key => $value)
         {
-            if (!array_key_exists($key, $connections))
+            if (!array_key_exists($key, $validTables))
             {
                 continue;
             }
 
-            $connectionTable = $connections[$key];
+            $connectionTable = $validTables[$key];
 
             $promptOptions = [
                 'label'       => $translator->trans('setup.prompt.module.'.$key.'.label', [], 'setup'),
@@ -71,9 +72,12 @@ class UserGroupValidator implements ValidatorInterface
                 'multiple'    => true
             ];
 
-            $importer->useIdentifierConnectionLogic($row, $key, UserGroupModel::getTable(), $connectionTable, $promptOptions);
+            if($promptFields = $importer->useIdentifierConnectionLogic($row, $key, UserGroupModel::getTable(), $connectionTable, $promptOptions))
+            {
+                $fieldCollection = $fieldCollection + $promptFields;
+            }
         }
 
-        return [];
+        return $fieldCollection;
     }
 }
