@@ -57,22 +57,24 @@ class UserGroupValidator implements ValidatorInterface
             }
         }
 
-        foreach ($row as $key => $value)
+        $validKeys = array_intersect(array_keys($row), array_keys($validTables));
+
+        foreach ($validKeys as $key)
         {
-            if (!array_key_exists($key, $validTables))
+            $table = $validTables[$key];
+
+            if (!$importer->hasValue($row, $key))
             {
                 continue;
             }
 
-            $connectionTable = $validTables[$key];
-
             $promptOptions = [
-                'label'       => $translator->trans('setup.prompt.module.'.$key.'.label', [], 'setup'),
-                'description' => $translator->trans('setup.prompt.module.'.$key.'.description', [], 'setup'),
+                'label'       => $translator->trans('setup.prompt.user_group.'.$key.'.label', ['%userGroupName%' => $row['name']], 'setup'),
+                'description' => $translator->trans('setup.prompt.user_group.'.$key.'.description', [], 'setup'),
                 'multiple'    => true
             ];
 
-            if($promptFields = $importer->useIdentifierConnectionLogic($row, $key, UserGroupModel::getTable(), $connectionTable, $promptOptions))
+            if($promptFields = $importer->useIdentifierConnectionLogic($row, $key, UserGroupModel::getTable(), $table, $promptOptions))
             {
                 $fieldCollection = $fieldCollection + $promptFields;
             }
