@@ -591,6 +591,7 @@
   border-color: var(--pi-input-border-focus-color);
 }
 #installer .ts-control {
+  border: 1px solid;
   border-radius: 3px;
   color: var(--pi-input-color);
   background-color: var(--pi-input-bg-color);
