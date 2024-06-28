@@ -2,11 +2,13 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\LicenseConnector;
 
+use Contao\BackendUser;
 use Oveleon\ProductInstaller\Util\ConnectorUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -24,7 +26,8 @@ class AdvertisingController
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly RequestStack $requestStack,
-        private readonly ConnectorUtil $connectorUtil
+        private readonly ConnectorUtil $connectorUtil,
+        private readonly Security $security,
     ){}
 
     /**
@@ -32,6 +35,13 @@ class AdvertisingController
      */
     public function __invoke(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         $request = $this->requestStack->getCurrentRequest();
         $parameter = $request->toArray();
 

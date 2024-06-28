@@ -2,9 +2,12 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
+use Contao\BackendUser;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,7 +37,8 @@ class Session
         private readonly ContaoManager $contaoManager,
         private readonly RouterInterface $router,
         private readonly TranslatorInterface $translator,
-        private readonly RequestStack $requestStack
+        private readonly RequestStack $requestStack,
+        private readonly Security $security,
     ){}
 
     /**
@@ -43,6 +47,13 @@ class Session
      */
     public function __invoke(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         $request = $this->requestStack->getCurrentRequest();
 
         // Check if the manager is installed

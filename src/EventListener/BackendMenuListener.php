@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Oveleon\ProductInstaller\EventListener;
 
+use Contao\BackendUser;
 use Contao\CoreBundle\Event\MenuEvent;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
 
@@ -11,12 +15,17 @@ use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
  */
 class BackendMenuListener
 {
-    public function __construct(
-        protected TranslatorInterface $translator
-    ){}
+    public function __construct(private readonly Security $security, protected TranslatorInterface $translator)
+    {}
 
     public function __invoke(MenuEvent $event): void
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin) {
+            return;
+        }
+
         $factory = $event->getFactory();
         $tree = $event->getTree();
 

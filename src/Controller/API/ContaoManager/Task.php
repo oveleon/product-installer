@@ -2,11 +2,13 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
+use Contao\BackendUser;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -29,7 +31,8 @@ class Task
     public function __construct(
         private readonly ContaoManager $contaoManager,
         private readonly TranslatorInterface $translator,
-        private readonly RequestStack $requestStack
+        private readonly RequestStack $requestStack,
+        private readonly Security $security,
     ){}
 
     #[Route('/set',
@@ -38,6 +41,13 @@ class Task
     )]
     public function set(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         $request = $this->requestStack->getCurrentRequest();
         $tasks = $request->toArray();
 
@@ -110,6 +120,13 @@ class Task
     )]
     public function get(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         try {
             $response = $this->contaoManager->call('task');
             $status = $response->getStatusCode();
@@ -139,6 +156,13 @@ class Task
     )]
     public function stop(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         try {
             $response = $this->contaoManager->call('task', 'PATCH');
             $status = $response->getStatusCode();
@@ -168,6 +192,13 @@ class Task
     )]
     public function delete(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         try {
             $response = $this->contaoManager->call('task', 'DELETE');
             $status = $response->getStatusCode();

@@ -2,10 +2,13 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\LicenseConnector;
 
+use Contao\BackendUser;
 use Oveleon\ProductInstaller\InstallerLock;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Helper functions to edit the installer lock file via the API.
@@ -21,7 +24,8 @@ class InstallerLockController
 {
     public function __construct(
         private readonly RequestStack $requestStack,
-        private readonly InstallerLock $installerLock
+        private readonly InstallerLock $installerLock,
+        private readonly Security $security,
     ){}
 
     #[Route('/remove',
@@ -30,6 +34,13 @@ class InstallerLockController
     )]
     public function remove(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         $request = $this->requestStack->getCurrentRequest();
         $request = $request->toArray();
         $hash = $request['hash'];

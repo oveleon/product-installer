@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\Download;
 
+use Contao\BackendUser;
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\System;
 use Exception;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -31,7 +33,8 @@ class DownloadController
         private readonly FileDownloader $fileDownloader,
         private readonly RepositoryDownloader $githubDownloader,
         private readonly TranslatorInterface $translator,
-        private readonly ConnectorUtil $connectorUtil
+        private readonly ConnectorUtil $connectorUtil,
+        private readonly Security $security,
     ){}
 
     /**
@@ -57,6 +60,13 @@ class DownloadController
      */
     public function __invoke(): Response
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         $requestStack = $this->requestStack->getCurrentRequest();
         $request = (object) $requestStack->toArray();
 

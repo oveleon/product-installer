@@ -2,12 +2,15 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\Setup;
 
+use Contao\BackendUser;
 use Oveleon\ProductInstaller\Import\Prompt\PromptResponse;
 use Oveleon\ProductInstaller\ProductTaskType;
 use Oveleon\ProductInstaller\Setup\ContentPackageSetup;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -25,7 +28,8 @@ class SetupController
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly TranslatorInterface $translator,
-        private readonly ContentPackageSetup $contentPackageSetup
+        private readonly ContentPackageSetup $contentPackageSetup,
+        private readonly Security $security,
     ){}
 
     /**
@@ -35,6 +39,13 @@ class SetupController
      */
     public function __invoke(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         $request = $this->requestStack->getCurrentRequest();
         $parameter = $request->toArray();
 

@@ -2,11 +2,13 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
+use Contao\BackendUser;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -25,7 +27,8 @@ class Database
     public function __construct(
         private readonly ContaoManager $contaoManager,
         private readonly TranslatorInterface $translator,
-        private readonly RequestStack $requestStack
+        private readonly RequestStack $requestStack,
+        private readonly Security $security,
     ){}
 
     #[Route('/check',
@@ -34,6 +37,13 @@ class Database
     )]
     public function check(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         try {
             $response = $this->contaoManager->call(
                 'server/database'
@@ -87,6 +97,13 @@ class Database
     )]
     public function migrateStatus(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         try {
             $response = $this->contaoManager->call(
                 'contao/database-migration'
@@ -128,6 +145,13 @@ class Database
     )]
     public function createMigrate(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         try {
             $response = $this->contaoManager->call(
                 'contao/database-migration',
@@ -177,6 +201,13 @@ class Database
     )]
     public function startMigrate(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         $request = $this->requestStack->getCurrentRequest();
         $parameter = $request->toArray();
 
@@ -233,6 +264,13 @@ class Database
     )]
     public function deleteMigrate(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         // Get status after creating
         $this->contaoManager->call(
             'contao/database-migration',

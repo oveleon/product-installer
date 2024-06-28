@@ -2,11 +2,14 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\Upload;
 
+use Contao\BackendUser;
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\System;
 use Oveleon\ProductInstaller\ProductTaskType;
 use Oveleon\ProductInstaller\Util\ArchiveUtil;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -20,7 +23,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 #[Route('api/upload/product/upload',
     name:       UploadController::class,
-    defaults:   ['_scope' => 'frontend', '_token_check' => false],
+    defaults:   ['_scope' => 'backend', '_token_check' => false],
     methods:    ['POST']
 )]
 class UploadController
@@ -30,6 +33,7 @@ class UploadController
         protected readonly ContaoFramework $framework,
         protected readonly TranslatorInterface $translator,
         protected readonly ArchiveUtil $archiveUtil,
+        private readonly Security $security,
     ){}
 
     /**
@@ -37,6 +41,13 @@ class UploadController
      */
     public function __invoke(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         $this->framework->initialize();
 
         $request = $this->requestStack->getCurrentRequest();

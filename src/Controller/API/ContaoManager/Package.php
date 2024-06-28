@@ -2,6 +2,7 @@
 
 namespace Oveleon\ProductInstaller\Controller\API\ContaoManager;
 
+use Contao\BackendUser;
 use Contao\System;
 use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -10,6 +11,7 @@ use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -28,7 +30,8 @@ class Package
     public function __construct(
         private readonly ContaoManager $contaoManager,
         private readonly TranslatorInterface $translator,
-        private readonly RequestStack $requestStack
+        private readonly RequestStack $requestStack,
+        private readonly Security $security,
     ){}
 
     /**
@@ -41,6 +44,13 @@ class Package
     )]
     public function installPackage(): JsonResponse
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser || !$user->isAdmin)
+        {
+            return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
         $request = $this->requestStack->getCurrentRequest();
         $root = System::getContainer()->getParameter('kernel.project_dir');
 
