@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -29,7 +29,7 @@ class SetupController
         private readonly RequestStack $requestStack,
         private readonly TranslatorInterface $translator,
         private readonly ContentPackageSetup $contentPackageSetup,
-        private readonly Security $security,
+        protected TokenStorageInterface $tokenStorage,
     ){}
 
     /**
@@ -39,7 +39,7 @@ class SetupController
      */
     public function __invoke(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {

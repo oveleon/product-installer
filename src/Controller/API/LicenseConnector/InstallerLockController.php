@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Helper functions to edit the installer lock file via the API.
@@ -25,7 +25,7 @@ class InstallerLockController
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly InstallerLock $installerLock,
-        private readonly Security $security,
+        protected TokenStorageInterface $tokenStorage,
     ){}
 
     #[Route('/remove',
@@ -34,7 +34,7 @@ class InstallerLockController
     )]
     public function remove(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {

@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -34,7 +34,7 @@ class DownloadController
         private readonly RepositoryDownloader $githubDownloader,
         private readonly TranslatorInterface $translator,
         private readonly ConnectorUtil $connectorUtil,
-        private readonly Security $security,
+        protected TokenStorageInterface $tokenStorage,
     ){}
 
     /**
@@ -60,7 +60,7 @@ class DownloadController
      */
     public function __invoke(): Response
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {

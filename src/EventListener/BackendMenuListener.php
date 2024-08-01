@@ -5,22 +5,23 @@ declare(strict_types=1);
 namespace Oveleon\ProductInstaller\EventListener;
 
 use Contao\BackendUser;
+use Contao\CoreBundle\Event\ContaoCoreEvents;
 use Contao\CoreBundle\Event\MenuEvent;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
 
-/**
- * @ServiceTag("kernel.event_listener", event="contao.backend_menu_build", priority=-255)
- */
+#[AsEventListener(ContaoCoreEvents::BACKEND_MENU_BUILD, priority: -255)]
 class BackendMenuListener
 {
-    public function __construct(private readonly Security $security, protected TranslatorInterface $translator)
-    {}
+    public function __construct(
+        protected TranslatorInterface $translator,
+        protected TokenStorageInterface $tokenStorage,
+    ) {}
 
     public function __invoke(MenuEvent $event): void
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin) {
             return;
