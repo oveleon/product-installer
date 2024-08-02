@@ -1,3 +1,0 @@
-oveleon.productinstaller.controller:
-    resource: '@ProductInstaller/src/Controller'
-    type: attribute
