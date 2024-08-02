@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class to write the "repositories" branch to the composer file.
@@ -24,7 +24,7 @@ class Repository
     public function __construct(
         private readonly Composer $composer,
         private readonly RequestStack $requestStack,
-        private readonly Security $security,
+        protected TokenStorageInterface $tokenStorage,
     ){}
 
     #[Route('/set',
@@ -33,7 +33,7 @@ class Repository
     )]
     public function set(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {

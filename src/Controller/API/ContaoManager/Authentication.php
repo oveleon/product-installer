@@ -6,7 +6,7 @@ use Contao\BackendUser;
 use Oveleon\ProductInstaller\ContaoManagerFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class to handle authentication with the Contao Manager.
@@ -23,12 +23,12 @@ class Authentication
     public function __construct(
         private readonly ContaoManagerFile $managerFile,
         private readonly RequestStack $requestStack,
-        private readonly Security $security,
+        protected TokenStorageInterface $tokenStorage,
     ){}
 
     public function __invoke(): void
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {

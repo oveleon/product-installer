@@ -9,7 +9,7 @@ use Contao\System;
 use Oveleon\ProductInstaller\ProductTaskType;
 use Oveleon\ProductInstaller\Util\ArchiveUtil;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -33,7 +33,7 @@ class UploadController
         protected readonly ContaoFramework $framework,
         protected readonly TranslatorInterface $translator,
         protected readonly ArchiveUtil $archiveUtil,
-        private readonly Security $security,
+        protected TokenStorageInterface $tokenStorage,
     ){}
 
     /**
@@ -41,7 +41,7 @@ class UploadController
      */
     public function __invoke(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {

@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -28,7 +28,7 @@ class Database
         private readonly ContaoManager $contaoManager,
         private readonly TranslatorInterface $translator,
         private readonly RequestStack $requestStack,
-        private readonly Security $security,
+        protected TokenStorageInterface $tokenStorage,
     ){}
 
     #[Route('/check',
@@ -37,7 +37,7 @@ class Database
     )]
     public function check(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {
@@ -97,7 +97,7 @@ class Database
     )]
     public function migrateStatus(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {
@@ -145,7 +145,7 @@ class Database
     )]
     public function createMigrate(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {
@@ -201,7 +201,7 @@ class Database
     )]
     public function startMigrate(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {
@@ -264,7 +264,7 @@ class Database
     )]
     public function deleteMigrate(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {

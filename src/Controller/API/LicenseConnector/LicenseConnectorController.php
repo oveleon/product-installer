@@ -7,7 +7,7 @@ use Oveleon\ProductInstaller\Util\ConnectorUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -25,7 +25,7 @@ class LicenseConnectorController
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly ConnectorUtil $connectorUtil,
-        private readonly Security $security,
+        protected TokenStorageInterface $tokenStorage,
     ){}
 
     #[Route('/config',
@@ -34,7 +34,7 @@ class LicenseConnectorController
     )]
     public function getLicenseConnectors(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {

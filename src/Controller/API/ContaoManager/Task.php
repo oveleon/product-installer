@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -32,7 +32,7 @@ class Task
         private readonly ContaoManager $contaoManager,
         private readonly TranslatorInterface $translator,
         private readonly RequestStack $requestStack,
-        private readonly Security $security,
+        protected TokenStorageInterface $tokenStorage,
     ){}
 
     #[Route('/set',
@@ -41,7 +41,7 @@ class Task
     )]
     public function set(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {
@@ -120,7 +120,7 @@ class Task
     )]
     public function get(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {
@@ -156,7 +156,7 @@ class Task
     )]
     public function stop(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {
@@ -192,7 +192,7 @@ class Task
     )]
     public function delete(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {

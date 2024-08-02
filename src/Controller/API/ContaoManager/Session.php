@@ -7,7 +7,7 @@ use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,7 +38,7 @@ class Session
         private readonly RouterInterface $router,
         private readonly TranslatorInterface $translator,
         private readonly RequestStack $requestStack,
-        private readonly Security $security,
+        protected TokenStorageInterface $tokenStorage,
     ){}
 
     /**
@@ -47,7 +47,7 @@ class Session
      */
     public function __invoke(): JsonResponse
     {
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
 
         if (!$user instanceof BackendUser || !$user->isAdmin)
         {
