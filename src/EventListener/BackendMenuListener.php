@@ -43,6 +43,7 @@ class BackendMenuListener
             ->setLinkAttribute('title', $this->translator->trans('installer.menu.title', [], 'installer'))
             ->setLinkAttribute('id', 'product-installer')
             ->setLinkAttribute('class', 'product-installer')
+            ->setLinkAttribute('data-turbo-prefetch', 'false')
         ;
 
         $contentNode->addChild($node);
