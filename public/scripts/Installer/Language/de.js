@@ -53,11 +53,6 @@ module.exports = {
     "dashboard.toggle.darkLight":                   "Hell / Dunkel Modus",
     "dashboard.toggle.fullscreen":                  "Vollbild",
 
-    // Upload step
-    "upload.headline":                              "Produkt hochladen",
-    "upload.description":                           "Bitte laden Sie ein Produkt hoch. Entweder Sie ziehen die Produktdatei (.content) in den gestrichelten Bereich oder klicken auf diesen um den Dateimanager aufzurufen.",
-    "upload.loading":                               "Produkt wird hochgeladen",
-
     // License Connector step
     "license_connector.headline":                   "Schittstelle wählen",
     "license_connector.load.connector":             "Schnittstellen werden abgerufen",

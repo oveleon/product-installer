@@ -53,11 +53,6 @@ module.exports = {
     "dashboard.toggle.darkLight":                   "Dark / Light Mode",
     "dashboard.toggle.fullscreen":                  "Fullscreen",
 
-    // Upload step
-    "upload.headline":                              "Upload product",
-    "upload.description":                           "Please upload a product. Either drag the product file (.content) into the dashed area or click on it to open the file manager.",
-    "upload.loading":                               "Product is uploading",
-
     // License Connector step
     "license_connector.headline":                   "Select interface",
     "license_connector.load.connector":             "Information is retrieved",

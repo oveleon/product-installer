@@ -1145,8 +1145,8 @@
   white-space: nowrap;
   word-break: keep-all;
   padding: 4px 8px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: rgb(249, 250, 251);
+  border: 1px solid rgb(229, 231, 235);
   border-radius: 6px;
 }
 #installer .badge.type {
@@ -1372,18 +1372,6 @@
     width: 150px;
   }
 }
-#installer div.file-upload {
-  flex-grow: 1;
-  border-radius: var(--pi-border-radius-3);
-  border: 1px dashed var(--pi-border-color);
-  background: url("/bundles/productinstaller/images/graphics/upload.svg") center center no-repeat;
-  background-size: auto 200px;
-  cursor: pointer;
-}
-#installer div.file-upload.dz-drag-hover {
-  border-color: var(--pi-primary-color);
-}
-
 #installer .notifications {
   display: flex;
   flex-direction: column;

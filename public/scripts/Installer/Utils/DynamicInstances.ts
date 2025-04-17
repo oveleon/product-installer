@@ -1,7 +1,6 @@
 import LicenseStep from "../Steps/LicenseStep";
 import ProductStep from "../Steps/ProductStep";
 import ProcessStep from "../Steps/ProcessStep";
-import UploadStep from "../Steps/UploadStep";
 import AdvertisingStep from "../Steps/AdvertisingStep";
 import ContaoManagerStep from "../Steps/ContaoManagerStep";
 import ApiProcess from "../Process/ApiProcess";
@@ -14,7 +13,6 @@ export {
     LicenseStep,
     ProductStep,
     ProcessStep,
-    UploadStep,
     AdvertisingStep,
     ContaoManagerStep,
 

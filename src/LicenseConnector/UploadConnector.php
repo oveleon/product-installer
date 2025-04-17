@@ -4,7 +4,6 @@ namespace Oveleon\ProductInstaller\LicenseConnector;
 
 use Contao\Controller;
 use Oveleon\ProductInstaller\LicenseConnector\Step\ProductStep;
-use Oveleon\ProductInstaller\LicenseConnector\Step\UploadStep;
 use Symfony\Component\HttpFoundation\Request;
 use Oveleon\ProductInstaller\LicenseConnector\Process\ContaoManagerProcess;
 use Oveleon\ProductInstaller\LicenseConnector\Process\RegisterProductProcess;
@@ -22,9 +21,6 @@ final class UploadConnector extends AbstractLicenseConnector
     {
         // Create steps
         $this->addSteps(
-            // Add license step
-            new UploadStep(),
-
             // Add product step
             new ProductStep(),
 
